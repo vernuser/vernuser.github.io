@@ -453,3 +453,14 @@ h6::before {
   -webkit-animation: ccc 6s linear infinite;
   animation: ccc 6s linear infinite;
 }
+
+
+
+
+
+
+
+.loading-img {
+  background: url(https://blogpic-5qb.pages.dev/img/avatar/neko.jpg) no-repeat center center;
+  background-size: cover;
+}
