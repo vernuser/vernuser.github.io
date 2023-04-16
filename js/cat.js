@@ -122,7 +122,7 @@ if (document.body.clientWidth > 992) {
         $("#myscoll").nekoScroll({
             nekoname:'nekowww', //nekoname，相当于id
             bgcolor: 'rgb(255 203 120 / .5)', //背景颜色，没有绳子背景图片时有效
-            hoverMsg:'你好~喵',
+            hoverMsg:'喵~？',
             fontFamily:'楷体', //对话框字体
             fontSize:'14px', //对话框字体的大小
             color:'#ff9e00',
