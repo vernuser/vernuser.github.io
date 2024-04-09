@@ -1,3 +1,4 @@
+
 //get请求
 $.ajax({
     type: 'get',
@@ -9,11 +10,15 @@ $.ajax({
     dataType: 'jsonp',
     success: function (res) {
         ipLoacation = res;
+        showWelcome();
     }
 })
+
+//根据经纬度计算两点距离(点1经度,点1纬度,点2经度,点2纬度)
 function getDistance(e1, n1, e2, n2) {
     const R = 6371
     const { sin, cos, asin, PI, hypot } = Math
+
     let getPoint = (e, n) => {
         e *= PI / 180
         n *= PI / 180
@@ -27,9 +32,11 @@ function getDistance(e1, n1, e2, n2) {
     return Math.round(r);
 }
 
+
+
 function showWelcome() {
 
-    let dist = getDistance(113.34499552, 23.15537143, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
+    let dist = getDistance(121.00, 31.00, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
     let pos = ipLoacation.result.ad_info.nation;
     let ip;
     let posdesc;
