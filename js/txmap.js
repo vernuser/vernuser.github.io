@@ -11,7 +11,7 @@ $.ajax({
         ipLoacation = res;
     }
 })
-function getDistance(e1, n1, e2, n2) {
+function getDistance(e1, n1, e2, n2) { 
     const R = 6371
     const { sin, cos, asin, PI, hypot } = Math
     let getPoint = (e, n) => {
