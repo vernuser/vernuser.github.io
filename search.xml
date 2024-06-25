@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>内存取证</title>
+      <link href="/2024/06/25/2024%E5%B9%B46%E6%9C%8825%E6%97%A5-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/"/>
+      <url>/2024/06/25/2024%E5%B9%B46%E6%9C%8825%E6%97%A5-%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/</url>
+      
+        <content type="html"><![CDATA[<h1 id="内存取证与流量分析"><a href="#内存取证与流量分析" class="headerlink" title="内存取证与流量分析"></a>内存取证与流量分析</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> 内存取证 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ctf </tag>
+            
+            <tag> 内存取证 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CTF--隐写术</title>
+      <link href="/2024/06/25/2024%E5%B9%B46%E6%9C%8825%E6%97%A5-CTF%E9%9A%90%E5%86%99%E6%9C%AF/"/>
+      <url>/2024/06/25/2024%E5%B9%B46%E6%9C%8825%E6%97%A5-CTF%E9%9A%90%E5%86%99%E6%9C%AF/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CTF-MISC简单介绍"><a href="#CTF-MISC简单介绍" class="headerlink" title="CTF  MISC简单介绍"></a>CTF  MISC简单介绍</h1><p>MISC，就是杂项，简单来说就是利用工具解密，算是CTF中最有意思的一个分支了</p><p>MISC中比较多出现的题目呢</p><p>图片的，文件的相关隐写</p><p>伪加密</p><p>亦或是将文件隐藏再docx,pdf中的各个位置，</p><p>这些都是存在的（索引你平时看的文件中可能存在另一个文件（雾））</p><h1 id="图片隐写"><a href="#图片隐写" class="headerlink" title="图片隐写"></a>图片隐写</h1><p>图片隐写呢可以根据图种分为几大类</p><p>JPG图片隐写，PNG图片隐写，GIF图片隐写以及其他类的图片隐写</p><p>但是都差不多</p><h2 id="改文件"><a href="#改文件" class="headerlink" title="改文件"></a>改文件</h2><p>首先保证人手一个010editor或者winhex</p><p><img src="https://pic.imgdb.cn/item/667a9782d9c307b7e98c21e4.png" alt=""><br>打开文件发现文件头是<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FF D8 FF E1</span><br></pre></td></tr></table></figure><br>说明是一个JPG文件（jpeg也是JPG</p><p>图片隐写的三板斧呢，</p><p>第一，看文件头</p><p>判断是什么类型的图片，然后可以用010的模板中的模板脚本辅助查找</p><p>第二，看文件尾部</p><p>正常文件结尾是固定的，但是有时候尾部会缀点东西，因为图片已经结束了所以<br>不影响正常文件的显示</p><p>第三，文件中部</p><p>会有一些人把明文信息直接丢到文件中的，一般会有提示符（不然谁费事巴拉的去找</p><p>还有一种就是图片更改宽高</p><p><img src="https://pic.imgdb.cn/item/667a971fd9c307b7e98b88c3.png" alt=""></p><p>16进制表中，</p><p>【固定】前面8个字节是文件头部信息，只需要看前面查表<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FF D8 FF E1 14 2E 45 78</span><br></pre></td></tr></table></figure><br>【固定】再有4个字节是数据段长度<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">69 66 00 00</span><br></pre></td></tr></table></figure></p><p>【固定】前面4个字节是文件头数据块的表示<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4D 4D 00 2A</span><br></pre></td></tr></table></figure><br>（可变）13个字节</p><p>前面4个表示宽<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00 00 00 08</span><br></pre></td></tr></table></figure><br>中间四个表示高<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00 0C 01 00</span><br></pre></td></tr></table></figure><br>后面五个依次是Bit depth、ColorType、Compression method、Filter method、Interlace method<br>(了解都不需要)</p><h3 id="伪加密"><a href="#伪加密" class="headerlink" title="伪加密"></a>伪加密</h3><p>虽然不是图片隐写但还是说一下把反正都要用010</p><p>文件是加密的但是解压不行，说明可能是伪加密</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">压缩源文件数据区：</span><br><span class="line">50 4B 03 04：这是头文件标记（0x04034b50）</span><br><span class="line">14 00：解压文件所需 pkware 版本</span><br><span class="line">00 00：全局方式位标记（有无加密）</span><br><span class="line">08 00：压缩方式</span><br><span class="line">5A 7E：最后修改文件时间</span><br><span class="line">F7 46：最后修改文件日期</span><br><span class="line">16 B5 80 14：CRC-32校验（1480B516）</span><br><span class="line">19 00 00 00：压缩后尺寸（25）</span><br><span class="line">17 00 00 00：未压缩尺寸（23）</span><br><span class="line">07 00：文件名长度</span><br><span class="line">00 00：扩展记录长度</span><br><span class="line"> </span><br><span class="line">压缩源文件目录区：</span><br><span class="line">50 4B 01 02：目录中文件文件头标记(0x02014b50)</span><br><span class="line">3F 00：压缩使用的 pkware 版本</span><br><span class="line">14 00：解压文件所需 pkware 版本</span><br><span class="line">00 00：全局方式位标记（有无加密，这个更改这里进行伪加密，改为09 00打开就会提示有密码了）</span><br><span class="line">08 00：压缩方式</span><br><span class="line">5A 7E：最后修改文件时间</span><br><span class="line">F7 46：最后修改文件日期</span><br><span class="line">16 B5 80 14：CRC-32校验（1480B516）</span><br><span class="line">19 00 00 00：压缩后尺寸（25）</span><br><span class="line">17 00 00 00：未压缩尺寸（23）</span><br><span class="line">07 00：文件名长度</span><br><span class="line">24 00：扩展字段长度</span><br><span class="line">00 00：文件注释长度</span><br><span class="line">00 00：磁盘开始号</span><br><span class="line">00 00：内部文件属性</span><br><span class="line">20 00 00 00：外部文件属性</span><br><span class="line">00 00 00 00：局部头部偏移量</span><br><span class="line"> </span><br><span class="line">压缩源文件目录结束标志：</span><br><span class="line">50 4B 05 06：目录结束标记</span><br><span class="line">00 00：当前磁盘编号</span><br><span class="line">00 00：目录区开始磁盘编号</span><br><span class="line">01 00：本磁盘上纪录总数</span><br><span class="line">01 00：目录区中纪录总数</span><br><span class="line">59 00 00 00：目录区尺寸大小</span><br><span class="line">3E 00 00 00：目录区对第一张磁盘的偏移量</span><br><span class="line">00 00：ZIP 文件注释长度</span><br></pre></td></tr></table></figure><h2 id="LSB"><a href="#LSB" class="headerlink" title="LSB"></a>LSB</h2><p>LSB最低有效位隐写</p><p>LSB原理就是利用古人言识别不出来的差异信息来进行加密</p><p><img src="https://pic.imgdb.cn/item/667a976ad9c307b7e98bfb72.png" alt=""><br>举个例子</p><p>BUU-LSB</p><p>QR search能用就用，用不了就用网站</p><p><a href="https://www.lddgo.net/image/qrcodescanner">在线二维码扫描器</a></p><h2 id="盲水印"><a href="#盲水印" class="headerlink" title="盲水印"></a>盲水印</h2><p>通常是将图片进行离散余弦、小波或者傅里叶变换，得到图片的频谱信息，<br>再将水印的编码信息叠加到图片的频谱上，<br>然后再进行一次逆变换，<br>生成的图片就带有几乎无法检测、但又可以确切还原出来的盲水印了<br><img src="https://pic.imgdb.cn/item/667a97d2d9c307b7e98ca410.png" alt=""><br><img src="https://pic.imgdb.cn/item/667a97d2d9c307b7e98ca43d.png" alt=""></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python bwm.py decode file1 file2 outfile</span><br></pre></td></tr></table></figure><p>盲水印有个傅里叶盲水印的</p><p>例题</p><p>攻防世界 misc 4-1</p><h2 id="二维码"><a href="#二维码" class="headerlink" title="二维码"></a>二维码</h2><p>二维码是从右向左填充的数据，纠错码会在数据段之后</p><p><img src="https://pic.imgdb.cn/item/667a97aad9c307b7e98c689a.png" alt=""></p><h2 id="binwalk和foremost"><a href="#binwalk和foremost" class="headerlink" title="binwalk和foremost"></a>binwalk和foremost</h2><p>binwalk查看图片信息</p><p>可以快速知道是不是由多个文件合并而成并将其分离</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">分析</span><br><span class="line">binwalk filename</span><br><span class="line">分离</span><br><span class="line">binwalk -e filename</span><br></pre></td></tr></table></figure><p>或者你直接用foremost分离文件</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foremost filename -o output</span><br><span class="line">foremost 文件名 -o 输出目录名</span><br></pre></td></tr></table></figure><h2 id="IDAT块隐写"><a href="#IDAT块隐写" class="headerlink" title="IDAT块隐写"></a>IDAT块隐写</h2><p>图像数据块 IDAT（image data chunk）：它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块。IDAT 块只有当上一个块充满时，才会继续一个新的块。</p><p>（找了一圈没找到一个IDAT的，找了个图你们看看明白就好<br><img src="https://pic.imgdb.cn/item/667a974dd9c307b7e98bcea6.png" alt=""></p><p>图片隐写还有很多，像素点的，二维码的,gif的，这个其实就纯看脑洞</p><h1 id="docx和ppt隐写"><a href="#docx和ppt隐写" class="headerlink" title="docx和ppt隐写"></a>docx和ppt隐写</h1><p>docx说白了也是一种zip形式，我们可以改成zip然后再进行寻找就能找到</p><p>字体的隐藏</p><p>书签</p><p>解压以后图片的设置</p><h1 id="音频隐写"><a href="#音频隐写" class="headerlink" title="音频隐写"></a>音频隐写</h1><p>音频隐写主要使用的是Audacity</p><p>看波形，看频率，经常在这里放摩斯密码或者是声音中参杂着</p><p>这个题呢就是典型的波形，放大到最大看前面你的就找到了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> MISC </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>lampao靶场</title>
       <link href="/2024/06/24/2024%E5%B9%B46%E6%9C%8824%E6%97%A5-lampiao/"/>
       <url>/2024/06/24/2024%E5%B9%B46%E6%9C%8824%E6%97%A5-lampiao/</url>
@@ -858,17 +912,6 @@
     
     
     <entry>
-      <title>关于店长</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>分类</title>
       <link href="/categories/index.html"/>
       <url>/categories/index.html</url>
@@ -891,22 +934,11 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/cursor.js"/>
-      <url>/js/cursor.js</url>
+      <title>关于店长</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[var CURSOR;Math.lerp = (a, b, n) => (1 - n) * a + n * b;const getStyle = (el, attr) => {    try {        return window.getComputedStyle            ? window.getComputedStyle(el)[attr]            : el.currentStyle[attr];    } catch (e) {}    return "";};class Cursor {    constructor() {        this.pos = {curr: null, prev: null};        this.pt = [];        this.create();        this.init();        this.render();    }    move(left, top) {        this.cursor.style["left"] = `${left}px`;        this.cursor.style["top"] = `${top}px`;    }    create() {        if (!this.cursor) {            this.cursor = document.createElement("div");            this.cursor.id = "cursor";            this.cursor.classList.add("hidden");            document.body.append(this.cursor);        }        var el = document.getElementsByTagName('*');        for (let i = 0; i < el.length; i++)            if (getStyle(el[i], "cursor") == "pointer")                this.pt.push(el[i].outerHTML);        document.body.appendChild((this.scr = document.createElement("style")));        // 这里改变鼠标指针的颜色 由svg生成        this.scr.innerHTML = `* {cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' width='8px' height='8px'><circle cx='4' cy='4' r='4' opacity='1.0' fill='rgb(255, 158, 53)'/></svg>") 4 4, auto}`;    }    refresh() {        this.scr.remove();        this.cursor.classList.remove("hover");        this.cursor.classList.remove("active");        this.pos = {curr: null, prev: null};        this.pt = [];        this.create();        this.init();        this.render();    }    init() {        document.onmouseover  = e => this.pt.includes(e.target.outerHTML) && this.cursor.classList.add("hover");        document.onmouseout   = e => this.pt.includes(e.target.outerHTML) && this.cursor.classList.remove("hover");        document.onmousemove  = e => {(this.pos.curr == null) && this.move(e.clientX - 8, e.clientY - 8); this.pos.curr = {x: e.clientX - 8, y: e.clientY - 8}; this.cursor.classList.remove("hidden");};        document.onmouseenter = e => this.cursor.classList.remove("hidden");        document.onmouseleave = e => this.cursor.classList.add("hidden");        document.onmousedown  = e => this.cursor.classList.add("active");        document.onmouseup    = e => this.cursor.classList.remove("active");    }    render() {        if (this.pos.prev) {            this.pos.prev.x = Math.lerp(this.pos.prev.x, this.pos.curr.x, 0.15);            this.pos.prev.y = Math.lerp(this.pos.prev.y, this.pos.curr.y, 0.15);            this.move(this.pos.prev.x, this.pos.prev.y);        } else {            this.pos.prev = this.pos.curr;        }        requestAnimationFrame(() => this.render());    }}(() => {    CURSOR = new Cursor();    // 需要重新获取列表时，使用 CURSOR.refresh()})();]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/js/fps.js"/>
-      <url>/js/fps.js</url>
-      
-        <content type="html"><![CDATA[if (window.localStorage.getItem("fpson") == undefined || window.localStorage.getItem("fpson") == "1") {    var rAF = function () {        return (            window.requestAnimationFrame ||            window.webkitRequestAnimationFrame ||            function (callback) {                window.setTimeout(callback, 1000 / 60);            }        );    }();    var frame = 0;    var allFrameCount = 0;    var lastTime = Date.now();    var lastFameTime = Date.now();    var loop = function () {        var now = Date.now();        var fs = (now - lastFameTime);        var fps = Math.round(1000 / fs);        lastFameTime = now;        // 不置 0，在动画的开头及结尾记录此值的差值算出 FPS        allFrameCount++;        frame++;        if (now > 1000 + lastTime) {            var fps = Math.round((frame * 1000) / (now - lastTime));            if (fps <= 5) {                var kd = `<span style="color:#bd0000">好卡🤢</span>`            } else if (fps <= 15) {                var kd = `<span style="color:red">电竞级😖</span>`            } else if (fps <= 25) {                var kd = `<span style="color:orange">有点难受😨</span>`            } else if (fps < 35) {                var kd = `<span style="color:#9338e6">不太流畅🙄</span>`            } else if (fps <= 45) {                var kd = `<span style="color:#08b7e4">还不错哦😁</span>`            } else {                var kd = `<span style="color:#39c5bb">十分流畅🤣</span>`            }            document.getElementById("fps").innerHTML = `FPS:${fps} ${kd}`;            frame = 0;            lastTime = now;        };        rAF(loop);    }    loop();} else {    document.getElementById("fps").style = "display:none!important"}]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -936,10 +968,21 @@
     
     <entry>
       <title></title>
-      <link href="/js/universe.js"/>
-      <url>/js/universe.js</url>
+      <link href="/js/cursor.js"/>
+      <url>/js/cursor.js</url>
       
-        <content type="html"><![CDATA[function dark() {window.requestAnimationFrame=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||window.msRequestAnimationFrame;var n,e,i,h,t=.05,s=document.getElementById("universe"),o=!0,a="180,184,240",r="226,225,142",d="226,225,224",c=[];function f(){n=window.innerWidth,e=window.innerHeight,i=.216*n,s.setAttribute("width",n),s.setAttribute("height",e)}function u(){h.clearRect(0,0,n,e);for(var t=c.length,i=0;i<t;i++){var s=c[i];s.move(),s.fadeIn(),s.fadeOut(),s.draw()}}function y(){this.reset=function(){this.giant=m(3),this.comet=!this.giant&&!o&&m(10),this.x=l(0,n-10),this.y=l(0,e),this.r=l(1.1,2.6),this.dx=l(t,6*t)+(this.comet+1-1)*t*l(50,120)+2*t,this.dy=-l(t,6*t)-(this.comet+1-1)*t*l(50,120),this.fadingOut=null,this.fadingIn=!0,this.opacity=0,this.opacityTresh=l(.2,1-.4*(this.comet+1-1)),this.do=l(5e-4,.002)+.001*(this.comet+1-1)},this.fadeIn=function(){this.fadingIn&&(this.fadingIn=!(this.opacity>this.opacityTresh),this.opacity+=this.do)},this.fadeOut=function(){this.fadingOut&&(this.fadingOut=!(this.opacity<0),this.opacity-=this.do/2,(this.x>n||this.y<0)&&(this.fadingOut=!1,this.reset()))},this.draw=function(){if(h.beginPath(),this.giant)h.fillStyle="rgba("+a+","+this.opacity+")",h.arc(this.x,this.y,2,0,2*Math.PI,!1);else if(this.comet){h.fillStyle="rgba("+d+","+this.opacity+")",h.arc(this.x,this.y,1.5,0,2*Math.PI,!1);for(var t=0;t<30;t++)h.fillStyle="rgba("+d+","+(this.opacity-this.opacity/20*t)+")",h.rect(this.x-this.dx/4*t,this.y-this.dy/4*t-2,2,2),h.fill()}else h.fillStyle="rgba("+r+","+this.opacity+")",h.rect(this.x,this.y,this.r,this.r);h.closePath(),h.fill()},this.move=function(){this.x+=this.dx,this.y+=this.dy,!1===this.fadingOut&&this.reset(),(this.x>n-n/4||this.y<0)&&(this.fadingOut=!0)},setTimeout(function(){o=!1},50)}function m(t){return Math.floor(1e3*Math.random())+1<10*t}function l(t,i){return Math.random()*(i-t)+t}f(),window.addEventListener("resize",f,!1),function(){h=s.getContext("2d");for(var t=0;t<i;t++)c[t]=new y,c[t].reset();u()}(),function t(){document.getElementsByTagName('html')[0].getAttribute('data-theme')=='dark'&&u(),window.requestAnimationFrame(t)}()};dark()]]></content>
+        <content type="html"><![CDATA[var CURSOR;Math.lerp = (a, b, n) => (1 - n) * a + n * b;const getStyle = (el, attr) => {    try {        return window.getComputedStyle            ? window.getComputedStyle(el)[attr]            : el.currentStyle[attr];    } catch (e) {}    return "";};class Cursor {    constructor() {        this.pos = {curr: null, prev: null};        this.pt = [];        this.create();        this.init();        this.render();    }    move(left, top) {        this.cursor.style["left"] = `${left}px`;        this.cursor.style["top"] = `${top}px`;    }    create() {        if (!this.cursor) {            this.cursor = document.createElement("div");            this.cursor.id = "cursor";            this.cursor.classList.add("hidden");            document.body.append(this.cursor);        }        var el = document.getElementsByTagName('*');        for (let i = 0; i < el.length; i++)            if (getStyle(el[i], "cursor") == "pointer")                this.pt.push(el[i].outerHTML);        document.body.appendChild((this.scr = document.createElement("style")));        // 这里改变鼠标指针的颜色 由svg生成        this.scr.innerHTML = `* {cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' width='8px' height='8px'><circle cx='4' cy='4' r='4' opacity='1.0' fill='rgb(255, 158, 53)'/></svg>") 4 4, auto}`;    }    refresh() {        this.scr.remove();        this.cursor.classList.remove("hover");        this.cursor.classList.remove("active");        this.pos = {curr: null, prev: null};        this.pt = [];        this.create();        this.init();        this.render();    }    init() {        document.onmouseover  = e => this.pt.includes(e.target.outerHTML) && this.cursor.classList.add("hover");        document.onmouseout   = e => this.pt.includes(e.target.outerHTML) && this.cursor.classList.remove("hover");        document.onmousemove  = e => {(this.pos.curr == null) && this.move(e.clientX - 8, e.clientY - 8); this.pos.curr = {x: e.clientX - 8, y: e.clientY - 8}; this.cursor.classList.remove("hidden");};        document.onmouseenter = e => this.cursor.classList.remove("hidden");        document.onmouseleave = e => this.cursor.classList.add("hidden");        document.onmousedown  = e => this.cursor.classList.add("active");        document.onmouseup    = e => this.cursor.classList.remove("active");    }    render() {        if (this.pos.prev) {            this.pos.prev.x = Math.lerp(this.pos.prev.x, this.pos.curr.x, 0.15);            this.pos.prev.y = Math.lerp(this.pos.prev.y, this.pos.curr.y, 0.15);            this.move(this.pos.prev.x, this.pos.prev.y);        } else {            this.pos.prev = this.pos.curr;        }        requestAnimationFrame(() => this.render());    }}(() => {    CURSOR = new Cursor();    // 需要重新获取列表时，使用 CURSOR.refresh()})();]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/js/fps.js"/>
+      <url>/js/fps.js</url>
+      
+        <content type="html"><![CDATA[if (window.localStorage.getItem("fpson") == undefined || window.localStorage.getItem("fpson") == "1") {    var rAF = function () {        return (            window.requestAnimationFrame ||            window.webkitRequestAnimationFrame ||            function (callback) {                window.setTimeout(callback, 1000 / 60);            }        );    }();    var frame = 0;    var allFrameCount = 0;    var lastTime = Date.now();    var lastFameTime = Date.now();    var loop = function () {        var now = Date.now();        var fs = (now - lastFameTime);        var fps = Math.round(1000 / fs);        lastFameTime = now;        // 不置 0，在动画的开头及结尾记录此值的差值算出 FPS        allFrameCount++;        frame++;        if (now > 1000 + lastTime) {            var fps = Math.round((frame * 1000) / (now - lastTime));            if (fps <= 5) {                var kd = `<span style="color:#bd0000">好卡🤢</span>`            } else if (fps <= 15) {                var kd = `<span style="color:red">电竞级😖</span>`            } else if (fps <= 25) {                var kd = `<span style="color:orange">有点难受😨</span>`            } else if (fps < 35) {                var kd = `<span style="color:#9338e6">不太流畅🙄</span>`            } else if (fps <= 45) {                var kd = `<span style="color:#08b7e4">还不错哦😁</span>`            } else {                var kd = `<span style="color:#39c5bb">十分流畅🤣</span>`            }            document.getElementById("fps").innerHTML = `FPS:${fps} ${kd}`;            frame = 0;            lastTime = now;        };        rAF(loop);    }    loop();} else {    document.getElementById("fps").style = "display:none!important"}]]></content>
       
     </entry>
     
@@ -962,6 +1005,17 @@
       <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/js/universe.js"/>
+      <url>/js/universe.js</url>
+      
+        <content type="html"><![CDATA[function dark() {window.requestAnimationFrame=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||window.msRequestAnimationFrame;var n,e,i,h,t=.05,s=document.getElementById("universe"),o=!0,a="180,184,240",r="226,225,142",d="226,225,224",c=[];function f(){n=window.innerWidth,e=window.innerHeight,i=.216*n,s.setAttribute("width",n),s.setAttribute("height",e)}function u(){h.clearRect(0,0,n,e);for(var t=c.length,i=0;i<t;i++){var s=c[i];s.move(),s.fadeIn(),s.fadeOut(),s.draw()}}function y(){this.reset=function(){this.giant=m(3),this.comet=!this.giant&&!o&&m(10),this.x=l(0,n-10),this.y=l(0,e),this.r=l(1.1,2.6),this.dx=l(t,6*t)+(this.comet+1-1)*t*l(50,120)+2*t,this.dy=-l(t,6*t)-(this.comet+1-1)*t*l(50,120),this.fadingOut=null,this.fadingIn=!0,this.opacity=0,this.opacityTresh=l(.2,1-.4*(this.comet+1-1)),this.do=l(5e-4,.002)+.001*(this.comet+1-1)},this.fadeIn=function(){this.fadingIn&&(this.fadingIn=!(this.opacity>this.opacityTresh),this.opacity+=this.do)},this.fadeOut=function(){this.fadingOut&&(this.fadingOut=!(this.opacity<0),this.opacity-=this.do/2,(this.x>n||this.y<0)&&(this.fadingOut=!1,this.reset()))},this.draw=function(){if(h.beginPath(),this.giant)h.fillStyle="rgba("+a+","+this.opacity+")",h.arc(this.x,this.y,2,0,2*Math.PI,!1);else if(this.comet){h.fillStyle="rgba("+d+","+this.opacity+")",h.arc(this.x,this.y,1.5,0,2*Math.PI,!1);for(var t=0;t<30;t++)h.fillStyle="rgba("+d+","+(this.opacity-this.opacity/20*t)+")",h.rect(this.x-this.dx/4*t,this.y-this.dy/4*t-2,2,2),h.fill()}else h.fillStyle="rgba("+r+","+this.opacity+")",h.rect(this.x,this.y,this.r,this.r);h.closePath(),h.fill()},this.move=function(){this.x+=this.dx,this.y+=this.dy,!1===this.fadingOut&&this.reset(),(this.x>n-n/4||this.y<0)&&(this.fadingOut=!0)},setTimeout(function(){o=!1},50)}function m(t){return Math.floor(1e3*Math.random())+1<10*t}function l(t,i){return Math.random()*(i-t)+t}f(),window.addEventListener("resize",f,!1),function(){h=s.getContext("2d");for(var t=0;t<i;t++)c[t]=new y,c[t].reset();u()}(),function t(){document.getElementsByTagName('html')[0].getAttribute('data-theme')=='dark'&&u(),window.requestAnimationFrame(t)}()};dark()]]></content>
       
     </entry>
     
