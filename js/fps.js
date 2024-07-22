@@ -25,7 +25,7 @@ if (window.localStorage.getItem("fpson") == undefined || window.localStorage.get
         if (now > 1000 + lastTime) {
             var fps = Math.round((frame * 1000) / (now - lastTime));
             if (fps <= 5) {
-                var kd = `<span style="color:#bd0000">好卡🤢</span>`
+                var kd = `<span style="color:#bd0000">卡死了卡死了🤢</span>`
             } else if (fps <= 15) {
                 var kd = `<span style="color:red">电竞级😖</span>`
             } else if (fps <= 25) {
