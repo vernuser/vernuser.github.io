@@ -4,6 +4,87 @@
   
     
     <entry>
+      <title>2024年7月31日--小迪笔记day3--抓包&amp;封包&amp;协议&amp;app&amp;小程序</title>
+      <link href="/2024/07/31/2024%E5%B9%B47%E6%9C%8831%E6%97%A5-%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day3/"/>
+      <url>/2024/07/31/2024%E5%B9%B47%E6%9C%8831%E6%97%A5-%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h1><p>burpsuite</p><p>charles</p><p>fiddler</p><p>个人感觉常用的就bp和青花瓷就可以了，八爪鱼没用过…不做评价</p><p>记得吧证书安装到浏览器和模拟器中，不然浏览器抓不到包，模拟器会一直报证书有问题</p><p>（好像是因为你个人装的话装进个人里面，需要装到系统的那里面才可以）</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 小迪安全 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器</title>
+      <link href="/2024/07/30/2024%E5%B9%B47%E6%9C%8830%E6%97%A5-%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day2/"/>
+      <url>/2024/07/30/2024%E5%B9%B47%E6%9C%8830%E6%97%A5-%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="网站搭建前置"><a href="#网站搭建前置" class="headerlink" title="网站搭建前置"></a>网站搭建前置</h1><p>域名，子域名，DNS，HTTP/HTTPS，SSL证书</p><p>域名：网站的名字，例如www.baidu.com</p><p>DNS：解析域名的</p><h1 id="web应用架构"><a href="#web应用架构" class="headerlink" title="web应用架构"></a>web应用架构</h1><p>开发语言:asp,php,aspx,jsp,java,python,ruby,go,html,js</p><p>程序源码：开源cms分类，开发语言分类，应用类型分类，开发框架分类</p><p>中间件容器：IIS,APACHE,NGINX,TOMENT,WEBLOGIC,JBOOS,GLASSHFISH</p><p>第三方软件：phpmyadmin,vs-ftpd,vnc,openssh</p><p>数据库类型：access,mysql,mssql,oracle,db2,sybase,redis,mongdb</p><h1 id="web安全漏洞"><a href="#web安全漏洞" class="headerlink" title="web安全漏洞"></a>web安全漏洞</h1><p>sql注入，xxe/xml，弱口令，文件安全，rce，csrf/ssrf/crlf，反序列化，逻辑越权，未授权访问等等</p><h1 id="web请求返回过程数据包"><a href="#web请求返回过程数据包" class="headerlink" title="web请求返回过程数据包"></a>web请求返回过程数据包</h1><p><a href="https://www.jianshu.com/p/558455228c43">https://www.jianshu.com/p/558455228c43</a></p><p><a href="https://www.cnblogs.com/cherrycui/p/10815465.html">https://www.cnblogs.com/cherrycui/p/10815465.html</a></p><p><a href="https://www.runoob.com/http/http-status-codes.html">http状态码</a></p><p>可以用bp简单客串一下扫描器，具体就是用爆破的方法，如果404就没有，403就存在</p><p>如果被拉黑了你的ip,上代理池/ww或者你去换一个</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 小迪安全 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过</title>
+      <link href="/2024/07/30/2024%E5%B9%B47%E6%9C%8830%E6%97%A5-%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day1/"/>
+      <url>/2024/07/30/2024%E5%B9%B47%E6%9C%8830%E6%97%A5-%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><p>poc：概念验证，常指的是一段漏洞证明的代码</p><p>（就是根据漏洞的一些信息，比如nuclei使用的yaml中，根据baseurl以及一些的raw http进行访问，再通过dsl,words，等进一步确认漏洞存在）</p><p>exp:漏洞利用脚本，不解释</p><p>paylaod：exp成功执行的时候，真正在目标系统执行的代码或指令</p><p>shellcode：指的是漏洞载荷，免杀经常提到</p><p>后门：通称，web网站叫webshell，但是其实还有系统等</p><p>木马：针对电脑的控制</p><p>病毒：破坏性的程序</p><p>反弹：弹shell，将权限转移到其他地方</p><p>跳板：中间的机器，A无法连接B，A可以通过连接B来达到连接C的</p><p><a href="https://www.cnblogs.com/sunny11/p/13583083.html">参考</a></p><h1 id="文件上传下载"><a href="#文件上传下载" class="headerlink" title="文件上传下载"></a>文件上传下载</h1><p>linux：wget curl ruby perl java python等</p><p>windows:powershell certutil bitsadmin msiexec mshta rund1132等</p><p><a href="https://blog.csdn.net/weixin_43303273/article/details/83029138">命令</a></p><p><a href="https://forum.ywhack.com/infosec.php">study 棱角社区</a></p><p>需要注意的是下载的文件夹的权限</p><h1 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h1><p>root or user</p><p>提权</p><p>前面靶机基本上最后都是提权完成的，我记得以前看了个文章说有100多个提权手法？（忘记了）</p><h1 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h1><p>windows默认自带windows defender</p><p>linux默认是iptables</p><p>入站出站协议</p><p>传webshell需要交互式 的，（联想到python的哪个命令）</p><p>内外网区分<br><img src="https://pic.imgdb.cn/item/66a8e27ed9c307b7e93458ad.png" alt=""></p><p>所以说靶机尽量不要搞在线靶机</p><p>比如你上fofa搜能找到同行的pikachu，，，还是一堆…</p><p>难崩<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;pikachu&quot; &amp;&amp; country=&quot;CN&quot; &amp;&amp; title=&quot;Get the pikachu&quot;</span><br></pre></td></tr></table></figure></p><p>别干坏事奥</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 小迪安全 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>iwebsec---- not only rce/sqli</title>
       <link href="/2024/07/27/2024%E5%B9%B47%E6%9C%8827%E6%97%A5-iwebsec%E9%9D%B6%E5%9C%BA/"/>
       <url>/2024/07/27/2024%E5%B9%B47%E6%9C%8827%E6%97%A5-iwebsec%E9%9D%B6%E5%9C%BA/</url>
@@ -502,9 +583,9 @@
       
         <tags>
             
-            <tag> web </tag>
-            
             <tag> 内存马 </tag>
+            
+            <tag> web </tag>
             
         </tags>
       
@@ -1213,9 +1294,20 @@
     
     
     <entry>
-      <title>关于店长</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title>留言板</title>
+      <link href="/comments/index.html"/>
+      <url>/comments/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>员工们</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -1246,9 +1338,9 @@
     
     
     <entry>
-      <title>标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>关于店长</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -1279,20 +1371,9 @@
     
     
     <entry>
-      <title>留言板</title>
-      <link href="/comments/index.html"/>
-      <url>/comments/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>员工们</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
