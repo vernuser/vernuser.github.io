@@ -4,6 +4,71 @@
   
     
     <entry>
+      <title></title>
+      <link href="/2024/11/20/2024%E5%B9%B411%E6%9C%8820%E6%97%A5-%E5%89%8D%E7%AB%AF%E6%BC%8F%E6%B4%9E/"/>
+      <url>/2024/11/20/2024%E5%B9%B411%E6%9C%8820%E6%97%A5-%E5%89%8D%E7%AB%AF%E6%BC%8F%E6%B4%9E/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>php命令执行</title>
+      <link href="/2024/11/20/2024%E5%B9%B411%E6%9C%8815%E6%97%A5-php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/"/>
+      <url>/2024/11/20/2024%E5%B9%B411%E6%9C%8815%E6%97%A5-php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</url>
+      
+        <content type="html"><![CDATA[<p>PHP命令执行函数<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">system：执行外部程序并显示输出</span><br><span class="line"></span><br><span class="line">passthru：执行外部程序并显示原始输出</span><br><span class="line"></span><br><span class="line">exec：执行外部程序并分会输出的最后一行</span><br><span class="line"></span><br><span class="line">shell_exec：通过shell执行外部命令并分会完整的处处作为字符串</span><br><span class="line"></span><br><span class="line">popen：打开一个管道执行fork命令</span><br><span class="line"></span><br><span class="line">proc_open：类似鱼popen</span><br><span class="line"></span><br><span class="line">pcntl_exec：在当前进程空间执行一个程序</span><br><span class="line"></span><br><span class="line">dl：在运行时加载一个php扩展</span><br><span class="line"></span><br><span class="line">`xx`</span><br><span class="line"></span><br></pre></td></tr></table></figure><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// system: 执行外部程序并显示输出</span><br><span class="line">echo &quot;system:\n&quot;;</span><br><span class="line">system(&#x27;dir&#x27;, $retval);</span><br><span class="line">if ($retval !== 0) &#123;</span><br><span class="line">    echo &quot;Error executing system command\n&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// passthru: 执行外部程序并显示原始输出</span><br><span class="line">echo &quot;\npassthru:\n&quot;;</span><br><span class="line">passthru(&#x27;dir&#x27;, $retval);</span><br><span class="line">if ($retval !== 0) &#123;</span><br><span class="line">    echo &quot;Error executing passthru command\n&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// exec: 执行外部程序并返回输出的最后一行</span><br><span class="line">echo &quot;\nexec:\n&quot;;</span><br><span class="line">$output = [];</span><br><span class="line">exec(&#x27;dir&#x27;, $output, $retval);</span><br><span class="line">if ($retval !== 0) &#123;</span><br><span class="line">    echo &quot;Error executing exec command\n&quot;;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    print_r($output);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// shell_exec: 通过shell执行命令并返回完整的输出作为字符串</span><br><span class="line">echo &quot;\nshell_exec:\n&quot;;</span><br><span class="line">$output = shell_exec(&#x27;dir&#x27;);</span><br><span class="line">if ($output === null) &#123;</span><br><span class="line">    echo &quot;Error executing shell_exec command\n&quot;;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    echo $output;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// popen: 打开一个管道，执行fork的命令</span><br><span class="line">echo &quot;\npopen:\n&quot;;</span><br><span class="line">$handle = popen(&#x27;dir&#x27;, &#x27;r&#x27;);</span><br><span class="line">if ($handle === false) &#123;</span><br><span class="line">    echo &quot;Error executing popen command\n&quot;;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    while (!feof($handle)) &#123;</span><br><span class="line">        echo fread($handle, 1024);</span><br><span class="line">    &#125;</span><br><span class="line">    pclose($handle);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// proc_open: 类似于popen，但提供了更多的进程控制</span><br><span class="line">echo &quot;\nproc_open:\n&quot;;</span><br><span class="line">$descriptorspec = [</span><br><span class="line">    0 =&gt; [&quot;pipe&quot;, &quot;r&quot;],  // 标准输入</span><br><span class="line">    1 =&gt; [&quot;pipe&quot;, &quot;w&quot;],  // 标准输出</span><br><span class="line">    2 =&gt; [&quot;pipe&quot;, &quot;w&quot;]   // 标准错误</span><br><span class="line">];</span><br><span class="line">$process = proc_open(&#x27;dir&#x27;, $descriptorspec, $pipes);</span><br><span class="line">if (is_resource($process)) &#123;</span><br><span class="line">    while ($s = fgets($pipes[1])) &#123;</span><br><span class="line">        echo $s;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose($pipes[0]);</span><br><span class="line">    fclose($pipes[1]);</span><br><span class="line">    fclose($pipes[2]);</span><br><span class="line">    proc_close($process);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    echo &quot;Error executing proc_open command\n&quot;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p><p><img src="https://pic.imgdb.cn/item/673d7b53d29ded1a8ca2d0bc.png" alt=""></p><h2 id="命令执行漏洞特点"><a href="#命令执行漏洞特点" class="headerlink" title="命令执行漏洞特点"></a>命令执行漏洞特点</h2><p>· 没有给命令传入参数的方法</p><p>· 字符串拼接</p><h2 id="命令执行过滤函数"><a href="#命令执行过滤函数" class="headerlink" title="命令执行过滤函数"></a>命令执行过滤函数</h2><p>· escapeshellcmd</p><p>· escapeshellarg</p><p>上面两个的作用都是转义，但是详细还是不一样的，比如说</p><p><code>escapeshellcmd</code>更多的是转义字符串中的特殊字符，以确保整个命令字符串的安全。它主要用于转义完整的命令行。<br>只要有shell命令就会被反引号转义</p><p><code>escapeshellarg</code>义单个命令参数，以确保参数被正确处理，即使参数中包含空格或其他特殊字符。它主要用于转义单个参数</p><p><img src="https://pic.imgdb.cn/item/673dab51d29ded1a8cd1016f.png" alt=""></p><p>在<code>escapeshellcmd</code>中是可以进行前者的<code>tail -n 5 /etc/passwd</code>的命令执行，但是不可以执行<code>tail -n 5 /etc/passwd;id</code>，因为id会在后面被反引号注释掉，但是在<code>escapeshellarg</code>中是不可以的</p><p><a href="https://www.leavesongs.com/PENTTRATION/PHPMailer-CVE-2016-10033.html">PHPMailer 代码执行漏洞</a></p><p>他的问题是<code>mail</code>函数调用了系统的mail命令，但是他用用户传给mail函数的第4个参数<code>$params=escapeshellcmd($params)；</code>拼接到mail中，</p><p>但是mail函数的-x命令后面可以指定一个输出的文件名，将mail的日志输出到这个文件中，当我们传入<code>params=&quot;-X /var/www/html/webshell.php&quot;；</code>的时候虽然有转义但是不妨碍我内部的文件的结果，这就导致了命令执行</p><p><img src="https://pic.imgdb.cn/item/673dad83d29ded1a8cd3bbbe.png" alt=""></p><p>但是实际上<code>escapeshellcmd</code>和<code>escapeshellarg</code>都是不安全的，因为他们都是基于黑名单的，所以我们都可以通过绕过黑名单来进行命令执行</p><p><a href="https://www.leavesongs.com/PENTTRATION/escapeshellarg-and-parameter-injection.html">谈escapeshellarg绕过与参数注入漏洞</a></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public function searchTree($query, $branch)</span><br><span class="line">&#123;</span><br><span class="line">    if (empty($query)) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $query = escapeshellarg($query);</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        $results = $this-&gt;getClient()-&gt;run($this, &quot;grep -i --line-number &#123;$query&#125; $branch&quot;);</span><br><span class="line">    &#125; catch (\RuntimeException $e) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><p><code>escapeshellarg</code>只能对你的单引号逃逸等做限制，但是他并没有对你的参数做限制，所以我们可以通过<code>grep -i --line-number &#39;test&#39; /etc/passwd;id</code>,<code>--open-files-in-pager=id</code>来进行命令执行，<br>就是说只能限制单双引号等符号但是不能限制你的函数原本就有的参数</p><p>修复方法就是在参数前面加<code>--</code>，这样就可以避免参数注入，因为lunux将会把<code>--</code>后面的参数当做参数而不是命令 </p><p>如果你想读取只需要在前面加上<code>--</code>或者<code>./</code>就可以</p><p><img src="https://pic.imgdb.cn/item/673db1b1d29ded1a8cd8f9a5.png" alt=""></p><h3 id="PHP中xml实体注入漏洞"><a href="#PHP中xml实体注入漏洞" class="headerlink" title="PHP中xml实体注入漏洞"></a>PHP中xml实体注入漏洞</h3><p>xml解析函数<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">simplexml_load_file</span><br><span class="line">simpxml_load_string</span><br><span class="line">Simplexmlelement</span><br><span class="line">domdocument</span><br><span class="line">xml_parse</span><br></pre></td></tr></table></figure></p><p>但是现在xxe漏洞逐渐减少</p><ul><li>PHP XML操作以来libxml库</li><li>libxml2.9.0默认关闭xml外部实体解析开关</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;php</span><br><span class="line">libxml_disable_entity_loader(true);</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure><p>禁用外部实体加载</p><p>挖掘的时候可以通过搜索核心函数就行暴力查找</p><p><img src="https://pic.imgdb.cn/item/673db438d29ded1a8cdd0f47.png" alt=""></p><p>如果无实际的输入输出点的话</p><p>我们要通过blind_xxe</p><ul><li>利用外部实体功能读取文件</li><li>利用外部实体发送http请求</li><li>利用http协议传递文件内容</li></ul><p>像是这种的</p><p><img src="https://pic.imgdb.cn/item/673db4ded29ded1a8cde1813.png" alt=""></p><p>就是通过http协议进行文件的读取</p><p><a href="https://explainshell.com/">php函数命令解释</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> php - 代码审计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>xinhucms代码审计</title>
+      <link href="/2024/11/18/2024%E5%B9%B411%E6%9C%888%E6%97%A5-xinhucms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <url>/2024/11/18/2024%E5%B9%B411%E6%9C%888%E6%97%A5-xinhucms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</url>
+      
+        <content type="html"><![CDATA[<p>信呼cms将后端代码都放置在webmain目录下，而且访问方式都是<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">index.php?a=文件名&amp;d=文件对应名&amp;m=模块</span><br></pre></td></tr></table></figure></p><h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p><img src="https://pic.imgdb.cn/item/673af490d29ded1a8c6e292a.png" alt=""><br>在这个地方我们发现可以看到一个上传文档点</p><p><img src="https://pic.imgdb.cn/item/673af4c2d29ded1a8c6e55a2.png" alt=""></p><p>抓包发现在<code>upload</code>文件下<code>upload</code>文件的<code>public</code>模块</p><p>追踪到<code>uploadAction.php</code>里面的<code>upfileAjax</code></p><p><img src="https://pic.imgdb.cn/item/673af651d29ded1a8c6fc8f5.png" alt=""></p><p>主要是对上传文件的限制，使得他按照要求进行上传，里面调用了c函数，跳转到C函数中发现包含了<code>uploadchajian.php</code></p><p><img src="https://pic.imgdb.cn/item/673b06a0d29ded1a8c80f1f7.png" alt=""></p><p>回到原来的代码中发现第49行调用了up函数，跳转查看</p><p><img src="https://pic.imgdb.cn/item/673b12a0d29ded1a8c8f6af3.png" alt=""></p><p><code>issavefile()</code>方法是用来进行后缀判断的</p><p><img src="https://pic.imgdb.cn/item/673b14e6d29ded1a8c92087f.png" alt=""></p><p><img src="https://pic.imgdb.cn/item/673b14a3d29ded1a8c91b1b2.png" alt=""></p><p>白名单绕过，如果不在的话调用<code>filesave</code>函数</p><p><img src="https://pic.imgdb.cn/item/673b15c5d29ded1a8c92f750.png" alt=""></p><p>这段是读取我们上传的文件内容并保存为base64编码格式，然后将代码保存为uptemp文件，最后进行删除，</p><p><img src="https://pic.imgdb.cn/item/673b16bdd29ded1a8c941bf8.png" alt=""></p><p><img src="https://pic.imgdb.cn/item/673b1708d29ded1a8c947201.png" alt=""></p><p>回到 <code>upfileAciton()</code> 方法中， <code>$upses</code> 接收 <code>up()</code> 方法返回的数据并将数据通过 <code>downChajian.php</code> 中<code>uploadback()</code> 方法备份到数据库，并以json形式返回</p><p><img src="https://pic.imgdb.cn/item/673b179ad29ded1a8c953457.png" alt=""></p><p>我们发现这里上传到的.php文件后缀会被替换为 .uptemp 后缀的文件，并返回了上传路径</p><p>但是我们在进行关键函数的检索的时候发现了一个可以解密base64的地方，并且可以通过控制id来还原<code>.uptemp</code>后缀文件为之前上传的后缀</p><p><img src="https://pic.imgdb.cn/item/673b1a42d29ded1a8c988212.png" alt=""></p><p>从这一段可以看出是上面上传处理的一个反向操作，并且通过<code>fileid</code>来控制</p><p><img src="https://pic.imgdb.cn/item/673b1a8bd29ded1a8c98daf3.png" alt=""></p><p><img src="https://pic.imgdb.cn/item/673dba0fd29ded1a8ce74350.png" alt=""></p><p>联系上面是fileid参数来控制上传的文件使其还原</p><p>所以我们可以通过更改fileid来控制</p><h3 id="渗透测试"><a href="#渗透测试" class="headerlink" title="渗透测试"></a>渗透测试</h3><p>将fileid替换为我们上传的文件的id</p><p><img src="https://pic.imgdb.cn/item/673b1b16d29ded1a8c99869b.png" alt=""></p><p>发现之前的.uptemp确实是可以被替换为.php文件后缀</p><p><img src="https://pic.imgdb.cn/item/673b1b38d29ded1a8c99b1da.png" alt=""></p><h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><p>在<code>include_once</code>的时候发现一个<code>mpathname</code>可控，</p><p><img src="https://pic.imgdb.cn/item/673ca031d29ded1a8cffcf11.png" alt=""></p><p>所以我们尝试跟踪这个发现他在上面被赋值了，就是71行的<code>$tplpaths.$tplname</code><br>下面我们发现<code>tplname</code>的后缀是限制限制死的只能为html</p><p><img src="https://pic.imgdb.cn/item/673ca045d29ded1a8cffdeea.png" alt=""></p><p>我们跟踪另外一个<code>mpathname</code>，他的代码说明是检查<code>$xhrock-&gt;displayfile</code>是否不为空，检查文件是否存在，然后重点关注这个<code>xhrock</code>,回溯到上面的是新建一个实例，然后接着回溯这个返现是可以通过控制<code>$m</code>来控制的</p><p><img src="https://pic.imgdb.cn/item/673ca15dd29ded1a8c00d7b1.png" alt=""></p><p>而这里的$m是通过前端传入的</p><p><img src="https://pic.imgdb.cn/item/673ca241d29ded1a8c01a37e.png" alt=""></p><p>但这里想要进入34行的if判断必须存在 $actfile 文件,而这里的 $actfile 变量是通过代码30行进行处理的。我们跟进 strformat() 函数</p><p><img src="https://pic.imgdb.cn/item/673ca299d29ded1a8c01ec8a.png" alt=""></p><p><img src="https://pic.imgdb.cn/item/673ca6e5d29ded1a8c059644.png" alt=""></p><p>这两个的大概内容是找到对应的php文件，而上述代码30行的<code>$m</code>是可控的,所以回到<code>xhrock</code>看<code>displayfile</code>可控的地方</p><p><img src="https://pic.imgdb.cn/item/673ca7c2d29ded1a8c077d5b.png" alt=""></p><p>找到这个</p><p><code>indexAction.php</code>的 <code>getshtmlAction</code> 函数中的 <code>displayfile</code> 变<br>量是通过 <code>$file</code> 进行赋值的，而 <code>$file</code> 中的 <code>$surl</code>参数是前端可控的，所以这里可以包含任意的php后缀文件。<br>（记得base64编码）</p><p>而<code>View.php</code>中这里我们可以控制<code>$m</code>来调用<code>indexAction.php</code>文件并且实例化文件中的<code>indexClassAction</code> 类，并且可以任意调用该类下的方法，也就是可以调用 <code>indexClassAction</code> 类下的<code>getshtmlAction</code> 方法</p><p><img src="https://pic.imgdb.cn/item/673ca9acd29ded1a8c0b53f6.png" alt=""></p><h3 id="渗透测试-1"><a href="#渗透测试-1" class="headerlink" title="渗透测试"></a>渗透测试</h3><p><img src="https://pic.imgdb.cn/item/673ca9dbd29ded1a8c0b8fc0.png" alt=""></p><h2 id=""><a href="#" class="headerlink" title=" "></a> </h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> php </tag>
+            
+            <tag> 代码审计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>五指cms代码审计</title>
       <link href="/2024/11/09/2024%E5%B9%B49%E6%9C%8829%E6%97%A5-%E4%BA%94%E6%8C%87cms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
       <url>/2024/11/09/2024%E5%B9%B49%E6%9C%8829%E6%97%A5-%E4%BA%94%E6%8C%87cms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</url>
@@ -203,9 +268,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -230,9 +295,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -357,9 +422,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -384,9 +449,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -463,9 +528,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -490,9 +555,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -517,9 +582,9 @@
       
         <tags>
             
-            <tag> 小迪安全 </tag>
-            
             <tag> 渗透学习 </tag>
+            
+            <tag> 小迪安全 </tag>
             
         </tags>
       
@@ -571,9 +636,9 @@
       
         <tags>
             
-            <tag> 渗透学习 </tag>
-            
             <tag> 命令执行 </tag>
+            
+            <tag> 渗透学习 </tag>
             
         </tags>
       
@@ -625,9 +690,9 @@
       
         <tags>
             
-            <tag> nuclei </tag>
-            
             <tag> 工具 </tag>
+            
+            <tag> nuclei </tag>
             
         </tags>
       
@@ -1184,9 +1249,9 @@
       
         <tags>
             
-            <tag> web </tag>
-            
             <tag> 内存马 </tag>
+            
+            <tag> web </tag>
             
         </tags>
       
@@ -1976,9 +2041,9 @@
     
     
     <entry>
-      <title>关于店长</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -1987,9 +2052,9 @@
     
     
     <entry>
-      <title>留言板</title>
-      <link href="/comments/index.html"/>
-      <url>/comments/index.html</url>
+      <title>关于店长</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -2003,17 +2068,6 @@
       <url>/css/custom.css</url>
       
         <content type="html"><![CDATA[:root {  --trans-light: rgba(255, 255, 255, 0.75);  --trans-dark: rgba(25, 25, 25, 0.75);  --border-style: 1px solid rgb(169, 169, 169);  --backdrop-filter: blur(5px) saturate(150%);}/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }@font-face {  /* 为载入的字体取名字(随意) */  font-family: 'YSHST';  /* 字体文件地址(相对或者绝对路径都可以) */  src: url();  /* 定义加粗样式(加粗多少) */  font-weight: normal;  /* 定义字体样式(斜体/非斜体) */  font-style: normal;  /* 定义显示样式 */  font-display: block;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(5) .menus_item_child {  left: -85px;}/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #ffbd41;  border-radius: 8px;}/* 鼠标样式 */#cursor {  position: fixed;  width: 16px;  height: 16px;  /* 这里改变跟随的底色 */  background: rgb(248, 193, 134);  border-radius: 8px;  opacity: 0.25;  z-index: 10086;  pointer-events: none;  transition: 0.2s ease-in-out;  transition-property: background, opacity, transform;}#cursor.hidden {  opacity: 0;}#cursor.hover {  opacity: 0.1;  transform: scale(2.5);  -webkit-transform: scale(2.5);  -moz-transform: scale(2.5);  -ms-transform: scale(2.5);  -o-transform: scale(2.5);}#cursor.active {  opacity: 0.5;  transform: scale(0.5);  -webkit-transform: scale(0.5);  -moz-transform: scale(0.5);  -ms-transform: scale(0.5);  -o-transform: scale(0.5);}/* 首页文章卡片 */#recent-posts > .recent-post-item {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border-radius: 25px;  border: var(--border-style);}/* 首页侧栏卡片 */#aside-content .card-widget {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border-radius: 18px;  border: var(--border-style);}/* 文章页、归档页、普通页面 */div#post,div#page,div#archive {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border: var(--border-style);  border-radius: 20px;}/* 导航栏 */#page-header.nav-fixed #nav {  background: rgba(255, 255, 255, 0.75);  backdrop-filter: var(--backdrop-filter);}[data-theme="dark"] #page-header.nav-fixed #nav {  background: rgba(0, 0, 0, 0.7) !important;}/* 夜间模式遮罩 */[data-theme="dark"] #recent-posts > .recent-post-item,[data-theme="dark"] #aside-content .card-widget,[data-theme="dark"] div#post,[data-theme="dark"] div#archive,[data-theme="dark"] div#page {  background: var(--trans-dark);}/* 夜间模式页脚页头遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 阅读模式 */.read-mode #aside-content .card-widget {  background: rgba(158, 204, 171, 0.5) !important;}.read-mode div#post {  background: rgba(158, 204, 171, 0.5) !important;}/* 夜间模式下的阅读模式 */[data-theme="dark"] .read-mode #aside-content .card-widget {  background: rgba(25, 25, 25, 0.9) !important;  color: #ffffff;}[data-theme="dark"] .read-mode div#post {  background: rgba(25, 25, 25, 0.9) !important;  color: #ffffff;}.pace {  -webkit-pointer-events: none;  pointer-events: none;  -webkit-user-select: none;  -moz-user-select: none;  user-select: none;  z-index: 2000;  position: fixed;  margin: auto;  top: 4px;  left: 0;  right: 0;  height: 8px;  border-radius: 8px;  width: 7rem;  background: #eaecf2;  border: 1px #e3e8f7;  overflow: hidden}.pace-inactive .pace-progress {  opacity: 0;  transition: .3s ease-in}.pace .pace-progress {  -webkit-box-sizing: border-box;  -moz-box-sizing: border-box;  -ms-box-sizing: border-box;  -o-box-sizing: border-box;  box-sizing: border-box;  -webkit-transform: translate3d(0, 0, 0);  -moz-transform: translate3d(0, 0, 0);  -ms-transform: translate3d(0, 0, 0);  -o-transform: translate3d(0, 0, 0);  transform: translate3d(0, 0, 0);  max-width: 200px;  position: absolute;  z-index: 2000;  display: block;  top: 0;  right: 100%;  height: 100%;  width: 100%;  /* linear-gradient(to right, #3494e6, #ec6ead) */  background: linear-gradient(to right, #f3d397, #fcad02);  animation: gradient 2s ease infinite;  background-size: 200%}.pace.pace-inactive {  opacity: 0;  transition: .3s;  top: -8px}/* 文章页H1-H6图标样式效果 *//* 控制风车转动速度 4s那里可以自己调节快慢 */h1::before,h2::before,h3::before,h4::before,h5::before,h6::before {  -webkit-animation: ccc 4s linear infinite;  animation: ccc 4s linear infinite;}/* 控制风车转动方向 -1turn 为逆时针转动，1turn 为顺时针转动，相同数字部分记得统一修改 */@-webkit-keyframes ccc {  0% {    -webkit-transform: rotate(0deg);    transform: rotate(0deg);  }  to {    -webkit-transform: rotate(-1turn);    transform: rotate(-1turn);  }}@keyframes ccc {  0% {    -webkit-transform: rotate(0deg);    transform: rotate(0deg);  }  to {    -webkit-transform: rotate(-1turn);    transform: rotate(-1turn);  }}/* 设置风车颜色 */#content-inner.layout h1::before {  color: #5ac3ff;  margin-left: -1.55rem;  font-size: 1.3rem;  margin-top: -0.23rem;}#content-inner.layout h2::before {  color: #78ffe9;  margin-left: -1.35rem;  font-size: 1.1rem;  margin-top: -0.12rem;}#content-inner.layout h3::before {  color: #4affd8;  margin-left: -1.22rem;  font-size: 0.95rem;  margin-top: -0.09rem;}#content-inner.layout h4::before {  color: #a9e000;  margin-left: -1.05rem;  font-size: 0.8rem;  margin-top: -0.09rem;}#content-inner.layout h5::before {  color: #57c850;  margin-left: -0.9rem;  font-size: 0.7rem;  margin-top: 0rem;}#content-inner.layout h6::before {  color: #dd54ff;  margin-left: -0.9rem;  font-size: 0.66rem;  margin-top: 0rem;}/* s设置风车hover动效 6s那里可以自己调节快慢*/#content-inner.layout h1:hover,#content-inner.layout h2:hover,#content-inner.layout h3:hover,#content-inner.layout h4:hover,#content-inner.layout h5:hover,#content-inner.layout h6:hover {  color: var(--theme-color);}#content-inner.layout h1:hover::before,#content-inner.layout h2:hover::before,#content-inner.layout h3:hover::before,#content-inner.layout h4:hover::before,#content-inner.layout h5:hover::before,#content-inner.layout h6:hover::before {  color: var(--theme-color);  -webkit-animation: ccc 6s linear infinite;  animation: ccc 6s linear infinite;}.loading-img {  background: url(https://blogpic-5qb.pages.dev/img/avatar/neko.jpg) no-repeat center center;  background-size: cover;}/* 帧率检测 */#fps {  position: fixed;  /* 指定位置 */  right: 10px;  bottom: 2px;  z-index: 1919810;}[data-theme="light"] #fps {  background-color: rgba(255, 173, 86, 0.644);  backdrop-filter: var(--backdrop-filter);  padding: 4px;  border-radius: 4px;}[data-theme="dark"] #fps {  background-color: rgba(0, 0, 0, 0.72);  backdrop-filter: var(--backdrop-filter);  padding: 4px;  border-radius: 4px;}body::-webkit-scrollbar {  width: 0;}.neko {  width: 64px;  height: 64px;  background-image: url("https://bu.dusays.com/2022/07/20/62d812db74be9.png");  position: absolute;  right: 32px;  background-repeat: no-repeat;  background-size: contain;  transform: translateX(50%);  cursor: pointer;  font-family: tzy;  font-weight: 600;  font-size: 16px;  color: #ffa53e;  display: none;}.neko::after {  display: none;  width: 100px;  height: 100px;  background-image: url("https://bu.dusays.com/2022/07/20/62d812d95e6f5.png");  background-size: contain;  z-index: 9999;  position: absolute;  right: 50%;  text-align: center;  line-height: 100px;  top: -115%;}.neko.showMsg::after {  content: attr(data-msg);  display: block;  overflow: hidden;  text-overflow: ellipsis;}.neko:hover::after {  content: attr(data-msg);  display: block;  overflow: hidden;  text-overflow: ellipsis;}.neko.fontColor::after {  color: #333;}/*** @description: 滚动条样式  跟猫二选一*/@media screen and (max-width:992px) {  ::-webkit-scrollbar {      width: 8px !important;      height: 8px !important  }  ::-webkit-scrollbar-track {      border-radius: 2em;  }  ::-webkit-scrollbar-thumb {      background-color: rgba(255, 255, 255, 0.3);      background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);      border-radius: 2em  }  ::-webkit-scrollbar-corner {      background-color: transparent  }}/* 头像呼吸灯 */[data-theme="light"] .avatar-img {  animation: huxi_light 4s ease-in-out infinite;}[data-theme="dark"] .avatar-img {  animation: huxi_dark 4s ease-in-out infinite;}@keyframes huxi_light {  0% {    box-shadow: 0px 0px 1px 1px #ffdf77;  }  25% {    box-shadow: 0px 0px 5px 5px #ffcb59;  }  50% {    box-shadow: 0px 0px 5px 5px #ffc23f;  }  75% {    box-shadow: 0px 0px 5px 5px #fdb61d;  }  100% {    box-shadow: 0px 0px 1px 1px #ffb24d;  }}@keyframes huxi_dark {  0% {    box-shadow: 0px 0px 1px 1px #ffdf77;  }  25% {    box-shadow: 0px 0px 5px 5px #ffcb59;  }  50% {    box-shadow: 0px 0px 5px 5px #ffc23f;  }  75% {    box-shadow: 0px 0px 5px 5px #fdb61d;  }  100% {    box-shadow: 0px 0px 1px 1px #ffb24d;  }}/* 滚动条样式 */::-webkit-scrollbar {  width: 8px;  height: 8px;}::-webkit-scrollbar-track {  background-color: rgba(73, 177, 245, 0.2);  border-radius: 2em;}::-webkit-scrollbar-thumb {  background-color: var(rgb(255,158,53));  background-image: -webkit-linear-gradient(    45deg,    rgba(255, 255, 255, 0.4) 25%,    transparent 25%,    transparent 50%,    rgba(255, 255, 255, 0.4) 50%,    rgba(255, 255, 255, 0.4) 75%,    transparent 75%,    transparent  );  border-radius: 2em;}::-webkit-scrollbar-corner {  background-color: transparent;}::-moz-selection {  color: #fff;  background-color: var(--theme-color);}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  text-shadow: 0 0 2px rgb(255, 158, 53) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  text-shadow: 0 0 2px rgb(255, 158, 53) !important;}/* 闪烁变动颜色连续渐变 */#site-name,#site-title,#site-subtitle,#post-info,.author-info__name,.author-info__description {  transition: text-shadow 1s linear !important;}/* 日间模式不生效 */[data-theme="light"] #site-name,[data-theme="light"] #site-title,[data-theme="light"] #site-subtitle,[data-theme="light"] #post-info {  animation: none;}/* 夜间模式生效 */[data-theme="dark"] #site-name,[data-theme="dark"] #site-title {  animation: light_15px 10s linear infinite;}[data-theme="dark"] #site-subtitle {  animation: light_10px 10s linear infinite;}[data-theme="dark"] #post-info {  animation: light_5px 10s linear infinite;}/* 关键帧描述 */@keyframes light_15px {  0% {    text-shadow: #5636ed 0 0 15px;  }  12.5% {    text-shadow: #11ee5e 0 0 15px;  }  25% {    text-shadow: #f14747 0 0 15px;  }  37.5% {    text-shadow: #f1a247 0 0 15px;  }  50% {    text-shadow: #f1ee47 0 0 15px;  }  50% {    text-shadow: #b347f1 0 0 15px;  }  62.5% {    text-shadow: #002afa 0 0 15px;  }  75% {    text-shadow: #ed709b 0 0 15px;  }  87.5% {    text-shadow: #39c5bb 0 0 15px;  }  100% {    text-shadow: #5636ed 0 0 15px;  }}@keyframes light_10px {  0% {    text-shadow: #5636ed 0 0 10px;  }  12.5% {    text-shadow: #11ee5e 0 0 10px;  }  25% {    text-shadow: #f14747 0 0 10px;  }  37.5% {    text-shadow: #f1a247 0 0 10px;  }  50% {    text-shadow: #f1ee47 0 0 10px;  }  50% {    text-shadow: #b347f1 0 0 10px;  }  62.5% {    text-shadow: #002afa 0 0 10px;  }  75% {    text-shadow: #ed709b 0 0 10px;  }  87.5% {    text-shadow: #39c5bb 0 0 10px;  }  100% {    text-shadow: #5636ed 0 0 10px;  }}@keyframes light_5px {  0% {    text-shadow: #5636ed 0 0 5px;  }  12.5% {    text-shadow: #11ee5e 0 0 5px;  }  25% {    text-shadow: #f14747 0 0 5px;  }  37.5% {    text-shadow: #f1a247 0 0 15px;  }  50% {    text-shadow: #f1ee47 0 0 5px;  }  50% {    text-shadow: #b347f1 0 0 5px;  }  62.5% {    text-shadow: #002afa 0 0 5px;  }  75% {    text-shadow: #ed709b 0 0 5px;  }  87.5% {    text-shadow: #39c5bb 0 0 5px;  }  100% {    text-shadow: #5636ed 0 0 5px;  }}/* 欢迎信息 */#welcome-info {  background: linear-gradient(45deg, #b9f4f3, #e3fbf9);  border-radius: 18px;  padding: 8px;}[data-theme="dark"] #welcome-info {  background: #ffb74caf;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -2043,17 +2097,6 @@
     
     <entry>
       <title></title>
-      <link href="/js/runtime.js"/>
-      <url>/js/runtime.js</url>
-      
-        <content type="html"><![CDATA[var now=new Date;function createtime(){now.setTime(now.getTime()+1e3);var e=new Date("04/10/2023 00:00:00"),t=Math.trunc(234e8+(now-e)/1e3*17),a=(t/1496e5).toFixed(6),o=new Date("04/10/2023 00:00:00"),n=(now-o)/1e3/60/60/24,r=Math.floor(n),i=(now-o)/1e3/60/60-24*r,s=Math.floor(i);1==String(s).length&&(s="0"+s);var d=(now-o)/1e3/60-1440*r-60*s,l=Math.floor(d);1==String(l).length&&(l="0"+l);var g=(now-o)/1e3-86400*r-3600*s-60*l,b=Math.round(g);1==String(b).length&&(b="0"+b);let c="";c=s<18&&s>=9?`<img class='boardsign' src='' title=''><br>  <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `:` <img class='boardsign' src='' title=''><br> <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `,document.getElementById("workboard")&&(document.getElementById("workboard").innerHTML=c)}setInterval((()=>{createtime()}),1e3);]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
       <link href="/js/txmap.js"/>
       <url>/js/txmap.js</url>
       
@@ -2075,6 +2118,17 @@
     
     
     <entry>
+      <title></title>
+      <link href="/js/runtime.js"/>
+      <url>/js/runtime.js</url>
+      
+        <content type="html"><![CDATA[var now=new Date;function createtime(){now.setTime(now.getTime()+1e3);var e=new Date("04/10/2023 00:00:00"),t=Math.trunc(234e8+(now-e)/1e3*17),a=(t/1496e5).toFixed(6),o=new Date("04/10/2023 00:00:00"),n=(now-o)/1e3/60/60/24,r=Math.floor(n),i=(now-o)/1e3/60/60-24*r,s=Math.floor(i);1==String(s).length&&(s="0"+s);var d=(now-o)/1e3/60-1440*r-60*s,l=Math.floor(d);1==String(l).length&&(l="0"+l);var g=(now-o)/1e3-86400*r-3600*s-60*l,b=Math.round(g);1==String(b).length&&(b="0"+b);let c="";c=s<18&&s>=9?`<img class='boardsign' src='' title=''><br>  <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `:` <img class='boardsign' src='' title=''><br> <div style="font-size:13px;font-weight:bold">本店已开张 ${r} 天 ${s} 小时 ${l} 分 ${b} 秒 <i id="heartbeat" class='fas fa-heartbeat'></i> <br> 旅行者 1 号当前距离地球 ${t} 千米，约为 ${a} 个天文单位 🚀</div> </b> <br> <b> <font size = 2px>再看看那个光点，它就在那里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨✨</font></b> `,document.getElementById("workboard")&&(document.getElementById("workboard").innerHTML=c)}setInterval((()=>{createtime()}),1e3);]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>店长们</title>
       <link href="/link/index.html"/>
       <url>/link/index.html</url>
@@ -2089,6 +2143,17 @@
       <title>标签</title>
       <link href="/tags/index.html"/>
       <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>留言板</title>
+      <link href="/comments/index.html"/>
+      <url>/comments/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
