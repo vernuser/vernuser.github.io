@@ -1,0 +1,586 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网络渗透测试 | 随波逐流の旅店</title><meta name="author" content="vernus"><meta name="copyright" content="vernus"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="网络渗透测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络渗透测试">
+<meta property="og:url" content="http://vernuser.github.io/2023/11/06/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="随波逐流の旅店">
+<meta property="og:description" content="网络渗透测试">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.imgdb.cn/item/667936fbd9c307b7e9e0c98d.jpg">
+<meta property="article:published_time" content="2023-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-06T03:44:11.297Z">
+<meta property="article:author" content="vernus">
+<meta property="article:tag" content="渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/667936fbd9c307b7e9e0c98d.jpg"><link rel="shortcut icon" href="https://blogpic-5qb.pages.dev/img/icon/coffee1.jpg"><link rel="canonical" href="http://vernuser.github.io/2023/11/06/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lib.baomitu.com/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络渗透测试',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-06 11:44:11'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><span id="fps"></span><link rel="stylesheet" href="https://cdn1.tianli0.top/npm/element-ui@2.15.6/packages/theme-chalk/lib/index.css"><div id="myscoll"></div><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><link rel="stylesheet" href="https://www.fomal.cc/static/css/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/667809e1d9c307b7e9f31ca0.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 旅店</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope-open"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 员工们</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于店长</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 来点什么？</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案室</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签墙</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类目表</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://pic.imgdb.cn/item/667936fbd9c307b7e9e0c98d.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="随波逐流の旅店"><span class="site-name">随波逐流の旅店</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 旅店</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope-open"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 员工们</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于店长</span></a></div><div class="menus_item"><a class="site-page group hide" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 来点什么？</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案室</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签墙</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类目表</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">网络渗透测试</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-05T16:00:00.000Z" title="发表于 2023-11-06 00:00:00">2023-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-06T03:44:11.297Z" title="更新于 2026-02-06 11:44:11">2026-02-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F/">渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="网络渗透测试"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipconfig  查看你电脑的ip地址</span><br><span class="line">对于linux系统应该是ifconfig</span><br></pre></td></tr></table></figure>
+<h3 id="查看IP信息"><a href="#查看IP信息" class="headerlink" title="查看IP信息"></a>查看IP信息</h3><h4 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h4><p>if—interface接口</p>
+<p>config—configer配置程序</p>
+<h4 id="eth0"><a href="#eth0" class="headerlink" title="eth0"></a>eth0</h4><p>eth—ethernet以太网</p>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/以太网/99684">以太网_百度百科 (baidu.com)</a></p>
+<p>FE—快速以太网</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139707963">标准以太网、快速以太网、千兆以太网和万兆以太网分别是什么？ - 知乎 (zhihu.com)</a></p>
+<p>localback回环地址</p>
+<p>netmask子网掩码，判断你是在哪个网络中（IP地址和子网掩码进行”与“运算）</p>
+<p>192.xxx.xxx.0最后一位是0表示这一个网络</p>
+<p>192.xxx.xxx.255表示这个网络的所有主机</p>
+<h3 id="查看路由信息"><a href="#查看路由信息" class="headerlink" title="查看路由信息"></a>查看路由信息</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">再kali中是route -n</span><br><span class="line">再windows是route PRINT</span><br></pre></td></tr></table></figure>
+<h3 id="DNS信息"><a href="#DNS信息" class="headerlink" title="DNS信息"></a>DNS信息</h3><p>每一个电脑实际上都是有一个DNS域名解析服务器nameserver</p>
+<p>正常访问一个网站访问的是他的IP，这个IP并不方便记忆，所以出现了DNS，比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">www.baidu.com</span><br><span class="line">com是一个互联网通用的</span><br><span class="line">baidu是百度的域名</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这样子就好记忆多了</p>
+<h3 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h3><p>网关是连接两个不同网络之间的通讯与控制</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE1LmNuYmxvZ3MuY29tL2Jsb2cvMzgyMTA4LzIwMTYwNC8zODIxMDgtMjAxNjA0MDkxNjQ5MDMxNDAtOTQ5NTcyMDA3LnBuZw?x-oss-process=image/format,png" alt="img"></p>
+<p>gateway默认网关</p>
+<p>自动设置就是利用<strong>DHCP（Dynamic Host Configuration Protocol, 动态主机配置协议）服务器</strong>来自动给网络中的计算机分配IP地址、子网掩码和默认网关 。</p>
+<h4 id="单播"><a href="#单播" class="headerlink" title="单播"></a>单播</h4><p>对特定的主机进行数据传送，简单来说就是两个设备点对点进行通信</p>
+<h4 id="组播"><a href="#组播" class="headerlink" title="组播"></a>组播</h4><p>一个设备与关系其数据的部分设备进行通信，也就是说一个设备对一组特定的主机进行通信</p>
+<p>(多用于<strong>D类IP</strong>)</p>
+<h4 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h4><p>一个设备对本网络内所有设备进行通信就是广播</p>
+<h2 id="虚拟机的三种模式"><a href="#虚拟机的三种模式" class="headerlink" title="虚拟机的三种模式"></a>虚拟机的三种模式</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic1.zhimg.com/80/v2-82deb4be7068ec65b3ab251df22d5130_720w.webp" alt="img"></p>
+<h5 id="桥接"><a href="#桥接" class="headerlink" title="桥接"></a>桥接</h5><p>桥接就是使用物理机的MAC地址，但是是有自己的独立IP的</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img-blog.csdnimg.cn/20201216200700237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ3MzU0ODI2,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h5 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h5><p>NAT就是将物理机作为路由器进行上网</p>
+<h5 id="HOST"><a href="#HOST" class="headerlink" title="HOST"></a>HOST</h5><p>图片来自</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/65103100">“桥接”和“NAT”方式区别 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_47354826/article/details/111301616">VMware虚拟机三种网络模式详解—Bridged（桥接模式）_vm桥接模式是什么意思-CSDN博客</a></p>
+<h2 id="Kali-linux常用命令"><a href="#Kali-linux常用命令" class="headerlink" title="Kali linux常用命令"></a>Kali linux常用命令</h2><h3 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PWD命令是Print Working Directory（打印工作目录）的缩写，其功能是显示当前工作目录。</span><br><span class="line">cd是Change Directory（更改目录）的缩写，其功能是将活动目录更改为指定的路径。</span><br><span class="line">ls命令用于显示指定工作目录下之内容（列出当前工作目录所含之文件及子目录)。</span><br><span class="line">locate命令用于查找符合条件的文件。</span><br><span class="line">whereis命令也用于查找文件。</span><br><span class="line">which命令会在环境变量$PATH设置的目录里查找符合条件的文件。</span><br><span class="line">mkdir是make directory（创建目录）的缩写，用于创建新的目录。</span><br><span class="line">cp: 复制文件或目录，语法为“cp 源文件 目标文件”</span><br><span class="line">rmdir用来删除一个空的目录，rm 命令来删除非空目录。</span><br></pre></td></tr></table></figure>
+<h3 id="文件查看"><a href="#文件查看" class="headerlink" title="文件查看"></a>文件查看</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat命令用来显示文件内容，语法为“cat 目录项”，cat命令可以在屏幕上显示文件，可以合并文件，还可以建立文本文件。</span><br><span class="line">另外head、tail、nl、more和less命令也可以用来浏览文件。</span><br><span class="line">grep 命令用于查找文件里符合条件的字符串。</span><br><span class="line">more 命令类似 cat ，不过会以一页一页的形式显示，更方便使用者逐页阅读，使用者在阅读时可以按空格键（space）来显示下一页，按 b 键来返回（back）一页显示。</span><br><span class="line">less 与 more 类似，但使用 less 可以随意浏览文件，下面是使用less参数显示文件内容之后，使用者可以进行的一些操作。</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Kali Linux 2同时支持net-tools和iproute2，所以可以使用这两种命令来完成对网络的配置和查看。如果要查看设备的网络连接信息，可以使用“ip addr”和“sudo ifconifg”</span><br><span class="line">ip命令中常用的方法有：</span><br><span class="line">ip addr show：显示网络信息；</span><br><span class="line">ip route show：显示路由 ；</span><br><span class="line">ip neigh show：显示arp表（相当于Windows的arp命令）；</span><br><span class="line">重启网络：ifdown &lt;网络接口名称&gt; ifup &lt;网络接口名称&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="Shell脚本"><a href="#Shell脚本" class="headerlink" title="Shell脚本"></a>Shell脚本</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Shell脚本与Windows/Dos下的批处理相似，也就是用各类命令预先放入到一个文件中，方便一次性执行的一个程序文件，主要是方便进行设置或者管理用的。Shell 脚本的编写跟 JavaScript、php 编程一样，只要有一个能编写代码的文本编辑器和一个能解释执行的脚本解释器就可以了。</span><br><span class="line">那么打开一个编辑器，输入以下内容。</span><br><span class="line">#! /bin/bash</span><br><span class="line">echo &quot;Hello, Kali!&quot;</span><br><span class="line">将该文件保存为HelloKali，不需要后缀名。</span><br><span class="line">当前我们还不能执行这个脚本，这是因为该脚本的权限导致的。这里可以使用ls -l命令来查看这个文件的权限。当前这个文件只有w和r权限，是不能执行的，这里需要为它添加一个可执行的权限。</span><br><span class="line">chmod  755  HelloKali</span><br><span class="line">再次使用ls -l查看，可以看到它具有了可执行权限。</span><br><span class="line">kali &gt; ./HelloKali</span><br><span class="line">这里的./ 可以理解为在当前目录下查找文件。</span><br><span class="line">按下回车可以看到屏幕上输出：</span><br><span class="line">Hello, Kali!</span><br><span class="line">这表明当前程序已经成功执行。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="服务管理"><a href="#服务管理" class="headerlink" title="服务管理"></a>服务管理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在Linux术语中，服务指的是在运行在后台等待使用的应用程序。Service命令用于对系统服务进行管理，比如启动（start）、停止（stop）、重启（restart）、查看状态（status）等。在Kali linux2中预装了很多服务。在Kali Linux中的有些服务可以通过GUI停止和启动，就像在Windows或Mac里一样。但是，也有些服务需要使用命令行管理。我们在这里介绍管理基本服务的语法：</span><br><span class="line">service servicename start|stop|restart</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="OSINT"><a href="#OSINT" class="headerlink" title="OSINT"></a>OSINT</h3><p>开源情报，指的是从公共资源中手机信息以在情报环境中使用他。</p>
+<h2 id="内网，DMZ，外网"><a href="#内网，DMZ，外网" class="headerlink" title="内网，DMZ，外网"></a>内网，DMZ，外网</h2><p>DMZ是位于两个防火墙之间的空间，比    Internet的安全性高，比内网的安全性低。DMZ的中文称呼是隔离区，也称为非军事区</p>
+<h3 id="内网，DMZ，外网之间的访问策略"><a href="#内网，DMZ，外网之间的访问策略" class="headerlink" title="内网，DMZ，外网之间的访问策略"></a>内网，DMZ，外网之间的访问策略</h3><h4 id="1-内网可以访问外网"><a href="#1-内网可以访问外网" class="headerlink" title="1.内网可以访问外网"></a>1.内网可以访问外网</h4><p>内网用户可以访问外网，在这里要进行源地址转换</p>
+<h4 id="2-内网用户可以访问DMZ"><a href="#2-内网用户可以访问DMZ" class="headerlink" title="2.内网用户可以访问DMZ"></a>2.内网用户可以访问DMZ</h4><p>方便内网用户使用和管理DMZ的服务器</p>
+<h4 id="3-外网不能访问内网"><a href="#3-外网不能访问内网" class="headerlink" title="3.外网不能访问内网"></a>3.外网不能访问内网</h4><h4 id="4-外网可以访问DMZ"><a href="#4-外网可以访问DMZ" class="headerlink" title="4.外网可以访问DMZ"></a>4.外网可以访问DMZ</h4><h4 id="5-DMZ不可以访问内网"><a href="#5-DMZ不可以访问内网" class="headerlink" title="5.DMZ不可以访问内网"></a>5.DMZ不可以访问内网</h4><h4 id="6-DMZ不可以访问外网"><a href="#6-DMZ不可以访问外网" class="headerlink" title="6.DMZ不可以访问外网"></a>6.DMZ不可以访问外网</h4><p>这一条有例外，比如将邮件服务器放置到DMZ就需要能够访问到外网。</p>
+<h2 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h2><p>内容分发网路，采用更大量的缓存服务器，不知放在用户相对集中的区域，当用户访问的时候利用全局负载技术，将用户的访问只想距离最近的缓存服务器上。</p>
+<p>简单来说就是在用户的附近建立一个本地仓库，就近给你内容（发货）</p>
+<p>可以看这一篇</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/52362950">到底什么是CDN？ - 知乎 (zhihu.com)</a></p>
+<h2 id="WAF"><a href="#WAF" class="headerlink" title="WAF"></a>WAF</h2><p>WEB应用防火墙</p>
+<p>带宽的单位<strong>dps</strong>，当然也可以mbps</p>
+<p><strong>hash是用来校验的</strong></p>
+<h2 id="TTL—-网络中的生存时间"><a href="#TTL—-网络中的生存时间" class="headerlink" title="TTL—-网络中的生存时间"></a>TTL—-网络中的生存时间</h2><p>每经过一个路由器就会-1</p>
+<p>不同的操作系统对TTL的初始值是不同的，比如</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piJSUE9"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/13/piJSUE9.png" alt="piJSUE9.png"></a></p>
+<p>我ping自己的本地是128，但是我ping</p>
+<p>作业：</p>
+<ul>
+<li>与ZoomEye功能类似的搜索引擎还有哪些？</li>
+</ul>
+<p>奇安信的鹰图，fofa，站长之家等等</p>
+<ul>
+<li>子域名收集</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piJS6De"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/13/piJS6De.png" alt="piJS6De.png"></a></p>
+<ul>
+<li>利用ZoomEye进行相关搜索</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piJS48P"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/13/piJS48P.png" alt="piJS48P.png"></a></p>
+<h3 id="Review："><a href="#Review：" class="headerlink" title="Review："></a>Review：</h3><p>子网掩码：与IP地址做与运算判断是否在同一网络中</p>
+<h3 id="TCP-IP协议，体系"><a href="#TCP-IP协议，体系" class="headerlink" title="TCP/IP协议，体系"></a>TCP/IP协议，体系</h3><p>TCP/IP是常用的四层结构，</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img-blog.csdn.net/20171215000304120?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjI0NjQ1NQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>协议是<strong>水平的</strong>，即两个协议是<strong>控制两个对等的实体</strong>进行通信的规则。</p>
+<p>服务是<strong>垂直的</strong>，即服务是<strong>从下通过层间接口向上</strong>进行提供的</p>
+<h2 id=""><a href="#" class="headerlink" title="#"></a>#</h2><p><a target="_blank" rel="noopener" href="https://imgse.com/i/piUdJeA"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/20/piUdJeA.png" alt="piUdJeA.png"></a></p>
+<p>传输层中以端口做区分，也可以叫做是传输层的地址</p>
+<p>域名也被看做是一个地址</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piUdtot"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/20/piUdtot.png" alt="piUdtot.png"></a></p>
+<p>MAC地址不可更改！！！</p>
+<h3 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h3><p><a target="_blank" rel="noopener" href="https://imgse.com/i/piUdUFP"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/20/piUdUFP.png" alt="piUdUFP.png"></a></p>
+<p>互联网的最小单位是交换机以及其下连接的电脑，交换机通过一个路由器连接到其他的交换机</p>
+<h3 id="交叉线"><a href="#交叉线" class="headerlink" title="交叉线"></a>交叉线</h3><p>直通线：网线两头线序一致（均为568A或68B）叫直通线。<br>交叉线：网线一头是568A线序，另一头是568B线序。</p>
+<p>如果是计算机与交换机或HUB相连，则两头都做568a，或两头都做568b，即使用直通线；如果是两台计算机互连或ADSL MODEM与HUB连接，则需要一头做568a，另一头做568b，也就是常说的1和3，2和6互换了，即使用交叉线。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://bkimg.cdn.bcebos.com/pic/0dd7912397dda144da48b24db8b7d0a20df48688?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2U5Mg==,g_7,xp_5,yp_5/format,f_auto" alt="img"></p>
+<h5 id="网关配置中通常使用-1还是-254？"><a href="#网关配置中通常使用-1还是-254？" class="headerlink" title="网关配置中通常使用.1还是.254？"></a>网关配置中通常使用.1还是.254？</h5><p><strong>一般来说是254，因为一般255是作为广播地址，而在1-254中随便选择一个数还要跳过的话，不如直接将254设置成网关</strong></p>
+<p>LAN和WAN</p>
+<p>GPON：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/80270214">EPON与GPON的应用与区别 - 知乎 (zhihu.com)</a></p>
+<p>ISP网络服务提供商</p>
+<p>ACL访问控制列表</p>
+<h3 id="ABC类网段"><a href="#ABC类网段" class="headerlink" title="ABC类网段"></a>ABC类网段</h3><p>10开头的IP是A类地址的私有地址</p>
+<p>C类网络是最多的，但是只能容纳2^8 -2个主机IP</p>
+<p>A类网络是最少的，但是只能容纳2^24 -2个主机IP</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img-blog.csdnimg.cn/20190705095636130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3NzMyODI5,size_16,color_FFFFFF,t_70" alt="img"></p>
+<h3 id="NAT-1"><a href="#NAT-1" class="headerlink" title="NAT"></a><strong>NAT</strong></h3><p>IP地址中主机标识位全0表示整个网络全1表示广播</p>
+<p>在<strong>公网</strong>的范围内，IP地址唯一</p>
+<p>socket套接字</p>
+<h3 id="UDP和TCP"><a href="#UDP和TCP" class="headerlink" title="UDP和TCP"></a>UDP和TCP</h3><p>TCP有连接，UDP无连接，广播，QQ都是用UDP，但是QQ传文件使用的是TCP</p>
+<p>qq使用的是oicq协议（仅限腾讯qq.exe，tim和qq内测版不是oicq的）</p>
+<h3 id="交换机switch"><a href="#交换机switch" class="headerlink" title="交换机switch"></a>交换机switch</h3><p>switch既可以表示交换机也可以表示开关，交换机用过CAM进行数据帧转发，当交换机收到数据帧时，会查找CAM表对应的表象并转发给对应接口。这个过程就像开关闭合</p>
+<h3 id="任务："><a href="#任务：" class="headerlink" title="任务："></a>任务：</h3><p>手机传图片给电脑抓包</p>
+<p>首先打开wireshark抓包，手机电脑要再同一网络下，</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piU6PKK"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/20/piU6PKK.png" alt="piU6PKK.png"></a></p>
+<p>ip.src==你手机的ip，因为传文件是TCP协议，随便抓一个追踪流就行，记得改成原始数据</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piU6FbD"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/20/piU6FbD.png" alt="piU6FbD.png"></a></p>
+<p>打不开，用010或者winhex删除前面的一大串就可</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/piU6AVe"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/11/20/piU6AVe.png" alt="piU6AVe.png"></a></p>
+<h4 id="RFC1597"><a href="#RFC1597" class="headerlink" title="RFC1597:"></a>RFC1597:</h4><p>一种保存地址空间的方法，这种方法不用给某个企业内部的私有主机分配全局唯一的IP地址，但是允许企业内部之间吗所有主机之间以及企业外部的所有共有主机之间的完全的网络连接。</p>
+<h4 id="IP在公网中是唯一的"><a href="#IP在公网中是唯一的" class="headerlink" title="IP在公网中是唯一的"></a>IP在公网中是唯一的</h4><p>在个人的私有网络中并不是，比如你的内网地址是192.168.xxx.xxx，另一个人的也是，但你不能说你们的公网IP是唯一的，所以要加限制条件</p>
+<h4 id="网络地址转换："><a href="#网络地址转换：" class="headerlink" title="网络地址转换："></a>网络地址转换：</h4><h5 id="SNAT：源网络地址转换："><a href="#SNAT：源网络地址转换：" class="headerlink" title="SNAT：源网络地址转换："></a><strong>SNAT：</strong>源网络地址转换：</h5><p>用于将内部网络中的源IP地址修改为公网可路由的IP地址</p>
+<h5 id="DNAT：目标网络地址转换："><a href="#DNAT：目标网络地址转换：" class="headerlink" title="DNAT：目标网络地址转换："></a><strong>DNAT：</strong>目标网络地址转换：</h5><p>用于将外部请求的目标地址转换为内网中的特定IP地址</p>
+<h5 id="SNAT和DNAT的使用场景："><a href="#SNAT和DNAT的使用场景：" class="headerlink" title="SNAT和DNAT的使用场景："></a>SNAT和DNAT的使用场景：</h5><h6 id="DNAT技术通常用于以下几种情况："><a href="#DNAT技术通常用于以下几种情况：" class="headerlink" title="DNAT技术通常用于以下几种情况："></a>DNAT技术通常用于以下几种情况：</h6><ul>
+<li>允许外部用户通过互联网访问内部Web服务器、邮件服务器等服务。</li>
+<li>允许外部用户通过VPN连接到内部网络。</li>
+<li>允许外部用户使用远程桌面协议（RDP）连接内部Windows服务器。</li>
+</ul>
+<h6 id="SNAT技术通常用于以下几种情况："><a href="#SNAT技术通常用于以下几种情况：" class="headerlink" title="SNAT技术通常用于以下几种情况："></a>SNAT技术通常用于以下几种情况：</h6><ul>
+<li>增加<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/ns?from_column=20065&amp;from=20065">网络安全</a>性，防止来自外部网络的攻击。</li>
+<li>控制流量分配，以提高网络带宽效率。</li>
+<li>允许内部计算机访问外部资源。</li>
+</ul>
+<p>一个端口号是16位表示，65525个端口）</p>
+<h5 id="ISP-Internet-Service-Provider"><a href="#ISP-Internet-Service-Provider" class="headerlink" title="ISP:Internet Service Provider:"></a>ISP:Internet Service Provider:</h5><p>互联网服务提供商，就是联通移动电信这一类给你提供上网的</p>
+<p>ipconfig/release：ip查看并且释放</p>
+<p>ipconfig/renew：ip查看并且重新连接</p>
+<p><strong>防火墙在网络层，WAF在应用层</strong></p>
+<p><strong>为什么防火墙会知道你是ICMP，因为他在解析传输层中会看到里面的协议Protocal</strong></p>
+<p>同一子网，看ARP缓存）</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148644458">https://zhuanlan.zhihu.com/p/148644458</a></p>
+<p>TCP FIN可以用来知道你的从操作系统是什么</p>
+<p>常见的端口号</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/picEaNT"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/12/06/picEaNT.png" alt="picEaNT.png"></a></p>
+<p>其中FTP的20端口是用来进行数据传输，21端口是用来进行访问控制</p>
+<h4 id="引导协议BOOTP"><a href="#引导协议BOOTP" class="headerlink" title="引导协议BOOTP"></a>引导协议BOOTP</h4><p>是一种基于UDP的协议。用于从服务器得到自己的IP地址、服务器的IP地址、启动映像文件名、网关IP等等</p>
+<h5 id="获取IP地址的过程"><a href="#获取IP地址的过程" class="headerlink" title="获取IP地址的过程"></a>获取IP地址的过程</h5><p>首先，客户端使用广播形式以IP地址255.255.255.255向网络中发出IP地址查询要求。运行BOOTP协议的服务器接收到这个请求，会发送一个含有IP地址、服务器IP地址、网关等信息的FOUND帧。客户端会根据该FOUND帧来获得自己的IP地址</p>
+<h4 id="动态地址配置协议DHCP协议（Dynamic-Host-Configuration-Protocol）"><a href="#动态地址配置协议DHCP协议（Dynamic-Host-Configuration-Protocol）" class="headerlink" title="动态地址配置协议DHCP协议（Dynamic Host Configuration Protocol）"></a>动态地址配置协议DHCP协议（Dynamic Host Configuration Protocol）</h4><p>DHCP是BOOTP的扩展，基于客户/服务器模式的，提供了一种动态指定IP地址和配置参数的机制。</p>
+<h5 id="DHCP的工作原理"><a href="#DHCP的工作原理" class="headerlink" title="DHCP的工作原理"></a>DHCP的工作原理</h5><p>寻找DHCP服务器（发布一个DHCP广播包来得知DHCP服务器），提供IP租用地址（在某一时间段来使用的地址，并不是固定给这个客户使用），接受IP租约</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f013acd35898">BOOTP协议与DHCP协议 - 简书 (jianshu.com)</a></p>
+<h4 id="网络指纹："><a href="#网络指纹：" class="headerlink" title="网络指纹："></a>网络指纹：</h4><p>网络指纹是指在互联网上识别和跟踪用户的一种方法，通过收集和分析用户在网络上的行为、设备信息、软件配置等数据来创建对用户的唯一标识。网络指纹通常包括以下内容：</p>
+<ol>
+<li><strong>设备信息</strong>: 包括用户的操作系统、浏览器类型和版本、屏幕分辨率、时区等设备特征。</li>
+<li><strong>网络属性</strong>: 包括用户的 IP 地址、网络提供商（ISP）信息、地理位置等。</li>
+<li><strong>浏览行为</strong>: 包括用户的点击模式、页面浏览习惯、访问频率等。</li>
+<li><strong>其他参数</strong>: 一些网站还可能收集关于用户的其他信息，比如语言设置、插件信息、字体配置等。</li>
+</ol>
+<p>通过收集这些信息，网站和广告商可以创建一个独特的“指纹”来标识和跟踪用户，即使用户在不同设备和网络下访问网站，也可以被识别出来。</p>
+<p>网络指纹技术的使用可以帮助网站提供个性化的服务，但也引发了隐私保护的问题。一些用户可能认为这种行为侵犯了他们的隐私权，因此网络指纹也成为了隐私保护领域的一个重要议题。</p>
+<h5 id="os-fngerprinting"><a href="#os-fngerprinting" class="headerlink" title="os fngerprinting"></a>os fngerprinting</h5><p>操作系统指纹识别（OS fingerprinting）是一种通过识别和分析网络上连接的设备的特征来确定其操作系统的方法。它基于操作系统在网络通信中产生的一些特定行为和响应模式。</p>
+<p>操作系统指纹识别的原理是通过发送一系列特定的网络请求，观察目标设备在响应时所表现出的行为和特征，从而推断出该设备正在运行的操作系统类型和版本。</p>
+<p>这些特征可能包括：</p>
+<ol>
+<li><strong>TCP/IP栈实现</strong>: 不同的操作系统对于TCP/IP协议栈的实现方式有所差异，如TCP/IP选项、初始序列号(ISN)的生成方式等。</li>
+<li><strong>网络协议响应</strong>: 操作系统对网络请求的响应可能会有不同的行为，比如对于某些特定的请求或错误条件的处理方式。</li>
+<li><strong>时间延迟和超时</strong>: 操作系统在响应网络请求时可能会有不同的延迟和超时设置。</li>
+<li><strong>默认开放的网络端口</strong>: 不同操作系统可能会默认打开一些特定的网络端口，这些端口可以用于区分操作系统类型。</li>
+</ol>
+<p>通过分析这些特征，网络安全工具和技术可以尝试识别设备的操作系统，并据此进行针对性的漏洞扫描、探测等操作。</p>
+<p>需要注意的是，操作系统指纹识别并非完全准确，不同的设备和网络环境可能导致结果的误判或不准确性。此外，一些设备可能会采取措施来隐藏或模糊操作系统指纹，以增加网络安全性。</p>
+<h5 id="CIDR地址"><a href="#CIDR地址" class="headerlink" title="CIDR地址"></a>CIDR地址</h5><p>这个佬写的很详细了，我就不买弄了（）</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dan15188387481/article/details/49873923">CIDR地址块及其子网划分（内含原始IP地址分类及其子网划分的介绍）_cidr块-CSDN博客</a></p>
+<p>wifi安全性</p>
+<p>学校的wifi根据MAC地址的前六个字节判断是否是虚拟机来请求IP，如果是则拒绝</p>
+<p>防火墙工作原理</p>
+<p>防护墙作用在非军事区，用于将内网和外部网络隔离开</p>
+<p>操作系统协议栈，指纹</p>
+<p>这个上面说了，可以往上回看</p>
+<p>nmap探测</p>
+<p>常见的就是-A -O -sP -p -sV</p>
+<p>-sP 10.0.105.1/24 ：探测10.0.105网段中的全部主机。</p>
+<p>-O IP ：探测指定IP的相关数据。</p>
+<p>-p 端口号1，端口号2 IP : 探测指定IP是否打开指定端口</p>
+<p>-p 端口号1，端口号2 IP -sV：探测指定IP、指定端口是那个版本的软件打开的。</p>
+<p>-A IP -oN 存储路径：在指定路径下生成相关操作的txt报告。</p>
+<p>-A IP ：扫描指定IP的全部内容。</p>
+<p>上周因为考试咕咕了，这次补上（）</p>
+<p>数据链路只在两个结点</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/picZDmR"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/12/06/picZDmR.png" alt="picZDmR.png"></a><br><a target="_blank" rel="noopener" href="https://imgse.com/i/picZw6J"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/12/06/picZw6J.png" alt="picZw6J.png"></a></p>
+<p>信息封装过程：</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/picZ0X9"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://z1.ax1x.com/2023/12/06/picZ0X9.png" alt="picZ0X9.png"></a></p>
+<p>HTTP：超文本传输协议</p>
+<p>路由器可以被看成是一台计算机而交换机可以堪称线</p>
+<p>问：怎么知道网关MAC地址</p>
+<p>ARP广播）</p>
+<p>封装时的类型</p>
+<p>0x0800  IP</p>
+<p>0x0806  ARP</p>
+<p>DHCP动态主机配置协议</p>
+<p>DHCP 和DNS协议是在应用层，用UDP</p>
+<p>Ip,子网掩码，DNS服务器，默认网关</p>
+<p>源端口0.0.0.0———————》255.255.255。255</p>
+<p>​            DHCP客户端                                DHCP服务器</p>
+<p>​                                        ——广播—-》</p>
+<p>​                                        《—-单播—-</p>
+<p>可进行的攻击</p>
+<p>ARP假冒</p>
+<p>ARP断网攻击</p>
+<p>制作钓鱼网站</p>
+<p>伪造DNS</p>
+<p>假冒客户端耗尽资源池（死亡之Ping）</p>
+<p>非法冒充DHCP</p>
+<h4 id="nmap上帝之眼的使用"><a href="#nmap上帝之眼的使用" class="headerlink" title="nmap上帝之眼的使用"></a>nmap上帝之眼的使用</h4><p>nmap -O</p>
+<p>NMAP -sS</p>
+<h5 id="使用两台虚拟机进行arp欺骗"><a href="#使用两台虚拟机进行arp欺骗" class="headerlink" title="使用两台虚拟机进行arp欺骗"></a>使用两台虚拟机进行arp欺骗</h5><p>上来先安装</p>
+<p>apt install arpscoof</p>
+<p>如果不成功的话进行换源就好了）</p>
+<p>查看是否安装成功</p>
+<p>arpspoof -h</p>
+<p>提示是arpspoof -i 网卡 -t 要攻击的主机ip -r要攻击的主机的默认网关</p>
+<p>我使用的是使用两个虚拟机进行操作</p>
+<p>这时候需要进行端口转发使得能正常使用。</p>
+<p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</p>
+<h5 id="网络渗透测试行业标准"><a href="#网络渗透测试行业标准" class="headerlink" title="网络渗透测试行业标准"></a>网络渗透测试行业标准</h5><ul>
+<li>前期与客户的交流阶段‘</li>
+<li>情报的收集阶段</li>
+<li>威胁建模阶段</li>
+<li>漏洞分析阶段</li>
+<li>漏洞利用阶段</li>
+<li>后渗透攻击阶段</li>
+<li>报告阶段</li>
+</ul>
+<p>SAM破解</p>
+<p>kon-boot系统启动盘（）</p>
+<p>挑战/响应认证方式（challenge/response）</p>
+<p>免杀</p>
+<p>双向远程控制连接</p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>网络渗透测试</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://vernuser.github.io/2023/11/06/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">http://vernuser.github.io/2023/11/06/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>vernus</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2023-11-06</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2026-02-06</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B8%97%E9%80%8F/">渗透</a></div><div class="post_share"><div class="social-share" data-image="https://pic.imgdb.cn/item/667936fbd9c307b7e9e0c98d.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/01/07/%E9%BB%91%E7%9B%92/" title="黑盒知识梳理"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/667936fbd9c307b7e9e0c98d.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">黑盒知识梳理</div></div></a></div><div class="next-post pull-right"><a href="/2023/03/19/os/" title="操作系统教程"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/672f0558d29ded1a8c33ef60.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">操作系统教程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/01/08/all-file-download/" title="WEB攻防--任意文件下载"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/667d4decd9c307b7e9ad92d8.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="title">WEB攻防--任意文件下载</div></div></a></div><div><a href="/2025/01/08/all-file-upload/" title="WEB攻防--任意文件上传"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/6679371cd9c307b7e9e11035.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="title">WEB攻防--任意文件上传</div></div></a></div><div><a href="/2025/01/08/lodash/" title="lodash"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/672f0558d29ded1a8c33ef60.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="title">lodash</div></div></a></div><div><a href="/2025/01/08/rce/" title="RCE"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/6679371cd9c307b7e9e11035.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="title">RCE</div></div></a></div><div><a href="/2025/01/08/sql%E6%B3%A8%E5%85%A5-%E5%AE%88%E5%A4%9C%E4%BA%BA/" title="WEB攻防--sql注入"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/672f0558d29ded1a8c33ef60.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="title">WEB攻防--sql注入</div></div></a></div><div><a href="/2025/01/08/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day1/" title="小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/667d4decd9c307b7e9ad92d8.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="title">小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/667809e1d9c307b7e9f31ca0.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">vernus</div><div class="author-info__description">愿终有一天你能与你重要的人重逢</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">64</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><a id="card-info-btn" href="https://vernuser.github.io/"><i></i><span>relax yourself~</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/vernuser" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/348470293?spm_id_from=333.337.0.0" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: ;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fa-regular fa-bookmark"></i><span>公告</span></div><div class="announcement_content"><center>主域名：<br><a target="_blank" rel="noopener" href="https://vernus.top"><b><font color="#5ea6e5">vernus.top</font></b></a><br>联系方式：<br><a href="https://vernuser.github.io"><b><font color="#5ea6e5">QQ 840683056</font></b></a><br><a href="https://vernuser.github.io"><b><font color="#5ea6e5">你还好吗</font></b></a><br><a href="https://vernuser.github.io"><b><font color="#5ea6e5">还是在摸鱼🦑</font></b></a><br><a href="https://vernuser.github.io">📬：<b><font color="#a591e0">vernuser@foxmail.com</font></b></a></center></div><div id="welcome-info"></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8BIP%E4%BF%A1%E6%81%AF"><span class="toc-text">查看IP信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ifconfig"><span class="toc-text">ifconfig</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#eth0"><span class="toc-text">eth0</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF"><span class="toc-text">查看路由信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS%E4%BF%A1%E6%81%AF"><span class="toc-text">DNS信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E5%85%B3"><span class="toc-text">网关</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E6%92%AD"><span class="toc-text">单播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E6%92%AD"><span class="toc-text">组播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD"><span class="toc-text">广播</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">虚拟机的三种模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5"><span class="toc-text">桥接</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NAT"><span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HOST"><span class="toc-text">HOST</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kali-linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">Kali linux常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="toc-text">文件目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%9F%A5%E7%9C%8B"><span class="toc-text">文件查看</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="toc-text">网络相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell%E8%84%9A%E6%9C%AC"><span class="toc-text">Shell脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-text">服务管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSINT"><span class="toc-text">OSINT</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%EF%BC%8CDMZ%EF%BC%8C%E5%A4%96%E7%BD%91"><span class="toc-text">内网，DMZ，外网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E7%BD%91%EF%BC%8CDMZ%EF%BC%8C%E5%A4%96%E7%BD%91%E4%B9%8B%E9%97%B4%E7%9A%84%E8%AE%BF%E9%97%AE%E7%AD%96%E7%95%A5"><span class="toc-text">内网，DMZ，外网之间的访问策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%86%85%E7%BD%91%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E5%A4%96%E7%BD%91"><span class="toc-text">1.内网可以访问外网</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%86%85%E7%BD%91%E7%94%A8%E6%88%B7%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AEDMZ"><span class="toc-text">2.内网用户可以访问DMZ</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%A4%96%E7%BD%91%E4%B8%8D%E8%83%BD%E8%AE%BF%E9%97%AE%E5%86%85%E7%BD%91"><span class="toc-text">3.外网不能访问内网</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%A4%96%E7%BD%91%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AEDMZ"><span class="toc-text">4.外网可以访问DMZ</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-DMZ%E4%B8%8D%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E5%86%85%E7%BD%91"><span class="toc-text">5.DMZ不可以访问内网</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-DMZ%E4%B8%8D%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E5%A4%96%E7%BD%91"><span class="toc-text">6.DMZ不可以访问外网</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CDN"><span class="toc-text">CDN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WAF"><span class="toc-text">WAF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TTL%E2%80%94-%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E7%94%9F%E5%AD%98%E6%97%B6%E9%97%B4"><span class="toc-text">TTL—-网络中的生存时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Review%EF%BC%9A"><span class="toc-text">Review：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-IP%E5%8D%8F%E8%AE%AE%EF%BC%8C%E4%BD%93%E7%B3%BB"><span class="toc-text">TCP&#x2F;IP协议，体系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">#</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="toc-text">路由器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E7%BA%BF"><span class="toc-text">交叉线</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E5%85%B3%E9%85%8D%E7%BD%AE%E4%B8%AD%E9%80%9A%E5%B8%B8%E4%BD%BF%E7%94%A8-1%E8%BF%98%E6%98%AF-254%EF%BC%9F"><span class="toc-text">网关配置中通常使用.1还是.254？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ABC%E7%B1%BB%E7%BD%91%E6%AE%B5"><span class="toc-text">ABC类网段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT-1"><span class="toc-text">NAT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP%E5%92%8CTCP"><span class="toc-text">UDP和TCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BAswitch"><span class="toc-text">交换机switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%EF%BC%9A"><span class="toc-text">任务：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RFC1597"><span class="toc-text">RFC1597:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IP%E5%9C%A8%E5%85%AC%E7%BD%91%E4%B8%AD%E6%98%AF%E5%94%AF%E4%B8%80%E7%9A%84"><span class="toc-text">IP在公网中是唯一的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%9A"><span class="toc-text">网络地址转换：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#SNAT%EF%BC%9A%E6%BA%90%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%9A"><span class="toc-text">SNAT：源网络地址转换：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DNAT%EF%BC%9A%E7%9B%AE%E6%A0%87%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%EF%BC%9A"><span class="toc-text">DNAT：目标网络地址转换：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#SNAT%E5%92%8CDNAT%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A"><span class="toc-text">SNAT和DNAT的使用场景：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#DNAT%E6%8A%80%E6%9C%AF%E9%80%9A%E5%B8%B8%E7%94%A8%E4%BA%8E%E4%BB%A5%E4%B8%8B%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5%EF%BC%9A"><span class="toc-text">DNAT技术通常用于以下几种情况：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#SNAT%E6%8A%80%E6%9C%AF%E9%80%9A%E5%B8%B8%E7%94%A8%E4%BA%8E%E4%BB%A5%E4%B8%8B%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5%EF%BC%9A"><span class="toc-text">SNAT技术通常用于以下几种情况：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ISP-Internet-Service-Provider"><span class="toc-text">ISP:Internet Service Provider:</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E5%AF%BC%E5%8D%8F%E8%AE%AEBOOTP"><span class="toc-text">引导协议BOOTP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96IP%E5%9C%B0%E5%9D%80%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">获取IP地址的过程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP%E5%8D%8F%E8%AE%AE%EF%BC%88Dynamic-Host-Configuration-Protocol%EF%BC%89"><span class="toc-text">动态地址配置协议DHCP协议（Dynamic Host Configuration Protocol）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#DHCP%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">DHCP的工作原理</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8C%87%E7%BA%B9%EF%BC%9A"><span class="toc-text">网络指纹：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#os-fngerprinting"><span class="toc-text">os fngerprinting</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CIDR%E5%9C%B0%E5%9D%80"><span class="toc-text">CIDR地址</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nmap%E4%B8%8A%E5%B8%9D%E4%B9%8B%E7%9C%BC%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">nmap上帝之眼的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%A4%E5%8F%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BF%9B%E8%A1%8Carp%E6%AC%BA%E9%AA%97"><span class="toc-text">使用两台虚拟机进行arp欺骗</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E8%A1%8C%E4%B8%9A%E6%A0%87%E5%87%86"><span class="toc-text">网络渗透测试行业标准</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/01/08/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" title="代码审计"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/667d4decd9c307b7e9ad92d8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码审计"/></a><div class="content"><a class="title" href="/2025/01/08/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" title="代码审计">代码审计</a><time datetime="2026-02-06T04:00:03.787Z" title="更新于 2026-02-06 12:00:03">2026-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/08/%E4%BA%94%E6%8C%87cms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="五指cms代码审计"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/6679371cd9c307b7e9e11035.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="五指cms代码审计"/></a><div class="content"><a class="title" href="/2025/01/08/%E4%BA%94%E6%8C%87cms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="五指cms代码审计">五指cms代码审计</a><time datetime="2026-02-06T03:59:48.270Z" title="更新于 2026-02-06 11:59:48">2026-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/08/bosscms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="bosscms代码审计"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/66793bc8d9c307b7e9eaed7f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="bosscms代码审计"/></a><div class="content"><a class="title" href="/2025/01/08/bosscms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="bosscms代码审计">bosscms代码审计</a><time datetime="2026-02-06T03:59:37.392Z" title="更新于 2026-02-06 11:59:37">2026-02-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By vernus</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script defer src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><div class="aplayer no-destroy" data-id="17734368626" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-theme="#ffaf5e" data-order="random"> </div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script defer src="/js/cursor.js"></script><script async src="//npm.elemecdn.com/pace-js@1.2.4/pace.min.js"></script><script async src="/js/fps.js"></script><script async src="https://cdn1.tianli0.top/npm/vue@2.6.14/dist/vue.min.js"></script><script async src="https://cdn1.tianli0.top/npm/element-ui@2.15.6/lib/index.js"></script><script defer data-pjax src="/js/cat.js"></script><script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script><script async data-pjax src="/js/txmap.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 190px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 160px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://blogpic-5qb.pages.dev/img/cate/4.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/靶场/&quot;);" href="javascript:void(0);">靶场</a><span class="categoryBar-list-count">13</span><span class="categoryBar-list-descr">代码审计</span></li><li class="categoryBar-list-item" style="background:url(https://blogpic-5qb.pages.dev/img/cate/1.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/web/&quot;);" href="javascript:void(0);">web</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">web</span></li><li class="categoryBar-list-item" style="background:url(https://blogpic-5qb.pages.dev/img/cate/3.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/ctf/&quot;);" href="javascript:void(0);">ctf</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">语言学习</span></li><li class="categoryBar-list-item" style="background:url(https://blogpic-5qb.pages.dev/img/cate/9.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/代码审计/&quot;);" href="javascript:void(0);">代码审计</a><span class="categoryBar-list-count">12</span><span class="categoryBar-list-descr">小迪安全</span></li><li class="categoryBar-list-item" style="background:url(https://blogpic-5qb.pages.dev/img/cate/6.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/守夜/&quot;);" href="javascript:void(0);">守夜</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">守夜</span></li><li class="categoryBar-list-item" style="background:url(https://pic.imgdb.cn/item/674020e5d29ded1a8cb10765.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/csrf/&quot;);" href="javascript:void(0);">csrf</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">随笔</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/数据结构/&quot;);" href="javascript:void(0);">数据结构</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/计算机网络/&quot;);" href="javascript:void(0);">计算机网络</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/渗透/&quot;);" href="javascript:void(0);">渗透</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/操作系统/&quot;);" href="javascript:void(0);">操作系统</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/工具/&quot;);" href="javascript:void(0);">工具</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/owasp/&quot;);" href="javascript:void(0);">owasp</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/漏洞复现/&quot;);" href="javascript:void(0);">漏洞复现</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/python/&quot;);" href="javascript:void(0);">python</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/php/&quot;);" href="javascript:void(0);">php</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/入侵检测/&quot;);" href="javascript:void(0);">入侵检测</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/应急响应/&quot;);" href="javascript:void(0);">应急响应</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/提权/&quot;);" href="javascript:void(0);">提权</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/yaml/&quot;);" href="javascript:void(0);">yaml</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/内存马/&quot;);" href="javascript:void(0);">内存马</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/内存取证/&quot;);" href="javascript:void(0);">内存取证</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/小迪安全/&quot;);" href="javascript:void(0);">小迪安全</a><span class="categoryBar-list-count">7</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var qweather_key = 'b16a1fa0e63c46a4b8f28abfb06ae3fe';
+  var gaud_map_key = 'e2b04289e870b005374ee030148d64fd&s=rsv3';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '121.12,31.10';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><div id="ghbdages" style="overflow:hidden;max-height:150px;height:auto;text-align:center;margin-top:10px"><div class="swiper-wrapper"><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" title="博客框架为Hexo_v6.2.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" title="主题版本Butterfly_v4.3.1"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" title="本站采用多线部署，主线路托管于Vercel"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" title="本站采用多线部署，备用线路托管于4EVERLAND"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a></div><div class="swiper-slide"><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></div></div></div><style>a.github-badge:hover:before {display:none}</style>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify/lib/swiperbdage_init.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '1s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__backInRight');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('page-number current');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '1.5s');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
