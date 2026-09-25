@@ -80,9 +80,13 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 
 /* 主体 */
 .layout{max-width:1180px;margin:0 auto;padding:96px 20px 90px;display:flex;gap:22px;align-items:flex-start}
-.side{flex:0 0 250px;width:250px;position:sticky;top:96px;max-height:calc(100vh - 108px);overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
-.side::-webkit-scrollbar{width:3px}
-.side::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:3px}
+.side{
+  flex:0 0 250px;width:250px;position:sticky;top:96px;
+  max-height:calc(100vh - 108px);overflow-y:auto;overflow-x:hidden;
+  /* 隐藏滚动条但保留滚动（鼠标滚轮/触摸板仍可滚） */
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.side::-webkit-scrollbar{width:0;height:0;display:none}
 .main{flex:1 1 auto;min-width:0}
 .card{
   background:var(--glass); border:1px solid var(--line); border-radius:var(--radius);
@@ -129,9 +133,11 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 .tab:hover{color:#fff}
 .tab.on{color:#fff}
 .tab.on::after{content:'';position:absolute;left:50%;bottom:-10px;width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:0 0 9px rgba(58,163,227,.9);transform:translateX(-50%)}
-.list{display:flex;flex-direction:column;gap:7px;max-height:318px;overflow-y:auto;scrollbar-width:thin}
-.list::-webkit-scrollbar{width:3px}
-.list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:3px}
+.list{
+  display:flex;flex-direction:column;gap:7px;max-height:318px;overflow-y:auto;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.list::-webkit-scrollbar{width:0;height:0;display:none}
 .list a{display:flex;align-items:center;gap:9px;text-decoration:none;opacity:.9;transition:opacity .3s ease,transform .3s ease}
 .list a:hover{opacity:1;transform:translateX(2px)}
 .list .thumb{
@@ -1713,8 +1719,8 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     });
   }
 
-  // 客户端分页：每页 4 张（1 张置顶 + 3 张整行），显示普通页码
-  var PER_PAGE = 4;
+  // 客户端分页：每页 12 条（4 张置顶 + 8 篇最新），显示普通页码
+  var PER_PAGE = 12;
   var feed = document.getElementById('feed');
   var pager = document.getElementById('pager');
   if (feed && pager) {
