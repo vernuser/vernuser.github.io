@@ -198,24 +198,66 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   .pt .inner,.pt::after,.pt .cover img{transition:none!important}
 }
 
-/* 列表区：一行一整张 */
-.rows{display:flex;flex-direction:column;gap:16px}
+/* 列表区：一行一整张（整图铺满 + 顶部文字 + 底部玻璃条） */
+.rows{display:flex;flex-direction:column;gap:18px}
 .pr{
-  position:relative;display:flex;align-items:stretch;height:212px;overflow:hidden;text-decoration:none;
-  border-radius:var(--radius);border:1px solid rgba(255,255,255,.24);background:var(--glass);
+  position:relative;display:block;height:258px;overflow:hidden;text-decoration:none;
+  border-radius:var(--radius);border:1px solid rgba(255,255,255,.22);background:var(--glass);
   box-shadow:var(--shadow);backdrop-filter:blur(12px) saturate(140%);
   -webkit-backdrop-filter:blur(12px) saturate(140%);
   transition:transform .4s cubic-bezier(.4,0,.2,1),box-shadow .4s ease,filter .45s ease;
 }
-.pr .cover{position:absolute;top:0;right:0;bottom:0;left:auto;width:42%;background:linear-gradient(135deg,rgba(58,163,227,.5),rgba(98,163,61,.5));overflow:hidden}
-.pr .veil{position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(6,18,32,.92) 0%,rgba(6,18,32,.72) 44%,rgba(6,18,32,.34) 70%,rgba(6,18,32,.14) 100%)}
-.pr .body{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;width:58%;padding:20px 26px}
-.pr h2{margin:0 0 8px;font-size:19px;line-height:1.45;font-weight:700;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pr p{margin:0 0 10px;font-size:13px;line-height:1.7;color:rgba(255,255,255,.76);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pr .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:9px;border-top:1px dashed rgba(255,255,255,.2)}
-.pr .tags{font-size:11.5px;color:rgba(255,255,255,.62);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pr .more{flex:none;font-size:12.5px;font-weight:600;color:var(--gold)}
-.pr:hover{z-index:5;transform:translateY(-3px);box-shadow:0 24px 50px rgba(6,20,36,.42)}
+.pr .cover{position:absolute;inset:0;background:linear-gradient(135deg,rgba(58,163,227,.55),rgba(98,163,61,.55));overflow:hidden}
+.pr .cover img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.01);transition:transform .9s cubic-bezier(.22,.61,.36,1)}
+.pr .veil{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(to bottom,rgba(4,12,24,.78) 0%,rgba(4,12,24,.52) 22%,rgba(4,12,24,.06) 48%,rgba(4,12,24,.18) 68%,rgba(4,12,24,.62) 100%);
+}
+.pr .body{position:absolute;top:0;left:0;right:0;z-index:2;padding:22px 26px 0}
+.pr h2{
+  margin:0 0 8px;font-size:23px;line-height:1.4;font-weight:700;color:#fff;
+  text-shadow:0 2px 14px rgba(4,12,24,.85),0 1px 3px rgba(4,12,24,.6);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.pr p{
+  margin:0;max-width:78%;font-size:13.5px;line-height:1.75;color:rgba(255,255,255,.88);
+  text-shadow:0 1px 10px rgba(4,12,24,.75);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+/* 底部玻璃条：头像 + 作者 + 日期 + 查看详情 */
+.pr .bar{
+  position:absolute;left:12px;right:12px;bottom:12px;z-index:3;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 8px 8px 10px;border-radius:14px;
+  background:rgba(12,26,44,.42);
+  border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(10px) saturate(140%);
+  -webkit-backdrop-filter:blur(10px) saturate(140%);
+}
+.pr .who{display:flex;align-items:center;gap:9px;min-width:0}
+.pr .who .av{
+  flex:none;width:34px;height:34px;border-radius:50%;overflow:hidden;
+  border:1px solid rgba(255,255,255,.4);box-shadow:0 3px 10px rgba(4,12,24,.4);
+}
+.pr .who .av img{width:100%;height:100%;object-fit:cover;display:block}
+.pr .who .nm{font-size:13px;color:#fff;white-space:nowrap}
+.pr .who .dt{
+  font-size:12px;color:rgba(255,255,255,.72);white-space:nowrap;
+  padding-left:10px;margin-left:2px;border-left:1px solid rgba(255,255,255,.22);
+}
+.pr .goto{
+  flex:none;display:inline-flex;align-items:center;gap:5px;
+  padding:6px 15px;border-radius:999px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.24);
+  font-size:12.5px;font-weight:600;color:#fff;
+  transition:background .3s ease,transform .3s ease;
+}
+.pr .goto svg{width:11px;height:11px;transition:transform .3s ease}
+.pr:hover{z-index:5;transform:translateY(-4px);box-shadow:0 26px 54px rgba(6,20,36,.46)}
+.pr:hover .cover img{transform:scale(1.06)}
+.pr:hover .goto{background:rgba(58,163,227,.62);transform:translateX(2px)}
+.pr:hover .goto svg{transform:translateX(2px)}
 .ph{
   display:flex;align-items:center;justify-content:center;width:100%;height:100%;
   font-size:11.5px;letter-spacing:.14em;color:rgba(255,255,255,.55);
@@ -256,7 +298,14 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   .featured{grid-template-columns:minmax(0,1fr)}
   .side{grid-template-columns:minmax(0,1fr)}
   .menu{display:none}
-  .post{height:220px}
+  .pr{height:230px}
+  .pr h2{font-size:19px}
+  .pr p{max-width:100%;font-size:12.5px}
+  .pr .body{padding:18px 18px 0}
+  .pr .bar{left:8px;right:8px;bottom:8px;padding:6px 6px 6px 8px}
+  .pr .who .dt{display:none}
+  .pr .goto{padding:5px 12px;font-size:12px}
+  .pt{height:220px}
 }
 </style>
 </head>
@@ -421,128 +470,144 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0651.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0651.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">ai</span>
-      <span class="date">2026-02-12</span>
-    </div>
     <h2>llm prompt attack</h2>
     <p>llm注入</p>
-    <div class="foot">
-      <span class="tags">#ai</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2026-02-12</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/ai_study/" title="AI study">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0160.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0160.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">ai</span>
-      <span class="date">2026-02-07</span>
-    </div>
     <h2>AI study</h2>
     <p>functions describe the world</p>
-    <div class="foot">
-      <span class="tags">#ai</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2026-02-07</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E8%BF%B0%26ai_agent/" title="markdown语法简述&amp;ai_agent">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0051.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0051.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">markdown</span>
-      <span class="date">2026-02-07</span>
-    </div>
     <h2>markdown语法简述&amp;ai_agent</h2>
     <p>markdown &amp; ai</p>
-    <div class="foot">
-      <span class="tags">#markdown #ai</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2026-02-07</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/win22%E6%8C%96%E7%9F%BF/" title="win挖矿">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0061.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0061.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">应急响应</span>
-      <span class="date">2026-02-02</span>
-    </div>
     <h2>win挖矿</h2>
     <p>win22挖矿</p>
-    <div class="foot">
-      <span class="tags">#应急响应</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2026-02-02</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/some_plus/" title="入侵检测">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0053.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0053.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">入侵检测</span>
-      <span class="date">2026-01-20</span>
-    </div>
     <h2>入侵检测</h2>
     <p>入侵检测</p>
-    <div class="foot">
-      <span class="tags">#入侵检测</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2026-01-20</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/owasp_top_10/" title="owasp top 10 2025">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0458.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0458.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">owasp</span>
-      <span class="date">2026-01-08</span>
-    </div>
     <h2>owasp top 10 2025</h2>
     <p>owasp</p>
-    <div class="foot">
-      <span class="tags">#owasp</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2026-01-08</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/nasl%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/" title="openvas">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0445.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0445.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">工具</span>
-      <span class="date">2025-03-11</span>
-    </div>
     <h2>openvas</h2>
     <p>工具</p>
-    <div class="foot">
-      <span class="tags">#工具 #openvas</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2025-03-11</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a>
 <a class="pr" href="/article/skytower/" title="skytower">
   <span class="cover"><img src="https://cdn.jsdelivr.net/gh/vernuser/acg-wallpaper@main/acg/0156.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0156.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <div class="meta">
-      <span class="chip">靶场</span>
-      <span class="date">2024-12-12</span>
-    </div>
     <h2>skytower</h2>
     <p>skytower</p>
-    <div class="foot">
-      <span class="tags">#靶场</span>
-      <span class="more">读一读 ›</span>
-    </div>
+  </div>
+  <div class="bar">
+    <span class="who">
+      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
+      <span class="nm">vernus</span>
+      <span class="dt">2024-12-12</span>
+    </span>
+    <span class="goto">查看详情
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+    </span>
   </div>
 </a></div></div>
     <nav class="pager">
