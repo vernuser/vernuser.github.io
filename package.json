@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "node scripts/build-articles.mjs && node scripts/build-pages.mjs",
+    "prebuild": "node scripts/build-articles.mjs && node scripts/build-pages.mjs && node scripts/build-home.mjs",
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/build-home.mjs",
     "start": "next start",
     "deploy": "node scripts/deploy.mjs",
     "lint": "next lint",
