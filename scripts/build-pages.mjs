@@ -28,7 +28,7 @@ const TOPBAR_CSS = `
 .brand .word{font:700 17px/1 Georgia,"Times New Roman",serif}
 .nav-menu{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}
 .nav-menu a{position:relative;color:rgba(255,255,255,.88);text-decoration:none;font-size:14.5px;white-space:nowrap;transition:color .25s ease}
-.nav-menu a::after{content:';position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
+.nav-menu a::after{content:\"\";position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
 .nav-menu a:hover{color:#fff}
 .nav-menu a:hover::after{width:60%}
 .nav-menu a.active{color:#fff;font-weight:600}
@@ -54,7 +54,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-ind
 .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:104px 22px 80px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
 .pill:hover{background:rgba(58,163,227,.5)}
-.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px;margin-top:6px}
 h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
 .sub{margin:8px 0 0;font-size:13.5px;color:rgba(255,255,255,.72)}
 .panel{background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}

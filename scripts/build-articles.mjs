@@ -106,7 +106,7 @@ const TOPBAR_CSS = `
 .brand .word{font:700 17px/1 Georgia,"Times New Roman",serif}
 .nav-menu{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}
 .nav-menu a{position:relative;color:rgba(255,255,255,.88);text-decoration:none;font-size:14.5px;white-space:nowrap;transition:color .25s ease}
-.nav-menu a::after{content:';position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
+.nav-menu a::after{content:\"\";position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
 .nav-menu a:hover{color:#fff}
 .nav-menu a:hover::after{width:60%}
 .topbar .avatar-btn{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(6,20,36,.4)}
@@ -150,8 +150,8 @@ article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
 
 const LIST_CSS = `${BASE_CSS}
 .wrap{max-width:1220px;margin:0 auto;padding:11vh 20px 70px}
-header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:30px}
-header h1{margin:0;font-size:34px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:30px}
+.page-head h1{margin:0;font-size:34px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
 .sub{margin:8px 0 0;font-size:13.5px;color:rgba(255,255,255,.72)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .card{position:relative;display:block;height:190px;border-radius:18px;overflow:hidden;text-decoration:none;border:1px solid rgba(255,255,255,.25);background:rgba(12,30,50,.42);box-shadow:0 12px 30px rgba(15,46,76,.24);backdrop-filter:blur(7px);transition:transform .4s cubic-bezier(.4,0,.2,1),filter .45s ease,box-shadow .4s ease}
@@ -267,7 +267,7 @@ ${a.categories.length ? `<span class="cat">${esc(a.categories[0])}</span>` : ''}
   </div>
 </header>
 <div class="wrap">
-  <header>
+  <header class="page-head">
     <div>
       <h1>文章归档</h1>
       <p class="sub">共 ${articles.length} 篇 · ${yearLine}</p>
