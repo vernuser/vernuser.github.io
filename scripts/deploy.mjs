@@ -58,7 +58,18 @@ try {
   // 用固定名 deploy-tmp 的分支做部署，避免与已存在的分支名冲突
   const DEPLOY_BRANCH = 'deploy-tmp';
   if (hasRemote) {
-    run(`git fetch ${REMOTE} ${BRANCH}`);
+    // fetch 同样要重试：网络抖动时失败会误走 orphan 分支
+    let fetched = false;
+    for (let attempt = 1; attempt <= 3 && !fetched; attempt++) {
+      try {
+        execSync(`git fetch ${REMOTE} ${BRANCH}`, { cwd: ROOT, stdio: 'pipe' });
+        fetched = true;
+      } catch (e) {
+        console.log(`fetch 第 ${attempt} 次失败`);
+        if (attempt === 3) throw new Error(`无法从 ${REMOTE} 获取 ${BRANCH}，请检查网络后重试`);
+        execSync('timeout /t 2 >NUL 2>NUL || sleep 2', { shell: true });
+      }
+    }
     run(`git worktree add --force --detach "${WORK}" ${REMOTE}/${BRANCH}`);
     run(`git checkout -B ${DEPLOY_BRANCH}`, WORK);
   } else {
