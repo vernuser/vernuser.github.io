@@ -24,7 +24,7 @@ export async function generateMetadata() {
     title: appConfig.name,
     description: appConfig.description,
     keywords: appConfig.keywords,
-    manifest: "/api/manifest",
+    manifest: "/manifest.json",
     icons: {
       icon: appConfig.favicon || "/favicon.ico",
       shortcut: "/icons/favicon192.png",

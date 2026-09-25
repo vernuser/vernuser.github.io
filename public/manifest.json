@@ -1,8 +1,8 @@
 {
-  "name": "喜好生成表",
-  "short_name": "喜好生成表",
-  "theme_color": "#FFFFFF",
-  "background_color": "#FFFFFF",
+  "name": "随波逐流の旅店",
+  "short_name": "旅店",
+  "theme_color": "#3aa3e3",
+  "background_color": "#0d2137",
   "display": "standalone",
   "orientation": "portrait",
   "scope": ".",

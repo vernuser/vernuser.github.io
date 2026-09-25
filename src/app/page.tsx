@@ -7,18 +7,17 @@
  */
 import { Loader } from "@/components/ui/loader/Loader";
 import { Suspense } from "react";
-import { getConfig, getDbConfig, transformConfig } from "@/lib/config";
+import { getConfig, transformConfig } from "@/lib/config";
 import { MainEffect } from "@/components/effect/MainEffect";
 import { getMotion } from "@/lib/motion";
 import { Footer } from "@/components/layout/Footer";
 import nextDynamic from "next/dynamic";
 import { Controller } from "@/components/controller/Controller";
 import { Weather } from "@/components/weather/Weather";
-import { pg } from "@/lib/db";
 
-// 静态导出：主页在构建期渲染为纯 HTML（不依赖运行时中间件与数据库）
+
+// 静态导出：主页在构建期渲染为纯 HTML
 export const dynamic = 'force-static';
-export const revalidate = 0;
 
 const Horizontal = nextDynamic(
   async () => (await import("@/components/content/Horizontal")).Horizontal

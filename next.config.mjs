@@ -15,21 +15,11 @@ const withPWA = nextPWA({
 });
 
 const nextConfig = {
-  // standalone：可用 `next start` 本地预览 / Node 环境部署
-  // 如需纯静态托管（GitHub Pages），改为 output: "export" 并移除中间件与 /config
-  output: "standalone",
+  // 静态导出：next build 直接产出 out/ 目录，可托管在 GitHub Pages 等纯静态服务
+  output: "export",
   trailingSlash: true,
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  // public/ 下的目录式静态页（/article-list/、/article/<slug>/）在 next start 下需要显式重写
-  async rewrites() {
-    return [
-      { source: "/article-list", destination: "/article-list/index.html" },
-      { source: "/article-list/", destination: "/article-list/index.html" },
-      { source: "/article/:slug", destination: "/article/:slug/index.html" },
-      { source: "/article/:slug/", destination: "/article/:slug/index.html" },
-    ];
   },
   images: {
     unoptimized: true,
