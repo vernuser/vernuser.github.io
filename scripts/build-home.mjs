@@ -18,15 +18,21 @@ const GENERATED = join(ROOT, 'src', 'generated');
 /* ------------------------------- 图床配置 ------------------------------- */
 // 图片仓库：https://github.com/vernuser/acg-wallpaper （654 张 ACG 插画，长边 1600px）
 // 主用 jsDelivr（国内较稳），加载失败时 onerror 回退到 raw.githubusercontent.com
-const WALLPAPER_REPO = 'vernuser/acg-wallpaper@main';
-const WALLPAPER_CDN = (id) => `https://cdn.jsdelivr.net/gh/${WALLPAPER_REPO}/acg/${id}`;
-const WALLPAPER_RAW = (id) => `https://raw.githubusercontent.com/${WALLPAPER_REPO.replace('@', '/')}/acg/${id}`;
+// 主源用 raw.githubusercontent（jsDelivr 在部分网络下不稳/限流），失败再回退 jsDelivr
+const WALLPAPER_REPO = 'vernuser/acg-wallpaper';
+const WALLPAPER_BRANCH = 'main';
+const WALLPAPER_RAW = (id) => `https://raw.githubusercontent.com/${WALLPAPER_REPO}/${WALLPAPER_BRANCH}/acg/${id}`;
+const WALLPAPER_CDN = (id) => `https://cdn.jsdelivr.net/gh/${WALLPAPER_REPO}@${WALLPAPER_BRANCH}/acg/${id}`;
 
-/** 读取图床索引（public/wallpaper-ids.json，由 scripts/build-wallpaper-ids.mjs 生成） */
+/** 读取横图清单（public/wallpaper-meta.json，由 scripts/build-wallpaper-meta.mjs 生成） */
 function readWallpaperIds() {
-  const p = join(PUBLIC, 'wallpaper-ids.json');
+  const p = join(PUBLIC, 'wallpaper-meta.json');
   if (!existsSync(p)) return [];
-  try { return JSON.parse(readFileSync(p, 'utf-8')).ids || []; } catch { return []; }
+  try {
+    const meta = JSON.parse(readFileSync(p, 'utf-8'));
+    // 只取横图，且优先"更横"的（大卡片裁切更好看）
+    return (meta.landscape || []).map((r) => r.id);
+  } catch { return []; }
 }
 
 /** 稳定的字符串哈希（同一篇文章每次构建拿到同一张图） */
@@ -39,26 +45,37 @@ function hashStr(s) {
   return (h >>> 0);
 }
 
-/** 为每篇文章分配壁纸封面 */
+/** 本地是否已有该封面的镜像（public/covers/<id>.jpg） */
+function hasLocalCover(id) {
+  return existsSync(join(PUBLIC, 'covers', id.replace(/\.[^.]+$/, '.jpg')));
+}
+
+/** 为每篇文章分配横图封面：按列表顺序取，互不重复，且分配结果稳定 */
 function assignWallpapers(articles, ids) {
   if (!ids.length) {
-    console.log('未找到图床索引，保留原有封面');
+    console.log('未找到横图清单，保留原有封面');
     return articles;
   }
   const used = new Set();
-  articles.forEach((a, i) => {
-    // 置顶四篇带序号参与哈希，避免前几张重复
-    const seed = i < 4 ? `${a.slug}#pin${i}` : `${a.slug}#cover`;
-    let idx = hashStr(seed) % ids.length;
-    // 冲突时顺延，保证同一页不出现重复
+  let local = 0;
+  articles.forEach((a) => {
+    // 起点由 slug 决定（同一篇固定），再顺延到下一个未被占用的横图
+    let idx = hashStr(`${a.slug}#cover`) % ids.length;
     let guard = 0;
     while (used.has(idx) && guard < ids.length) { idx = (idx + 1) % ids.length; guard++; }
     used.add(idx);
-    a.wallpaper = ids[idx];
-    a.cover = WALLPAPER_CDN(ids[idx]);
-    a.coverFallback = WALLPAPER_RAW(ids[idx]);
+    const id = ids[idx];
+    if (hasLocalCover(id)) {
+      // 同域本地封面：加载最快最稳
+      a.cover = `/covers/${id.replace(/\.[^.]+$/, '.jpg')}`;
+      a.coverFallback = WALLPAPER_RAW(id);
+      local++;
+    } else {
+      a.cover = WALLPAPER_RAW(id);
+      a.coverFallback = WALLPAPER_CDN(id);
+    }
   });
-  console.log(`已为 ${articles.length} 篇文章随机分配图床封面（图库 ${ids.length} 张）`);
+  console.log(`已为 ${articles.length} 篇文章分配横图封面（候选 ${ids.length} 张，其中本地 ${local} 张）`);
   return articles;
 }
 
@@ -536,13 +553,17 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 .date{color:rgba(255,255,255,.72)}
 #feed.hovering .pt:not(:hover),#feed.hovering .pr:not(:hover){filter:blur(1.2px)}
 
-.pager{display:flex;justify-content:center;gap:6px;margin-top:26px}
-.pager a,.pager span{
-  min-width:36px;height:36px;padding:0 10px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;
-  text-decoration:none;font-size:13.5px;color:#fff;background:var(--glass);border:1px solid var(--line);transition:all .25s ease;
+.pager{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;margin-top:28px}
+.pager button{
+  min-width:38px;height:38px;padding:0 12px;border-radius:10px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:13.5px;color:#fff;background:var(--glass);border:1px solid var(--line);
+  backdrop-filter:blur(10px);transition:background .25s ease,transform .25s ease,box-shadow .25s ease;
 }
-.pager a:hover{background:rgba(58,163,227,.5)}
-.pager .cur{background:var(--sky-deep);border-color:transparent;font-weight:600;box-shadow:0 6px 16px rgba(29,111,184,.4)}
+.pager button:hover:not(:disabled){background:rgba(58,163,227,.5);transform:translateY(-2px)}
+.pager button.cur{background:var(--sky-deep);border-color:transparent;font-weight:600;box-shadow:0 8px 20px rgba(29,111,184,.45)}
+.pager button:disabled{opacity:.45;cursor:not-allowed}
+.pager .gap{color:rgba(255,255,255,.55);padding:0 4px}
 
 @media(max-width:1080px){
   .layout{flex-direction:column;padding-top:18px}
@@ -676,7 +697,7 @@ function coverInner(a) {
     const fb = a.coverFallback
       ? `this.onerror=null;this.src='${esc(a.coverFallback)}'`
       : 'this.remove()';
-    return `<img src="${esc(a.cover)}" alt="" loading="lazy" onerror="${fb}">`;
+    return `<img src="${esc(a.cover)}" alt="" decoding="async" fetchpriority="high" onerror="${fb}">`;
   }
   const letter = (a.title || '·').trim().charAt(0) || '·';
   return `<span class="ph" aria-hidden="true">${esc(letter)}</span>`;
@@ -788,11 +809,8 @@ function page(articles) {
   </div>
 
   <main class="main">
-    <div id="feed">${feedBlock(articles.slice(0, 12))}</div>
-    <nav class="pager">
-      <span class="cur">1</span>
-      <a href="/article-list/">全部文章 →</a>
-    </nav>
+    <div id="feed">${feedBlock(articles)}</div>
+    <nav class="pager" id="pager" aria-label="分页"></nav>
   </main>
 </div>
 
@@ -863,6 +881,46 @@ function page(articles) {
     document.getElementById('menu').addEventListener('click', function (e) {
       if (e.target.tagName === 'A') bar.classList.remove('open');
     });
+  }
+
+  // 客户端分页：每页 4 张（1 张置顶 + 3 张整行），显示普通页码
+  var PER_PAGE = 4;
+  var feed = document.getElementById('feed');
+  var pager = document.getElementById('pager');
+  if (feed && pager) {
+    var posts = Array.prototype.slice.call(feed.querySelectorAll('.pt, .pr'));
+    var pages = Math.max(1, Math.ceil(posts.length / PER_PAGE));
+    var page = 1;
+    function drawPager() {
+      var html = '';
+      html += '<button type="button" data-go="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>上一页</button>';
+      for (var i = 1; i <= pages; i++) {
+        if (pages > 7 && i > 2 && i < pages - 1 && Math.abs(i - page) > 1) {
+          if (!html.endsWith('<span class="gap">…</span>')) html += '<span class="gap">…</span>';
+          continue;
+        }
+        html += '<button type="button" data-go="' + i + '"' + (i === page ? ' class="cur"' : '') + '>' + i + '</button>';
+      }
+      html += '<button type="button" data-go="' + (page + 1) + '"' + (page === pages ? ' disabled' : '') + '>下一页</button>';
+      pager.innerHTML = html;
+    }
+    function render(smooth) {
+      posts.forEach(function (el, i) {
+        var show = Math.floor(i / PER_PAGE) + 1 === page;
+        el.style.display = show ? '' : 'none';
+      });
+      drawPager();
+      if (smooth) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    pager.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-go]');
+      if (!btn || btn.disabled) return;
+      var next = parseInt(btn.dataset.go, 10);
+      if (!next || next < 1 || next > pages || next === page) return;
+      page = next;
+      render(true);
+    });
+    render(false);
   }
 
   // 置顶卡入场动画：进入视口后依次浮出

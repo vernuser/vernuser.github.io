@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "prebuild": "node scripts/build-articles.mjs && node scripts/build-pages.mjs && node scripts/build-home.mjs",
+    "covers": "node scripts/build-covers.mjs",
+    "wallpaper-meta": "node scripts/build-wallpaper-meta.mjs",
     "wallpaper": "node scripts/build-wallpaper-ids.mjs",
     "dev": "next dev",
     "build": "next build && node scripts/build-home.mjs",

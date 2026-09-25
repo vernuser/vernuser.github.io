@@ -348,8 +348,15 @@ function main() {
       let guard = 0;
       while (usedWp.has(idx) && guard < wpIds.length) { idx = (idx + 1) % wpIds.length; guard++; }
       usedWp.add(idx);
-      a.cover = WP_CDN(wpIds[idx]);
-      a.coverFallback = WP_RAW(wpIds[idx]);
+      const wid = wpIds[idx];
+      const wlocal = join(ROOT, "public", "covers", wid.replace(/\.[^.]+$/, ".jpg"));
+      if (existsSync(wlocal)) {
+        a.cover = "/covers/" + wid.replace(/\.[^.]+$/, ".jpg");
+        a.coverFallback = WP_RAW(wid);
+      } else {
+        a.cover = WP_RAW(wid);
+        a.coverFallback = WP_CDN(wid);
+      }
     });
     console.log(`归档/文章封面已从图床分配（图库 ${wpIds.length} 张）`);
   }
