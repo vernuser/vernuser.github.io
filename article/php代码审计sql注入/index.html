@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代码审计sql注入 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>代码审计sql注入</h1>
+    <div class="meta"><span class="chip date">2024-09-21</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><h1>java代码审计</h1>
+<h2>codeql安装</h2>
+<p>从github下载cil文件</p>
+<p><a href="https://github.com/github/codeql-cli-binaries/releases">cli文件release地址</a></p>
+<p>下载下来以后找一个没有中文的路径解压缩安放</p>
+<p> 再从github下载工作车间</p>
+<p><a href="https://github.com/github/vscode-codeql-starter">工作车间</a></p>
+<p>注意下载的时候不要直接clone，因为他不只有这个还包括其下的子项目</p>
+<p>使用vscode的图形化界面的话需要先在vscode安装插件codeql（不是很理解为什么jetbrains的要收费，适用的那个也是乱七八糟的）</p>
+<p>在插件设置中配置codeql的二进制文件</p>
+<p><img src="https://pic.imgdb.cn/item/66ee6ed0f21886ccc00e24bb.png" alt=""></p>
+<p>再系统环境变量中添加codeql的bin文件地址</p>
+<p>这样codeql就配置好了</p>
+<p>后面就是创建数据库的过程，我尝试的是这个项目
+ <a href="https://github.com/godzeo/java-sec-code">java-sec-code</a></p>
+<p>执行codeql命令</p>
+<pre><code>codeql database create /Users/zy/Documents/project/codeql/vscode-codeql-starter-main/database/codeql_java-sec-code  --language=&quot;java&quot;  --command=&quot;mvn clean install --file pom.xml&quot; --source-root=/Users/zy/Documents/project/sec_java_vul/java-sec-code
+</code></pre>
+<p>这里面，</p>
+<pre><code>codeql database create  /Users/zy/Documents/project/codeql/vscode-codeql-starter-main/database/codeql_java-sec-code
+
+创建一个在/Users/zy/Documents/project/codeql/vscode-codeql-starter-main/database/名为codeql_java-sec-code的数据库
+
+--language=&quot;java&quot;  使用的是java的语言
+
+--command=&quot;mvnb clean install --file pom.xml&quot;利用命令进行源码编译
+
+--source-root= 设置源码的路径
+
+</code></pre>
+<p>如果能成功的话会输出Successfully created database at xxxxxx的，需要注意的是不是每个项目都可以使用codeql进行审计，codeql是将代码转化成类似数据库的形式，并基于该database进行分析</p>
+<p>然后再codeql的插件中选择你刚刚建立的数据库文件夹</p>
+<p><img src="https://pic.imgdb.cn/item/66ee71e6f21886ccc011bb88.png" alt=""></p>
+<p>官方制定了一下规则可以使用</p>
+<pre><code>/ql/java/ql/src/Security                 放着一些官方的规则(java)，可直接用。
+/ql/java/ql/src/experimental/Security  一些还在实验中的规则(java)。
+</code></pre>
+<p>找到代码的进行运行，跑出来了就是成功了</p>
+<p><img src="https://pic.imgdb.cn/item/66ee723ff21886ccc01221d8.png" alt=""></p>
+<p>php手工调试</p>
+<pre><code>万金油函数
+var_dump       将当前变量值或者函数返回结果dump出来
+
+查看上下文内容
+- get_defined_functions
+- get_defined_vars   获取当前运行php的所有变量
+- get_defined_constants
+- get_included_files
+- get_loaded_extensions
+- get_Declared_classes
+- get_Declared_interfaces
+
+查看函数调用过程
+- debug_backtrace
+- debug_print_backtrace
+
+Xdebug手工调试
+- xdebug_call_file 获取调用当前函数的文件
+- xdebug_call_line 获取调用当前函数文件的行
+- xdebug_call_function 获取调用当前函数的函数
+- xdebug_dump_superglobals 获取所有超全局变量
+- xdebug_get_monitored_functions 监控函数调用
+
+</code></pre>
+<p>影响php安全的全局配置</p>
+<pre><code>- magic_quote_gpc:5.3后废弃,5.4后移除
+将所有变量进行转义
+
+- register_global:4.2后默认false
+将用户传入的变量被直接的注册为全局变量直接使用
+
+- allow_url_include:默认false
+允许url包括远程文件，可能导致csrf，xss
+
+- allow_url_fopen:默认true
+允许url读取远程文件
+
+- request_order:5,3后从gpc改为gp
+指定 PHP 在处理 HTTP 请求参数
+
+- show_open_tag：5.4+，无论是够开始&lt;?=...?&gt;都是可以运行的
+用于控制是否允许使用短标签
+
+- safe_mode(5.4移除)
+
+
+- open_basedir
+限制 PHP 脚本对文件系统的访问范围
+
+- disable_functions/disable_classes
+ PHP 中禁用特定的内置函数\类
+
+- enable_dl（5.2默认false）
+是否允许加载拓展
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66ee8818f21886ccc02858ab.png" alt=""></p>
+<h2>代码审计的sql注入</h2>
+<ul>
+<li><p>反向查找流程</p>
+<ul>
+<li>通过可控变量（输入点）回溯危险函数</li>
+<li>查找危险函数可控变量</li>
+<li>传递的过程中触发漏洞
+无法挖掘逻辑漏洞等
+命中率低
+适应性较差：不适合全局过滤的站点</li>
+</ul>
+</li>
+<li><p>正向查找流程</p>
+<ul>
+<li>从入口点函数触发</li>
+<li>找到控制器，理解url派发规则</li>
+<li>跟踪控制器调用，以理解代码为目标进行源码阅读</li>
+<li>阅读代码的过程中可能发现漏洞</li>
+</ul>
+</li>
+</ul>
+<h2>php sql注入漏洞技巧</h2>
+<h3>php+mysql连接方式</h3>
+<p>PDO
+Mysqli
+Mysql（废弃）没有预编译</p>
+<h3>sql注入常见过滤方法</h3>
+<p>intval/addslashes/mysql_real_escape
+mysqli_escape_string/mysqli_real_escape_string/mysqli::escape_string
+PDO::quote
+参数化查询</p>
+<h2>常见注入过滤绕过方法</h2>
+<ol>
+<li></li>
+</ol>
+<ul>
+<li>intval                将变量的值转换为整数</li>
+<li>addslashes            用于对字符串中的特殊字符进行转义，包括单引号 (&#39;)、双引号 (&quot;)、反斜杠 ()、NULL 字符等
+<img src="https://pic.imgdb.cn/item/66ef842ef21886ccc018df58.png" alt=""></li>
+<li>mysql_real_escape
+<img src="https://pic.imgdb.cn/item/66ef8566f21886ccc019f995.png" alt=""></li>
+</ul>
+<p>绕过方式:
+宽字节注入
+寻找字符串转换函数</p>
+<ul>
+<li>urldecode</li>
+<li>base64_Decode</li>
+<li>iconv</li>
+<li>json_decode</li>
+<li>stripshasles</li>
+<li>simple_xml_loadstring
+<img src="https://pic.imgdb.cn/item/66ef9128f21886ccc024cfe2.png" alt="">
+这里的&#39;id&#39;如果不加上引号的话，转义就没有意义，因为可以通过数字型</li>
+</ul>
+<p><code>1 union select xxxx from xxxx</code></p>
+<p>进行绕过</p>
+<ol start="2">
+<li></li>
+</ol>
+<ul>
+<li>mysqli::escape_string /PDO::quote<ul>
+<li>与addslashes差别：是否会主动加引号包裹</li>
+<li>宽字符注入</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li></li>
+</ol>
+<ul>
+<li>参数化查询<ul>
+<li>寻找非sql值位置</li>
+<li>SELECT <code>name</code> FROM <code>user</code> WHERE <code>id</code>=?ORDER BY <code>login_time</code> LIMIT 1
+上面的中只有?的地方是可以预编译的，其他的可以被用户控制的地方仍然可能存在sql注入漏洞</li>
+</ul>
+</li>
+</ul>
+<h4>举例1</h4>
+<p>贷齐乐header注入</p>
+<pre><code>function t($text){
+$text = nl2br($text);
+$text = real_strip_tags($text);
+$text = addslashes($text);
+$text = trim($text);
+return $text;
+</code></pre>
+<p>分析</p>
+<pre><code>nl2br($text):
+
+将文本中的换行符 \n 转换为 HTML 的 &lt;br&gt; 标签，以便在网页上正确显示换行。
+real_strip_tags($text):
+
+假设这是一个自定义函数，用于移除文本中的 HTML 标签。通常用来防止XSS攻击和清理输入数据。
+addslashes($text):
+
+在特殊字符（如单引号、双引号、反斜杠）前添加反斜杠。通常用于准备将文本插入数据库，防止SQL注入。
+trim($text):
+
+移除文本两端的空白字符，包括空格、制表符和换行符。
+返回值
+</code></pre>
+<p>在整个函数中，只有addslashes函数对sql进行了限制</p>
+<h4>举例2</h4>
+<p>metinfo企业网站管理系统SQL注入漏洞</p>
+<pre><code>if($p){
+   $array = explode(&#39;.&#39;,base64_decode($p));
+   $sql=&quot;SELECT * FROM $met_admin_table WHERE admin_id=&#39;&quot;.$array[0].&quot;&#39;&quot;;
+   $sqlarray = $db-&gt;get_one($sql);
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66f0065cf21886ccc09bc433.png" alt=""></p>
+<h3>思路总结</h3>
+<p>开发者容易忽略的注入点</p>
+<pre><code>· http头
+  X-Forwarded-For
+  User-Agent
+  Referer
+· PHP_SELF
+· 文件名$_FILES[][name]
+· REQUEST_URI
+· php：//input
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66f007aff21886ccc09d5834.png" alt="">
+这个
+<code>PHP_SELF</code>
+是用户可控的
+<img src="https://pic.imgdb.cn/item/66f007eaf21886ccc09d9622.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/66f00835f21886ccc09dded4.png" alt=""></p>
+<p>和上一个一样，但是是用户可传的完整路径</p>
+<p>引入单引号（转义符）的方法</p>
+<pre><code>stripslashes
+
+base64_decode
+
+urldecode
+
+substr
+
+iconv
+
+str_Replace(&#39;0&#39;,&#39;,$sql&#39;)
+
+xml
+
+json_decode
+</code></pre>
+<h2>test</h2>
+<ol>
+<li><img src="https://pic.imgdb.cn/item/66f0187af21886ccc0ade027.png" alt=""></li>
+</ol>
+<p>这个中存在最easy的sql注入，在这个项目中</p>
+<pre><code>$name = $_GET[&#39;name&#39;];
+$query = &quot;SELECT name,age,email,country FROM user_details WHERE name=&#39;{$name}&#39;&quot;;
+</code></pre>
+<p>直接获取了get中name的值然后传给query的sql语句中，在这里可以进行sql注入</p>
+<ol start="2">
+<li></li>
+</ol>
+<p><img src="https://pic.imgdb.cn/item/66f029aef21886ccc0c0fd46.png" alt=""></p>
+<p>除了宽字节基本没啥漏洞，除非用的是GBK</p>
+<ol start="3">
+<li><img src="https://pic.imgdb.cn/item/66f02c11f21886ccc0c37c5c.png" alt=""></li>
+</ol>
+<p>可以防御sql，需要设置</p>
+<p><img src="https://pic.imgdb.cn/item/66f02c6df21886ccc0c3e074.png" alt=""></p>
+<pre><code>ENT_QUOTES是在参数的第二位flag参数设置
+</code></pre>
+<p>所以这个其实也是存在sql注入的</p>
+<ol start="4">
+<li><img src="https://pic.imgdb.cn/item/66f02f2bf21886ccc0c6d136.png" alt=""></li>
+</ol>
+<p>这个也是存在sql注入的，他虽然做了转义但是没有在后面就行&#39;&#39;的处理导致age裸露在外面</p>
+<ol start="5">
+<li><img src="https://pic.imgdb.cn/item/66f105ccf21886ccc0793660.png" alt=""></li>
+</ol>
+<p>这个也是存在sql的</p>
+<p><img src="https://pic.imgdb.cn/item/67075cacd29ded1a8c6161cc.png" alt=""></p>
+<ol start="6">
+<li><img src="https://pic.imgdb.cn/item/66f12e81f21886ccc0a16d88.png" alt=""></li>
+</ol>
+<p>这个是将字符串变成数字，包没有漏洞</p>
+<ol start="7">
+<li><img src="https://pic.imgdb.cn/item/66f15b14f21886ccc0cd5101.png" alt=""></li>
+</ol>
+<p>这个一眼有，这里intval是没用的，他仍然将<code>$_GET[&#39;id&#39;]</code>传入</p>
+<ol start="8">
+<li><code>id_numeric</code>判断用户输入是不是输入的数字或数字字符串</li>
+</ol>
+<p><img src="https://pic.imgdb.cn/item/66f15d35f21886ccc0cf514b.png" alt=""></p>
+<p>这里其实是存在的</p>
+<p>他没有在返回404以后组织运行，后面的还是继续会执行的</p>
+<p>把后面的<code>$wuery</code>放在else里面会更好一点</p>
+<ol start="9">
+<li><p>就是在8的后面header后面加了个exit，这个就没有了</p>
+</li>
+<li><p><img src="https://pic.imgdb.cn/item/66f15f44f21886ccc0d154ca.png" alt=""></p>
+</li>
+</ol>
+<p>我看着像是没有，但是是有的</p>
+<p>属于是防了，但没完全防</p>
+<pre><code>如果我输入这样子的
+order=ASC; DROP TABLE user_details; --
+他就会变成
+SELECT name, age, email, country FROM user_details ORDER BY id ASC; DROP TABLE user_details; --
+
+还是会删除user_details表
+</code></pre>
+<ol start="11">
+<li><img src="https://pic.imgdb.cn/item/66f16b81f21886ccc0dd681e.png" alt=""></li>
+</ol>
+<p>这个地方正则不对，他只判断是是否是存在这个<code>/DESC/ASC/i</code>而不是只有这个，我们可与i进行sql注入以后在后面接一个desc</p>
+<pre><code class="language-例">union select 1,2,3# DESC
+</code></pre>
+<p>想要修改的话，</p>
+<pre><code>if (!preg_match(&#39;/^(DESC|AEC)$/i&#39;,$order)){
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66f16d35f21886ccc0df23a4.png" alt=""></p>
+<ol start="12">
+<li><img src="https://pic.imgdb.cn/item/66f16e76f21886ccc0e063b1.png" alt=""></li>
+</ol>
+<p>没有漏洞，非常标准的预编译的</p>
+<p>在SQL语句中使用占位符 ?，并在 execute() 方法中传递参数数组 <code>[$name]</code>。这样可以确保用户输入的数据不会直接插入到SQL语句中，从而避免SQL注入攻击。</p>
+<ol start="13">
+<li><img src="https://pic.imgdb.cn/item/66f16eddf21886ccc0e0ce0b.png" alt=""></li>
+</ol>
+<p>有sql注入漏洞，他给的评价是，这里的<code>urldecode,或者base64_Decode会引入新的单引号进行注入使得前面的addslashes无效</code></p>
+<p><img src="https://pic.imgdb.cn/item/66f16ff1f21886ccc0e1e800.png" alt=""></p>
+<p>至此，sql的php代审结束</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pyhton--从入门到入土---函数 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>Pyhton--从入门到入土---函数</h1>
+    <div class="meta"><span class="chip date">2023-03-27</span><span class="chip">分类·python</span><span class="chip">#python</span></div>
+    <article><p>函数</p>
+<h6>定义函数</h6>
+<p>开头使用关键字def定义函数，中间添加需要定义的函数的名字，结尾部分别忘了:</p>
+<pre><code>def greet_user():
+    print(&quot;Hello a&quot;)
+greet_user()
+</code></pre>
+<pre><code>Hello a
+</code></pre>
+<h6>向函数中传递信息</h6>
+<pre><code>def greet_user(user_name):
+    &quot;&quot;&quot;表示最简单的问候&quot;&quot;&quot;
+    print(f&quot;Hello a,{user_name.title()}&quot;)
+greet_user(&#39;jess&#39;)
+</code></pre>
+<pre><code>Hello a,Jess
+</code></pre>
+<p>传递实参</p>
+<pre><code>def describe_pet(animal_type,pet_name):
+   print(f&quot;i have a {animal_type}&quot;)
+   print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+describe_pet(&#39;dog&#39;,&#39;king&#39;)
+</code></pre>
+<pre><code>i have a dog
+my dog&#39;s name is king.
+</code></pre>
+<p>这里将实参dog赋给形参animal_type，而实参king被赋给pet_name，这种基于实参的位置顺序的关联方式称之为位置实参</p>
+<h6>多次调用函数</h6>
+<pre><code>def describe_pet(animal_type,pet_name):
+    print(f&quot;i have a {animal_type}&quot;)
+    print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+describe_pet(&#39;小黑子&#39;,&#39;真下头&#39;)
+describe_pet(&#39;汪汪队&#39;,&#39;立大功&#39;)
+</code></pre>
+<pre><code>i have a 小黑子
+my 小黑子&#39;s name is 真下头.
+i have a 汪汪队
+my 汪汪队&#39;s name is 立大功.
+</code></pre>
+<h6>关键字实参</h6>
+<pre><code>from builtins import print
+
+
+def describe_pet(animal_type, pet_name):
+    print(f&quot;i have a {animal_type}&quot;)
+    print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+
+
+describe_pet(animal_type=&#39;小黑子&#39;, pet_name=&#39;真下头&#39;)
+</code></pre>
+<pre><code>i have a 小黑子
+my 小黑子&#39;s name is 真下头.
+</code></pre>
+<p>关键字实参的顺序无所谓，但是需要准确制定函数定义中的形参名</p>
+<h6>默认值</h6>
+<p>编写函数式，可以给每个形参指定默认值，在调用函数中都给形参提供实参时，Python将使用指定的实参值，否则将会使用形参的默认值</p>
+<pre><code>from builtins import print
+
+
+def describe_pet(pet_name,animal_type=&#39;dog&#39;):
+    print(f&quot;i have a {animal_type}&quot;)
+    print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+
+
+describe_pet(pet_name=&#39;汪汪队立大功&#39;)
+</code></pre>
+<pre><code>i have a dog
+my dog&#39;s name is 汪汪队立大功.
+</code></pre>
+<h6>返回值</h6>
+<p>·函数并非是直接显示输出，它还可以处理一些数据，并返回一个或者一组值。函数返回的值称之为返回值。</p>
+<pre><code>from builtins import print
+
+
+def name(first_name,last_name):
+    full_name=f&quot;{first_name}  {last_name}&quot;
+    return full_name.title()
+musician = name(&#39;a&#39;,&#39;hahaha&#39;)
+print(musician)
+</code></pre>
+<pre><code>A  Hahaha
+</code></pre>
+<p>这里的返回值是full.name转换成首字母大写形式</p>
+<h6>让实参变成可选的</h6>
+<p>可以使用默认值是实参变成可选的</p>
+<pre><code>from builtins import print
+
+
+def name(first_name,last_name,middle_name=&#39;&#39;):
+    if middle_name:
+        full_name=f&quot;{first_name} {middle_name} {last_name}&quot;
+    else:
+        full_name=f&quot;{first_name} {last_name}&quot;
+
+    return full_name.title()
+musician = name(&#39;a&#39;,&#39;hahaha&#39;)
+print(musician)
+</code></pre>
+<pre><code>A Hahaha
+</code></pre>
+<h6>返回字典</h6>
+<pre><code>from builtins import print
+
+def name_in(first_name,last_name):
+    person = {&#39;ffirst&#39;:first_name,&#39;last&#39;:last_name}
+    return person
+musician = name_in(&#39;奥拓&#39;,&#39;阿波卡利斯&#39;)
+print(musician)
+</code></pre>
+<pre><code>{&#39;ffirst&#39;: &#39;奥拓&#39;, &#39;last&#39;: &#39;阿波卡利斯&#39;}
+</code></pre>
+<h6>结合使用函数以及while循环</h6>
+<pre><code>from builtins import print
+
+def name_in(first_name,last_name):
+    full_name = f&quot;{first_name}{last_name}&quot;
+    return full_name.title()
+while True:
+    print(&#39;Hello everybody&#39;)
+    print(&#39;please input your first name and last name&#39;)
+    f_name = input(&quot;Please input your first name:&quot;)
+    if f_name == &#39;quit&#39;:
+        break
+    l_name = input(&quot;Please input your last name:&quot;)
+    if l_name == &#39;quit&#39;:
+        break
+    name_out=name_in(f_name,l_name)
+    print(name_out)
+</code></pre>
+<pre><code>Hello everybody
+please input your first name and last name
+Please input your first name:a
+Please input your last name:a
+Aa
+Hello everybody
+please input your first name and last name
+Please input your first name:a
+Please input your last name:_a
+A_A
+Hello everybody
+please input your first name and last name
+Please input your first name:a
+Please input your last name:quit
+</code></pre>
+<h6>传递列表</h6>
+<pre><code>def greet_user(names):
+    for name in names:
+        message = f&quot;hello  {name.title()}&quot;
+        print(message)
+username = [&#39;haah&#39;,&#39;xixi&#39;,&#39;wangwang&#39;]
+greet_user(username)
+</code></pre>
+<pre><code>hello  Haah
+hello  Xixi
+hello  Wangwang
+</code></pre>
+<h6>在函数中修改列表</h6>
+<pre><code>unprint_Designed = [&#39;phone&#39;,&#39;robot&#39;,&#39;dodecahedron&#39;]
+print_designeds = []
+
+while unprint_Designed:
+    current_design = unprint_Designed.pop()
+    print(f&quot;printing model:{current_design}&quot;)
+    print_designeds.append(current_design)
+print(&quot;the following models have been printed:&quot;)
+for print_designed in print_designeds:
+    print(print_designed)
+</code></pre>
+<pre><code>printing model:dodecahedron
+printing model:robot
+printing model:phone
+the following models have been printed:
+dodecahedron
+robot
+phone
+</code></pre>
+<p>使用函数来进行编写</p>
+<pre><code>def print_model(unprinted_designeds,completed_models):
+    while unprinted_designeds:
+        current_print = unprinted_designeds.pop()
+        print(f&quot;printing models:{current_print}&quot;)
+        completed_models.append(current_print)
+def show_completed(completed_models):
+    print(&quot;the following models have been printed:&quot;)
+    for completed_model in completed_models:
+        print(completed_model)
+unprint_designs = [&#39;phone&#39;,&#39;computer&#39;,&#39;robot&#39;]
+complete_models = []
+
+print_model(unprint_designs,complete_models)
+show_completed(complete_models)
+</code></pre>
+<pre><code>printing models:robot
+printing models:computer
+printing models:phone
+the following models have been printed:
+robot
+computer
+phone
+</code></pre>
+<h6>切片表示法[:]禁止访问列表</h6>
+<pre><code>from builtins import print
+
+
+def print_model(unprinted_designeds, completed_models):
+    while unprinted_designeds:
+        current_print = unprinted_designeds.pop()
+        print(f&quot;printing models:{current_print}&quot;)
+        completed_models.append(current_print)
+
+
+def show_completed(completed_models):
+    print(&quot;the following models have been printed:&quot;)
+    for completed_model in completed_models:
+        print(completed_model)
+
+
+
+unprint_designs = [&#39;phone&#39;, &#39;computer&#39;, &#39;robot&#39;]
+complete_models = []
+print_model(unprint_designs[:],complete_models)
+show_completed(complete_models)
+print(unprint_designs)
+</code></pre>
+<pre><code>printing models:robot
+printing models:computer
+printing models:phone
+the following models have been printed:
+robot
+computer
+phone
+[&#39;phone&#39;, &#39;computer&#39;, &#39;robot&#39;]
+</code></pre>
+<p>这个就是在下面调用函数的时候建立一个切片来进行运算，这个切片的话当做中间件就好</p>
+<h6>传递任意数量的实参</h6>
+<pre><code>def making_pizza(*toppomgs):
+    print(&quot;\nmaking a pizza whit the ffollowing topping&quot;)
+    for topping in toppomgs:
+        print(f&quot;-{topping}&quot;)
+making_pizza(&#39;pepperoni&#39;)
+making_pizza(&#39;mushrooms&#39;,&#39;green peppers&#39;,&#39;extra cheese&#39;)
+</code></pre>
+<pre><code>
+making a pizza whit the ffollowing topping
+-pepperoni
+
+making a pizza whit the ffollowing topping
+-mushrooms
+-green peppers
+-extra cheese
+</code></pre>
+<p>在这里的话，*toppings这里的星号定义了一个空元组（元组的话见操作列表）并将所有的值封装到这个空元组中</p>
+<h6>结合使用位置实参和任意数量实参</h6>
+<pre><code>def making_pizza(size,*toppomgs):
+    print(f&quot;making a {size} pizza whit the ffollowing topping&quot;)
+    for topping in toppomgs:
+        print(f&quot;-{topping}&quot;)
+making_pizza(12,&#39;pepperoni&#39;)
+making_pizza(16,&#39;mushrooms&#39;,&#39;green peppers&#39;,&#39;extra cheese&#39;)
+</code></pre>
+<pre><code>making a 12 pizza whit the ffollowing topping
+-pepperoni
+making a 16 pizza whit the ffollowing topping
+-mushrooms
+-green peppers
+-extra cheese
+</code></pre>
+<p>使用任意数量的关键字实参</p>
+<p>**可以创建一个空字典</p>
+<pre><code>def build_profit(first,last,**user_name):
+    user_name[&#39;first_name&#39;] = first
+    user_name[&#39;last_name&#39;] = last
+    return user_name
+user_profile = build_profit(&#39;齐格飞&#39;,&#39;卡斯兰娜&#39;,
+                            location = &#39;圣芙蕾雅学园&#39;,
+                            says = &#39;我将发动一次nb的攻击&#39;)
+print(user_profile)
+</code></pre>
+<pre><code>{&#39;location&#39;: &#39;圣芙蕾雅学园&#39;, &#39;says&#39;: &#39;我将发动一次nb的攻击&#39;, &#39;first_name&#39;: &#39;齐格飞&#39;, &#39;last_name&#39;: &#39;卡斯兰娜&#39;}
+</code></pre>
+<h6>导入整个模块</h6>
+<p>先建立一个python文件，里面输入写好的def，保存为pizza.py</p>
+<pre><code>def making_pizza(size,*toppings):
+   print(f&quot;making a {size} pizza whit the following topping&quot;)
+   for topping in toppings:
+      print(f&quot;-{topping}&quot;)
+</code></pre>
+<p>然后再这个文件所在的目录下在新建一个</p>
+<pre><code>import pizza
+pizza.making_pizza(16,&#39;pepperont&#39;)
+pizza.making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<p>使用import让python打开文件pizza.py</p>
+<p>，并将其中的线索有的函数都复制到这个程序中，你看不到复制的代码，因为在这个程序运行时，Python在幕后复制了这些代码。要调用被导入模块的函数，可指定被导入模块的名称pizza和函数名making_pizza（），并用句号来分隔开</p>
+<h6>当然也可以显性的调用函数</h6>
+<pre><code>from pizza import making_pizza
+making_pizza(16,&#39;pepperont&#39;)
+making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<p>这样也是可行的，而且这样的话不需要在每一个前面添加句号</p>
+<h6>使用as来给函数指定别名</h6>
+<pre><code>from pizza import making_pizza as mp
+mp(16,&#39;pepperont&#39;)
+mp(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<pre><code>making a 16 pizza whit the following topping
+-pepperont
+making a 21 pizza whit the following topping
+-cheese
+-huge
+-mushrooms
+</code></pre>
+<h6>使用as给模块指定别名</h6>
+<pre><code>import pizza as p
+p.making_pizza(16,&#39;pepperont&#39;)
+p.making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<p>结果是一样的</p>
+<h6>导入模块中的所有函数</h6>
+<p>使用星号（*）可以让Python导入模块中的所有函数</p>
+<pre><code>from pizza import *
+making_pizza(16,&#39;pepperont&#39;)
+making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<pre><code>making a 16 pizza whit the following topping
+-pepperont
+making a 21 pizza whit the following topping
+-cheese
+-huge
+-mushrooms
+</code></pre>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

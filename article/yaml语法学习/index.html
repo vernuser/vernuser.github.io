@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nuclei模板编写&amp;&amp;yaml学习 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>nuclei模板编写&amp;&amp;yaml学习</h1>
+    <div class="meta"><span class="chip date">2024-06-27</span><span class="chip">分类·yaml</span><span class="chip">#yaml</span></div>
+    <article><p>Nuclei 是一种可快速利用的漏洞扫描程序，旨在探测现代应用程序、基础设施、云平台和网络，帮助
+识别和缓解漏洞。</p>
+<p>Nuclei的核心是利用模板(表示为简单的 YAML 文件)来描述检测、排名和解决特定安全漏洞的方
+法。</p>
+<p>每个模板都描述了可能的攻击路线，详细说明了漏洞、其严重性、优先级以及偶尔出现的相关漏洞。
+这种以模板为中心的方法确保 Nuclei不仅可以识别潜在威胁，还可以精确定位具有切实现实影响的可
+利用漏洞。</p>
+<h2>nuclei安装教程</h2>
+<p>安装nuclei的三种方式</p>
+<pre><code class="language-go环境下">go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+</code></pre>
+<pre><code class="language-直接下载二进制文件">https://github.com/projectdiscovery/nuclei/releases
+</code></pre>
+<pre><code class="language-使用docker拉取">docker pull projectdiscovery/nuclei:latest
+</code></pre>
+<p>windows下推荐直接下载二进制文件就行了，简单方便</p>
+<p>linux下直接</p>
+<pre><code>pip install nuclei
+</code></pre>
+<p>不需要go环境就能下载完成</p>
+<p>验证安装成功与否</p>
+<pre><code>nuclei -h
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/667d4b9dd9c307b7e9a9ba2c.png" alt="">
+下载以后先更新</p>
+<pre><code>nuclei -up   #更新nuclei
+nuclei -ut   #更新脚本
+</code></pre>
+<p>nuclei命令集</p>
+<pre><code>用法：
+  nuclei [命令]
+
+命令：
+目标：
+   -u, -target string[]                 指定扫描的URL/主机
+   -l, -list string                     指定需要扫描的URL/主机文件（一行一个）
+
+模板：
+   -t, -templates string[]              指定需要扫描的模板或者模板的路径
+   -nt, -new-templates                  只扫描最新版本中添加的模板
+   -w, -workflows string[]              指定扫描中的工作流或者工作流目录
+   -validate                            验证通过的模板
+   -tl                                  列出所有可用的模板
+
+过滤：
+   -tags string[]                       执行有标记的模板子集
+   -etags, -exclude-tags string[]       执行标记为排除的模板
+   -itags, -include-tags string[]       不执行具有攻击性的模板
+   -et, -exclude-templates string[]     要排除的模板或者模板目录
+   -it, -include-templates string[]     执行默认或配置中排除的模板
+   -s, -severity value[]                根据严重性运行模板，允许的值有：info,low,medium,high,critical
+   -es, -exclude-severity value[]       根据严重性排除模板，允许的值有：info,low,medium,high,critical
+   -a, -author string[]                 执行指定作者的模板
+
+输出：
+   -o, -output string                   输出发现的问题到文件
+   -silent                              只显示结果
+   -nc, -no-color                       禁用输出内容着色（ANSI转义码）
+   -json                                输出为jsonL（ines）
+   -irr, -include-rr                    在JSONL中输出对应的请求和相应（仅结果）
+   -nm, -no-meta                        不显示匹配的元数据
+   -nts, -no-timestamp                  不在输出中显示时间戳
+   -rdb, -report-db string              本地的Nuclei结果数据库（始终使用该数据库保存结果）
+   -me, -markdown-export string         以markdown导出结果
+   -se, -sarif-export string            以SARIF导出结果
+
+配置：
+   -config string                       指定Nuclei的配置文件
+   -rc, -report-config string           指定Nuclei报告模板文件
+   -H, -header string[]                 指定报告中的标题：value格式
+   -V, -var value                       通过var=value指定var值
+   -r, -resolvers string                指定Nuclei的解析文件
+   -sr, -system-resolvers               当DNS错误时使用系统DNS
+   -passive                             启用被动扫描处理HTTP响应
+   -ev, env-vars                        在模板中使用环境变量
+
+交互：
+   -inserver, -ineractsh-server string  使用interactsh反连检测平台（默认为&quot;https://interact.sh&quot;）
+   -itoken, -interactsh-token string    指定反连检测平台的身份凭证
+   -interactions-cache-size int         指定保存在交互缓存中的请求数（默认：5000）
+   -interactions-eviction int           聪缓存中删除请求前等待的时间（默认为60秒）
+   -interactions-poll-duration int      每个轮询前等待时间（默认为5秒）
+   -interactions-cooldown-period int    退出轮询前的等待时间（默认为5秒）
+   -ni, -no-interactsh                  禁用反连检测平台，同时排除基于反连检测的模板
+
+限速：
+   -r1, -rate-limit int                 每秒最大请求量（默认：150）
+   -rlm, -rate-limit-minute int         每分钟最大请求量
+   -bs, -bulk-size int                  每个模板最大并行检测数（默认：25）
+   -c, -concurrency int                 并行执行的最大模板数量（默认：25）
+
+
+优化：
+   -timeout int                         超时时间（默认为5秒）
+   -retries int                         重试次数（默认：1）
+   -mhe, -max-host-error int            某主机扫描失败次数，跳过该主机（默认：30）
+   -project                             使用项目文件夹避免多次发送同一请求
+   -project-path string                 设置特定的项目文件夹
+   -spm, -stop-at-first-path            得到一个结果后停止（或许会中断模板和工作流的逻辑）
+   -stream                              流模式 - 在不整理输入的情况下详细描述
+
+无界面浏览器：
+    -headless                           启用需要无界面浏览器的模板
+    -page-timeout int                   在无界面下超时秒数（默认：20）
+    -sb, -show-brower                   在无界面浏览器运行模板时，显示浏览器
+    -sc, -system-chrome                 不使用Nuclei自带的浏览器，使用本地浏览器
+
+调试：
+    -debug                              显示所有请求和响应
+    -debug-req                          显示所有请求
+    -debug-resp                         显示所有响应
+    -proxy, -proxy-url string           使用HTTP代理
+    -proxy-socks-url string             使用SOCK5代理
+    -tlog, -trace-log string            写入请求日志到文件
+    -version                            显示版本信息
+    -v, -verbose                        显示详细信息
+    -vv                                 显示额外的详细信息
+    -tv, -templates-version             显示已安装的模板版本
+
+升级：
+    -update                             更新Nuclei到最新版本
+    -ut, -update-templates              更新Nuclei模板到最新版
+    -ud, -update-directory string       覆盖安装模板
+    -duc, -disable-update-check         禁用更新
+
+统计：
+    -stats                              显示正在扫描的统计信息
+    -sj, -stats-json                    将统计信息以JSONL格式输出到文件
+    -si, -stats-inerval int             显示统计信息更新的间隔秒数（默认：5）
+    -m, -metrics                        显示Nuclei端口信息
+    -mp, -metrics-port int              更改Nuclei默认端口（默认：9092）
+</code></pre>
+<p>或者直接使用nuclei给的页面进行</p>
+<p><a href="https://cloud.projectdiscovery.io/">https://cloud.projectdiscovery.io/</a></p>
+<h2>yaml学习</h2>
+<h3>基本语法</h3>
+<ul>
+<li>大小写敏感</li>
+<li>使用缩进表示层次关系（和Python挺像的</li>
+<li>缩进不能使用TAB制表符，只能是空格</li>
+<li>#表示注释</li>
+<li>缩进空格数不重要，但是同一层次必须元素左对齐</li>
+</ul>
+<h4>yaml对象</h4>
+<p>对象键值对</p>
+<pre><code>简单的可以使用冒号形式
+key: value冒号后面需要加一个空格
+也可以使用key:{key1:value1,key2:value2}
+亦或是
+key:
+    child-key:value
+    child-key2:value2
+</code></pre>
+<p>对于相对比较复杂的对象格式，可以使用一个问好加一个空格表示一个
+复杂的KEY，配合一个而冒号加一个空格表示一个value</p>
+<pre><code>?
+  - complexkey1
+  - complexkey2
+:
+  - complexvalue1
+  - complexvalue2
+</code></pre>
+<p>表示对象的属性是一个数组<code>[complexkey1,complexkey2]</code>
+对象的值也是要给数组<code>[complexvalue1,complexvalue2]</code></p>
+<h4>yaml数组</h4>
+<p>以<code>-</code>开头表示一个数组</p>
+<pre><code>- a
+- b
+- c
+</code></pre>
+<p>YAML 支持多维数组，可以使用行内表示：
+<code>key: [value1,value2,...]</code></p>
+<p>数据结构的子成员是一个数组，则可以在该项下面缩进一个空格</p>
+<pre><code>-
+ - a
+ - b
+ - c
+</code></pre>
+<p>举一个相对比较复杂的例子</p>
+<pre><code>students:
+-
+  id: 1
+  name: creeper
+  grade: 100
+-
+  id: 2
+  name: tenurnight
+  grade: 120
+</code></pre>
+<p>就是流式里面的</p>
+<pre><code>students: [{id: 1,name: creeper,grade: 100},{id: 2,name: tenurnight,grade: 120}]
+</code></pre>
+<h4>复合结构</h4>
+<p>yml的复合结构</p>
+<pre><code>language:
+ - python
+ - javascript
+ - ruby
+ - go
+websites:
+ yaml: yaml.org
+ ruby: ruby.org
+ python: python.org
+ go: go.org
+</code></pre>
+<p>其实就是json的</p>
+<pre><code>{
+ language: [&#39;python&#39;,&#39;javascript&#39;,&#39;ruby&#39;,&#39;go&#39;]
+ websites:
+  {
+   yaml: &quot;yaml.org&quot;
+   ruby: &quot;ruby.org&quot;
+   python: &quot;python.org&quot;
+   go: &quot;go.org&quot;
+  }
+}
+</code></pre>
+<h4>纯量</h4>
+<p>纯量是不可分割的，最基本的值</p>
+<ul>
+<li>字符串</li>
+<li>布尔值</li>
+<li>整数</li>
+<li>浮点型</li>
+<li>NULL</li>
+<li>时间</li>
+<li>日期</li>
+</ul>
+<pre><code class="language-例题来自菜鸟">boolean:
+    - TRUE  #true,True都可以
+    - FALSE  #false，False都可以
+float:
+    - 3.14
+    - 6.8523015e+5  #可以使用科学计数法
+int:
+    - 123
+    - 0b1010_0111_0100_1010_1110    #二进制表示
+null:
+    nodeName: &#39;node&#39;
+    parent: ~  #使用~表示null
+string:
+    - 哈哈
+    - &#39;Hello world&#39;  #可以使用双引号或者单引号包裹特殊字符
+    - newline
+      newline2    #字符串可以拆成多行，每一行会被转化成一个空格
+date:
+    - 2018-02-17    #日期必须使用ISO 8601格式，即yyyy-MM-dd
+datetime:
+    -  2018-02-17T15:02:31+08:00    #时间使用ISO 8601格式，时间和日期之间使用T连接，最后使用+代表时区
+</code></pre>
+<h4>引用</h4>
+<pre><code>defaults: &amp;defaults
+  adapter:  postgres
+  host:     localhost
+
+development:
+  database: myapp_development
+  &lt;&lt;: *defaults
+
+test:
+  database: myapp_test
+  &lt;&lt;: *defaults
+</code></pre>
+<p>相当于</p>
+<pre><code>defaults:
+  adapter:  postgres
+  host:     localhost
+
+development:
+  database: myapp_development
+  adapter:  postgres
+  host:     localhost
+
+test:
+  database: myapp_test
+  adapter:  postgres
+  host:     localhost
+</code></pre>
+<p>就是使用&amp;建立锚点，使用&lt;&lt;表示合并到当前数据，*用来引用锚点</p>
+<p>我的理解就是&amp;就是建立一个函数
+&lt;&lt;就是告诉你我要在这里引用
+*就是调用函数</p>
+<pre><code>- &amp;showell Steve
+- Clark
+- Brian
+- Oren
+- *showell
+</code></pre>
+<p>转换成js就是</p>
+<pre><code>[ &#39;Steve&#39;, &#39;Clark&#39;, &#39;Brian&#39;, &#39;Oren&#39;, &#39;Steve&#39; ]
+</code></pre>
+<p>参考地址：
+<a href="https://www.runoob.com/w3cnote/yaml-intro.html">https://www.runoob.com/w3cnote/yaml-intro.html</a>
+<a href="https://www.ruanyifeng.com/blog/2016/07/yaml.html">https://www.ruanyifeng.com/blog/2016/07/yaml.html</a>
+<a href="https://www.jianshu.com/p/97222440cd08">https://www.jianshu.com/p/97222440cd08</a>
+<a href="https://daihainidewo.github.io/blog/yaml%E6%95%99%E7%A8%8B/">https://daihainidewo.github.io/blog/yaml%E6%95%99%E7%A8%8B/</a></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

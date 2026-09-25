@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBOScms代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>IBOScms代码审计</h1>
+    <div class="meta"><span class="chip date">2024-10-07</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><h2>命令执行</h2>
+<p><img src="https://pic.imgdb.cn/item/6703e174d29ded1a8c971ad2.png" alt=""></p>
+<p>在这里的只有这个地方可以修改，猜测可能存在文件读取，命令执行，sql注入等 漏洞，抓包查看路由以及传参</p>
+<p><img src="https://pic.imgdb.cn/item/6703e12ad29ded1a8c96be55.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6703f031d29ded1a8ca66be2.png" alt=""></p>
+<p>这里使用了<code>dbSubmit</code>，这个在数据包中发现是1，这里的作用是检查表单是否已经提交</p>
+<p>在第33行调用了<code>database</code>的<code>databaseBackup()</code>方法，跟进一下</p>
+<p><img src="https://pic.imgdb.cn/item/6703f31cd29ded1a8ca95c5a.png" alt=""></p>
+<p>这里235行通过控制<code>filename</code>参数来控制我们上传的文件名，236行对一些后缀进行了过滤</p>
+<blockquote>
+<p>getRequest()方法则是获取我们不同类型的请求参数，getQuery、getPost、getParam这些方法是YII框
+架下封装好的一些获取请求参数的方法这些方法可直接调用</p>
+</blockquote>
+<p><img src="https://pic.imgdb.cn/item/6703f5f1d29ded1a8cac3899.png" alt=""></p>
+<p>我们知道<code>filename</code>可控，那我们就跟踪<code>$filename</code></p>
+<p><img src="https://pic.imgdb.cn/item/6703f5dbd29ded1a8cac1ebc.png" alt=""></p>
+<p>这里是将<code>/  \\  .  &#39;</code>替换成了空进行了第二次过滤后赋值给<code>$backupFileName</code></p>
+<p>下面设置<code>$method=multivol</code>，并将<code>$backupFileName</code>赋值给<code>$dumpFile</code></p>
+<p><img src="https://pic.imgdb.cn/item/6703f6e6d29ded1a8cad3602.png" alt=""></p>
+<p>else的话也是经过分支拼接到<code>dumpFile</code>,但是这里的<code>dumpFile</code>后续会被拼接到这里</p>
+<p><img src="https://pic.imgdb.cn/item/6703f7c1d29ded1a8cae729e.png" alt=""></p>
+<p>这里用到了反引号并且<code>dumpfile</code>可控，所以我们可以传入</p>
+<pre><code>&amp;whoami&gt;demo1&amp;
+</code></pre>
+<p>进行命令执行</p>
+<h2>sql注入</h2>
+<p>在标签页</p>
+<p><img src="https://pic.imgdb.cn/item/67052812d29ded1a8ca9d268.png" alt=""></p>
+<p>里面的汇报中</p>
+<p><img src="https://pic.imgdb.cn/item/6705282dd29ded1a8ca9ea51.png" alt=""></p>
+<p>存在sql的报错</p>
+<p><img src="https://pic.imgdb.cn/item/6705282cd29ded1a8ca9ea16.png" alt=""></p>
+<p>抓包看看</p>
+<p><img src="https://pic.imgdb.cn/item/6705285dd29ded1a8caa1698.png" alt=""></p>
+<p>通过api控制器调用了module层的getlist类，跟进查看</p>
+<p><img src="https://pic.imgdb.cn/item/670529ecd29ded1a8cab7f41.png" alt=""></p>
+<p>结合数据包我们可以发现存在问题的是<code>keyword</code>的<code>subject</code></p>
+<p>跟踪一下发现</p>
+<p><img src="https://pic.imgdb.cn/item/67052a9dd29ded1a8cac1bb9.png" alt=""></p>
+<p>30行判断<code>keyword</code>是否存在，32行将他带入到<code>getListCondition</code>里面,<code>getListCondition</code>是进行sql拼接查询的，将结果带入到33行的<code>getListCondition</code>方法进行的sql参数执行的操作</p>
+<p>这里教程是用的debug的方式查看参数的传递过程，但是不知道为什么我的xdebug每次一调试就是</p>
+<p><img src="https://pic.imgdb.cn/item/67061b80d29ded1a8c654eb0.png" alt=""></p>
+<p>导致我调试不了</p>
+<p>教程是说</p>
+<p>这里经过调试最后返回的结果是完整的没对特殊字符进行过滤的完整sql语句</p>
+<p><img src="https://pic.imgdb.cn/item/67061ca1d29ded1a8c66e26d.png" alt=""></p>
+<p>原因是YII框架的DB类库没有对sql进行处理兵器开发人员在二次开发的过程中没对报错进行异常捕获导致产生错误</p>
+<h2>文件上传</h2>
+<p><img src="https://pic.imgdb.cn/item/67066381d29ded1a8c9f7e82.png" alt=""></p>
+<p>这里可以自定义上传的文件类型，所以我们可以通过修改这个来进行文件上传，发现定义了.php还是不能上传</p>
+<p><img src="https://pic.imgdb.cn/item/67066494d29ded1a8ca04bc2.png" alt=""></p>
+<p>抓包分析路由</p>
+<p><img src="https://pic.imgdb.cn/item/6706944ed29ded1a8cc5fe75.png" alt=""></p>
+<p>这里是调用的file文件夹下面的personal的add，所以我们能找到<code>actionadd</code>
+方法，这个方法是通过op参数帮助我们进行功能定位，但是他会先调用<code>actionindex</code>方法获取后台配置参数</p>
+<p><img src="https://pic.imgdb.cn/item/670697c6d29ded1a8cc8f23e.png" alt=""></p>
+<p>在 <code>actionIndex</code> 方法中调用了<code>getUploadConfig</code>获取上传配置参数</p>
+<p><img src="https://pic.imgdb.cn/item/67069809d29ded1a8cc924e4.png" alt=""></p>
+<p>跟踪发现进行了一些过滤</p>
+<p><img src="https://pic.imgdb.cn/item/6706984bd29ded1a8cc95c17.png" alt=""></p>
+<p>他107的<code>dangerTags</code>中如果存在变量就要unset</p>
+<p><img src="https://pic.imgdb.cn/item/670698a6d29ded1a8cc9a039.png" alt=""></p>
+<p>所以我们的php没法上传</p>
+<p>但是我们真正上传的类中还包含着过滤</p>
+<p><img src="https://pic.imgdb.cn/item/670698f1d29ded1a8cc9dd34.png" alt=""></p>
+<p>它调用了<code>CommonAttach</code>类下的方法，这里面封装着所有用于上传的方法</p>
+<p><img src="https://pic.imgdb.cn/item/67069948d29ded1a8cca21ff.png" alt=""></p>
+<p>这里的<code>checkExt</code>就是第二处过滤的地方了</p>
+<p><img src="https://pic.imgdb.cn/item/67069973d29ded1a8cca4268.png" alt=""></p>
+<p>所以我们可以用</p>
+<pre><code>gif
+
+.htaccess
+</code></pre>
+<p>等等进行文件上传</p>
+<h2>任意文件读取</h2>
+<p>查找危险函数unlink，发现这个</p>
+<p><img src="https://pic.imgdb.cn/item/67069b02d29ded1a8ccbd4b9.png" alt=""></p>
+<p>这里通过post获取<code>kety</code>，然后判断是不是文件就进行了删除</p>
+<p>所以可以抓一个删除包然后进行<code>../</code>的返回，类似这样</p>
+<p><img src="https://pic.imgdb.cn/item/67069b7ad29ded1a8ccc479d.png" alt=""></p>
+<p>至此，结束iboscms</p>
+<p>总结：</p>
+<p>yii框架有明显的过滤但是在module层没有封装好导致可能存在sql漏洞</p>
+<p>unlink危险函数</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

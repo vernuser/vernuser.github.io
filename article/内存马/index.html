@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内存马入门知识学习 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>内存马入门知识学习</h1>
+    <div class="meta"><span class="chip date">2023-05-04</span><span class="chip">分类·内存马</span><span class="chip">#web</span></div>
+    <article><p>Java Servlet前置知识</p>
+<p>Servlet/Filter/Listener Java Web三大件</p>
+<h3>1.Servlet</h3>
+<p>Servlet是服务期端的Java的应用程序，用于处理http请求并做出相应的响应。</p>
+<p><img src="https://s2.loli.net/2023/05/04/c9diYKwZAu1UQVb.png" alt="7200f7125f97563204de7ea26dc35c62.png"></p>
+<h2>2.Filter</h2>
+<p>介于Web和Servlet之间的过滤器，用于过滤未到达Servlet的请求或者由Servlet生成但还没有返回响应</p>
+<p>（可见上图）</p>
+<h2>3.listener</h2>
+<p>listener是用于监听某些特定动作的监听器。当特定动作发生时，监听该动作的监听器会自动调用相应的方法，比如</p>
+<p><img src="https://s2.loli.net/2023/05/04/TPpq5HERw7okcVd.png" alt="f6ffb2c6e921b812dd6da32a017023e8.png"></p>
+<p>解释一下上图，但我们创建一个session时，会自动调用HttpSessionListener中的sessionCreated，而当session被销毁的时候也同时会调用 sessionDestroyed() 方法</p>
+<h2>内存马的攻击面</h2>
+<p>webshell实际上也是一种web服务，所以可以有以下几种思路</p>
+<p>1.动态注册/字节码替换 interceptor/controller（使用框架如 spring/struts2/jfinal）</p>
+<p>2.动态注册/字节码替换 使用责任链设计模式的中间件、框架的实现（例如 Tomcat 的 Pipeline &amp; Valve，Grizzly 的 FilterChain &amp; Filter 等等）</p>
+<p>3.动态注册/字节码替换 servlet-api 的具体实现 servlet/filter/listener</p>
+<p>4.动态注册/字节码替换一些定时任务的具体实现 比如 TimeTask等</p>
+<p>所以，webshell作为一个后门，实际上我们需要他完成的工作室能够接受恶意注入并回显。</p>
+<p>（后面设计的知识还没学，过几天做回来填坑）</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

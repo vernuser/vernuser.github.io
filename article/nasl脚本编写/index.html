@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>openvas · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>openvas</h1>
+    <div class="meta"><span class="chip date">2025-03-11</span><span class="chip">分类·工具</span><span class="chip">#工具</span><span class="chip">#openvas</span></div>
+    <article><h2>openvas调研</h2>
+<p>openvas是nessus项目分支，基于B/S框架进行工作，执行扫描并提供扫描结果</p>
+<p>安装的话kali或者ubuntu都可以，</p>
+<p>如果我没记错应该是</p>
+<pre><code>apt-get install gvm
+</code></pre>
+<p>检查是</p>
+<pre><code>gvm-check-setup
+</code></pre>
+<p>启动是</p>
+<pre><code>gvm-start
+</code></pre>
+<p>如果出现了</p>
+<pre><code>[&gt;] Please wait for the GVM services to start.
+[&gt;]
+[&gt;] You might need to refresh your browser once it opens.
+[&gt;]
+[&gt;]  Web UI (Greenbone Security Assistant): https://127.0.0.1:9392
+
+● gsad.service - Greenbone Security Assistant daemon (gsad)
+     Loaded: loaded (/usr/lib/systemd/system/gsad.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2025-03-31 13:42:28 CST; 65ms ago
+ Invocation: ecffdcc6ce684dfb907bdb1c0014c502
+       Docs: man:gsad(8)
+             https://www.greenbone.net
+   Main PID: 235214 (gsad)
+      Tasks: 1 (limit: 4511)
+     Memory: 2M (peak: 2M)
+        CPU: 22ms
+     CGroup: /system.slice/gsad.service
+             ├─235214 /usr/sbin/gsad --foreground --listen 0.0.0.0 --port 9392
+             └─235216 /usr/sbin/gsad --foreground --listen 0.0.0.0 --port 9392
+
+3月 31 13:42:28 kawakaze systemd[1]: Starting gsad.service - Greenbone Security Assistant daemon (gsad)...
+3月 31 13:42:28 kawakaze systemd[1]: Started gsad.service - Greenbone Security Assistant daemon (gsad).
+
+● gvmd.service - Greenbone Vulnerability Manager daemon (gvmd)
+     Loaded: loaded (/usr/lib/systemd/system/gvmd.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2025-03-31 13:42:23 CST; 5s ago
+ Invocation: a7b7ce4ca6fd433e8abc52934746f188
+       Docs: man:gvmd(8)
+    Process: 234620 ExecStart=/usr/sbin/gvmd --osp-vt-update=/run/ospd/ospd.sock --listen-group=_gvm (code=exited, status=0/SUCCESS)
+   Main PID: 234621 (gvmd)
+      Tasks: 1 (limit: 4511)
+     Memory: 211.3M (peak: 339.9M)
+        CPU: 4.707s
+     CGroup: /system.slice/gvmd.service
+             └─234621 &quot;gvmd: Waiting &quot; --osp-vt-update=/run/ospd/ospd.sock --listen-group=_gvm
+
+3月 31 13:42:15 kawakaze systemd[1]: Starting gvmd.service - Greenbone Vulnerability Manager daemon (gvmd)...
+3月 31 13:42:15 kawakaze systemd[1]: gvmd.service: Can&#39;t open PID file /run/gvmd/gvmd.pid (yet?) after start: No such file or directory
+3月 31 13:42:23 kawakaze systemd[1]: Started gvmd.service - Greenbone Vulnerability Manager daemon (gvmd).
+
+● ospd-openvas.service - OSPd Wrapper for the OpenVAS Scanner (ospd-openvas)
+     Loaded: loaded (/usr/lib/systemd/system/ospd-openvas.service; disabled; preset: disabled)
+     Active: active (running) since Mon 2025-03-31 13:42:15 CST; 12s ago
+ Invocation: 3052909356974660937e6cc23f5107e1
+       Docs: man:ospd-openvas(8)
+             man:openvas(8)
+    Process: 234594 ExecStart=/usr/bin/ospd-openvas --config /etc/gvm/ospd-openvas.conf --log-config /etc/gvm/ospd-logging.conf (code=exited, status=0/SUCCESS)
+   Main PID: 234600 (ospd-openvas)
+      Tasks: 5 (limit: 4511)
+     Memory: 132.4M (peak: 161.1M)
+        CPU: 2.753s
+     CGroup: /system.slice/ospd-openvas.service
+             ├─234600 /usr/bin/python3 /usr/bin/ospd-openvas --config /etc/gvm/ospd-openvas.conf --log-config /etc/gvm/ospd-logging.conf
+             └─234602 /usr/bin/python3 /usr/bin/ospd-openvas --config /etc/gvm/ospd-openvas.conf --log-config /etc/gvm/ospd-logging.conf
+
+3月 31 13:42:14 kawakaze systemd[1]: Starting ospd-openvas.service - OSPd Wrapper for the OpenVAS Scanner (ospd-openvas)...
+3月 31 13:42:15 kawakaze systemd[1]: Started ospd-openvas.service - OSPd Wrapper for the OpenVAS Scanner (ospd-openvas).
+
+[&gt;] Opening Web UI (https://127.0.0.1:9392) in: 5... 4... 3... 2... 1...
+</code></pre>
+<p>说明启动成功了，（因为我第一次安装的时候不知道为什么安装成功了,check检查没问题，但是就是启动不起来）</p>
+<p>接下来就是打开本地的9392端口</p>
+<p>更新openvas插件是</p>
+<pre><code>sudo greenbone-nvt-sync
+</code></pre>
+<p><code>/var/lib/openvas/plugins</code></p>
+<p>openvas所有的脚本都在里面，
+如果想要找到某一个脚本，可以试一下我这个代码</p>
+<pre><code>import os
+def search_in_file(file_path, search_string):
+    try:
+        with open(file_path, &#39;r&#39;, encoding=&#39;utf-8&#39;) as file:
+            for line in file:
+                if search_string in line:
+                    return True
+    except (UnicodeDecodeError, IOError):
+        pass
+    return False
+def search_in_directory(directory, search_string, output_file):
+    with open(output_file, &#39;w&#39;, encoding=&#39;utf-8&#39;) as outfile:
+        for root, _, files in os.walk(directory):
+            for file in files:
+                file_path = os.path.join(root, file)
+                if search_in_file(file_path, search_string):
+                    outfile.write(f&quot;{file_path}\n&quot;)
+if __name__ == &quot;__main__&quot;:
+    current_directory = os.getcwd()
+    search_string = input(&quot;CVE编号:&quot;)
+    output_file = search_string + &quot;_search_result.txt&quot;
+    search_in_directory(current_directory, search_string, output_file)
+    print(f&quot;Search results saved to: {output_file}&quot;)
+</code></pre>
+<p>编写openvas脚本的时候，有个问题，就是当我编写sql延时注入的时候，回显是.....，而且等很久没有其他输出，就很奇怪</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

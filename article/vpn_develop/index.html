@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vpn develop · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>vpn develop</h1>
+    <div class="meta"><span class="chip date">2026-02-15</span><span class="chip">分类·vpn</span><span class="chip">#vpn</span></div>
+    <article><blockquote>
+<p>每当一种技术被识别，被封锁，总会有更强大的技术 浴火重生</p>
+</blockquote>
+<blockquote>
+<p>以此致敬人类对开放自由的渴望</p>
+</blockquote>
+<h1>GFW</h1>
+<blockquote>
+<p>防火长城（英语：Great Firewall，GFW），中国国家防火墙，或简称为墙、防火墙等，中共中央网信办称其为数据跨境安全网关，是中华人民共和国政府用以过滤国际互联网出口内容的软硬件系统集合。防火长城不是中国特有的一个专门单位，而是由分散部门的各服务器和路由器等设备，加上相关公司的应用程序构成，其监控所有经过国际网关的通讯，对认为不符合中国官方要求的传输内容，进行干扰、阻断、屏蔽。由于中国网络审查广泛，中国大陆内含有“不合适”内容的网站，会受到政府直接的行政干预，故防火长城主要作用在于分析和过滤中国境外网络的信息。自本世纪初以来，防火长城由国家计算机网络与信息安全管理中心（CNCERT）运营和维护。</p>
+</blockquote>
+<blockquote>
+<p>随着防火长城逐渐为人熟知，“墙”一词有时也被用作动词，“被墙”即指网站内容被防火长城所屏蔽，“翻墙”也被引申为突破网络审查浏览中国大陆境外被屏蔽的网站或使用服务的行为。
+-------来自<a href="https://zh.wikipedia.org/wiki/%E9%98%B2%E7%81%AB%E9%95%BF%E5%9F%8E">维基百科</a></p>
+</blockquote>
+<h1>协议</h1>
+<h2>Shadowsocks（SS）</h2>
+<p>2012年，一个名为&quot;clowwindy&quot;的中国程序员发布了一个叫
+<strong>shadowsocks</strong>的新项目，从此拉开了这场翻墙技术的战争</p>
+<p>从技术上说,SS(shadowsocks)是一个轻量级的基于sock5的加密代理，他的用途就是突破早期的GFW（Great Firewall），但是shadowsocks真正颠覆性的地方在于他首次结合了PAC(Proxy Auto-Config)文件，在此之前，所有的vpn都是走国外代理，不论你是否访问国内or国外流量，都会在国外节点，但是SS创造性的将其分为了国内直接链接和国外代理，使得vpn链接更加顺滑。</p>
+<p>好景不长的是，2015年8月22日，其作者Clowwindy在GitHub上称，警察在两日前要求他停止开发Shadowsocks项目并删除其所有代码。之后，作者停止维护Shadowsocks，其GitHub项目页面已被清空，这就是著名的喝茶事件。</p>
+<p>这本该是SS的终点，但是也是其赛博飞升的起点。</p>
+<h2>ShadowsocksR(SSR)</h2>
+<p>因为SS是开源的，源代码早就被fork不知道多少，当clowwindy这个中心被迫消失后，这反而促成了其去中心化。</p>
+<p>往后十几年，社区基本上都在和GFW拉扯，现在GFW早就针对SS的特征进行精准定位，基本上想要自己通过vps搭建SS节点，不出几分钟就会被封杀。</p>
+<p>在SS发展过程中，曾经有一个著名分支SSR，是一个网名为&quot;breakwa11&quot;的用户发起的Shadowsocks分支，在Shadowsocks的基础上增加了一些资料混淆方式，称修复了部分安全问题并可以提高QoS优先级。后来贡献者Librehat也为Shadowsocks补上了一些此类特性，甚至增加了类似Tor的可插拔传输层功能。</p>
+<p>但是因为breakwa11本人过于高调，2017年7月27日，breakwa11遭到自称“ESU.TV”（恶俗TV）的不明身份人士人身攻击，对方宣称如果不停止开发并阻止用户讨论此事件将发布更多包含个人隐私的资料，随后breakwa11表示遭到对方人肉搜索并公开个人资料的是无关人士，为了防止对方继续伤害无关人士，breakwa11将删除GitHub上的所有代码、解散相关交流群组，停止ShadowsocksR项目。</p>
+<h2>V2Ray（VMess）</h2>
+<p>随着GFW的升级，他开始具备流量分析和主动探测的能力，传统的SS已经无法生存，为了应对这种情况，新一代协议应运而生，他就是v2ray带来的VMes。</p>
+<p>VMess将UUID作为用户标识，并创造性的加入了时间戳验证机制以对抗GFW,凡事都有两面性，VMess的加强也带u来了技术难度的大幅度上升，相比于SS，它需要更加繁琐和高难度的探寻，这就催生了VLess.</p>
+<h2>Trojan</h2>
+<p>于 2019 年，TrojanGfw开发并开源了Trojan，与VMess完全相反，Trojan模仿的是一个nginx，他在标准的443端口监听并处理真实的tls握手，当GFW来视察的时候，它会返回一个真实的http页面，只有懂得暗号的才能使他变为代理服务器，这就使得GFW的主动探测失效.</p>
+<h2>VLess</h2>
+<p>VLESS是V2Ray项目中的一个简化协议，于 2020 年引入，作为 VMess 的继任者，vless算是一种vmess 模块化版本，他将协议层与加密解耦,vless只负责用户身份验证和数据转发，自己不带任何加密功能，（最近引入了VLESS Encryption加密），这种模块化设计巧妙在，它允许开发者在其上面灵活插入更先进强大的加密和伪装技术，并未后来XTLS和Reality等一系列打下坚实基础。</p>
+<h3>V2Fly和Xray诞生</h3>
+<p>说起V2Fly，可能会感到陌生又熟悉，他是V2Ray的继承者，2019年2月，V2Ray项目创始人Victoria Raymond突然消失，原作者的Github账号最后一次更新2019年11月。</p>
+<p>后面的继任者于2019年6月宣称“由于原V2Ray开发者长期不上线，其他维护者没有完整权限，为了方便维护，原V2Ray项目停止后新创建了V2Fly组织。</p>
+<p>而V2Fly的分裂要从一个技术难点说起，即TLS-in-TLS,当你用VMess这类协议跑在TLS加密通道中，实际上是对已加密的再一次加密，这就造成了极大的性能损耗，为解决这个问题，当时还在V2Fly的RPRX发明了XTLS，但是因为在开源许可证等问题上存在分歧，XTLS最终自立门户基于V2Fly-core创建了一个新的分支，Xray-core。</p>
+<h2>REALITY</h2>
+<p>REALITY 是 Xray 项目中的一项创新技术，由XTLS/REALITY于2022年推出。它不再试图伪装成一个普通的网站服务器，而是选择假扮成大型互联网公司的 CDN 节点，如 Apple、Google 或 Microsoft 的边缘服务器。这种「借尸还魂」的策略使得流量在 GFW 眼中看起来完全合法，REALITY代表了翻墙技术的最新进展，从这里开始已经几乎完全无法被 GFW 识别和封锁。</p>
+<h2>Hysteria</h2>
+<p>与前文介绍的基于 TCP 的协议不同，apernet/hysteria选择基于 UDP 协议，并模仿 QUIC（Quick UDP Internet Connections）的工作方式。QUIC 是 Google 开发的下一代传输协议，旨在提供低延迟、高可靠性的连接，广泛用于 HTTP/3。
+Hysteria 的核心创新在于其拥塞控制算法：</p>
+<ul>
+<li>激进拥塞控制 传统 TCP 在检测到丢包时会减速重传，以避免网络拥塞。而 Hysteria 采用相反策略：当检测到丢包时，它会加速发包，试图抢占更多带宽。这种「反直觉」的方法在高丢包、低质量网络环境中表现出色，能够显著提升传输速度和稳定性。</li>
+<li>QUIC 伪装 Hysteria 使用 QUIC 的握手和数据格式，使流量看起来像是正常的 QUIC 流量，进一步增强伪装效果。</li>
+</ul>
+<p>然而，Hysteria 也面临挑战：</p>
+<p>许多 ISP 对 UDP 流量实施质量服务限制，优先级低于 TCP，可能导致速度不稳定。激进发包可能被误认为是 DDoS 攻击，导致服务器 IP 被封锁。后期项目如tuic-protocol/tuic对 Hysteria 进行了改进，引入更智能的丢包退避策略，避免过度发包，同时保持性能优势。这些 UDP 协议为翻墙技术带来了新的可能性，尤其在对抗 GFW 的流量整形时。</p>
+<p>不过，根据 GFW Report 团队发表在 USENIX’25 上的 Exposing and Circumventing SNI-based QUIC Censorship of the Great Firewall of China 一文，GFW 已经开始针对 QUIC 流量进行封锁和干扰，Hysteria 的前景仍需观察。</p>
+<h2>NaiveProxy</h2>
+<p>klzgrad/naiveproxy采用了与众不同的对抗策略：不是创造新的协议，而是尽可能完美地模仿真实浏览器的 HTTPS 流量。它基于 Chromium 的网络栈开发，确保生成的流量在字节级别与 Chrome 浏览器产生的流量一致。</p>
+<p>这一方法的优势在于，流量指纹与正常浏览器流量无异，GFW 的 DPI 和指纹分析几乎无法区分。NaiveProxy 代表了「以假乱真」的极致，但也凸显了翻墙技术的极限：当伪装足够完美时，检测将变得极其困难。</p>
+<h3>Mihomo</h3>
+<p>其实说到翻墙，虽然不应该算在协议里面，但是我认为还是不得不提的是一个，Mihomo，clash继承者，在过去几年里小黑猫通过其图形化界面以及强大的分流规则风靡大江南北，其知名度不输当年的SS小飞机，但是2023年11月，一场风暴席卷了整个clash生态圈。</p>
+<p>先是CFW（clash for windows）作者Fndroid删除了项目，然后引发了一系列连锁反应，clash内核开发者以及其他多个知名客户端的开发者都在极短的时间内相继删库跑路。这场废墟之上一个名为clash.meta的分支存活了下来，并改名为Mihomo，切割与原项目的链接。</p>
+<p>clash的崩塌事件也给了我们一个深刻的教训，一个项目哪怕是开源的，如果过于依赖几个核心开发者，当关键节点收到压力时，整个生态都有可能在一夜之间倾覆。</p>
+<h1>结语</h1>
+<p>1987年9月20日20时55分，中国兵器工业计算机应用研究所成功发送了中国第一封电子邮件，这标志这中国与国际计算机网络已经成功连接。这封邮件的内容是：</p>
+<blockquote>
+<p>Across the Great Wall we can reach every corner in the world. (越过长城，走向世界)</p>
+</blockquote>
+<p>现在看来，颇具讽刺意义。</p>
+<p>回顾这场漫长的对抗，尽管开发者们面临从被喝茶到被迫删除心血之作的巨大风险，但开放自由的开源精神让这个生态系统展现出惊人的韧性，我们已经看到XRay社区在探索后量子密码的可能性，也许未来，AI也会被用于这场对抗之中，但是无论技术如何演变，背后那种对信息自由流动的渴望将永远是驱动创新的不竭动力。</p>
+<center>
+
+<p><strong>向所有开发者，致以最高的敬意</strong></p>
+</center></article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

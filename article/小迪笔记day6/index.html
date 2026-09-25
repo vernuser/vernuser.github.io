@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小迪笔记day67891011--信息打点 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>小迪笔记day67891011--信息打点</h1>
+    <div class="meta"><span class="chip date">2024-08-02</span><span class="chip">分类·小迪安全</span><span class="chip">#小迪安全</span><span class="chip">#渗透</span></div>
+    <article><h1>信息点：</h1>
+<p>基础信息，系统信息，应用信息，防护信息，人员信息，其他信息等</p>
+<h1>技术点：</h1>
+<p>CMS 识别，端口扫描，CDN 绕过，源码获取，子域名查询，WAF 识别，负载均衡识别等</p>
+<h1>资产收集</h1>
+<h2>ttl判断操作系统</h2>
+<p>linux的数是64或255</p>
+<p>windows nt/2000/xp 是128</p>
+<p>windows98 是32</p>
+<p>unix是255</p>
+<p>ping一下看距离哪一个更近就可以判断是那个（）</p>
+<p>也可以直接上nmap等端口扫描开干</p>
+<h2>数据库判断</h2>
+<p>组合 or 端口扫描</p>
+<p>mysql 3306</p>
+<p>mssql 1433</p>
+<p>redis 6379</p>
+<p>Oracle 1521</p>
+<p>DB2 5000</p>
+<p>postgresql 5432</p>
+<h2>源码</h2>
+<p>互站  网上搜  fofa搜</p>
+<p>（例：不知道还存不存在 面具约会）</p>
+<h3>源码泄露</h3>
+<p>composer.json(类似版权和声明的文件，一种php特性)</p>
+<p>git 源码泄露</p>
+<p>svn 源码泄露</p>
+<p>hg 源码泄漏</p>
+<p>网站备份压缩文件</p>
+<p>WEB-INF/web.xml 泄露   [RoarCTF 2019]Easy Java</p>
+<p>DS_Store 文件泄露</p>
+<p>SWP 文件泄露</p>
+<p>CVS 泄露</p>
+<p>Bzr 泄露</p>
+<p>GitHub 源码泄漏</p>
+<pre><code>GITHUB 资源搜索：
+in:name test               #仓库标题搜索含有关键字
+in:descripton test         #仓库描述搜索含有关键字
+in:readme test             #Readme 文件搜素含有关键字
+stars:&gt;3000 test
+#stars 数量大于 3000 的搜索关键字
+stars:1000..3000 test      #stars 数量 大 于 1000 小于 3000 的搜 索 关 键 字 forks:&gt;1000 test
+#forks 数量大于 1000 的搜索关键字
+forks:1000..3000 test      #forks 数量 大 于 1000 小于 3000 的搜 索 关 键 字 size:&gt;=5000 test
+#指定仓库大于 5000k(5M)的搜索关键字 pushed:&gt;2019-02-12 test    #发布时间大于 2019-02-12 的
+搜索 关 键 字 created:&gt;2019-02-12 test   # 创建 时 间 大 于 2019-02-12 的搜 索 关 键 字 user:test
+#用户名搜素
+license:apache-2.0 test    #明确仓库的 LICENSE 搜索关键字 language:java test         #在 java 语
+言的代码中搜索关键字
+user:test in:name test     #组合搜索,用户名 test 的标题含有 test 的
+关键字配合谷歌搜索：
+site:Github.com smtp
+site:Github.com smtp @qq.com
+site:Github.com smtp @126.com
+site:Github.com smtp @163.com
+site:Github.com smtp @sina.com.cn
+site:Github.com smtp password
+site:Github.com String password smtp
+</code></pre>
+<h2>域名</h2>
+<p>可以看域名是否已经被注册，买域名</p>
+<h2>备案</h2>
+<p> beianx</p>
+<h2>操作系统</h2>
+<h2>cdn</h2>
+<p>超级ping一下就可以</p>
+<p><a href="https://ping.chinaz.com/">https://ping.chinaz.com/</a></p>
+<p><a href="https://www.17ce.com/">https://www.17ce.com/</a></p>
+<p><a href="https://tools.ipip.net/ping.php">https://tools.ipip.net/ping.php</a></p>
+<h3>cdn绕过</h3>
+<p>一把梭
+<a href="https://get-site-ip.com/">git-site-ip</a></p>
+<h4>子域名入手</h4>
+<h4>利用网站漏洞</h4>
+<h4>历史DNS记录</h4>
+<h4>cdn本身</h4>
+<p>获取控制面板，这个纯粹靠运气</p>
+<h4>mx记录和邮件</h4>
+<p>找回的地方发送邮件到你的邮箱，在qq邮箱中查看邮件原文就可以了
+<img src="https://pic.imgdb.cn/item/66b0880ad9c307b7e93f5424.png" alt=""></p>
+<p>配合备案配合ip查询配合网站能得到真实ip</p>
+<h4>国外请求：</h4>
+<p>可能仅针对国内进行了cdn加速，绕到国外就可以尝试了</p>
+<p><a href="https://tools.ipip.net/cdn.php">https://tools.ipip.net/cdn.php</a></p>
+<p>（阿里云CDN有个业务类型是
+<img src="https://pic.imgdb.cn/item/66b0814bd9c307b7e935c9ac.png" alt=""></p>
+<p>超级ping:<a href="https://ping.chinaz.com/">https://ping.chinaz.com/</a></p>
+<p>17ce.com</p>
+<h4>超级ping</h4>
+<h4>扫描探针</h4>
+<h1>### zmap</h1>
+<p>44分大法（）</p>
+<h4>黑暗引擎</h4>
+<p>zoomeye,fofa,shadon</p>
+<h2>服务器负载均衡</h2>
+<p>lbd--kali也有</p>
+<h3>app</h3>
+<p>app的抓包封包监听等等的我跳了，目前用不上，后面用上了再加</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>
