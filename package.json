@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "node scripts/build-articles.mjs",
+    "prebuild": "node scripts/build-articles.mjs && node scripts/build-pages.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

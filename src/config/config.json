@@ -83,13 +83,13 @@
     {
       "icon": "/icons/cards/guestbook.png",
       "title": "留言板",
-      "url": "https://vernuser.github.io/comments/",
+      "url": "/comments/",
       "desc": "想来一间足够舒适的房间？"
     },
     {
       "icon": "/icons/cards/avatar.png",
       "title": "关于店长",
-      "url": "https://vernuser.github.io/about/",
+      "url": "/about/",
       "desc": "一个菜菜的 ctfer"
     },
     {
@@ -106,7 +106,7 @@
     {
       "icon": "/icons/cards/friends.png",
       "title": "员工们",
-      "url": "https://vernuser.github.io/link/",
+      "url": "/link/",
       "desc": "一路同行的朋友们"
     }
   ],

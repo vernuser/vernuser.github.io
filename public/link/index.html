@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>员工们 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:11vh 22px 80px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
+h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
+.sub{margin:8px 0 0;font-size:13.5px;color:rgba(255,255,255,.72)}
+.panel{background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+.panel p{margin:.9em 0}
+.panel h2{color:#fff;font-size:20px;margin:1.6em 0 .5em;border-left:3px solid var(--sky);padding-left:12px}
+.panel a{color:#8fd0ff}
+.panel del{color:rgba(255,255,255,.45)}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:8vh 14px 60px}h1{font-size:23px}}:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:11vh 22px 80px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
+h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
+.sub{margin:8px 0 0;font-size:13.5px;color:rgba(255,255,255,.72)}
+.panel{background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+.panel p{margin:.9em 0}
+.panel h2{color:#fff;font-size:20px;margin:1.6em 0 .5em;border-left:3px solid var(--sky);padding-left:12px}
+.panel a{color:#8fd0ff}
+.panel del{color:rgba(255,255,255,.45)}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:8vh 14px 60px}h1{font-size:23px}}
+.group{margin-bottom:34px}
+.group h2{margin:0 0 6px;font-size:22px;color:#fff;border-left:3px solid var(--sky);padding-left:12px}
+.group .desc{margin:0 0 16px;font-size:13px;color:rgba(255,255,255,.68)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;text-decoration:none;
+  border:1px solid rgba(255,255,255,.22);background:rgba(226,236,248,.14);backdrop-filter:blur(10px);
+  transition:transform .35s cubic-bezier(.4,0,.2,1),background .35s ease,box-shadow .35s ease}
+.item:hover{transform:translateY(-4px);background:rgba(58,163,227,.3);box-shadow:0 16px 34px rgba(15,46,76,.3)}
+.item img{flex:none;width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.35);background:linear-gradient(135deg,rgba(58,163,227,.6),rgba(98,163,61,.6))}
+.item .txt{min-width:0}
+.item .name{display:block;font-size:15px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .note{margin:2px 0 0;font-size:12.5px;color:rgba(255,255,255,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>员工们</h1>
+      <p class="sub">一路同行的朋友们 · 共 13 位</p>
+    </div>
+    <a class="pill" href="/">← 返回主页</a>
+  </div>
+  <section class="group">
+  <h2>1.技术支持</h2>
+  <p class="desc">本网站的搭建由以下开源作者提供技术支持</p>
+  <div class="items">
+<a class="item" href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">
+<img src="https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg" alt="Hexo" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">Hexo</span><p class="note">快速、简单且强大的网志框架</p></span>
+</a>
+  </div>
+</section>
+<section class="group">
+  <h2>2.友情链接</h2>
+  <p class="desc">员工们</p>
+  <div class="items">
+<a class="item" href="https://www.lhglearncode.top/" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0eb0d29ded1a8c3c6f00.jpg" alt="昊戈" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">昊戈</span><p class="note">佬，菜，带</p></span>
+</a>
+<a class="item" href="https://4reexile.github.io" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0e6ad29ded1a8c3c38fa.jpg" alt="creeper？" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">creeper？</span><p class="note">aw!man</p></span>
+</a>
+<a class="item" href="https://arrio464.github.io/blog2/" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0e69d29ded1a8c3c38ab.jpg" alt="云哲" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">云哲</span><p class="note">关注云哲喵~关注云哲谢谢喵~</p></span>
+</a>
+<a class="item" href="https://taskmanagerol.github.io/" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/66781e0cd9c307b7e91cfb1c.jpg" alt="云云" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">云云</span><p class="note">以撒领域大神</p></span>
+</a>
+<a class="item" href="https://www.cnblogs.com/Kawakaze777" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0e69d29ded1a8c3c38ab.jpg" alt="pyc" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">pyc</span><p class="note">kawakazi</p></span>
+</a>
+<a class="item" href="https://jokerboxs.github.io/" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0e6ad29ded1a8c3c3963.jpg" alt="尚少" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">尚少</span><p class="note">re（炉石）领域大神</p></span>
+</a>
+<a class="item" href="https://www.noctuna.cc" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0eb0d29ded1a8c3c6eb4.jpg" alt="鬼鬼" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">鬼鬼</span><p class="note">女装领域大神（bushi）</p></span>
+</a>
+<a class="item" href="https://luckycyang.top" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f0cd4d29ded1a8c3ad6d6.jpg" alt="孟神" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">孟神</span><p class="note">ddw</p></span>
+</a>
+<a class="item" href="http://www.flowit233.cn/" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/667811d3d9c307b7e902cec3.png" alt="FloW1t233" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">FloW1t233</span><p class="note">0_o</p></span>
+</a>
+<a class="item" href="https://blog.csdn.net/WRplayeR" target="_blank" rel="noopener">
+<img src="https://profile-avatar.csdnimg.cn/20540d98d36b4e00913f06fbb67dbdc6_wrplayer.jpg!1" alt="炭烧" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">炭烧</span><p class="note">炭烧大人ddw</p></span>
+</a>
+<a class="item" href="https://recyvan.github.io/" target="_blank" rel="noopener">
+<img src="https://recyvan.github.io/user_data/auto.jpg" alt="recyvan" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">recyvan</span><p class="note">任神为什么 是神！</p></span>
+</a>
+<a class="item" href="https://bakadeer.github.io/" target="_blank" rel="noopener">
+<img src="https://pic.imgdb.cn/item/672f1112d29ded1a8c3e35a4.jpg" alt="屎官" loading="lazy" onerror="this.style.visibility='hidden'">
+<span class="txt"><span class="name">屎官</span><p class="note">史官否？屎官矣</p></span>
+</a>
+  </div>
+</section>
+</div>
+</body>
+</html>
