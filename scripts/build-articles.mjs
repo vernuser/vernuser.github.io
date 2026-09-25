@@ -77,9 +77,42 @@ function normalizeDate(raw) {
   const dm = String(raw || '').match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
   return dm ? `${dm[1]}-${String(dm[2]).padStart(2, '0')}-${String(dm[3]).padStart(2, '0')}` : '';
 }
+/* ------------------------------ 图床封面 ------------------------------ */
+const WALLPAPER_REPO = 'vernuser/acg-wallpaper@main';
+const WP_CDN = (id) => `https://cdn.jsdelivr.net/gh/${WALLPAPER_REPO}/acg/${id}`;
+const WP_RAW = (id) => `https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/${id}`;
+
+function readWallpaperIds() {
+  const p = join(ROOT, 'public', 'wallpaper-ids.json');
+  if (!existsSync(p)) return [];
+  try { return JSON.parse(readFileSync(p, 'utf-8')).ids || []; } catch { return []; }
+}
+
+function hashStr(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0);
+}
+
 function esc(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
+
+const TOPBAR_CSS = `
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;padding:14px 20px}
+.topbar-in{max-width:1120px;margin:0 auto;height:56px;padding:0 8px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(78,86,120,.42);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);box-shadow:0 12px 34px rgba(6,18,34,.32)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;white-space:nowrap;color:#fff}
+.brand .mark{width:28px;height:28px;flex:none;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#3aa3e3,#62a33d);font:700 15px/1 Georgia,"Times New Roman",serif;color:#fff}
+.brand .word{font:700 17px/1 Georgia,"Times New Roman",serif}
+.nav-menu{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}
+.nav-menu a{position:relative;color:rgba(255,255,255,.88);text-decoration:none;font-size:14.5px;white-space:nowrap;transition:color .25s ease}
+.nav-menu a::after{content:';position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
+.nav-menu a:hover{color:#fff}
+.nav-menu a:hover::after{width:60%}
+.topbar .avatar-btn{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(6,20,36,.4)}
+.topbar .avatar-btn img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:820px){.topbar{padding:10px 12px}.topbar-in{padding:0 6px 0 12px}.brand .word{font-size:15px}.nav-menu{gap:12px}.nav-menu a{font-size:13px}.nav-menu a::after{display:none}}
+`;
 
 const BASE_CSS = `:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
 *{box-sizing:border-box}
@@ -90,7 +123,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-ind
 .pill:hover{background:rgba(58,163,227,.5)}`;
 
 const ARTICLE_CSS = `${BASE_CSS}
-.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.wrap{max-width:860px;margin:0 auto;padding:104px 22px 80px}
 .panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
 h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
 .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
@@ -145,9 +178,24 @@ function articleShell(a, contentHtml) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(a.title)} · ${esc(SITE_TITLE)}</title>
-<style>${ARTICLE_CSS}</style>
+<style>${TOPBAR_CSS}${ARTICLE_CSS}</style>
 </head>
 <body>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="/"><span class="mark">随</span><span class="word">随波逐流の旅店</span></a>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="/">首页</a></li>
+        <li><a href="/article-list/">随心记</a></li>
+        <li><a href="/article-list/">壁纸墙</a></li>
+        <li><a href="/link/">友人帐</a></li>
+        <li><a href="/about/">关于我</a></li>
+      </ul>
+    </nav>
+    <a class="avatar-btn" href="/about/" title="vernus"><img src="/icons/cards/avatar.png" alt="vernus"></a>
+  </div>
+</header>
 <div class="wrap">
   <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
   <div class="panel">
@@ -200,9 +248,24 @@ ${a.categories.length ? `<span class="cat">${esc(a.categories[0])}</span>` : ''}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>文章归档 · ${esc(SITE_TITLE)}</title>
-<style>${LIST_CSS}</style>
+<style>${TOPBAR_CSS}${LIST_CSS}</style>
 </head>
 <body>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="/"><span class="mark">随</span><span class="word">随波逐流の旅店</span></a>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="/">首页</a></li>
+        <li><a href="/article-list/">随心记</a></li>
+        <li><a href="/article-list/">壁纸墙</a></li>
+        <li><a href="/link/">友人帐</a></li>
+        <li><a href="/about/">关于我</a></li>
+      </ul>
+    </nav>
+    <a class="avatar-btn" href="/about/" title="vernus"><img src="/icons/cards/avatar.png" alt="vernus"></a>
+  </div>
+</header>
 <div class="wrap">
   <header>
     <div>
@@ -275,6 +338,21 @@ function main() {
     articles.push(a);
   }
 
+  // 封面统一改用图床仓库（确定性随机：同一篇每次构建拿同一张图）
+  const wpIds = readWallpaperIds();
+  const usedWp = new Set();
+  if (wpIds.length) {
+    articles.forEach((a, i) => {
+      const seed = i < 4 ? `${a.slug}#pin${i}` : `${a.slug}#cover`;
+      let idx = hashStr(seed) % wpIds.length;
+      let guard = 0;
+      while (usedWp.has(idx) && guard < wpIds.length) { idx = (idx + 1) % wpIds.length; guard++; }
+      usedWp.add(idx);
+      a.cover = WP_CDN(wpIds[idx]);
+      a.coverFallback = WP_RAW(wpIds[idx]);
+    });
+    console.log(`归档/文章封面已从图床分配（图库 ${wpIds.length} 张）`);
+  }
   articles.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   mkdirSync(join(ROOT, 'public', 'article-list'), { recursive: true });
