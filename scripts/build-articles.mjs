@@ -187,8 +187,8 @@ function articleShell(a, contentHtml) {
     <nav>
       <ul class="nav-menu">
         <li><a href="/">首页</a></li>
-        <li><a href="/article-list/">随心记</a></li>
-        <li><a href="/article-list/">壁纸墙</a></li>
+        <li><a href="/diary/">随心记</a></li>
+        <li><a href="/wallpaper/">壁纸墙</a></li>
         <li><a href="/link/">友人帐</a></li>
         <li><a href="/about/">关于我</a></li>
       </ul>
@@ -257,8 +257,8 @@ ${a.categories.length ? `<span class="cat">${esc(a.categories[0])}</span>` : ''}
     <nav>
       <ul class="nav-menu">
         <li><a href="/">首页</a></li>
-        <li><a href="/article-list/">随心记</a></li>
-        <li><a href="/article-list/">壁纸墙</a></li>
+        <li><a href="/diary/">随心记</a></li>
+        <li><a href="/wallpaper/">壁纸墙</a></li>
         <li><a href="/link/">友人帐</a></li>
         <li><a href="/about/">关于我</a></li>
       </ul>
