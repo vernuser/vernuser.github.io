@@ -80,12 +80,11 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-ind
 .side .m{display:block;font-size:11px;color:var(--muted);margin-top:1px}
 .side .empty{padding:14px 4px;text-align:center;font-size:12.5px;color:var(--muted)}
 .side .cat{list-style:none;margin:0;padding:0}
-.side .cat a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;text-decoration:none;color:rgba(255,255,255,.9);font-size:13px;transition:background .3s ease,transform .3s ease}
-.side .cat a:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.side .cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;color:rgba(255,255,255,.9);font-size:13px;transition:background .3s ease,transform .3s ease;cursor:default}
+.side .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
 .side .cat .n{flex:none;min-width:24px;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11px;text-align:center;color:#fff}
 .side .cloud{display:flex;flex-wrap:wrap;gap:7px}
-.side .cloud a{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease}
-.side .cloud a:hover{background:rgba(58,163,227,.5);color:#fff}
+.side .cloud .tagpill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);transition:all .3s ease;cursor:default}
 
 /* 封面大图 + 白色毛玻璃信息层 */
 .hero{
@@ -233,17 +232,17 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-ind
 
   <section class="card">
     <h3 class="sec-title">分类<span class="sub">26 个</span></h3>
-    <ul class="cat"><li><a href="/article-list/"><span>代码审计</span><span class="n">12</span></a></li><li><a href="/article-list/"><span>靶场</span><span class="n">11</span></a></li><li><a href="/article-list/"><span>小迪安全</span><span class="n">7</span></a></li><li><a href="/article-list/"><span>python</span><span class="n">5</span></a></li><li><a href="/article-list/"><span>渗透</span><span class="n">4</span></a></li><li><a href="/article-list/"><span>未分类</span><span class="n">4</span></a></li><li><a href="/article-list/"><span>ai</span><span class="n">3</span></a></li><li><a href="/article-list/"><span>工具</span><span class="n">2</span></a></li><li><a href="/article-list/"><span>内网</span><span class="n">2</span></a></li><li><a href="/article-list/"><span>守夜</span><span class="n">2</span></a></li></ul>
+    <ul class="cat"><li><span class="row"><span>代码审计</span><span class="n">12</span></span></li><li><span class="row"><span>靶场</span><span class="n">11</span></span></li><li><span class="row"><span>小迪安全</span><span class="n">7</span></span></li><li><span class="row"><span>python</span><span class="n">5</span></span></li><li><span class="row"><span>渗透</span><span class="n">4</span></span></li><li><span class="row"><span>未分类</span><span class="n">4</span></span></li><li><span class="row"><span>ai</span><span class="n">3</span></span></li><li><span class="row"><span>工具</span><span class="n">2</span></span></li><li><span class="row"><span>内网</span><span class="n">2</span></span></li><li><span class="row"><span>守夜</span><span class="n">2</span></span></li></ul>
   </section>
 
   <section class="card">
     <h3 class="sec-title">标签云<span class="sub">24 个</span></h3>
-    <div class="cloud"><a href="/article-list/">渗透</a><a href="/article-list/">代码审计</a><a href="/article-list/">靶场</a><a href="/article-list/">小迪安全</a><a href="/article-list/">web</a><a href="/article-list/">python</a><a href="/article-list/">ai</a><a href="/article-list/">内网</a><a href="/article-list/">工具</a><a href="/article-list/">vpn</a><a href="/article-list/">markdown</a><a href="/article-list/">应急响应</a><a href="/article-list/">入侵检测</a><a href="/article-list/">owasp</a><a href="/article-list/">openvas</a><a href="/article-list/">yaml</a><a href="/article-list/">ctf</a><a href="/article-list/">内存取证</a><a href="/article-list/">计算机网络</a><a href="/article-list/">php</a><a href="/article-list/">操作系统</a><a href="/article-list/">手法</a><a href="/article-list/">数据结构</a><a href="/article-list/">原型链污染</a></div>
+    <div class="cloud"><span class="tagpill">渗透</span><span class="tagpill">代码审计</span><span class="tagpill">靶场</span><span class="tagpill">小迪安全</span><span class="tagpill">web</span><span class="tagpill">python</span><span class="tagpill">ai</span><span class="tagpill">内网</span><span class="tagpill">工具</span><span class="tagpill">vpn</span><span class="tagpill">markdown</span><span class="tagpill">应急响应</span><span class="tagpill">入侵检测</span><span class="tagpill">owasp</span><span class="tagpill">openvas</span><span class="tagpill">yaml</span><span class="tagpill">ctf</span><span class="tagpill">内存取证</span><span class="tagpill">计算机网络</span><span class="tagpill">php</span><span class="tagpill">操作系统</span><span class="tagpill">手法</span><span class="tagpill">数据结构</span><span class="tagpill">原型链污染</span></div>
   </section>
 </aside>
 
   <main class="main">
-    <a class="crumb" href="/article-list/">← 返回归档</a>
+    <a class="crumb" href="/">← 返回首页</a>
 
     <section class="hero" style="--hero:url('/covers/0310.jpg')">
       <span class="hero-bg"></span>

@@ -2,7 +2,7 @@
  * 把 _hexo-old 中的文章迁移到 remio-home（构建期执行）：
  *   - 解析 front-matter
  *   - 正文用 marked 渲染，输出 public/article/<slug>/index.html
- *   - 生成 public/article-list/index.html 归档页
+ *   - （归档页已移除）
  *   - 生成 src/generated/articles.json 索引
  * 运行：node scripts/build-articles.mjs
  */
@@ -177,12 +177,11 @@ const ARTICLE_CSS = `${BASE_CSS}
 .side .m{display:block;font-size:11px;color:var(--muted);margin-top:1px}
 .side .empty{padding:14px 4px;text-align:center;font-size:12.5px;color:var(--muted)}
 .side .cat{list-style:none;margin:0;padding:0}
-.side .cat a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;text-decoration:none;color:rgba(255,255,255,.9);font-size:13px;transition:background .3s ease,transform .3s ease}
-.side .cat a:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.side .cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;color:rgba(255,255,255,.9);font-size:13px;transition:background .3s ease,transform .3s ease;cursor:default}
+.side .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
 .side .cat .n{flex:none;min-width:24px;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11px;text-align:center;color:#fff}
 .side .cloud{display:flex;flex-wrap:wrap;gap:7px}
-.side .cloud a{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease}
-.side .cloud a:hover{background:rgba(58,163,227,.5);color:#fff}
+.side .cloud .tagpill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);transition:all .3s ease;cursor:default}
 
 /* 封面大图 + 白色毛玻璃信息层 */
 .hero{
@@ -354,12 +353,12 @@ function articleSidebar(articles) {
 
   <section class="card">
     <h3 class="sec-title">分类<span class="sub">${catCount.size} 个</span></h3>
-    <ul class="cat">${cats.map(([n, c]) => `<li><a href="/article-list/"><span>${esc(n)}</span><span class="n">${c}</span></a></li>`).join('')}</ul>
+    <ul class="cat">${cats.map(([n, c]) => `<li><span class="row"><span>${esc(n)}</span><span class="n">${c}</span></span></li>`).join('')}</ul>
   </section>
 
   <section class="card">
     <h3 class="sec-title">标签云<span class="sub">${tagCount.size} 个</span></h3>
-    <div class="cloud">${tags.map(([n]) => `<a href="/article-list/">${esc(n)}</a>`).join('')}</div>
+    <div class="cloud">${tags.map(([n]) => `<span class="tagpill">${esc(n)}</span>`).join('')}</div>
   </section>
 </aside>`;
 }
@@ -404,7 +403,7 @@ function articleShell(a, contentHtml, articles) {
   ${articleSidebar(articles)}
 
   <main class="main">
-    <a class="crumb" href="/article-list/">← 返回归档</a>
+    <a class="crumb" href="/">← 返回首页</a>
 
     <section class="hero"${cover ? ` style="--hero:url('${esc(cover)}')"` : ''}>
       ${cover ? `<span class="hero-bg"></span>` : ''}
@@ -651,13 +650,11 @@ function main() {
     delete a.html;
   }
 
-  mkdirSync(join(ROOT, 'public', 'article-list'), { recursive: true });
-  writeFileSync(OUT_LIST, listShell(articles), 'utf-8');
+  // 归档页已移除（文章直接展示在首页与随心记，无需单独归档）
   writeFileSync(OUT_JSON, JSON.stringify(articles, null, 2), 'utf-8');
 
   console.log(`已生成文章 ${articles.length} 篇`);
   console.log('  public/article/<slug>/index.html');
-  console.log('  public/article-list/index.html');
   // GitHub Pages 的 Jekyll 会忽略以 _ 开头的目录（如 _next），禁用之
   writeFileSync(join(ROOT, 'public', '.nojekyll'), '', 'utf-8');
 

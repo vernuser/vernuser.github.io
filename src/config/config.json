@@ -95,14 +95,9 @@
     {
       "icon": "/icons/cards/more.svg",
       "title": "更多站点",
-      "desc": "归档 · 员工们 · 更多"
+      "desc": "员工们 · 更多站点"
     },
-    {
-      "icon": "/icons/cards/archive.png",
-      "title": "文章归档",
-      "url": "/article-list/",
-      "desc": "69 篇随笔与笔记"
-    },
+
     {
       "icon": "/icons/cards/friends.png",
       "title": "员工们",
@@ -118,7 +113,7 @@
     "hoverFlip": true,
     "direction": "row",
     "modal": true,
-    "modalTips": "这里放着旅店里的一些东西：全部 69 篇文章的入口、一路同行的朋友们，以及早期的站点，随便逛逛吧~",
+    "modalTips": "这里放着旅店里的一些东西：一路同行的朋友们，以及早期的站点，随便逛逛吧~",
     "modalTitle": "更多站点"
   },
   "socialConfig": {

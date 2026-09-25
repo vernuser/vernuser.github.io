@@ -212,7 +212,7 @@ function diaryPage(articles) {
     </div>
     <p class="text">${body}</p>
     <div class="foot">
-      <a class="chip" href="/article-list/">「${esc(cat)}」</a>
+      <span class="chip">「${esc(cat)}」</span>
       <a class="chip" href="${a.url}">${esc(a.title)}</a>
       <span class="like" title="评论数需接入评论系统后显示">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>

@@ -439,12 +439,12 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 
 /* 分类 / 标签 / 站点信息 */
 .cat{list-style:none;margin:0;padding:0}
-.cat a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 6px;border-radius:10px;text-decoration:none;color:rgba(255,255,255,.9);font-size:13.5px;transition:background .3s ease,transform .3s ease}
-.cat a:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 6px;border-radius:10px;color:rgba(255,255,255,.9);font-size:13.5px;transition:background .3s ease,transform .3s ease;cursor:default}
+.cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
 .cat .n{flex:none;min-width:26px;padding:1px 8px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11.5px;text-align:center;color:#fff}
 .cloud{display:flex;flex-wrap:wrap;gap:8px}
-.cloud a{display:inline-block;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease}
-.cloud a:hover{background:rgba(58,163,227,.5);color:#fff}
+.cloud .tagpill{display:inline-block;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.9);transition:all .3s ease;cursor:default}
+.cloud .tagpill:hover{background:rgba(58,163,227,.4);color:#fff}
 .info{display:flex;flex-direction:column;gap:8px;font-size:13px}
 .info div{display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.9)}
 .info b{font-weight:600;color:#fff}
@@ -661,7 +661,7 @@ function categoriesBlock(articles) {
   const rows = [...counter.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 10)
-    .map(([name, n]) => `<li><a href="/article-list/#${encodeURIComponent(name)}"><span>${esc(name)}</span><span class="n">${n}</span></a></li>`)
+    .map(([name, n]) => `<li><span class="row"><span>${esc(name)}</span><span class="n">${n}</span></span></li>`)
     .join('\n');
   return `<section class="card">
   <h3 class="sec-title">分类<span class="sub">${counter.size} 个</span></h3>
@@ -675,7 +675,7 @@ function tagsBlock(articles) {
   const tags = [...counter.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 34);
   return `<section class="card">
   <h3 class="sec-title">标签云<span class="sub">${counter.size} 个</span></h3>
-  <div class="cloud">${tags.map(([t]) => `<a href="/article-list/">${esc(t)}</a>`).join('')}</div>
+  <div class="cloud">${tags.map(([t]) => `<span class="tagpill">${esc(t)}</span>`).join('')}</div>
 </section>`;
 }
 
