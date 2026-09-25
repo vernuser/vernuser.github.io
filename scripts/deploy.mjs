@@ -8,7 +8,7 @@
  * 实现：用临时 git worktree + 独立提交，不会影响当前分支的源码历史。
  */
 import { execSync } from 'child_process';
-import { existsSync, rmSync, mkdtempSync, writeFileSync } from 'fs';
+import { existsSync, rmSync, mkdtempSync, writeFileSync, readdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -42,27 +42,39 @@ const nojekyll = join(OUT, '.nojekyll');
 if (!existsSync(nojekyll)) writeFileSync(nojekyll, '', 'utf-8');
 
 try {
-  // 分支已存在就直接 worktree，否则用孤儿分支新建
-  let branchExists = false;
-  try {
-    capture(`git ls-remote --heads ${REMOTE} ${BRANCH}`);
-    branchExists = !!capture(`git ls-remote --heads ${REMOTE} ${BRANCH}`);
-  } catch {
-    branchExists = false;
+  // 取远程分支（带重试，网络抖动很常见）
+  let hasRemote = false;
+  for (let attempt = 1; attempt <= 3 && !hasRemote; attempt++) {
+    try {
+      const out = capture(`git ls-remote --heads ${REMOTE} ${BRANCH}`);
+      hasRemote = !!out;
+    } catch (e) {
+      console.log(`ls-remote 第 ${attempt} 次失败：${e.message.split('\n')[0]}`);
+      if (attempt === 3) throw e;
+      execSync('timeout /t 2 >NUL 2>NUL || sleep 2', { shell: true });
+    }
   }
 
-  if (branchExists) {
+  // 用固定名 deploy-tmp 的分支做部署，避免与已存在的分支名冲突
+  const DEPLOY_BRANCH = 'deploy-tmp';
+  if (hasRemote) {
     run(`git fetch ${REMOTE} ${BRANCH}`);
     run(`git worktree add --force --detach "${WORK}" ${REMOTE}/${BRANCH}`);
-    run(`git checkout -B ${BRANCH}`, WORK);
+    run(`git checkout -B ${DEPLOY_BRANCH}`, WORK);
   } else {
     run(`git worktree add --force --detach "${WORK}"`);
-    run(`git checkout --orphan ${BRANCH}`, WORK);
+    run(`git checkout --orphan ${DEPLOY_BRANCH}`, WORK);
   }
-
-  // 清空工作区（保留 .git），再复制 out/ 内容
+  // 彻底清空工作区（保留 .git）：否则已删除的文件会残留在目标分支上
   run('git rm -rf . --quiet || true', WORK);
   run('git clean -fdx --quiet || true', WORK);
+  // 再物理删除一遍，确保目录内容真的为空
+  try {
+    for (const f of readdirSync(WORK)) {
+      if (f === '.git') continue;
+      rmSync(join(WORK, f), { recursive: true, force: true });
+    }
+  } catch { /* ignore */ }
 
   // Windows 下用 robocopy / POSIX 下用 cp
   if (process.platform === 'win32') {
@@ -78,7 +90,7 @@ try {
   } catch {
     console.log('没有需要提交的改动');
   }
-  run(`git push --force ${REMOTE} ${BRANCH}`, WORK);
+  run(`git push --force ${REMOTE} ${DEPLOY_BRANCH}:${BRANCH}`, WORK);
 
   console.log(`\n已发布到 ${REMOTE}/${BRANCH}`);
 } finally {
