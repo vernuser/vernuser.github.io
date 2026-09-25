@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CISCN2024_canic · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>CISCN2024_canic</h1>
+    <div class="meta"><span class="chip">分类·web</span><span class="chip">#web</span></div>
+    <article><p>原型链污染的题</p>
+<p>敏感目录提示了是</p>
+<pre><code>/src
+/admin
+</code></pre>
+<p>在src里面可以看到源码</p>
+<pre><code>from sanic import Sanic
+from sanic.response import text, html
+from sanic_session import Session
+import pydash
+# pydash==5.1.2
+
+
+class Pollute:
+    def __init__(self):
+        pass
+
+
+app = Sanic(__name__)
+app.static(&quot;/static/&quot;, &quot;./static/&quot;)
+Session(app)
+
+
+@app.route(&#39;/&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
+async def index(request):
+    return html(open(&#39;static/index.html&#39;).read())
+
+
+@app.route(&quot;/login&quot;)
+async def login(request):
+    user = request.cookies.get(&quot;user&quot;)
+    if user.lower() == &#39;adm;n&#39;:
+        request.ctx.session[&#39;admin&#39;] = True
+        return text(&quot;login success&quot;)
+
+    return text(&quot;login fail&quot;)
+
+
+@app.route(&quot;/src&quot;)
+async def src(request):
+    return text(open(__file__).read())
+
+
+@app.route(&quot;/admin&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;])
+async def admin(request):
+    if request.ctx.session.get(&#39;admin&#39;) == True:
+        key = request.json[&#39;key&#39;]
+        value = request.json[&#39;value&#39;]
+        if key and value and type(key) is str and &#39;_.&#39; not in key:
+            pollute = Pollute()
+            pydash.set_(pollute, key, value)
+            return text(&quot;success&quot;)
+        else:
+            return text(&quot;forbidden&quot;)
+
+    return text(&quot;forbidden&quot;)
+
+
+if __name__ == &#39;__main__&#39;:
+    app.run(host=&#39;0.0.0.0&#39;)
+</code></pre>
+<pre><code class="language-代码解释">@app.route(&#39;/&#39;, methods=[&#39;GET&#39;, &#39;POST&#39;])
+async def index(request):
+    return html(open(&#39;static/index.html&#39;).read())
+</code></pre>
+<p>这是一个装饰器.将下面的函数和指定的URL拼接起来，接受的方法为GET,POST</p>
+<p>async def 是一个异步函数，函数名字为Index,接受一个request值</p>
+<p>return html(open(&#39;static/index.html&#39;))读取static/index.html的文件并将其内容作为相应返回给客户端。</p>
+<p>解释一下什么是异步，正常的同步就是一个一个的做，做完一个才能进行下一个</p>
+<p>但是异步就是比如</p>
+<pre><code>setTimeout(function cbFn(){
+    console.log(&#39;learnInPro&#39;);
+}, 1000);
+console.log(&#39;sync things&#39;);
+</code></pre>
+<p>当js执行到的时候发现是一个异步任务，则会先挂起执行后面的，等到1000ms之后，回调函数cbFn才会执行</p>
+<p>为什么要异步呢，因为js是单线程，效率至上，呵呵</p>
+<p>怎么知道是不是一个异步呢，很简单，看看有么有async def开头，还可通过inspect模块检查一个函数是否异步函数。</p>
+<p>inspect.iscoroutinefunction() 函数可以用于判断一个函数是否为协程函数（包括异步函数）。</p>
+<pre><code>
+@app.route(&quot;/login&quot;)
+async def login(request):
+    user = request.cookies.get(&quot;user&quot;)
+    if user.lower() == &#39;adm;n&#39;:
+        request.ctx.session[&#39;admin&#39;] = True
+        return text(&quot;login success&quot;)
+    return text(&quot;login fail&quot;)
+</code></pre>
+<p>@app.route(&quot;/login&quot;)表示讲这个异步函数绑定到&quot;/login&quot; 路径上的HTTP请求。当客户端发送到 &quot;/login&quot; 的请求时，该函数将被调用。</p>
+<p>user = request.cookies.get(&quot;user&quot;) 从请求的 Cookie 中获取名为 &quot;user&quot; 的值，并将其赋给 user 变量。</p>
+<p>if user.lower() == &#39;adm;n&#39;: 检查用户是否为 &quot;adm;n&quot;。这里使用了 lower() 方法将用户输入的值转换为小写，以进行不区分大小写的比较。</p>
+<p>request.ctx.session[&#39;admin&#39;] = True 如果用户为 &quot;adm;n&quot;，将在请求上下文（request.ctx）的会话（session）中设置 &quot;admin&quot; 键，并将其值设为 True。</p>
+<p>return text(&quot;login success&quot;) 返回一个响应，其中包含文本内容 &quot;login success&quot;。这将作为登录成功的响应发送给客户端。</p>
+<p>return text(&quot;login fail&quot;) 如果用户不是 &quot;adm;n&quot;，则返回一个响应，其中包含文本内容 &quot;login fail&quot;。这将作为登录失败的响应发送给客户端。</p>
+<pre><code>@app.route(&quot;/src&quot;)
+async def src(request):
+    return text(open(__file__).read())
+</code></pre>
+<p>return text(open(<strong>file</strong>).read())打开当前代码文件（<strong>file</strong> 表示当前文件的路径），并使用 read() 方法读取其内容。</p>
+<pre><code>@app.route(&quot;/admin&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;])
+async def admin(request):
+    if request.ctx.session.get(&#39;admin&#39;) == True:
+        key = request.json[&#39;key&#39;]
+        value = request.json[&#39;value&#39;]
+        if key and value and type(key) is str and &#39;_.&#39; not in key:
+            pollute = Pollute()
+            pydash.set_(pollute, key, value)
+            return text(&quot;success&quot;)
+        else:
+            return text(&quot;forbidden&quot;)
+</code></pre>
+<p>@app.route(&quot;/admin&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;]) 表示将该异步函数绑定到 &quot;/admin&quot; 路径上的HTTP请求，并限定允许的请求方法为 GET 和 POST。当客户端发送到 &quot;/admin&quot; 的 GET 或 POST 请求时，该函数将被调用。</p>
+<p>async def admin(request): 定义了一个异步函数 admin，它接收一个 request 参数，表示HTTP请求对象。</p>
+<p>if request.ctx.session.get(&#39;admin&#39;) == True: 检查会话中是否存在 &#39;admin&#39; 键，并且其值为 True。这可能是在某个会话管理器中处理用户登录状态的方式。</p>
+<p>key = request.json[&#39;key&#39;] 从请求的 JSON 数据中获取名为 &#39;key&#39; 的值，并将其赋给 key 变量。</p>
+<p>value = request.json[&#39;value&#39;] 从请求的 JSON 数据中获取名为 &#39;value&#39; 的值，并将其赋给 value 变量。</p>
+<p>if key and value and type(key) is str and &#39;<em>.&#39; not in key: 检查条件，确保 &#39;key&#39; 和 &#39;value&#39; 非空，且 &#39;key&#39; 的类型为字符串，并且 &#39;key&#39; 中不包含 &#39;</em>.&#39;。这是对请求参数的验证。</p>
+<p>pollute = Pollute() 创建一个名为 pollute 的对象，可能是某个类的实例化对象。</p>
+<p>pydash.set_(pollute, key, value) 使用 pydash 库中的 set_ 函数，将 value 设置到 pollute 对象的 key 属性中。这可能是在操作对象的属性赋值。</p>
+<p>return text(&quot;success&quot;) 返回一个响应，其中包含文本内容 &quot;success&quot;。这将作为成功的响应发送给客户端。</p>
+<p>return text(&quot;forbidden&quot;) 如果条件检查不通过，返回一个响应，其中包含文本内容 &quot;forbidden&quot;。这将作为禁止访问的响应发送给客户端。</p>
+<p>所以我们要绕过adm；n的限制，因为这里从session提取，所以会在;进行截断，所以不能直接传，看了师傅的wp说是<strong>RFC2068</strong></p>
+<p>所以我们传cookie:adm\073n即可
+<img src="https://pic.imgdb.cn/item/666ed600d9c307b7e979e2bb.png" alt=""></p>
+<p>在cookie中找到session，
+<img src="https://pic.imgdb.cn/item/666ed62fd9c307b7e97a3eb3.png" alt=""></p>
+<p>我们的目的是污染file使它可以在flag所在的文件下，所以我们先尝试污染</p>
+<pre><code>{&quot;key&quot;:&quot;.__init__\\\\.__globals__\\\\.__file__&quot;,&quot;value&quot;: &quot;/etc/passwd&quot;}
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/666ed6b2d9c307b7e97b35e0.png" alt=""></p>
+<p>success，访问/src</p>
+<p><img src="https://pic.imgdb.cn/item/666ed6e8d9c307b7e97b9ff5.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/666edad6d9c307b7e9835301.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/666edafad9c307b7e9839b29.png" alt=""></p>
+<p>后面是需要本地启动sanic去做，但是显然我不会，等我有时间再来研究这个</p>
+<p><del>留个爪</del></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

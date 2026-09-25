@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>代码审计</h1>
+    <div class="meta"><span class="chip date">2024-09-24</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><h2>汇总</h2>
+<h4>文件包含</h4>
+<pre><code>include/require/include_once/require_once/sql_autoload
+</code></pre>
+<h4>文件读取</h4>
+<pre><code>file_get_contents/fread/readfile/file/highlight_file/show_source
+</code></pre>
+<h4>文件写入</h4>
+<pre><code>file_put_contents/fwrite/mkdir/fputs
+</code></pre>
+<h4>文件删除</h4>
+<pre><code>unlink/rmdir
+</code></pre>
+<h4>文件上传</h4>
+<pre><code>move_uploaded_dile/copy/rename
+</code></pre>
+<h3>文件上传漏洞</h3>
+<p>文件上传流程</p>
+<ol>
+<li>检查文件大小，后缀，类型</li>
+<li>检查文件内容（图片头）</li>
+<li>提取文件后缀</li>
+<li>生成新文件名</li>
+<li>将上传临时文件拷贝到新文件名位置</li>
+</ol>
+<h3>逻辑常见错误</h3>
+<ul>
+<li>只检查文件类型而不检查后缀，文件头</li>
+<li>文件后缀黑名单泄露</li>
+<li>使用原始文件名导致\0截断漏洞</li>
+</ul>
+<h4>啥都没过滤</h4>
+<p><a href="https://php.mengsec.com/bugs/wooyun-2015-0125592.html">https://php.mengsec.com/bugs/wooyun-2015-0125592.html</a></p>
+<h4>前端验证</h4>
+<p><a href="https://php.mengsec.com/bugs/wooyun-2015-0125592.html">https://php.mengsec.com/bugs/wooyun-2015-0125592.html</a></p>
+<p>文件上传</p>
+<p><img src="https://pic.imgdb.cn/item/66f40c28f21886ccc002a851.png" alt=""></p>
+<h4>00截断</h4>
+<p>php的5.4.7之前可以使用<code>\00截断</code></p>
+<p>就是当你上传文件名韦<code>1.php\xoo1.gif</code></p>
+<p>检测到尾缀就为.gif，但是实际上识别到的文件是1.php，这就导致了文件上传漏洞</p>
+<h3>文件包含漏洞</h3>
+<p>文件包含漏洞!=文件读取漏洞</p>
+<p>文件包含&gt;文件读取</p>
+<p>常见位置：</p>
+<ul>
+<li>模板文件名</li>
+<li>语言文件名</li>
+</ul>
+<p>文件包含漏洞限制</p>
+<ul>
+<li>寻找可被包含的文件： 上传文件、临时文件、Session文件、日志文件、</li>
+<li>啥都没过滤，或者利用协议</li>
+</ul>
+<h3>文件删除漏洞</h3>
+<p><a href="https://paper.seebug.org/411/">https://paper.seebug.org/411/</a></p>
+<ul>
+<li>删除任意文件.dos服务器</li>
+<li>删除安装所文件，导致目标环境可被重新安装</li>
+<li>重新安装-&gt;任意管理员账号密码重置</li>
+</ul>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

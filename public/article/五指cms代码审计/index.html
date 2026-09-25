@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>五指cms代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>五指cms代码审计</h1>
+    <div class="meta"><span class="chip date">2024-09-31</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><p>在根目录index.php中看到</p>
+<p><img src="https://pic.imgdb.cn/item/66f8e54ef21886ccc044b327.png" alt=""></p>
+<p>其中的<code>./configs/web_config.php</code>是配置文件，<code>core.php</code>是核心框架文件</p>
+<p><code>load_class(&quot;application&quot;)</code>将application这个类实例化了</p>
+<p>然后调用$app对象的run方法运行</p>
+<p>因为是调用<code>load_class</code>加载application类，所以就是<code>application.class.php</code></p>
+<p>通过<code>load_class</code>来到core.php里面</p>
+<p><img src="https://pic.imgdb.cn/item/66f8e82df21886ccc047af1b.png" alt=""></p>
+<p>里面有个<code>COREFRAME_ROOT</code>,</p>
+<pre><code>&lt;?php
+defined(&#39;WWW_ROOT&#39;) or exit(&#39;No direct script access allowed&#39;);
+
+define(&#39;COREFRAME_ROOT&#39;,substr(dirname(__FILE__),0,-11).&#39;coreframe&#39;.DIRECTORY_SEPARATOR);
+define(&#39;CACHE_ROOT&#39;,substr(dirname(__FILE__),0,-11).&#39;caches&#39;.DIRECTORY_SEPARATOR);
+define(&#39;CACHE_EXT&#39;,&#39;f1q_e&#39;);
+</code></pre>
+<p>获取文件地址并减去最后11个字符</p>
+<p><code>COREFRAME_ROOT.&#39;app/&#39;.$m.&#39;/libs/class/&#39;.$class.&#39;.class.php&#39;</code></p>
+<p>这个实际上就是路径名<code>app目录下模块名/libs/class/类名.class.php</code></p>
+<p>实例化wuzhi_application类的时候会调用下面的构造函数将路由信息定义完成</p>
+<p><img src="https://pic.imgdb.cn/item/66f8f513f21886ccc058d92a.png" alt=""></p>
+<p>这个是当类的实例被创建时，这个方法会自动调用</p>
+<p>也就是说这个是</p>
+<p>加载application类的时候，调用load_class获取application.class.php并实例化，
+然后通过run获取路由信息</p>
+<h2>sql注入</h2>
+<p>在这里存在sql漏洞</p>
+<p><img src="https://pic.imgdb.cn/item/66f90a4ff21886ccc07b2b36.png" alt=""></p>
+<p>bp抓包</p>
+<p><img src="https://pic.imgdb.cn/item/66f90a1ff21886ccc07ad919.png" alt=""></p>
+<p>可以定位到
+<code>/coreframe/app/member/admin/group.php</code>的del()函数</p>
+<p><img src="https://pic.imgdb.cn/item/66f90f88f21886ccc082612a.png" alt=""></p>
+<p>这里的第133行是判断groupid是否为空，134行是判断是否是数组，但是这里不管是不是他都执行了delete函数操作数据库</p>
+<p>追踪delete函数，（我也不知道他这个追踪是怎么追踪的，我直接control f搜索delete里面好多，但是又没看到php代码审计的插件)</p>
+<p>在<code>db.class.php</code>里面看到</p>
+<p><img src="https://pic.imgdb.cn/item/66fe4824a0d098f8981d74e6.png" alt=""></p>
+<p>其中调用了array2sql,其中的array2sql是</p>
+<p><img src="https://pic.imgdb.cn/item/66fe49c3a0d098f8981f2334.png" alt=""></p>
+<p>可以得出是将数组转换成sql语言并移除一些特殊符号防止sql注入</p>
+<pre><code>if(is_array($data)) {
+    $sql = &#39;&#39;;
+    foreach ($data as $key =&gt; $val) {
+        $val = str_replace(&quot;%20&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;%27&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;(&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;)&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;&#39;&quot;, &#39;&#39;, $val);
+        $sql .= $sql ? &quot; AND `$key` = &#39;$val&#39; &quot; : &quot; `$key` = &#39;$val&#39; &quot;;
+    }
+    return $sql;
+}
+- 如果 $data 是一个数组，则初始化一个空字符串 $sql。
+- 遍历数组，将每个键值对转换为 SQL 格式的条件。
+- 使用 str_replace 函数移除一些特殊字符（如 %20, %27, (, ), &#39;），以防止 SQL 注入。
+- 将每个条件拼接成一个 SQL WHERE 子句，多个条件之间用 AND 连接。
+</code></pre>
+<p>只有最下面的那行</p>
+<pre><code>return $this-&gt;master_db-&gt;delete($table, $where);
+</code></pre>
+<p>是对数据库进行操作的</p>
+<p><code>$this-&gt;master</code>是对数据库进行连接的</p>
+<p>在目录内查找delete，在<code>mysqli.class.php</code>中发现是<code>WUZHI_mysqli</code>类下的方法</p>
+<pre><code>public function __construct($config_file = &#39;mysql_config&#39;)
+获取www/configs/mysql_config.php中mysql的配置信息
+{
+        $this-&gt;mysql_config = get_config($config_file);
+        $this-&gt;dbname = $this-&gt;mysql_config[$this-&gt;db_key][&#39;dbname&#39;];
+        $this-&gt;tablepre = $this-&gt;mysql_config[$this-&gt;db_key][&#39;tablepre&#39;];
+        $this-&gt;dbcharset = $this-&gt;mysql_config[$this-&gt;db_key][&#39;dbcharset&#39;];
+
+        $this-&gt;slave_server = isset($this-&gt;mysql_config[$this-&gt;db_key][&#39;slave_server&#39;]) ? $this-&gt;mysql_config[$this-&gt;db_key][&#39;slave_server&#39;] : &#39;&#39;;
+
+        $class = $this-&gt;mysql_config[$this-&gt;db_key][&#39;type&#39;];
+        require_once(COREFRAME_ROOT.&#39;app/core/libs/class/&#39;.$class.&#39;.class.php&#39;);
+        $classname = &#39;WUZHI_&#39;.$class;
+        $this-&gt;master_db = new $classname($this-&gt;mysql_config[$this-&gt;db_key]);
+        if($this-&gt;slave_server) {
+            $slave_server = weight_rand($this-&gt;slave_server);
+            if($slave_server==&#39;default&#39;) {
+                $this-&gt;read_db = $this-&gt;master_db;
+            } else {
+                $this-&gt;read_db = new $classname($this-&gt;mysql_config[$this-&gt;slave_server]);
+            }
+        } else {
+            $this-&gt;read_db = $this-&gt;master_db;
+        }
+    }
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66fe78a5335a200d6a9b443b.png" alt=""></p>
+<p>在mysqli.class.php中，他没有做任何过滤直接将语句拼接到<code>$sql</code>并通过query（）执行，所以存在sql漏洞</p>
+<p><img src="https://pic.imgdb.cn/item/66fe7904335a200d6a9b891f.png" alt=""></p>
+<p>这里可以进行报错注入</p>
+<h2>任意文件写入</h2>
+<p><img src="https://pic.imgdb.cn/item/66ff6d72d29ded1a8c8b4be0.png" alt=""></p>
+<p>通过seay审计发现里面有个file_put_content函数可能存在任意文件写入，进去查看发现这里是通过data内容可以控制写入文件的内容</p>
+<p><img src="https://pic.imgdb.cn/item/66ff6dd7d29ded1a8c8b9b1e.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/66ff6e59d29ded1a8c8c0523.png" alt=""></p>
+<p>这phpstorm中找到他的funvtion<code>set_cache</code></p>
+<p>他只判断是了是否提交了表单但没对提交的内容进行过滤，这就导致<code>setting </code>参数也就是上面所说的 <code>$data</code> 部分写入造成任意文件写入</p>
+<p><img src="https://pic.imgdb.cn/item/67076359d29ded1a8c69640b.png" alt=""></p>
+<p>如果没有提交表单，就会通过<code>get_cache</code>读取缓存文件</p>
+<p><img src="https://pic.imgdb.cn/item/67076392d29ded1a8c699bd2.png" alt=""></p>
+<p>所以我们可以这么构造文件读写</p>
+<pre><code>/index.php?
+m=attachment&amp;f=index&amp;v=ueditor&amp;_su=wuzhicms&amp;submit=XXX&amp;setting=payload
+</code></pre>
+<h2>CSRF</h2>
+<p>在这里</p>
+<p><img src="https://pic.imgdb.cn/item/66ff820fd29ded1a8c9c0012.png" alt=""></p>
+<p>当我们提交的时候发现</p>
+<p><img src="https://pic.imgdb.cn/item/66ff822dd29ded1a8c9c18e4.png" alt=""></p>
+<p>提示了账号不存在，说明必须要一个前台账号才能设置为系统管理员账号，</p>
+<p><img src="https://pic.imgdb.cn/item/66ff84ffd29ded1a8c9ee282.png" alt=""></p>
+<p>抓包发现添加管理员的路由，找到源码<code>/coreframe/app/core/admin/power.php</code></p>
+<pre><code>这段代码是一个名为 add 的方法，用于添加管理员。以下是详细分析：
+检查是否提交表单：
+if(isset($GLOBALS[&#39;submit&#39;])) {
+检查全局变量 $GLOBALS[&#39;submit&#39;] 是否存在，以确定是否提交了表单。
+验证用户名：
+if(empty($GLOBALS[&#39;form&#39;][&#39;username&#39;])) MSG(L(&#39;parameter error&#39;));
+$username = $GLOBALS[&#39;form&#39;][&#39;username&#39;];
+$r = $this-&gt;db-&gt;get_one(&#39;member&#39;, array(&#39;username&#39; =&gt; $username));
+if(!$r[&#39;uid&#39;]) MSG(L(&#39;账号不存在，请先管理会员处－添加账号&#39;));
+检查表单中的 username 是否为空，如果为空则显示错误消息。
+获取表单中的 username 并从 member 表中查找对应的记录。
+如果找不到对应的用户 ID (uid)，则显示错误消息。
+检查管理员是否已存在：
+$rs = $this-&gt;db-&gt;get_one(&#39;admin&#39;, array(&#39;uid&#39; =&gt; $r[&#39;uid&#39;]));
+if($rs) MSG(L(&#39;管理员已存在！&#39;));
+从 admin 表中查找对应的用户 ID (uid)。
+如果找到记录，则显示管理员已存在的消息。
+准备表单数据：
+$formdata = array();
+$formdata[&#39;uid&#39;] = $r[&#39;uid&#39;];
+if(empty($GLOBALS[&#39;form&#39;][&#39;password&#39;])) {
+    $formdata[&#39;password&#39;] = &#39;&#39;;
+} else {
+    $factor = substr(random_string(&#39;md5&#39;), 0, 6);
+    $password = md5(md5($GLOBALS[&#39;form&#39;][&#39;password&#39;]) . $factor);
+    $formdata[&#39;password&#39;] = $password;
+    $formdata[&#39;factor&#39;] = $factor;
+}
+$formdata[&#39;role&#39;] = &#39;,&#39; . implode(&#39;,&#39;, $GLOBALS[&#39;form&#39;][&#39;role&#39;]) . &#39;,&#39;;
+$formdata[&#39;truename&#39;] = remove_xss($GLOBALS[&#39;form&#39;][&#39;truename&#39;]);
+初始化一个空数组 $formdata。
+将用户 ID (uid) 添加到 $formdata。
+检查表单中的 password 是否为空，如果为空则设置为空字符串。
+如果不为空，则生成一个随机因子 (factor)，并使用 MD5 加密密码和因子。
+将加密后的密码和因子添加到 $formdata。
+将角色信息和真实姓名添加到 $formdata。
+插入数据并显示成功消息：
+$this-&gt;db-&gt;insert(&#39;admin&#39;, $formdata);
+MSG(L(&#39;operation success&#39;));
+将 $formdata 插入到 admin 表中。
+显示操作成功的消息。
+显示添加管理员表单：
+} else {
+    $show_formjs = 1;
+    $form = load_class(&#39;form&#39;);
+    $roles = $this-&gt;db-&gt;get_list(&#39;admin_role&#39;, &#39;&#39;, &#39;*&#39;, 0, 100);
+    include $this-&gt;template(&#39;power_add&#39;);
+}
+如果没有提交表单，则显示添加管理员的表单。
+设置 show_formjs 为 1。
+加载表单类并获取角色列表。
+包含并显示 power_add 模板。
+</code></pre>
+<p>在代码38行处根据用户名
+从数据库中取出前台账户，如果该前台用户不存在则会提示如下内容，也就是我们上面的提示，在40行代码判断该用户是否已经是管理员，而44-51行代码是判断添加管理员时是否设置密码，这部分操作在上面部分我们添加管理员的时候也可以看得出来，在代码54行将我们的内容插入到数据库中</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9600d29ded1a8caede21.png" alt=""></p>
+<p>能看出来这部分没有进行token校验或者其他手段，这就导致我们可以伪造数据包进行csrf</p>
+<h2>目录遍历</h2>
+<p>glob函数发现存在目录遍历，这里面的<code>glob()</code>的$<code>dir</code>参数可控,上面的18行做了一些过滤</p>
+<p><img src="https://pic.imgdb.cn/item/66ff97d7d29ded1a8cb0a8db.png" alt=""></p>
+<p>29行通过<code>include $this -&gt;template(&#39;listing&#39;)</code>包含并渲染旗下的<code>listing.tpl.php</code>文件</p>
+<pre><code>glob()函数返回一个包含匹配指定模式的文件名或目录的数组
+
+语法：
+glob(pattern,flags)
+    pattern
+    必需。规定检索模式。
+    flags
+    可选。规定特殊的设定。
+返回值：
+该函数返回一个包含有匹配文件/目录的数组。如果失败则返回 FALSE。
+</code></pre>
+<p>payload</p>
+<pre><code>index.php?m=template&amp;f=index&amp;v=listing&amp;_su=wuzhicms
+</code></pre>
+<h2>任意文件删除</h2>
+<p>全局查找危险函数unlink（删除指定文件）</p>
+<p>发现my_unlink里面调用了这个函数</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9ac3d29ded1a8cb349bb.png" alt=""></p>
+<p>跟踪一下</p>
+<p>其中一个位于del()函数内部，</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9b1fd29ded1a8cb39675.png" alt=""></p>
+<p>这两个地方需要传入id和url，但是通过<code>remove_xss</code>函数过滤了</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9b73d29ded1a8cb3dcf6.png" alt=""></p>
+<p>这里是对我们输入的东西进行实体编码，替换了一些文字防止<code> &lt;IMG SRC=@avascript:alert(&#39;XSS&#39;)&gt; 的攻击</code>，下面过滤了一些js的标签</p>
+<p>回到del（）函数，他里面是鲜活的一个id，然后从数据库查找这个id对应的path，但是如果没有id的话会直接根据你输入的path进行文件操作，所以我们只需要构造path就可以了</p>
+<p><img src="https://pic.imgdb.cn/item/6707b1fbd29ded1a8cbd49d9.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6707b154d29ded1a8cbcb023.png" alt=""></p>
+<p>所以可以</p>
+<p><img src="https://pic.imgdb.cn/item/6707651cd29ded1a8c6b20ec.png" alt=""></p>
+<p>至此,五指cms的审计结束</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

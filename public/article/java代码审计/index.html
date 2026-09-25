@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代码审计---java基础 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>代码审计---java基础</h1>
+    <div class="meta"><span class="chip date">2024-09-19</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><h1>java基本语法</h1>
+<p>基础语法：</p>
+<ul>
+<li>对象：对象是类的一个实例，有状态和行为</li>
+</ul>
+<p>例如：一条狗是一个对象，他的状态就有：颜色，名字，品种；行为就有了：吃，坐下，叫等</p>
+<ul>
+<li><p>类：类是一个模板，他描述一类对象的行为和状态</p>
+</li>
+<li><p>方法：方法就是行为，一个类可以有很多方法，逻辑运算，数据修改以及所有动作都是在方法中完成的</p>
+</li>
+<li><p>实例变量：每个对象都有独特的实例变量，对象的状态由这些实例变量的值决定</p>
+</li>
+</ul>
+<p>第一个java程序</p>
+<pre><code>public class the_first_java {
+    /* 第一个Java程序
+
+  *它将输出字符串 Hello World
+
+   */
+    public static void main(String[] args){
+        System.out.println(&quot;Hello World&quot;);
+    }
+}
+</code></pre>
+<p>输出应该是</p>
+<pre><code>Hello World
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66ec1db4f21886ccc0fb79df.png" alt=""></p>
+<h2>java对象和类</h2>
+<p><img src="https://pic.imgdb.cn/item/66ec1e60f21886ccc0fc1ded.png" alt=""></p>
+<h2>java创建对象</h2>
+<p>对象是根据类创建的。在Java中，使用关键字new来创建一个新的对象。创建对象需要以下三步：</p>
+<ul>
+<li><p>声明：声明一个对象，包括对象名称和对象类型。</p>
+</li>
+<li><p>实例化：使用关键字 new 来创建一个对象。</p>
+</li>
+<li><p>初始化：使用 new 创建对象时，会调用构造方法初始化对象。</p>
+</li>
+</ul>
+<p>puppy</p>
+<pre><code>public class Puppy {
+    public Puppy(String name){
+        System.out.println(&quot;小狗的名字是&quot;+name);
+
+    }
+    public static void main(String[] args){
+        Puppy myPuppy = new Puppy(&quot;tommy&quot;);
+    }
+}
+</code></pre>
+<p>输出应该是:</p>
+<pre><code>小狗的名字是tommy
+</code></pre>
+<h2>Java基本类型</h2>
+<p><img src="https://pic.imgdb.cn/item/66ec23eef21886ccc00243ec.png" alt=""></p>
+<pre><code>public class Test {
+    static boolean bool;
+    static byte by;
+    static  char ch;
+    static double d;
+    static float f;
+    static int i;
+    static long l;
+    static short sh;
+    static String str;
+
+    public static void main(String[] args) {
+        System.out.println(&quot;Bool:&quot;+bool);
+        System.out.println(&quot;Byte:&quot;+by);
+        System.out.println(&quot;Char:&quot;+ch);
+        System.out.println(&quot;Double:&quot;+d);
+        System.out.println(&quot;Float:&quot;+f);
+        System.out.println(&quot;Int:&quot;+i);
+        System.out.println(&quot;Long:&quot;+l);
+        System.out.println(&quot;Short:&quot;+sh);
+        System.out.println(&quot;String:&quot;+str);
+    }
+
+}
+</code></pre>
+<p>输出应该是</p>
+<pre><code>Bool:false
+Byte:0
+Char:
+Double:0.0
+Float:0.0
+Int:0
+Long:0
+Short:0
+String:null
+
+进程已结束，退出代码为 0
+</code></pre>
+<h2>java循环结构</h2>
+<p>经典的三种循环方式:</p>
+<ul>
+<li>while 循环</li>
+<li>do...while循环</li>
+<li>for循环</li>
+</ul>
+<p>while实例</p>
+<pre><code>public class cycle {
+    public static void main(String[] args) {
+        int x=10;
+        while(x&lt;20){
+            System.out.println(&quot;value of x : &quot;+ x);
+            x++;
+//            System.out.println(&quot;\n&quot;);
+        }
+    }
+}
+</code></pre>
+<p>输出</p>
+<pre><code>value of x : 10
+value of x : 11
+value of x : 12
+value of x : 13
+value of x : 14
+value of x : 15
+value of x : 16
+value of x : 17
+value of x : 18
+value of x : 19
+</code></pre>
+<p>不知道为啥，按理说不应该不会换行的吗，怎么加了个换行符多一行🧐</p>
+<p>do-while循环</p>
+<pre><code>public class text {
+        public static void main(String args[]) {
+
+            for(int x = 10; x &lt; 20; x = x+1) {
+                System.out.print(&quot;value of x : &quot; + x );
+                System.out.print(&quot;\n&quot;);
+            }
+        }
+}
+</code></pre>
+<p>输出为</p>
+<pre><code>value of x : 10
+value of x : 11
+value of x : 12
+value of x : 13
+value of x : 14
+value of x : 15
+value of x : 16
+value of x : 17
+value of x : 18
+value of x : 19
+</code></pre>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

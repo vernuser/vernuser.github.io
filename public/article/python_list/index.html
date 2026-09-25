@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python:从入门到入土---列表 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>Python:从入门到入土---列表</h1>
+    <div class="meta"><span class="chip date">2023-03-20</span><span class="chip">分类·python</span><span class="chip">#python</span></div>
+    <article><h6>列表是什么？</h6>
+<p>列表由一些列按照特定顺序排列而成的元素。</p>
+<p>在Python中，由[]表示列表，并用“，”分隔开其中的元素</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+</code></pre>
+<p>这样的话会打印</p>
+<pre><code>[&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+</code></pre>
+<p>没错，他会连着【】一块打印下来，没想到吧</p>
+<h6>访问列表元素</h6>
+<p>列表式有序集合，所以要访问列表式只需要将该元素的索引告诉Python就好。</p>
+<p>例如</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[0])
+</code></pre>
+<p>当你请求访问列表元素时，Python只会返回该元素，而不包括【】</p>
+<pre><code>trek
+</code></pre>
+<p>当然你也可以使用之前学习过的方法</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[0].title())
+</code></pre>
+<p>这样的话会输出</p>
+<pre><code>Trek
+</code></pre>
+<p>值得一提的是</p>
+<p>索引是从0开始而并不是1开始</p>
+<p>在Python中，第一个列表元素的索引为0而不是1.(这一点 就跟C语言的数组那块一样，都是从0开始的)</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[1])
+print(bicycle[2])
+</code></pre>
+<pre><code>cannondale
+redline
+</code></pre>
+<p>当你想要倒过来访问列表的时候，Python会提供给你一种特殊的语法。通过将索引定位为-1，可让Python返回最后一个列表元素：</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[-1])
+</code></pre>
+<pre><code>redline
+</code></pre>
+<h5>修改添加和删除元素</h5>
+<h6>修改</h6>
+<p>很简单，用索引定位就好</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle[0] = &#39;baba&#39;
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+[&#39;baba&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+</code></pre>
+<h6>添加</h6>
+<p>在列表未添加元素</p>
+<pre><code>.append
+</code></pre>
+<p>这是一个很神奇的东西，他可以让你在列表的末尾添加元素</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.append = (&#39;ca&#39;)
+print(bicycle)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;&#39;ca&#39;
+</code></pre>
+<p>当然，如果你足够闲得无聊，你也来可以尝试</p>
+<pre><code>name = []
+name.append=(&#39;zgh&#39;)
+nmae.append=(&#39;cjy&#39;)
+nmae.append=(&#39;czm&#39;)
+nmae.append=(&#39;dyf&#39;)
+nmae.append=(&#39;czh&#39;)
+print(name)
+</code></pre>
+<pre><code>[&#39;cgh&#39;,&#39;cjy&#39;,&#39;czm&#39;,&#39;dlf&#39;,&#39;czh&#39;]
+</code></pre>
+<p>有了在末尾添加当然就有在中间添加了</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.insect = (1,&#39;ca&#39;)
+print(bicycle)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;trek&#39;,&#39;ca&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+</code></pre>
+<h6>删除</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+del bicycle[0]
+print(bicycle)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;cannondale&#39;,&#39;redline&#39;
+</code></pre>
+<p>使用del可以无线删除，当然，前提是你知道这个元素在Python中的索引值</p>
+<h6>当然你也可以使用方法pop()删除</h6>
+<p>（我感觉这个列表就像一个栈，pop使用就像弹出这个栈顶）</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+outdate = bicycle.pop()
+print(bicycle)
+print(outdate)
+（这一块本来我打算用popped的，但@一般路过小辉夜给了更好的建议，所以就用outdata了）
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+‘trek’&#39;cannondale&#39;
+&#39;redline&#39;
+</code></pre>
+<h6>弹出任何位置的元素</h6>
+<p>其实吧，pop这个东西不知能删除最后一个元素，你只要在括号里面填写你想要的元素的索引，他都能给你弹出来</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+outdate = bicycle.pop(1)
+print(bicycle)
+print(outdate)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;trek,&#39;redline&#39;
+&#39;cannondale&#39;
+</code></pre>
+<p>需要注意的是，当你弹出元素的时候，这个元素就不在列表中了</p>
+<p>根据特定的值删除</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.remove(&#39;cannondale&#39;)
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+[&#39;trek&#39;,redline&#39;]
+</code></pre>
+<p>使用remove的时候也可以照常使用这个值</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+abb = &#39;cannondale&#39;
+bicycle.remove(&#39;cannondale&#39;)
+print(f&quot;{abb.title()}&quot;)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+Cannondale
+</code></pre>
+<h6>组织列表</h6>
+<p>sort（）</p>
+<h6>使用sort（）可以将列表进行用就行排序（这个是按照字母进行排序的）</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+bicycle.sort()
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;cannondale&#39;,&#39;redline&#39;,&#39;trek&#39;]
+</code></pre>
+<p>当你要逆字母方向时，需要</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+bicycle.sort(reverse = True)
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;redline&#39;, &#39;cannondale&#39;]
+</code></pre>
+<h6>使用sorted函数进行临时性的排序</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+print(sorted(bicycle))
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+[&#39;cannondale&#39;, &#39;redline&#39;, &#39;trek&#39;]
+[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+</code></pre>
+<h6>倒着打印列表</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.reverse()
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+[&#39;redline&#39;, &#39;cannondale&#39;, &#39;trek&#39;]
+</code></pre>
+<h6>确定列表长度</h6>
+<pre><code>&gt;&gt;&gt;bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+&gt;&gt;&gt;len(bicycle)
+3
+</code></pre>
+<h3>遍历整个列表</h3>
+<h5>for循环</h5>
+<pre><code>people = [&#39;ann&#39;,&#39;bee&#39;,&#39;c++&#39;,&#39;dev--c&#39;]
+for person in people:
+    print(person)
+</code></pre>
+<pre><code>ann
+bee
+c++
+dev--c
+</code></pre>
+<p>需要注意的是：</p>
+<p>Python中的for循环与C语言中的不一样，C语言中的是</p>
+<p>for(中间是循环条件)</p>
+<p>但Python的是for (临时变量) in （列表）</p>
+<p>而且需要注意的是，Python每次运行循环的时候需要注意在后面添加一个:，这在C语言中是不层出现过的，C语言中，for后面不需要加任何的标点符号。</p>
+<h5>在for循环中进行更多的操作，比如说</h5>
+<pre><code>people = [&#39;ann&#39;,&#39;bee&#39;,&#39;c++&#39;,&#39;dev--c&#39;]
+for person in people:
+    print(f“{person.title()},you are a good man&quot;)
+    print(f&quot;i can&#39;t meet a better man than you,f{person.title()}&quot;)
+</code></pre>
+<pre><code>Ann,you are a good man
+i can&#39;t meet a better man than you,Ann
+Bee,you are a good man
+i can&#39;t meet a better man than you,Bee
+C++,you are a good man
+i can&#39;t meet a better man than you,C++
+Dev--C,you are a good man
+i can&#39;t meet a better man than you,Dev--C
+</code></pre>
+<p>在for循环中，想要包含多少行代码都是可以的，实际上，你会发现使用for循环对每个元素执行众多不同的操作很有用</p>
+<h6>注意事项：（一股子翻译腔味道）</h6>
+<ol>
+<li>注意缩进，切记注意，你永远不知道你会犯下什么样的错误直到有人指出来</li>
+<li>注意标点符号，注意冒号，这很重要，你知道的</li>
+</ol>
+<h5>创建数值列表</h5>
+<h6>使用函数range</h6>
+<pre><code>for value in range(1,5):
+    print(value)
+</code></pre>
+<pre><code>1
+2
+3
+4
+</code></pre>
+<p>没错，range(1,5)只打印了1-4，这回死编程语言中常见的差一行为的结果，函数range（）让python从指定的第一个值开始数，并在到达你指定的第二个值时停止。这就是他不输出5的原因。当然，如果你执意要打印1-5，只需要输入range(1,6)</p>
+<h6>使用range创建数值列表</h6>
+<pre><code>&gt;&gt;&gt;number = list(range(1,6))
+&gt;&gt;&gt;print(number)
+</code></pre>
+<pre><code>[1, 2, 3, 4, 5]
+</code></pre>
+<p>需要注意的是，上面的list后面使用的实施（）而不是【】，如果你使用【】的话，那就是输出</p>
+<pre><code>list[range(1, 6)]
+</code></pre>
+<p>使用range时还可以指定步长，比如</p>
+<pre><code>number = list(range(2,11,2))
+print(number)
+</code></pre>
+<pre><code>[2, 4, 6, 8, 10]
+</code></pre>
+<p>使用range（）几乎能够创建任何需要的数集。</p>
+<pre><code>squares = []
+for value in range(1,11):
+    square = value ** 2
+    squares.append(square)
+print(squares)
+</code></pre>
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+<p>可以小小的进行优化</p>
+<pre><code>squares = []
+for value in range(1,11):
+    squares.append(square**2)
+print(squares)
+</code></pre>
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+<p>当然,python中也有一些库函数可以方便你运算</p>
+<pre><code>digits = [1,2,3,4,5,6,7,8,9]
+print(min(digits))
+print(max(digits))
+print(sum(digits))
+</code></pre>
+<pre><code>1
+9
+45
+</code></pre>
+<p>值得注意的是，这里的digits不能使用for循环，原因是不能迭代</p>
+<h6>列表解析</h6>
+<pre><code>squares = [value**2 for value in range(1,11)]
+print(squares)
+</code></pre>
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+<p>这个列表中的意思是首先制定一个描述性的列表名squares，然后制定一个左方括号，并且定义一个表达式，用于生成要存储到列表中的值，接下来，编写一个for循环，用于给表达式提供值，在加上右方括号。</p>
+<h5>使用列表的一部分</h5>
+<h6>切片</h6>
+<pre><code>player = [&#39;ann&#39;,&#39;bee&#39;,&#39;c++&#39;,&#39;dev&#39;]
+print(player[0:2])
+</code></pre>
+<pre><code>[&#39;ann&#39;, &#39;bee&#39;]
+</code></pre>
+<p>上述语言中[:]分号是到的意思，比如说0:2是索引为0的数到索引为1的数的，[1:]是索引为1的数到末尾的，[:2]是索引为0的数到索引为2 的数</p>
+<p>当然，如果你要输出在结尾附近的，你可以用这样的形式[-3:]</p>
+<p>当然，列表也是可以遍历和复制的</p>
+<h5>元组</h5>
+<p>元组看起来很像列表，但其实是不一样的，元组使用的是圆括号而不是方括号</p>
+<p>需要注意的是Python是禁止修改元组的值的</p>
+<p>所以要想修改元组的值，只能从头重新定义一个元组。</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

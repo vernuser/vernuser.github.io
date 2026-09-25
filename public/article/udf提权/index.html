@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mysql提权 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>mysql提权</h1>
+    <div class="meta"><span class="chip date">2023-03-19</span><span class="chip">分类·提权</span><span class="chip">#手法</span></div>
+    <article><p>mysql的udf提权</p>
+<h2>先决条件</h2>
+<ul>
+<li>已经获得mysql数据库的控制权限（即已经知道mysql的数据库账号密码
+，但是不知道数据库所在服务器的权限，并且可以远程连接数据库</li>
+<li>mysql具有写入文件的权力即<code>show global variables like &#39;%secure%&#39;</code>为空</li>
+</ul>
+<h2>使用情况</h2>
+<ul>
+<li>在拿到mysql权限的情况下，但是没拿到mysql所在服务器的权限，
+通过在mysql提权，将mysql权限提升到操作系统权限</li>
+</ul>
+<p>（mysql提权获得的权限和mysql所在的服务武器登陆的账号权限
+相关，如果是普通用户权限启动的mysql那就是普通用户权限
+但是如果以管理员权限就是管理员权限的）</p>
+<pre><code>show global variables like &#39;%secure%&#39;;
+</code></pre>
+<p>查看mysql是否具有读写的权限</p>
+<ul>
+<li>secure_file_priv值为NULL，说明不允许导入导出</li>
+<li>secure_file_priv值为/tmp/,说明mysql的导入导出之限制在/tmp/目录下</li>
+<li>secure_file_priv值为空说明允许导入导出</li>
+</ul>
+<p>这是不允许的
+<img src="https://pic.imgdb.cn/item/667e79d0d9c307b7e9760312.png" alt=""></p>
+<p>这是允许输入输出的
+<img src="https://pic.imgdb.cn/item/667e79d0d9c307b7e976033a.png" alt=""></p>
+<p>如果secure_file_priv的值不是的话，我们可以在mysql/my.ini中查看时候有更改secure_file_priv的参数为&#39;&#39;然后重启
+mysql和apache服务即可生效</p>
+<h2>上传动态链接库</h2>
+<p>动态链接库就是实现共享函数库的一种方式，在windows下叫dll，在linux环境下就是so，我们要把它放到固定的一些目录中</p>
+<ul>
+<li>在mysql&gt;5.1中,udf.dll必须在mysql的bin\plugin文件夹下，plugin文件夹默认不存在需要创建</li>
+<li>mysql&lt;5.1</li>
+<li><ul>
+<li>如果是 win 2000 的服务器，我们则需要将 udf.dll 文件导到 C:\Winnt\udf.dll 下。</li>
+<li>如果是 win2003 服务器，我们则要将 udf.dll 文件导出在 C:\Windows\udf.dll 下。</li>
+</ul>
+</li>
+</ul>
+<p>我已经创建了所以直接使用</p>
+<pre><code>show variables like &quot;plugin%&quot;;
+</code></pre>
+<p>查看位置</p>
+<p>然后使用</p>
+<pre><code>select @@version_compile_os.@@version_compile_machine
+</code></pre>
+<p>查看当前数据库以及操作系统的架构</p>
+<p>在linux中我们需要编写一个udf.cpp的文件在执行编译的命令</p>
+<pre><code>#include &lt;mysql.h&gt;
+ extern &quot;C&quot; long long testadd(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error)
+{
+int a = *((long long *)args-&gt;args[0]);
+int b = *((long long *)args-&gt;args[1]);
+return a + b;
+}
+extern &quot;C&quot; my_bool testadd_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
+{
+return 0;
+}
+
+</code></pre>
+<p>g++ -shared -fPIC -I /usr/include/mysql -o udf.so udf.cpp</p>
+<p>然后需要将我们编译好的udf.so下载到mysql相应的目录中，
+记得<code>select version();</code>
+查看版本，然后就是创建函数</p>
+<pre><code>create function函数名 returns string soname &quot;udf.so&quot;
+</code></pre>
+<p>函数名必须和源码的一样</p>
+<pre><code>
+select * frome mysql.func
+</code></pre>
+<p>执行函数
+select 函数名</p>
+<h1>总结</h1>
+<p>UDF提权就是MYSQL的服务端由谁运行就可以获得谁的权限,UDF提的是系统的权而不是数据库用户的</p>
+<p>在Linux下5.7版本之后，默认运行时MySQL的是mysql用户，所以在MySQL 5.7版本之后，UDF提权基本上来讲算是失效了，
+除非管理员手动用root身份去运行MYSQL，5.7之前MySQL运行时默认是以root身份去运行的</p>
+<p><del>所以我昨天那个靶机问题应该是在我提权的函数名不一样，但我懒的再改了/ww</del></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

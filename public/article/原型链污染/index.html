@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>原型链污染 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>原型链污染</h1>
+    <div class="meta"><span class="chip">分类·web</span><span class="chip">#web</span><span class="chip">#原型链污染</span></div>
+    <article><h2>前置</h2>
+<h3>js</h3>
+<p>javascript是一种完全的面向对象的有说
+HTML中给的js必须包含在<code>&lt;script&gt;</code>与<code>&lt;/script&gt;</code>之间
+js代码脚本可以被放置在html中的<code>&lt;head&gt;</code>和<code>&lt;body&gt;</code>中</p>
+<pre><code class="language-在&lt;script&gt;中">&lt;script&gt;
+    alert(&quot;my first script&quot;);
+&lt;/script&gt;
+</code></pre>
+<pre><code class="language-在&lt;body&gt;中">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+
+&lt;script&gt;
+document.write(&quot;&lt;h1&gt;这是一个标题&lt;/h1&gt;&quot;);
+document.write(&quot;&lt;p&gt;这是一个段落&lt;/p&gt;&quot;);
+&lt;/script&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-在&lt;head&gt;中">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;script&gt;
+function myFunction()
+{
+document.getElementById(&quot;demo&quot;).innerHTML=&quot;我的第一个 JavaScript 函数&quot;;
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;我的 Web 页面&lt;/h1&gt;
+&lt;p id=&quot;demo&quot;&gt;一个段落&lt;/p&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;myFunction()&quot;&gt;尝试一下&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>也可以把js文件存在外部，保存为.js，但是调用的时候就是</p>
+<pre><code class="language-js_study.html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;菜鸟教程(runoob.com)&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;h1&gt;我的 Web 页面&lt;/h1&gt;
+&lt;p id=&quot;demo&quot;&gt;一个段落。&lt;/p&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;myFunction()&quot;&gt;点击这里&lt;/button&gt;
+&lt;p&gt;&lt;b&gt;注释：&lt;/b&gt;myFunction 保存在名为 &quot;myscript.js&quot; 的外部文件中。&lt;/p&gt;
+&lt;script src=&quot;myscript.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-myscript.js">function myFunction()
+{
+    document.getElementById(&quot;demo&quot;).innerHTML=&quot;我的第一个 JavaScript 函数&quot;;
+}
+</code></pre>
+<p><code>getelementById() 方法可返回对拥有指定 ID 的第一个对象的引用。</code></p>
+<p>js中可以通过<code>&quot;\&quot;</code>进行换行</p>
+<p>但是你不能</p>
+<pre><code>document.write \
+(&quot;你好世界!&quot;);
+</code></pre>
+<p>html中<code>&lt;p&gt;</code>标签定义段落。</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

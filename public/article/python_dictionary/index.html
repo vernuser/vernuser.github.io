@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python--从入门到入土--字典 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>Python--从入门到入土--字典</h1>
+    <div class="meta"><span class="chip date">2023-03-24</span><span class="chip">分类·python</span><span class="chip">#python</span></div>
+    <article><pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+print(alien_0[&#39;color&#39;])
+print(alien_0[&#39;points&#39;])
+</code></pre>
+<pre><code>green
+5
+</code></pre>
+<h6>这就是一个简单的字典</h6>
+<p>在Python中，字典是一系列键值对。每个键都有一个值相互关联</p>
+<h6>访问字典中的值</h6>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+new_point=alien_0[&#39;points&#39;]
+print(f&quot;you have killed {new_point} alien&quot;)
+</code></pre>
+<pre><code>you have killed 5alien
+</code></pre>
+<h6>添加键值对</h6>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+print(alien_0)
+alien_0[&#39;x_position&#39;]=0
+alien_0[&#39;y_position&#39;]=0
+print(alien_0)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;, &#39;points&#39;: 5}
+{&#39;color&#39;: &#39;green&#39;, &#39;points&#39;: 5, &#39;x_position&#39;: 0, &#39;y_position&#39;: 0}
+</code></pre>
+<h6>修改字典中的值</h6>
+<pre><code>alien_0={&#39;color&#39;:&#39;green&#39;}
+print(alien_0)
+alien_0[&#39;color&#39;]=&#39;yellow&#39;
+print(f&quot;now it&#39;s {alien_0}&quot;)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;}
+now it&#39;s {&#39;color&#39;: &#39;yellow&#39;}
+</code></pre>
+<h6>删除字典中的键值对</h6>
+<pre><code>alien_0={&#39;color&#39;:&#39;green&#39;,&#39;point&#39;:5}
+print(alien_0)
+del alien_0[&#39;color&#39;]
+print(alien_0)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;, &#39;point&#39;: 5}
+{&#39;point&#39;: 5}
+</code></pre>
+<h6>来一个大家伙</h6>
+<pre><code>favorite_language ={
+    &#39;edward&#39;:&#39;rudy&#39;,
+    &#39;jen&#39;:&#39;python&#39;,
+    &#39;phil&#39;:&#39;python&#39;,
+    &#39;sarah&#39;:&#39;c&#39;,
+    }
+language = favorite_language[&#39;sarah&#39;].title()
+print(f&quot;sarah&#39;s favorite language is {language}&quot;)
+</code></pre>
+<pre><code>sarah&#39;s favorite language is C
+</code></pre>
+<h6>使用方法get来访问值</h6>
+<p>get（）方法的第一个参数用于指定值，第二个参数为指定的键不存在的时候要返回的值，可省略</p>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;speed&#39;:&#39;slow&#39;}
+point_value = alien_0.get(&#39;color&#39;,&#39;0_o&#39;)
+print(point_value)
+</code></pre>
+<pre><code>green
+</code></pre>
+<p>但是如果我换一个数值呢</p>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;speed&#39;:&#39;slow&#39;}
+point_value = alien_0.get(&#39;spend&#39;,&#39;0_o&#39;)
+print(point_value)
+</code></pre>
+<pre><code>0_o//(好一个杰西卡)
+</code></pre>
+<h6>遍历字典</h6>
+<pre><code>user = {
+    &#39;username&#39;: &#39;admin&#39;,
+    &#39;first&#39;:&#39;enrico&#39;,
+    &#39;last&#39;:&#39;fermi&#39;
+}
+for key,value in user.items():
+    print(f&quot;\nkey:{key}&quot;)
+    print(f&quot;vale:{value}&quot;)
+</code></pre>
+<pre><code>key:username
+vale:admin
+
+key:first
+vale:enrico
+
+key:last
+vale:fermi
+</code></pre>
+<p>这里不是使用keys()和values()方法，只是设了两个局部变量使得key=键，value等于值而已</p>
+<p>item（）方法返回一个键值对列表</p>
+<pre><code>from builtins import print
+
+favorite_languages = {
+    &#39;edward&#39;: &#39;rudy&#39;,
+    &#39;jen&#39;: &#39;python&#39;,
+    &#39;phil&#39;: &#39;python&#39;,
+    &#39;sarah&#39;: &#39;c&#39;,
+}
+friends = [&#39;sarah&#39;,&#39;jen&#39;]               //这里的“，”很关键，这是分隔开两个的，										   如果没有的话会默认两个连接在一起输出
+for name in favorite_languages.keys():
+    print(f&quot;{name.title()}&quot;)
+
+    if name in friends:
+        language = favorite_languages[name].title()
+        print(f&quot;{name.title()},i know you like {language}&quot;)
+</code></pre>
+<pre><code>Edward
+Jen
+Jen,i know you like Python
+Phil
+Sarah
+Sarah,i know you like C
+</code></pre>
+<p>key()方法：返回一个字典所有的键。</p>
+<h6>按照特定顺序来遍历字典中的所有键</h6>
+<pre><code>from builtins import print
+
+favorite_languages = {
+    &#39;jen&#39;: &#39;python&#39;,
+    &#39;phil&#39;: &#39;python&#39;,
+    &#39;edward&#39;: &#39;rudy&#39;,
+    &#39;sarah&#39;: &#39;c&#39;,
+}
+for name in sorted(favorite_languages.keys()):
+    print(f&quot;{name.title()},thanks for you &quot;)
+</code></pre>
+<pre><code>Edward,thanks for you
+Jen,thanks for you
+Phil,thanks for you
+Sarah,thanks for you
+</code></pre>
+<p>set()可以找出独一无二的元素</p>
+<pre><code>from builtins import print
+
+favorite_languages = {
+    &#39;jen&#39;: &#39;python&#39;,
+    &#39;phil&#39;: &#39;python&#39;,
+    &#39;edward&#39;: &#39;rudy&#39;,
+    &#39;sarah&#39;: &#39;c&#39;,
+}
+for language in set(favorite_languages.values()):
+    print(f&quot;{language.title()}&quot;)
+</code></pre>
+<pre><code>Rudy
+Python
+C
+</code></pre>
+<p>keys() 方法用于返回字典中的所有键；values() 方法用于返回字典中所有键对应的值</p>
+<h6>嵌套</h6>
+<pre><code>alien_00={&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+alien_01={&#39;color&#39;:&#39;blue&#39;,&#39;points&#39;:6}
+alien_02={&#39;color&#39;:&#39;red&#39;,&#39;points&#39;:9}
+alien_03={&#39;color&#39;:&#39;yellow&#39;,&#39;points&#39;:7}
+aliens=[alien_00,alien_01,alien_02,alien_03]
+for alien in aliens:
+    print(alien)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;, &#39;points&#39;: 5}
+{&#39;color&#39;: &#39;blue&#39;, &#39;points&#39;: 6}
+{&#39;color&#39;: &#39;red&#39;, &#39;points&#39;: 9}
+{&#39;color&#39;: &#39;yellow&#39;, &#39;points&#39;: 7}
+</code></pre>
+<p>大量使用</p>
+<pre><code>aliens = []
+for alien_number in range(20):
+    new_alien = {&#39;color&#39;:&#39;green&#39;,&#39;point&#39;:5}
+    aliens.append(new_alien)
+
+for alien in aliens[:3]:
+    if alien[&#39;color&#39;]==&#39;green&#39;:
+        alien[&#39;color&#39;]=&#39;yellow&#39;
+        alien[&#39;point&#39;]=&#39;10&#39;
+    elif alien[&#39;color&#39;]==&#39;yellow&#39;:
+        alien[&#39;color&#39;]=&#39;red&#39;
+        alien[&#39;point&#39;]=&#39;20&#39;
+for alien in aliens[:5]:
+    print(alien)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;yellow&#39;, &#39;point&#39;: &#39;10&#39;}
+{&#39;color&#39;: &#39;yellow&#39;, &#39;point&#39;: &#39;10&#39;}
+{&#39;color&#39;: &#39;yellow&#39;, &#39;point&#39;: &#39;10&#39;}
+{&#39;color&#39;: &#39;green&#39;, &#39;point&#39;: 5}
+{&#39;color&#39;: &#39;green&#39;, &#39;point&#39;: 5}
+</code></pre>
+<h6>在字典中存储列表</h6>
+<pre><code>pizza = {
+    &#39;sort&#39;:&#39;好好好&#39;,
+    &#39;materials&#39;:[&#39;好&#39;,&#39;好个寂寞好&#39;],
+}
+print(f&quot;you order a {pizza[&#39;sort&#39;]} pizza&quot;)
+for material in pizza[&#39;materials&#39;]:
+    print(&#39;\t&#39;+material)
+</code></pre>
+<pre><code>you order a 好好好 pizza
+    好
+    好个寂寞好
+</code></pre>
+<h6>在字典中存储字典</h6>
+<pre><code>users = {
+    &#39;admin&#39;: {
+        &#39;first&#39;:&#39;ann&#39;,
+        &#39;last&#39;:&#39;bbaa&#39;,
+        &#39;location&#39;:&#39;A点&#39;,
+    },								//&quot;,&quot;切记切记
+    &#39;adminstor&#39;: {
+        &#39;first&#39;:&#39;daa&#39;,
+        &#39;last&#39;:&#39;ccaa&#39;,
+        &#39;location&#39;:&#39;B点&#39;,
+    }
+}
+for user_name,user_info in users.items():        //items()返回一个键值对，
+                                                   user_name等于前面的键
+                                                   user_info等于后面的值
+    print(f&quot;username:{user_name}&quot;)
+    print(f&quot;full name:{user_info[&#39;first&#39;]}{user_info[&#39;last&#39;]}&quot;)
+    print(f&quot;location:{user_info[&#39;location&#39;]}&quot;)
+</code></pre>
+<pre><code>username:admin
+full name:annbbaa
+location:A点
+username:adminstor
+full name:daaccaa
+location:B点
+</code></pre>
+<p>这一块挺乱的我感觉，字典跟之前的if和for循环贴在一起了，再加上keys(),values(),items()等等几个方法，多练练吧0_o</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

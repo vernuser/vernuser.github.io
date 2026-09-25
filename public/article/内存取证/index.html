@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内存取证 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>内存取证</h1>
+    <div class="meta"><span class="chip date">2024-06-25</span><span class="chip">分类·内存取证</span><span class="chip">#内存取证</span></div>
+    <article><h1>内存取证与流量分析</h1>
+<p>内存取证</p>
+<p>内存取证分为活取证和死取证</p>
+<p>活取证就是</p>
+<pre><code>在主机存活时发现系统被入侵,然后直接把机器的运行内存dump下来，对运行内存进行还原分析
+</code></pre>
+<p>主要工作就是
+看系统
+看命令
+哈希摘要
+日志文件
+内存信息</p>
+<p>死取证就是</p>
+<pre><code>对机器的磁盘做镜像之后进行分析，在关机后制作硬盘镜像，分析镜像（MBR硬盘分区,GPT全局分区表,LVM逻辑卷）是否存在病毒,木马等恶意程序
+</code></pre>
+<p>内存取证主要用的就是vol</p>
+<p>现在有vol2和vol3</p>
+<p>但是个人认为vol3没有2好用</p>
+<p>但是vol2的配置就是依托</p>
+<h1>vol2安装</h1>
+<pre><code>首先需要安装依赖
+sudo apt install -y python2  libpython2-dev
+sudo python2 -m pip install -U setuptools wheel
+
+下载 pip2
+
+sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+sudo python2 get-pip.py
+
+python 依赖
+
+sudo pip2 install pycrypto distorm3
+
+下载 volatility 到 /usr/share 目录
+
+cd /usr/share
+sudo git clone https://github.com/volatilityfoundation/volatility
+cd volatility
+sudo python2 setup.py install
+
+vol.py -h
+</code></pre>
+<p>如果你报错了但是pytho2 vol.py可行，说明你跳步骤了</p>
+<p>vol的指令格式是固定的，3和2的差不多，就是插件的调用方法和profile不用指定就是了</p>
+<p><a href="https://blog.csdn.net/m0_68012373/article/details/127419463">命令集可以看这个大佬的</a></p>
+<p>vol一般都是直接用插件冲，所以我们需要知道插件是干啥的
+<img src="https://pic.imgdb.cn/item/667ab997d9c307b7e9c9aac5.png" alt=""></p>
+<h2>imageinfo</h2>
+<p>分析内存镜像的基本信息</p>
+<pre><code>volatility -f 镜像文件 imageinfo
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/667ab9c7d9c307b7e9ca07fb.png" alt=""></p>
+<h2>pslist</h2>
+<p>plist：查看镜像中正在运行的进程</p>
+<pre><code>volatility -f 镜像文件 --profile=镜像文件  pslist
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/667aba5cd9c307b7e9cb3566.png" alt=""></p>
+<h2>pstree</h2>
+<p>以树的形式来列出正在进行的进程</p>
+<p><img src="https://pic.imgdb.cn/item/667abac8d9c307b7e9cc2626.png" alt=""></p>
+<h2>cmdscan</h2>
+<p>cmdscan是搜索XP / 2003 / Vista / 2008和conhost.exe上搜索csrss.exe的内存，
+对于win7是搜索cmd.exe。是搜索命令行的输入历史记录</p>
+<p><img src="https://pic.imgdb.cn/item/667abb5cd9c307b7e9cd45f7.png" alt=""></p>
+<p>这是xp的</p>
+<p><img src="https://pic.imgdb.cn/item/667abb76d9c307b7e9cd81d1.png" alt=""></p>
+<p>这是window 7 的</p>
+<h2>consoles</h2>
+<p>跟cmdscan类似，但是他不是扫描command_history，但是扫描consoles_information
+cmdscan只能看输入的命令但是console能看到缓冲区的输出</p>
+<p><img src="https://pic.imgdb.cn/item/667abc2ad9c307b7e9cef3a8.png" alt=""></p>
+<h2>cmdline</h2>
+<p>列举出所有命令行下运行的程序
+privs:显示进程权限
+envars：显示进程环境变量
+verinfo：显示PE文件中嵌入的版本信息
+enumfunc：列出进程，dll和内核驱动程序导入和导出</p>
+<h2>filescan</h2>
+<p>扫描文件指令，一般后面直接就是 | grep &#39;flag&#39;</p>
+<p>或者| grep -E “png”（查找png后缀文件）</p>
+<h2>dumpfiles</h2>
+<p>dump出指定PID的文件，一般只要是做内存题都会用到的指令。</p>
+<p>procdump
+转储进程的可执行文件，后跟PID</p>
+<p>memdump
+可以将内存中的某个进程保存出来</p>
+<p>volatility -f win7.vmem --profile=Win7SP1x64 memdump -p [PID] -D ./</p>
+<h2>用Hash获取密码</h2>
+<p>mimikatz</p>
+<h2>printkey</h2>
+<p>获取用户：volatility -f raw.raw --profile=Win7SP1x64 printkey -K “SAM\Domains\Account\Users\Names</p>
+<p>例题：弗列格殿下</p>
+<p>日常的imageinfo看系统</p>
+<p>看filescan</p>
+<p>看cmdline</p>
+<p>看consoles</p>
+<p>看iehistory</p>
+<p>哦终于又发现</p>
+<p>看到他下载了flag.jpg和hint.txt</p>
+<p><img src="https://pic.imgdb.cn/item/667aca23d9c307b7e9ec7e05.png" alt=""></p>
+<p>filescan | grep hint</p>
+<p>dumpfiles -Q 地址 -D ./</p>
+<p>gilescan | grep flag</p>
+<p>这个没有，hint提示了fl4g，搜</p>
+<p><img src="https://pic.imgdb.cn/item/667aca23d9c307b7e9ec7e40.png" alt=""></p>
+<p>gilescan | grep fl4g</p>
+<p>dumpfiles -Q 地址 -D ./</p>
+<p>两个一样的图片，梦回隐写</p>
+<p><img src="https://pic.imgdb.cn/item/667aca2ad9c307b7e9ec8c72.png" alt=""></p>
+<p>双写隐写，png在前</p>
+<p>聚合图床不让放二维码，这里你们自己解一下</p>
+<p>出了个二维码，扫码打开，百度翻译，听语音</p>
+<p><img src="https://pic.imgdb.cn/item/667aca5fd9c307b7e9ecf42a.png" alt=""></p>
+<p>flag{abcdefg}</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

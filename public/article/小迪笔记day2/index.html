@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器</h1>
+    <div class="meta"><span class="chip date">2024-07-30</span><span class="chip">分类·小迪安全</span><span class="chip">#小迪安全</span><span class="chip">#渗透</span></div>
+    <article><h1>网站搭建前置</h1>
+<p>域名，子域名，DNS，HTTP/HTTPS，SSL证书</p>
+<p>域名：网站的名字，例如<a href="http://www.baidu.com">www.baidu.com</a></p>
+<p>DNS：解析域名的</p>
+<h1>web应用架构</h1>
+<p>开发语言:asp,php,aspx,jsp,java,python,ruby,go,html,js</p>
+<p>程序源码：开源cms分类，开发语言分类，应用类型分类，开发框架分类</p>
+<p>中间件容器：IIS,APACHE,NGINX,TOMENT,WEBLOGIC,JBOOS,GLASSHFISH</p>
+<p>第三方软件：phpmyadmin,vs-ftpd,vnc,openssh</p>
+<p>数据库类型：access,mysql,mssql,oracle,db2,sybase,redis,mongdb</p>
+<h1>web安全漏洞</h1>
+<p>sql注入，xxe/xml，弱口令，文件安全，rce，csrf/ssrf/crlf，反序列化，逻辑越权，未授权访问等等</p>
+<h1>web请求返回过程数据包</h1>
+<p><a href="https://www.jianshu.com/p/558455228c43">https://www.jianshu.com/p/558455228c43</a></p>
+<p><a href="https://www.cnblogs.com/cherrycui/p/10815465.html">https://www.cnblogs.com/cherrycui/p/10815465.html</a></p>
+<p><a href="https://www.runoob.com/http/http-status-codes.html">http状态码</a></p>
+<p>可以用bp简单客串一下扫描器，具体就是用爆破的方法，如果404就没有，403就存在</p>
+<p>如果被拉黑了你的ip,上代理池/ww或者你去换一个</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

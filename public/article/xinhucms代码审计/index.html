@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>xinhucms代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>xinhucms代码审计</h1>
+    <div class="meta"><span class="chip date">2024-11-08</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><p>信呼cms将后端代码都放置在webmain目录下，而且访问方式都是</p>
+<pre><code>
+index.php?a=文件名&amp;d=文件对应名&amp;m=模块
+</code></pre>
+<h2>shell</h2>
+<p><img src="https://pic.imgdb.cn/item/673af490d29ded1a8c6e292a.png" alt="">
+在这个地方我们发现可以看到一个上传文档点</p>
+<p><img src="https://pic.imgdb.cn/item/673af4c2d29ded1a8c6e55a2.png" alt=""></p>
+<p>抓包发现在<code>upload</code>文件下<code>upload</code>文件的<code>public</code>模块</p>
+<p>追踪到<code>uploadAction.php</code>里面的<code>upfileAjax</code></p>
+<p><img src="https://pic.imgdb.cn/item/673af651d29ded1a8c6fc8f5.png" alt=""></p>
+<p>主要是对上传文件的限制，使得他按照要求进行上传，里面调用了c函数，跳转到C函数中发现包含了<code>uploadchajian.php</code></p>
+<p><img src="https://pic.imgdb.cn/item/673b06a0d29ded1a8c80f1f7.png" alt=""></p>
+<p>回到原来的代码中发现第49行调用了up函数，跳转查看</p>
+<p><img src="https://pic.imgdb.cn/item/673b12a0d29ded1a8c8f6af3.png" alt=""></p>
+<p><code>issavefile()</code>方法是用来进行后缀判断的</p>
+<p><img src="https://pic.imgdb.cn/item/673b14e6d29ded1a8c92087f.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673b14a3d29ded1a8c91b1b2.png" alt=""></p>
+<p>白名单绕过，如果不在的话调用<code>filesave</code>函数</p>
+<p><img src="https://pic.imgdb.cn/item/673b15c5d29ded1a8c92f750.png" alt=""></p>
+<p>这段是读取我们上传的文件内容并保存为base64编码格式，然后将代码保存为uptemp文件，最后进行删除，</p>
+<p><img src="https://pic.imgdb.cn/item/673b16bdd29ded1a8c941bf8.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673b1708d29ded1a8c947201.png" alt=""></p>
+<p>回到 <code>upfileAciton()</code> 方法中， <code>$upses</code> 接收 <code>up()</code> 方法返回的数据并将数据通过 <code>downChajian.php</code> 中<code>uploadback()</code> 方法备份到数据库，并以json形式返回</p>
+<p><img src="https://pic.imgdb.cn/item/673b179ad29ded1a8c953457.png" alt=""></p>
+<p>我们发现这里上传到的.php文件后缀会被替换为 .uptemp 后缀的文件，并返回了上传路径</p>
+<p>但是我们在进行关键函数的检索的时候发现了一个可以解密base64的地方，并且可以通过控制id来还原<code>.uptemp</code>后缀文件为之前上传的后缀</p>
+<p><img src="https://pic.imgdb.cn/item/673b1a42d29ded1a8c988212.png" alt=""></p>
+<p>从这一段可以看出是上面上传处理的一个反向操作，并且通过<code>fileid</code>来控制</p>
+<p><img src="https://pic.imgdb.cn/item/673b1a8bd29ded1a8c98daf3.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673dba0fd29ded1a8ce74350.png" alt=""></p>
+<p>联系上面是fileid参数来控制上传的文件使其还原</p>
+<p>所以我们可以通过更改fileid来控制</p>
+<h3>渗透测试</h3>
+<p>将fileid替换为我们上传的文件的id</p>
+<p><img src="https://pic.imgdb.cn/item/673b1b16d29ded1a8c99869b.png" alt=""></p>
+<p>发现之前的.uptemp确实是可以被替换为.php文件后缀</p>
+<p><img src="https://pic.imgdb.cn/item/673b1b38d29ded1a8c99b1da.png" alt=""></p>
+<h2>文件包含</h2>
+<p>在<code>include_once</code>的时候发现一个<code>mpathname</code>可控，</p>
+<p><img src="https://pic.imgdb.cn/item/673ca031d29ded1a8cffcf11.png" alt=""></p>
+<p>所以我们尝试跟踪这个发现他在上面被赋值了，就是71行的<code>$tplpaths.$tplname</code>
+下面我们发现<code>tplname</code>的后缀是限制限制死的只能为html</p>
+<p><img src="https://pic.imgdb.cn/item/673ca045d29ded1a8cffdeea.png" alt=""></p>
+<p>我们跟踪另外一个<code>mpathname</code>，他的代码说明是检查<code>$xhrock-&gt;displayfile</code>是否不为空，检查文件是否存在，然后重点关注这个<code>xhrock</code>,回溯到上面的是新建一个实例，然后接着回溯这个返现是可以通过控制<code>$m</code>来控制的</p>
+<p><img src="https://pic.imgdb.cn/item/673ca15dd29ded1a8c00d7b1.png" alt=""></p>
+<p>而这里的$m是通过前端传入的</p>
+<p><img src="https://pic.imgdb.cn/item/673ca241d29ded1a8c01a37e.png" alt=""></p>
+<p>但这里想要进入34行的if判断必须存在 $actfile 文件,而这里的 $actfile 变量是通过代码30行进行处理的。我们跟进 strformat() 函数</p>
+<p><img src="https://pic.imgdb.cn/item/673ca299d29ded1a8c01ec8a.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673ca6e5d29ded1a8c059644.png" alt=""></p>
+<p>这两个的大概内容是找到对应的php文件，而上述代码30行的<code>$m</code>是可控的,所以回到<code>xhrock</code>看<code>displayfile</code>可控的地方</p>
+<p><img src="https://pic.imgdb.cn/item/673ca7c2d29ded1a8c077d5b.png" alt=""></p>
+<p>找到这个</p>
+<p><code>indexAction.php</code>的 <code>getshtmlAction</code> 函数中的 <code>displayfile</code> 变
+量是通过 <code>$file</code> 进行赋值的，而 <code>$file</code> 中的 <code>$surl</code>参数是前端可控的，所以这里可以包含任意的php后缀文件。
+（记得base64编码）</p>
+<p>而<code>View.php</code>中这里我们可以控制<code>$m</code>来调用<code>indexAction.php</code>文件并且实例化文件中的<code>indexClassAction</code> 类，并且可以任意调用该类下的方法，也就是可以调用 <code>indexClassAction</code> 类下的<code>getshtmlAction</code> 方法</p>
+<p><img src="https://pic.imgdb.cn/item/673ca9acd29ded1a8c0b53f6.png" alt=""></p>
+<h3>渗透测试</h3>
+<p><img src="https://pic.imgdb.cn/item/673ca9dbd29ded1a8c0b8fc0.png" alt=""></p>
+<h2></h2>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

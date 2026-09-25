@@ -1,0 +1,161 @@
+{
+  "name": "随波逐流の旅店",
+  "favicon": "/favicon.ico",
+  "keywords": "vernus,随波逐流の旅店,个人主页,网安,CTF,代码审计,渗透测试,靶场,二次元",
+  "description": "愿终有一天能与你重要的人重逢",
+  "avatarConfig": {
+    "src": "https://pic.imgdb.cn/item/667809e1d9c307b7e9f31ca0.jpg",
+    "size": 150,
+    "round": "full",
+    "style": "wave",
+    "hoverAnimate": "top",
+    "hidden": false,
+    "aloneRight": false
+  },
+  "bgConfig": {
+    "bg": ["/SAO-bg.jpg"],
+    "mbg": ["/SAO-bg.jpg"],
+    "bgStyle": "snow",
+    "blur": "",
+    "cardOpacity": 0.1,
+    "carousel": false,
+    "carouselGap": 5,
+    "transitionTime": 0.7,
+    "transitionStyle": "default",
+    "autoAnimate": false
+  },
+  "globalStyle": {
+    "primaryColor": "#3aa3e3",
+    "theme": "switcher",
+    "weather": true
+  },
+  "layoutConfig": {
+    "gapSize": "lg",
+    "style": "",
+    "istTransition": true
+  },
+  "subTitle": "https://v1.hitokoto.cn?c=a&c=b&c=c",
+  "subTitleConfig": {
+    "typing": true,
+    "loading": "wave",
+    "loopTyping": true,
+    "shadow": false,
+    "typingCursor": true,
+    "showFrom": true,
+    "style": "desc",
+    "gapDelay": 0.05,
+    "content": "欢迎光临，这里是随波逐流の旅店",
+    "desc": "vernus · 一个菜菜的 CTF 玩家，主营 python / 靶场 / 网安知识，偶尔打打 galgame，重度二次元爱好者。"
+  },
+  "links": [
+    {
+      "title": "github",
+      "color": "#24292e",
+      "url": "https://github.com/vernuser",
+      "icon": "github"
+    },
+    {
+      "title": "bilibili",
+      "color": "#0088cc",
+      "url": "https://space.bilibili.com/348470293",
+      "icon": "bilibili"
+    },
+    {
+      "title": "email",
+      "color": "#fd3232",
+      "url": "mailto:vernuser@foxmail.com",
+      "icon": "email"
+    },
+    {
+      "title": "qq",
+      "color": "#dfba00",
+      "url": "http://wpa.qq.com/msgrd?v=3&uin=840683056&site=qq&menu=yes",
+      "icon": "qq"
+    }
+  ],
+  "sites": [
+    {
+      "icon": "https://pic.imgdb.cn/item/6679371cd9c307b7e9e11035.png",
+      "title": "文章归档",
+      "url": "/article-list/",
+      "desc": "69 篇随笔与笔记"
+    },
+    {
+      "icon": "https://pic.imgdb.cn/item/66793bc8d9c307b7e9eaedc2.jpg",
+      "title": "留言板",
+      "url": "https://vernuser.github.io/comments/",
+      "desc": "想来一间足够舒适的房间？"
+    },
+    {
+      "icon": "https://pic.imgdb.cn/item/66793bc8d9c307b7e9eaed7f.jpg",
+      "title": "员工们",
+      "url": "https://vernuser.github.io/link/",
+      "desc": "一路同行的朋友们"
+    },
+    {
+      "icon": "https://pic.imgdb.cn/item/667809e1d9c307b7e9f31ca0.jpg",
+      "title": "关于店长",
+      "url": "https://vernuser.github.io/about/",
+      "desc": "一个菜菜的 ctfer"
+    },
+    {
+      "icon": "https://pic.imgdb.cn/item/672f0557d29ded1a8c33eeeb.png",
+      "title": "主站",
+      "url": "https://vernus.top",
+      "desc": "vernus.top"
+    },
+    {
+      "icon": "https://pic.imgdb.cn/item/66793bc7d9c307b7e9eaeccd.png",
+      "title": "更多站点",
+      "desc": "点开看看还有什么"
+    }
+  ],
+  "sitesConfig": {
+    "hidden": false,
+    "cardStyle": "",
+    "hoverBlur": true,
+    "hoverScale": true,
+    "hoverFlip": true,
+    "direction": "row",
+    "modal": true,
+    "modalTips": "这里放着旅店里的一些东西：早期站点、临时页面，以及全部 69 篇文章的入口，随便逛逛吧~",
+    "modalTitle": "更多站点"
+  },
+  "socialConfig": {
+    "autoAnimate": true,
+    "loading": "wave",
+    "ripple": true
+  },
+  "sliders": {
+    "data": [
+      { "title": "Python", "value": 75 },
+      { "title": "渗透测试", "value": 70 },
+      { "title": "代码审计", "value": 65 },
+      { "title": "内网渗透", "value": 60 },
+      { "title": "CTF 靶场", "value": 70 },
+      { "title": "应急响应", "value": 55 },
+      { "title": "内存取证", "value": 45 },
+      { "title": "Linux", "value": 65 },
+      { "title": "Web 安全", "value": 72 },
+      { "title": "PHP", "value": 60 },
+      { "title": "YAML / 工具链", "value": 50 },
+      { "title": "原型链 / 前端", "value": 40 }
+    ],
+    "title": "技能加点",
+    "color": "linear-gradient(to right, #3aa3e3 0%, #62a33d 100%)",
+    "hidden": false,
+    "column": 4
+  },
+  "footer": {
+    "text": "© 2023 - 2026 By vernus",
+    "url": "https://vernus.top",
+    "direction": "col-reverse",
+    "isExternal": true
+  },
+  "resources": {
+    "css": [],
+    "js": [],
+    "bodyHtml": ""
+  },
+  "domain": "https://vernuser.github.io"
+}

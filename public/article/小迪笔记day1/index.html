@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过</h1>
+    <div class="meta"><span class="chip date">2024-07-30</span><span class="chip">分类·小迪安全</span><span class="chip">#小迪安全</span><span class="chip">#渗透</span></div>
+    <article><h1>名词解释</h1>
+<p>poc：概念验证，常指的是一段漏洞证明的代码</p>
+<p>（就是根据漏洞的一些信息，比如nuclei使用的yaml中，根据baseurl以及一些的raw http进行访问，再通过dsl,words，等进一步确认漏洞存在）</p>
+<p>exp:漏洞利用脚本，不解释</p>
+<p>paylaod：exp成功执行的时候，真正在目标系统执行的代码或指令</p>
+<p>shellcode：指的是漏洞载荷，免杀经常提到</p>
+<p>后门：通称，web网站叫webshell，但是其实还有系统等</p>
+<p>木马：针对电脑的控制</p>
+<p>病毒：破坏性的程序</p>
+<p>反弹：弹shell，将权限转移到其他地方</p>
+<p>跳板：中间的机器，A无法连接B，A可以通过连接B来达到连接C的</p>
+<p><a href="https://www.cnblogs.com/sunny11/p/13583083.html">参考</a></p>
+<h1>文件上传下载</h1>
+<p>linux：wget curl ruby perl java python等</p>
+<p>windows:powershell certutil bitsadmin msiexec mshta rund1132等</p>
+<p><a href="https://blog.csdn.net/weixin_43303273/article/details/83029138">命令</a></p>
+<p><a href="https://forum.ywhack.com/infosec.php">study 棱角社区</a></p>
+<p>需要注意的是下载的文件夹的权限</p>
+<h1>权限</h1>
+<p>root or user</p>
+<p>提权</p>
+<p>前面靶机基本上最后都是提权完成的，我记得以前看了个文章说有100多个提权手法？（忘记了）</p>
+<h1>防火墙</h1>
+<p>windows默认自带windows defender</p>
+<p>linux默认是iptables</p>
+<p>入站出站协议</p>
+<p>传webshell需要交互式 的，（联想到python的哪个命令）</p>
+<p>内外网区分
+<img src="https://pic.imgdb.cn/item/66a8e27ed9c307b7e93458ad.png" alt=""></p>
+<p>所以说靶机尽量不要搞在线靶机</p>
+<p>比如你上fofa搜能找到同行的pikachu，，，还是一堆...</p>
+<p>难崩</p>
+<pre><code class="language-fofa语句">&quot;pikachu&quot; &amp;&amp; country=&quot;CN&quot; &amp;&amp; title=&quot;Get the pikachu&quot;
+</code></pre>
+<p>别干坏事奥</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

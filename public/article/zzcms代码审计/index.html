@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zzcms代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>zzcms代码审计</h1>
+    <div class="meta"><span class="chip date">2024-10-13</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><h2>框架目录</h2>
+<pre><code>/install 安装程序目录（安装时必须有可写入权限）
+/admin 默认后台管理目录（可任意改名）
+/user 注册用户管理程序存放目录
+/skin 用户网站模板存放目录;
+/template 系统模板存放目录;
+/inc 系统所用包含文件存放目录
+/area 各地区显示文件存放目录
+/zhaoshang 招商程序文件存放目录
+/daili 代理
+/zhanhui 展会
+/company 企业
+/job 招聘
+/zixun 资讯
+/special专题
+/pinpai 品牌
+/wangkan 网络刊物
+/zhanting 注册用户展厅页程序
+/one 专存放单页面，如公司简介页，友情链接页，帮助页都放在这个目录里了
+/ajax ajax程序处理页面
+/reg 用户注册页面
+/3 第三方插件存放目录
+  /3/ckeditor CK编缉器程序存放目录
+  /3/alipay 支付宝在线支付系统存放目录
+  /3/tenpay 财富通在线支付系统存放目录
+  /3/qq_connect2.0 qq登陆接口文件
+  /3/ucenter_api discuz论坛用户同步登陆接口文件
+  /3/kefu 在线客服代码
+  /3/mobile_msg 第三方手机短信API
+  /3/phpexcelreader PHP读取excel文件组件
+/cache 缓存文件放目录
+/html 生成的静态页存放目录
+/uploadfiles 上传文件存放目录
+/daili_excel 要导入的代理信息excel表格文件上传目录
+/image 程序设计图片,swf文件存放目录
+/flash 展厅用透明flash装饰动画存放目录
+/js js文件存放目录
+/web.config 伪静态规则文件适用于 iis7服务器(万网比较常用)
+/httpd.ini 伪静态规则文件适用于 iis6服务器
+/.htaccess 伪静态规则文件适用于Apache 服务器
+/nginx.conf 伪静态规则文件适用Nginx服务器
+
+</code></pre>
+<h2>前台任意文件写入</h2>
+<p>使用Fortify自动审计工具时发现可能存在一个xxe漏洞，</p>
+<p><img src="https://pic.imgdb.cn/item/670bd341d29ded1a8c22360b.png" alt=""></p>
+<p><code>xml_parse</code>解析xml文档，搜索他的方法<code>parse</code></p>
+<p><img src="https://pic.imgdb.cn/item/670be4bdd29ded1a8c316f6f.png" alt=""></p>
+<p>发现<code>xml_unserialize</code>对<code>parse()</code>函数进行了调用，再去搜索</p>
+<p><img src="https://pic.imgdb.cn/item/670ca7d5d29ded1a8cb97562.png" alt=""></p>
+<p>这里是从post中获取原始的数据流</p>
+<p>上面的ertu<code>parse_Str</code>是将解码后的字符串解析为变量并存储在<code>$get</code>中，而上面的<code>$code</code>可控，而<code>$code</code>经过<code>_authcode</code>的处理，跟进一下发现大概是加解密字符串的,<code>$string</code>是需要加解密的字符串，也就是<code>$code</code>，$operation 默认为DECODE也就是解密字符串，而 $key 则为加解密的秘钥。</p>
+<blockquote>
+<p>他说这里的默认密钥是123456，我真没看出来那里说了是123456</p>
+</blockquote>
+<p><img src="https://pic.imgdb.cn/item/670cb03bd29ded1a8cbfbc47.png" alt=""></p>
+<p>因为<code>code</code>可控，所以下面的<code>$time,$action</code>可控</p>
+<p>59行判断传入的<code>$action</code>是否在数组中,是的话继续运行并讲<code>$get,post</code>以参数形式传输，所以<code>$get,post</code>也可控</p>
+<p><img src="https://pic.imgdb.cn/item/670cb021d29ded1a8cbfab99.png" alt=""></p>
+<p>所以我们可以去数组中找找有没有危险操作的</p>
+<p><code>updateapps</code>里面有一个<code>fwrite</code>,接收的<code>UC-API</code>可控，而且下面的fwrite是将我们输入的信息进行正则匹配进行替换，所以可以实现任意文件读写</p>
+<p><img src="https://pic.imgdb.cn/item/670cb35ed29ded1a8cc1fae5.png" alt=""></p>
+<h3>测试</h3>
+<p>因为这里的东西限制了我们两条</p>
+<p><img src="https://pic.imgdb.cn/item/670cf31fd29ded1a8c04ac38.png" alt=""></p>
+<ol>
+<li><code>$timestamp - $get[&#39;time&#39;] &gt; 3600</code></li>
+<li><code>$get[&#39;action&#39;]=updateapps;</code></li>
+</ol>
+<p>并且要经过_authcode（）解码，所以我们要先讲<code>$code</code>编码</p>
+<p>这里我也找到了<code>UC-KEY</code>---他在配置文件中说是默认为123456，也就解释了上面的123456的默认</p>
+<p><img src="https://pic.imgdb.cn/item/670cfc0bd29ded1a8c0e4d6e.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670d0d19d29ded1a8c270940.png" alt=""></p>
+<p>这里说明了要按照xml的格式进行编写，所以就有了</p>
+<p><img src="https://pic.imgdb.cn/item/670cfc81d29ded1a8c0edb68.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670cfc9bd29ded1a8c0ef622.png" alt=""></p>
+<h2>任意文件删除</h2>
+<p>全局搜索<code>unlink</code>的时候发现这么一个东西</p>
+<p><img src="https://pic.imgdb.cn/item/670d1e79d29ded1a8c3cc9bb.png" alt=""></p>
+<p>追踪一下<code>unlink</code>的<code>file</code>发现<code>action</code>和<code>mlname</code>可控</p>
+<p><img src="https://pic.imgdb.cn/item/670d1fb3d29ded1a8c3ddba1.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670d202fd29ded1a8c3e5137.png" alt=""></p>
+<p>这里的<code>mlname</code>可控，他传入文件夹名给<code>ml</code>然后遍历整个文件夹下的文件，最将文件名赋值给<code>file</code>然后通过<code>unlink</code>删除</p>
+<p>当文件夹下的文件全部被删除后再通过<code>rmdir</code>删除传入的文件夹</p>
+<p>payload：</p>
+<pre><code>/admin/uploadfile_nouse.php?action=del&amp;mlname=..\文件夹名字
+</code></pre>
+<h2>前端xss漏洞</h2>
+<p>该系统没有按照mvc开发模式进行开发，导致大部分前后端代码都在一个php文件中，</p>
+<p><img src="https://pic.imgdb.cn/item/670def3bd29ded1a8cd10b09.png" alt=""></p>
+<p>这里的两个参数<code>imgid</code>和<code>noshuiyin</code>参数可控，</p>
+<p><img src="https://pic.imgdb.cn/item/670dfa34d29ded1a8cd9de07.png" alt=""></p>
+<h2>sql注入</h2>
+<p>这里的<code>classname</code>是可控的，从上面要求<code>action=modify</code>是一个条件，</p>
+<p><img src="https://pic.imgdb.cn/item/6710c0a3d29ded1a8c00f6b5.png" alt=""></p>
+<p>从这php开头可以看到<code>dowhat</code>是可控的</p>
+<p><img src="https://pic.imgdb.cn/item/6710c098d29ded1a8c00ed73.png" alt=""></p>
+<p>所以应该还有个条件是<code>dowhat=modifybigclass</code></p>
+<p><img src="https://pic.imgdb.cn/item/6710c13dd29ded1a8c016c12.png" alt=""></p>
+<pre><code>payload=classname= xxxxxxx（自己填写sql语句）
+</code></pre>
+<h2>总结：</h2>
+<ol>
+<li>如果限制了登录失败次数像是10次这种，可以看源码中是否通过ip来进行限制的，如果是的话可以在爆破的时候将ip的第一位也爆破一下</li>
+<li>sql注入的相关漏洞可以看<code>select *</code>这种的东西，后面看是否传入的参数可控</li>
+<li>还是危险函数</li>
+<li>在正常的使用中可能有些不是传统的mvn框架所以我们要对目事先录框架进行分析</li>
+<li>可以使用Fortify以及seay等工具对参数先进行分析，这样方便我们后期的审计</li>
+</ol>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

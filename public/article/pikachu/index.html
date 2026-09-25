@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pikachu---爆破 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>pikachu---爆破</h1>
+    <div class="meta"><span class="chip date">2023-03-19</span><span class="chip">分类·靶场</span><span class="chip">#靶场</span></div>
+    <article><p><a href="https://note.youdao.com/s/AmDlcdeg">https://note.youdao.com/s/AmDlcdeg</a></p>
+<p>pikachu验证码绕过</p>
+<p><a href="https://note.youdao.com/s/cCN1K9ys">https://note.youdao.com/s/cCN1K9ys</a></p>
+<p>pikachu验证码绕过（on cilent）</p>
+<p><a href="https://note.youdao.com/s/DSGjveVc">https://note.youdao.com/s/DSGjveVc</a></p>
+<p>pikachu中token防爆破</p>
+<h3>Web登录防爆破的原理和实现</h3>
+<p><a href="https://www.cnblogs.com/cx59244405/p/10410746.html">https://www.cnblogs.com/cx59244405/p/10410746.html</a></p>
+<h5>ddos攻击：一般指分布式拒绝服务攻击</h5>
+<blockquote>
+<p>一.基于自动化程序分类</p>
+<p>1.手工的DDoS攻击：早期的DDoS攻击全是采用手动配置的，即发动DDoS攻击时，扫描远端有漏洞的计算机，侵入他们并安装代码</p>
+<p>2.半自动化的DDoS攻击:攻击者使用自动化的Script来扫描，主控端的机器对主控端和代理端之间进行协商攻击的类型、受害者的地址、何时发起攻击等信息由进行详细记录。</p>
+<p>3、自动化的DDoS攻击。</p>
+<p>在这类攻击中。攻击者和代理端机器之间的通信是绝对不允许的。这类攻击的攻击阶段绝大部分被限制用一个单一的命令来实现，攻击的所有特征，例如攻击的类型，持续的时间和受害者的地址在攻击代码中都预先用程序实现。 [4]</p>
+<p>二、基于系统及协议的弱点分类</p>
+<p>1、洪水攻击。</p>
+<p>在<a href="https://baike.baidu.com/item/%E6%B4%AA%E6%B0%B4%E6%94%BB%E5%87%BB/8826972?fromModule=lemma_inlink">洪水攻击</a>中。傀儡机向受害者系统发送大量的数据流为了充塞受害者系统的带宽，影响小的则降低受害者提供的服务，影响大的则使整个网络带宽持续饱和，以至于网络服务瘫痪。典型的洪水攻击有UDP洪水攻击和ICMP洪水攻击。 [4]</p>
+<p>2、扩大攻击。</p>
+<p>扩大攻击分为两种，一种是利用广播lP地址的特性，一种是利用反射体来发动攻击。前一种攻击者是利用了广播IP地址的特性来扩大和映射攻击，导致路由器将数据包发送到整个网络的广播地址列表中的所有的广播IP地址。这些恶意的流量将减少受害者系统可提供的带宽。典型的扩大攻击有Smurf和Fraggle攻击。 [4]</p>
+<p>3、利用协议的攻击。</p>
+<p>该类攻击则是利用某些协议的特性或者利用了安装在受害者机器上的协议中存在的漏洞来耗尽它的大量资源。典型的利用协议攻击的例子是TCP SYN攻击。 [4]</p>
+<p>4、畸形数据包攻击。</p>
+<p>攻击者通过向受害者发送不正确的IP地址的数据包，导致受害系统崩溃。畸形数据包攻击可分为两种类型：IP地址攻击和IP数据包属性攻击。 [4]</p>
+<p>三、基于攻击速率分类</p>
+<p>DDoS攻击从基于速率上进行分类，可以分为持续速率和可变速率的攻击。持续速率的攻击是指只要开始发起攻击，就用全力不停顿也不消减力量。像这种攻击的影响是非常快的。可变速率的攻击，从名字就可以看出，用不同的攻击速率，基于这种速率改变的机制，可以把这种攻击分为增加速率和波动的速率。 [4]</p>
+<p>四、基于影响力进行分类</p>
+<p>DDoS攻击从基于影响力方面可以分为网络服务彻底崩溃和降低网络服务的攻击。服务彻底崩溃的攻击将导致受害者的服务器完全拒绝对客户端提供服务。降低网络服务的攻击，消耗受害者系统的一部分资源，这将延迟攻击被发现的时间，同时对受害者造成一定的破坏。 [4]</p>
+<p>五、基于入侵目标分类</p>
+<p>DDoS攻击从基于入侵目标，可以将DDoS攻击分为带宽攻击和连通性攻击，带宽攻击通过使用大量的数据包来淹没整个网络，使得有效的网络资源被浪费，合法用户的请求得不到响应，大大降低了效率。而连通性攻击是通过发送大量的请求来使得计算机瘫痪，所有有效的操作系统资源被耗尽，导致计算机不能够再处理合法的用户请求。 [4]</p>
+<p>六、基于攻击路线分类</p>
+<p>1、直接攻击：攻击者和主控端通信，主控端接到攻击者的命令后，再控制代理端向受害者发动攻击数据流。代理端向受害者系统发送大量的伪IP地址的网络数据流，这样攻击者很难被追查到。 [4]</p>
+<p>2、反复式攻击通过利用反射体，发动更强大的攻击流。<a href="https://baike.baidu.com/item/%E5%8F%8D%E5%B0%84%E4%BD%93/1614339?fromModule=lemma_inlink">反射体</a>是任何一台主机只要发送一个数据包就能收到一个数据包，反复式攻击就是攻击者利用中间的<a href="https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/9338583?fromModule=lemma_inlink">网络节点</a>发动攻击。 [4]</p>
+<p>七、基于攻击特征分类</p>
+<p>从攻击特征的角度，可以将DDoS攻击分为攻击行为特征可提取和攻击行为特征不可提取两类。攻击行为特征可提取的DDoS攻击又可以细分为可过滤型和不可过滤型。可过滤型的DDoS攻击主要指那些使用畸形的非法数据包。不可过滤型DDoS攻击通过使用精心设计的数据包，模仿合法用户的正常请求所用的数据包，一旦这类数据包被过滤将会影响合法用户的正常使用。 [4]</p>
+</blockquote>
+<p>以上来自百度百科（没想到吧哈哈哈哈<img src="https://img2.baidu.com/it/u=3863236755,305052694&fm=253&fmt=auto&app=138&f=JPEG?w=300&h=300" alt="img">)</p>
+<h6>DDoS的工作原理</h6>
+<p>在DDoS共计期间，一系列机器人活着僵尸网络会用HTTP请求和流量攻占网站或服务。从本质上来讲，在攻击期间会有多台计算机攻击一台计算机，导致将合法用户推出。因此网络可能会延迟或中断一段时间。</p>
+<p>在共计期间，黑客可能会深入数据库以访问各种敏感信息。DDoS攻击可以利用安全漏洞冰攻击可通过Internet公开访问的任何终结点。</p>
+<p>拒绝服务攻击可能会持续几小时，甚至几天。这些网络攻击还可能在一次攻击中造成多项破坏。个人和企业设备都容易受到此类攻击。</p>
+<h4>1.防护软件/硬件Waf(Web应用防火墙)/Web服务器限制单IP固定时间段的登陆频率</h4>
+<ul>
+<li>所以可以使用WAF来实现对某个IP访问过高时将其IP加入黑名单隔离</li>
+<li>通过Nginx等web服务器可以实现限制单IP固定时间段的登录频率，也就是限制流量</li>
+<li>可以防爆破的同时一定程度上防止DDoS攻击</li>
+</ul>
+<h6>nginx配置</h6>
+<pre><code>https://www.runoob.com/w3cnote/nginx-setup-intro.html
+</code></pre>
+<p>但是这样也有问题，攻击者可以通过代理池的方式绕过</p>
+<p>代理池：一组受管理的代理，代理池充当计算机和网络之间的中介，将请求路由到网站并显示自己的IP地址，同时隐藏自己的IP</p>
+<ul>
+<li>（因为代理池中有很多的IP地址，相当于你连接到代理池，再从代理池换了一个IP连接到你所要去的网站）</li>
+</ul>
+<h4>2.WebApp限制单用户固定时间段的登录频率</h4>
+<p>就跟手机密码试错一样，错误几次以上就锁账号，能一定程度上的防止</p>
+<p>但这样也有问题，可以故意使用错误密码使得原来的用户也不能登陆</p>
+<h5>重放攻击</h5>
+<p>又称之为重播攻击，是指攻击者发送一个目的主机已接收过得包来达到欺骗系统的目的</p>
+<pre><code>其实他的意思就是攻击者把服务器收到过的数据包反复请求，由于是已经拒收岛国的数据包，如果服务器防范不当的话接口可以通过身份验证，就跟pikachu的验证码绕过一样，重发的包是服务器接受过的，而且验证码还没变，所以可以通过爆破账号密码来进行攻击
+</code></pre>
+<h4>3.图片验证码（扭曲+干扰+数字+字母+阴影+随机颜色）</h4>
+<p>我相信各位登录王网站的时候肯定会输入过一些验证码，像是这样的</p>
+<p><img src="https://s2.loli.net/2023/03/21/3jRAkKbfhrN2pO6.gif" alt="44770e5bc70fa816a0df9da07816e28c.gif"></p>
+<p>这样是为了防止重放攻击</p>
+<p><em>但是这样的问题就是验证码不能放在session中，因为重放攻击每次的session都不变，去session中核对验证码每次都是不变的</em></p>
+<h5>session,PHP语言</h5>
+<blockquote>
+<p>string <strong>session_cache_limiter</strong> ( [string cache_limiter]) 函数返回当前缓存限制的名字. 如果指定了 cache_limiter， 当前的缓存限制的名字被改为新值。</p>
+</blockquote>
+<p>​                                                ----------------------来自百度百科</p>
+<p>但实际上吧，session和cookie功能其实差不多，他们的区别在于session记录在服务器，cookie记录在客户端</p>
+<p>session就是在服务器内开辟一块内存，这个session只允许当前服务器使用，即使是新开了一个服务器也无法使用当前这个session</p>
+<p>（硬要说的话，就像是你通过steam要买一个游戏，你在购物车选好以后要跳付款界面，没有session的话付款界面怎么知道你要付的款项呢（如果不想知道的话我感觉表票也不是不能接受））</p>
+<p>那问题来了，浏览器怎么知道你应该付的是这个款项而不是其他的呢，比如你买一个永劫，但给你跳转了一个尼尔机械纪元的钱，这不血亏。（反过来我倒是可以小小的将就一下（&lt;^__^&gt;）</p>
+<p>其实这种情况是不可能出现的，当访问一个页面的时候，会给服务器一个unique的号码，而这个号码也会同时共享给session,当访问第二个页面的时候，会将这个号码同步传递到第二个页面。</p>
+<p>4.IP段黑白名单</p>
+<p>就是Ban了某些IP</p>
+<h3>XSS（跨站脚本）</h3>
+<p>cross-site scripting，简称CSS，但是前端叠层样式表缩写也是css，所以就叫xss喽</p>
+<p>反射型XSS</p>
+<p>存储型XSS</p>
+<p>DOM型XSS</p>
+<h4>反射型XSS</h4>
+<p>一种非持久的攻击，做法是：恶意攻击者往web页面中插入恶意代码，当用户浏览这一页的时候，嵌入其中Web里面的html代码会被执行，从而达到恶意攻击用户的目的。这里的恶意插入的代码并没有保存在目标页面中，需要引诱用户点击一个链接到目标网站的恶意链接来实施攻击。</p>
+<p><a href="https://blog.csdn.net/bwxzdjn/article/details/123645177">https://blog.csdn.net/bwxzdjn/article/details/123645177</a></p>
+<pre><code>简单来说就是
+网站上附着一个链接，这个链接是恶意攻击者的恶意链接，用户点进去以后就会进入恶意攻击者的网站，恶意攻击者就会知道用户的信息
+</code></pre>
+<p><img src="https://typorazhd.oss-cn-beijing.aliyuncs.com/image-20221208143205877.png" alt="image-20221208143205877"></p>
+<h4>pikuchu靶场反射型xss(get)</h4>
+<p>随便输入一个&#39;&quot;&lt;&gt;输出结果是</p>
+<p><img src="https://s2.loli.net/2023/03/21/elbXhvtZz8iro7k.png" alt="image-20230321135824714.png"></p>
+<p>这能忍？反手就是一个ctrl -u</p>
+<p>（这里我是页面自动翻译了，理论上应该是who is &#39;&quot;&lt;&gt;,i don&#39;t care）</p>
+<p>直接Ctrl -f搜索who is</p>
+<p><img src="https://s2.loli.net/2023/03/21/1iwplsH72PL3qJD.png" alt="image-20230321135703131.png"></p>
+<p>好，确定是反射型的xss(好像说了句废话的骄傲)</p>
+<p><img src="https://s2.loli.net/2023/03/21/9DiamckuOMgP2G7.png" alt="image-20230321142115407.png"></p>
+<p>这里看到了限制字符长度是20，弹药输入的肯定高于20个，需要在控制台中修改</p>
+<p>打开控制台，搜索maxlength的时候无意中发现这么一个东西</p>
+<p><img src="https://s2.loli.net/2023/03/21/LJbPXwfscC7hixF.png" alt="image-20230321142052781.png"></p>
+<p>输进去瞅瞅</p>
+<p><img src="https://s2.loli.net/2023/03/21/pBT5HWQKe4nJvYz.png" alt="image-20230321142240712.png"></p>
+<p>挖趣，他真的，我哭死</p>
+<p>但这也不能阻止我搞他</p>
+<p>输入<script>alert("xss")<script>构建弹窗</p>
+<p>很好，没有弹</p>
+<p>问题出在<script>alert("xss")</script></p>
+<p><img src="https://s2.loli.net/2023/03/21/5jwvFCxpzlZ8WJU.png" alt="image-20230321142623029.png"></p>
+<p>呜呼~起飞</p>
+<h4>pikuchu靶场存储型xss</h4>
+<p>据说存储型的和反射型的原理是一样的，但是存储型的是</p>
+<p>持久性的，他会将你输入的注入到后端数据库去</p>
+<p>存储型和反射型的差别在于我们每次去刷新页面还是会弹出这个窗口，因为我们刚才的留言已经保存在数据库里了。我们每次打开网页，都会从数据库中把这个留言加载出来，触发这个脚本的运行。</p>
+<p>所以这道题我直接删payload了</p>
+<pre><code>&lt;script&gt;alter(&quot;xss&quot;)&lt;/script&gt;
+</code></pre>
+<h4>pikuchu靶场DOM型xss</h4>
+<p>Hexo不好贴图，我就放在了有道云里面</p>
+<h4>pikachu靶场盲打</h4>
+<p>并不是一种xss漏洞的类型，其实说的是一种xss的攻击场景。</p>
+<p>我直接输入</p>
+<pre><code>&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;
+</code></pre>
+<p>正面一无所有，所以我看了眼提示进了后台，账号admin密码123456提示里面有，进入以后就弹出了xss的通知</p>
+<h4>pikachu靶场过滤</h4>
+<p>绕过姿势我看了几种</p>
+<ol>
+<li><h5>大小写绕过</h5>
+<pre><code>&lt;ScRiPt&gt;alert(&quot;xsS&quot;)&lt;/ScRiPt&gt;
+</code></pre>
+</li>
+<li><h5>img标签</h5>
+<pre><code>&lt;img src=# onerror=alert(&quot;xss&quot;) /&gt;
+</code></pre>
+</li>
+</ol>
+<h4>pikachu靶场htmlspecialchars</h4>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

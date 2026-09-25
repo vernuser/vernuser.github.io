@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI study · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>AI study</h1>
+    <div class="meta"><span class="chip date">2026-02-07</span><span class="chip">分类·ai</span><span class="chip">#ai</span></div>
+    <article><h1>1. LangChain</h1>
+<p>LangChain是一个快速构建LLM代理和应用的方法，他提供与构建的代理架构和模型集成，只需要输入api就可集成LLM。</p>
+<h2>1.1 LangChain核心功能</h2>
+<table>
+<thead>
+<tr>
+<th>模块类别</th>
+<th>示例功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>模块接口封装</td>
+<td>OpenAI、Claude、Cohere、Qwen 等模型统一调用方式</td>
+</tr>
+<tr>
+<td>输出结构化</td>
+<td>自动从模型中解析 JSON、Schema、函数签名、文档等</td>
+</tr>
+<tr>
+<td>Memory管理</td>
+<td>Buffer、Summary、Entity、Conversation Memory 等</td>
+</tr>
+<tr>
+<td>Tool 接入</td>
+<td>Web 搜索、SQL 数据库、Python 执行器、API 代理等</td>
+</tr>
+<tr>
+<td>Agent 架构</td>
+<td>ReAct、Self-Ask、OpenAI Function Agent 等调度机制</td>
+</tr>
+<tr>
+<td>RAG继承</td>
+<td>多种 Retriever、Vector Store、文档拆分策略</td>
+</tr>
+<tr>
+<td>Server/API 发布</td>
+<td>快速将链部署为 Web 服务或 A2A Agent</td>
+</tr>
+<tr>
+<td>Debug &amp; Callback</td>
+<td>Token 使用统计、LangSmith 可视化追踪等</td>
+</tr>
+</tbody></table>
+<p>可以说LangChain不仅仅是智能体开发应用的简单框架，更是模型应用组装的工具箱。</p>
+<h2>1.2 LangChain核心架构</h2>
+<p>LangChain核心架构大致分为三层</p>
+<ol>
+<li><p>最底层的<strong>大模型API抽象层</strong>：内置开源模型调度框架封装API；中转&amp;聚合平台封装API；其他自定义第三方模型封装API</p>
+</li>
+<li><p>中间层的<strong>工作流API抽象层</strong>：在确保模型接入后，LangChain有定义了一整套LCEL（LangChain Expression Language）语法，以方便开发者能够非常便捷的将提示词模板、大模型以及一些外部工具进行组合拼装，搭建一些工作流</p>
+</li>
+<li><p>最顶层的<strong>AGENT API抽象层</strong>：封装LangChain Agent基础封装逻辑，创建方法和编排方法。内置工具组调用方法等</p>
+</li>
+</ol>
+<h1>2.LangGraph</h1>
+<p>LangChain和LangGraph是并列存在的，底层架构同源，接口完全相同，区别在于LangChain是链式结构而LangGraph是图装结构</p>
+<h1>3.NLP</h1>
+<p>NLP（Nation Language Processing）,自然语言处理，是计算机科学，人工智能和语言学的交叉领域，研究如何让计算机处理、理解、生成人类语言。</p>
+<p>NLP发展历程可大致分为四个阶段：</p>
+<ol>
+<li>早期研究，侧重于人工写的规则和语法，如基于规则的方法</li>
+<li>统计方法：引入数学和溶剂方法，侧重于从大规模语料库中自动学习语言规律，如隐马尔可夫模型（HMM），条件随机场（CRF）</li>
+<li>深度学习：基于审计网络，强调自动提取和端到端的训练，如循环神经网络(RNN)，长短时记忆网络（LSTM）等</li>
+<li>预训练模型：基于大规模数据和深度学习模型的与训练方法，提升了NLP任务的性能，如GPT，BERT，T5</li>
+</ol>
+<p>从上述发展历程中可以直观地看出，NLP模型发展趋势是参数量和通用性的双重提升</p>
+<h2>基于神经网络的方法</h2>
+<p>代表性又RNN循环神经网络和LSTM长短时记忆网络</p>
+<h3>时序网络模型</h3>
+<h4>RNN（循环神经网络）</h4>
+<p>是按时间序列的前馈神经网络模型</p>
+<p>训练后可处理书讯数据输入，并将其转换为特定的顺序数据输出；</p>
+<p>问题：</p>
+<p><a href="https://imgchr.com/i/pZzt1qe"><img src="https://s41.ax1x.com/2026/02/27/pZzt1qe.png" alt="pZzt1qe.png"></a></p>
+<ul>
+<li>训练速度慢：时间序列处理</li>
+<li>记忆时间短：记住后面的Token，容易忘记前面的</li>
+<li>梯度消失或者梯度爆炸</li>
+</ul>
+<h4>LSTM（Long Short-Term Memory）</h4>
+<p>是一种特殊的RNN网络，主要是为了环节RNN在处理上序列训练时的梯度消失或者梯度爆炸</p>
+<p>加入了Forget Gate,Input Gate,Output Gate;</p>
+<p>问题：</p>
+<ul>
+<li>训练速度更慢</li>
+<li>短期记忆和梯度问题未完全解决</li>
+</ul>
+<p><a href="https://imgchr.com/i/pZztTo9"><img src="https://s41.ax1x.com/2026/02/27/pZztTo9.png" alt="pZztTo9.png"></a></p>
+<h4>Encoder-Decoder结构模型</h4>
+<p>Seq to Seq（序列到序列）是一种特殊的数列建模问题，主要包括编码器和解码器，Encoder将输入序列进行处理，得到向量，向量输入到Decoder转化成想要的输出</p>
+<p><a href="https://imgchr.com/i/pZztqRx"><img src="https://s41.ax1x.com/2026/02/27/pZztqRx.png" alt="pZztqRx.png"></a></p>
+<h4>Transformer</h4>
+<p>Transformer架构为左边Encoder右边Decoder结构，如下图所示
+<a href="https://imgchr.com/i/pZztXQK"><img src="https://s41.ax1x.com/2026/02/27/pZztXQK.png" alt="pZztXQK.png"></a></p>
+<p>从网络结构角度来看，Transformer中Encoder与Decoder的主要区别在于Self-Attention机制的Mask应用。具体而言，Encoder在计算Self-Attention时不使用Mask，而Decoder则引入了Mask操作。</p>
+<p>从训练和预测过程来看，训练阶段Encoder和Decoder均可并行计算；但在预测阶段，仅Encoder支持并行计算，Decoder则需顺序处理。</p>
+<h4>Self Attention</h4>
+<p>Self attention最重要的组成部分是QKV三个向量</p>
+<p>Query：查询当前单词表示用于与其他所有单词进行评分</p>
+<p>Key：关键向量就像是单中所有单词的标签</p>
+<p>Value：值向量是实际的单词表示，一旦堆某个单词进行评分，这些数值就会相加表示当前的单词。</p>
+<p>在Attention模块中的，对当前Q和所有的K计算相似度，然后通过Softmax操作得到权重，最后根据权重与对应的V成绩求和，得到Attention的Value值。</p>
+<p><a href="https://imgchr.com/i/pZzNmwQ"><img src="https://s41.ax1x.com/2026/02/27/pZzNmwQ.png" alt="pZzNmwQ.png"></a></p>
+<p>因此，在Attention中的Scaled dot-product attention运算为</p>
+<p><a href="https://imgchr.com/i/pZzNGOU"><img src="https://s41.ax1x.com/2026/02/27/pZzNGOU.png" alt="pZzNGOU.png"></a></p>
+<p>简单来说就像是在图书馆取书，Query查询含有目标tag的书架，Key就是每个书架上贴的tag，Value就是里面书的内容，不过在实际应用中往往不是单一数值。而是多个不同信息的组合。</p>
+<p>通过将Q向量与每一个K向量相乘（点积运算后加上Softmax运算），可以为每个文件计算出来一个得分。</p>
+<h4>Multi-head attention</h4>
+<p>多头注意力机制是进行多个Self-Attention的结合，每个head都会学到不同表示空间中的特征</p>
+<p><a href="https://imgchr.com/i/pZzNXhn"><img src="https://s41.ax1x.com/2026/02/27/pZzNXhn.png" alt="pZzNXhn.png"></a>
+<a href="https://imgchr.com/i/pZzNvpq"><img src="https://s41.ax1x.com/2026/02/27/pZzNvpq.png" alt="pZzNvpq.png"></a></p>
+<h3>其他网络结构</h3>
+<ol>
+<li><p>Norm：对数据归一化，将数据约束到高斯分布上，稳定训练；</p>
+</li>
+<li><p>Add&amp;Residual：残差相加，避免梯度消失，构建更深的网络；</p>
+</li>
+<li><p>Feed Forward：将数据转化为非线性，更好表征复杂关系；</p>
+</li>
+<li><p>Masked Multi Head Attention：在Decoder中，将MHA中的矩阵与右上角进行掩码的矩阵相乘，其他操作与MHA相同；</p>
+</li>
+<li><p>Softmax：在模型的Decoder之后进行归一化，得到概率输出。</p>
+</li>
+</ol>
+<p>未完待续</p>
+<p><a href="https://news.qq.com/rain/a/20250930A01RD100">https://news.qq.com/rain/a/20250930A01RD100</a></p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

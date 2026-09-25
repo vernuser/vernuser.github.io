@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hadcms代码审计 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>hadcms代码审计</h1>
+    <div class="meta"><span class="chip date">2024-10-26</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+    <article><h2>任意文件写入</h2>
+<p>全局搜索<code>file_put_contents</code>的时候发现</p>
+<p><img src="https://pic.imgdb.cn/item/671ca80fd29ded1a8c0310e4.png" alt=""></p>
+<p>往上回溯发现它是通过weitch..case来控制<code>file_put_contentts</code>的，而下面的path也就是我们通过POST传入的</p>
+<p>23-35行对路径真实性进行了检验</p>
+<p>如果不存在弹出路径不存在的提示并返回JSON响应,并且限制了不能创建新的文件夹</p>
+<p><img src="https://pic.imgdb.cn/item/671cadc7d29ded1a8c09fc8a.png" alt=""></p>
+<p>所以我们确定了传入的内容<code>type=save</code></p>
+<p>path要求是必须真实存在的路径，</p>
+<p><img src="https://pic.imgdb.cn/item/671cb670d29ded1a8c148588.png" alt=""></p>
+<p>suffixs一开始就限制了类型</p>
+<p><img src="https://pic.imgdb.cn/item/671cb69cd29ded1a8c14aa09.png" alt=""></p>
+<p>这里只是判断了一下是否符合格式，但是没过滤php文件</p>
+<p>所以可以通过nkdire来创建新测目录文件</p>
+<p><img src="https://pic.imgdb.cn/item/671cb729d29ded1a8c152efd.png" alt=""></p>
+<h3>测试</h3>
+<p><img src="https://pic.imgdb.cn/item/671dedc5d29ded1a8c05f16c.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/671dedc5d29ded1a8c05f18e.png" alt=""></p>
+<h2>任意文件删除</h2>
+<p>在上面的基础上这里有一个</p>
+<p><img src="https://pic.imgdb.cn/item/671dee46d29ded1a8c065c5e.png" alt=""></p>
+<p>由于上面的分析可知path和type是可控的，所以构成任意文件删除漏洞</p>
+<h2>任意文件删除+rce</h2>
+<p>存在任意文件删除的时候，我们可以进行locked锁文件的删除以重装，而且在重装界面我们能看到我们的数据库信息会记录到config.php中</p>
+<p><img src="https://pic.imgdb.cn/item/671f525dd29ded1a8c0b4516.png" alt=""></p>
+<p>当我们安装的时候，就会对配置文件进行写入，但是写入的时候没有过滤，这就导致我们可以进行rce</p>
+<p><img src="https://pic.imgdb.cn/item/671f5398d29ded1a8c0d5e37.png" alt=""></p>
+<p>后面是对数据库进行连接，创建等操作,但是不能随意输入，如果数据库执行期间报错会导致后面安装不成功，config,php无法写入</p>
+<p><img src="https://pic.imgdb.cn/item/671f5472d29ded1a8c0e1924.png" alt=""></p>
+<p>最上面的代码限制了我们不能随意访问该文件，但是<code>$_G</code>中内容可控，经过尝试发现只有这里的 <code>mysql_prefix</code> 参数也就是数据库前缀这里是可以完全控制的，其他参数如果拼接特殊字符会导致数据库语句执行报错</p>
+<p>config.php中可知，必须定义puyuetian常量才能正常访问该文件，所以显然不能直接访问而要通过特定路由，但是index.php中包含了puyueyian.php，所以只要能正常安装成功就能进行rce</p>
+<p><img src="https://pic.imgdb.cn/item/671f620ed29ded1a8c1e8584.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/671f621cd29ded1a8c1e9593.png" alt=""></p>
+<h3>测试</h3>
+<p><img src="https://pic.imgdb.cn/item/671f6f15d29ded1a8c2c0f57.png" alt=""></p>
+<pre><code class="language-payload地方">/*!&#39;; phpinfo();//
+</code></pre>
+<h2>任意文件读取</h2>
+<p><img src="https://pic.imgdb.cn/item/6725e7f7d29ded1a8c813f59.png" alt=""></p>
+<p>注意一下前置，<code>suffixs</code>允许的尾缀是这个，前面我们分析了path可控</p>
+<p>而且在下面发现了回显</p>
+<p><img src="https://pic.imgdb.cn/item/67262db0d29ded1a8cb7b5ec.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67262db0d29ded1a8cb7b621.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67262dd6d29ded1a8cb7d756.png" alt=""></p>
+<h2>模板上传绕过getshell</h2>
+<p>在<code>/app/superadmin/phpscript/app.php</code>中</p>
+<p><img src="https://pic.imgdb.cn/item/672739c5d29ded1a8c70d1ea.png" alt=""></p>
+<p>有一个<code>		if (!InArray(&#39;hsa,zip&#39;, $suffix)) {</code>检查尾缀是否为.zip文件，然后在下面用到了<code>ziparchive::extractTo()</code></p>
+<p><img src="https://pic.imgdb.cn/item/67273aa0d29ded1a8c718402.png" alt=""></p>
+<pre><code>ziparchive 部分使用方法
+&lt;?php
+/******** ziparchive 可选参数 *******/
+/*
+1.ZipArchive::addEmptyDir
+添加一个新的文件目录
+2.ZipArchive::addFile
+将文件添加到指定zip压缩包中。
+3.ZipArchive::addFromString
+添加的文件同时将内容添加进去
+4.ZipArchive::close
+关闭ziparchive
+5.ZipArchive::extractTo
+将压缩包解压
+6.ZipArchive::open
+打开一个zip压缩包
+7.ZipArchive::getStatusString
+返回压缩时的状态内容，包括错误信息，压缩信息等等
+8.ZipArchive::deleteIndex
+删除压缩包中的某一个文件，如：deleteIndex(0)删除第一个文件
+9.ZipArchive::deleteName
+删除压缩包中的某一个文件名称，同时也将文件删除。
+?&gt;
+</code></pre>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>

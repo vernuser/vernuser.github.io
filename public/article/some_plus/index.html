@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入侵检测 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 22px 80px}
+.panel{margin-top:18px;background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+h1{margin:0 0 14px;font-size:29px;line-height:1.4;color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.chip{padding:2px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.chip.date{color:var(--gold)}
+article h2,article h3,article h4{color:#fff;margin:1.6em 0 .6em;line-height:1.45}
+article h2{font-size:23px;border-left:3px solid var(--sky);padding-left:12px}
+article h3{font-size:19px;color:#dcecff}
+article p{margin:.85em 0}
+article a{color:#8fd0ff}
+article img{max-width:100%;border-radius:10px;margin:14px 0}
+article ul,article ol{padding-left:1.5em}
+article li{margin:.35em 0}
+article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:var(--muted)}
+article code{background:rgba(255,255,255,.14);padding:2px 6px;border-radius:5px;font-size:.9em;color:#ffd9a8;font-family:Consolas,Monaco,monospace}
+article pre{background:rgba(6,14,26,.85);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+article th,article td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+article th{background:rgba(255,255,255,.07);color:#fff}
+article hr{border:none;border-top:1px dashed var(--line);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:24px 14px 60px}h1{font-size:22px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="pill" href="/article-list/">← 返回归档</a> <a class="pill" href="/">⌂ 主页</a>
+  <div class="panel">
+    <h1>入侵检测</h1>
+    <div class="meta"><span class="chip date">2026-01-20</span><span class="chip">分类·入侵检测</span><span class="chip">#入侵检测</span></div>
+    <article><h1>1.入侵排查</h1>
+<h2>1.1 windows 入侵排查</h2>
+<p>常见应急相应事件：
+web入侵： 网页挂马，主页篡改，webshell
+系统入侵： 病毒木马，勒索软件，远控后门
+网络攻击： ddos，dns劫持，arp欺骗</p>
+<h3>1.1.1 检查系统账号安全</h3>
+<ol>
+<li>查看服务器是否存在弱口令，远程管理端口是否对公网开放
+检查方法：咨询服务器管理员</li>
+<li>查看服务器是否存在可以账号，新增账号
+检查方法： cmd窗口，输入<code>lusrmrg.msc</code>（本地用户和组，win11家庭版没有这个），查看是否有新增/可疑账号，如有管理员群组的新增禁用或者删除</li>
+</ol>
+<p>需要注意的是，再本地用户群组里面，用户结尾带有$符号的，你再命令行输入net user里面是看不到的，这是隐藏账号，当然你也可以直接在命令框添加隐藏账号<code>net user add test$</code>即可</p>
+<p>或者使用D盾，直接克隆账号检测</p>
+<p>防止万一暴力破解的话，可以用<code>eventvwr.msc</code>事件查看器，windows日志-安全
+或者使用windows的log parser也可以，微软官方提供，使用sql语句，比如选取前面100就是<code>select top 100 * from security.evtx</code>（需要事先将日志文件保存为evtx文件）</p>
+<h3>1.1.2 检查异常端口，进程</h3>
+<ol>
+<li>检查端口连接情况，是否有远程连接可疑连接</li>
+</ol>
+<ul>
+<li>试用netstat -ano查看当前网络连接，定义可以established
+<code>established</code>是建立连接的意思，表示两台机器正在通信</li>
+<li>试用netstat定位出的pid编号，再用tasklist命令进程定位<code>tasklist | findstr &quot;PID&quot;</code></li>
+</ul>
+<ol start="2">
+<li>进程
+根据进程名称查看是否有可疑进程
+<code>tasklist /svc</code></li>
+<li><code>msinfo32</code>通过这个也可以查看是否有可疑进程</li>
+<li>D盾</li>
+<li>查看可以的进程以及紫禁城</li>
+</ol>
+<ul>
+<li>没有签名验证信息的进程</li>
+<li>没有描述信息的进程</li>
+<li>进程路径是否合法</li>
+<li>cpu或者内存资源占用是否过高</li>
+<li>进程的属主</li>
+</ul>
+<p><code>查看windows服务所对应的端口%systemroot%/system32/drivers/etc/services</code></p>
+<h3>1.1.3 检查启动项，计划任务，服务</h3>
+<ol>
+<li>是否有异常启动项</li>
+</ol>
+<p>a. 【开始】-&gt; 【启动】</p>
+<p>b. <code>msconfig</code>
+判断不一样的话打开注册表<code>regedit</code>找到</p>
+<pre><code>HREY_CURRENT_USER\SOftware\microsoft\windows\currentversion\run
+</code></pre>
+<p>另一个再</p>
+<pre><code>HREY_local_machine\software\microsoft\windows\currentversion\run
+</code></pre>
+<p>c.本地组策略编辑器中的windows启动的脚本设置</p>
+<p>win+r <code>gpedit.msc</code></p>
+<h2>1.2 linux入侵排查</h2>
+<h3>1.2.1 账号安全</h3>
+<p>用户信息文件<code>/etc/passwd</code>
+root:x:0:0:root:root:/bin/bash
+用户名：密码：用户id：组id：用户说明：家目录：登陆之后的shell</p>
+<p>影子文件<code>/etc/shadow</code>
+root:加密密码:密码最后一次修改时间：两次密码的修改时间间隔：密码有效期：密码修改时间到期的警告天数：密码过期之后的宽限天数：账号失效时间：保留</p>
+<p>who 查看当前登录用户（tty本地登录 pts远程登陆）</p>
+<p>w查看系统信息，想知道某一时刻用户行为</p>
+<p>uptime查看登陆多久，多久用户，负载状态</p>
+<p>查询特权用户
+<code>awk -F: &#39;$3==0 {print $1}&#39; /etc/passwd</code></p>
+<p>查询可以远程登陆的账号信息
+<code>awk &#39;/\$1 | \$6/{print $1}&#39; /etc/shadow</code></p>
+<p>查询sudo权限账号
+<code>more /etc/sudoers | grep -v &quot;^#\|^$&quot; | grep &quot;ALL=(ALL)&quot;</code></p>
+<p>禁用或删除多余或可疑账号</p>
+<p>usermod -L  user禁用账号，账号无法登陆</p>
+<p>userdel user 删除user账号</p>
+<p>userdel -r user 将删除user用户并且将/home 目录下的user目录一并删除</p>
+<h3>1.2.2 历史命令</h3>
+<p>通过.bash_history文件查看账号执行过的系统命令</p>
+<ul>
+<li><p>root 用户<code>history</code></p>
+</li>
+<li><p>打开/home下的<code>.bash_history</code>，查看普通账号执行的历史命令</p>
+<ul>
+<li>保存1w条命令</li>
+</ul>
+</li>
+</ul>
+<p><code>sed -i &#39;s/^HISTSTIZE=1000/HISTSITZE=10000/g&#39; /etc/profile </code></p>
+<ul>
+<li>或者再etc/profile底部加上如下代码，再source /etc/profile让配置生效</li>
+</ul>
+<pre><code class="language-#">USER_IP=`who -u am i 2&gt;/dev/null | awk &#39;{print $NF}&#39; | sed -e &#39;s/[()]//g&#39;`
+if [ -z $USER_IP ]; then
+USER_IP=`hostname`
+fi
+
+# 設置 history 的顯示格式，包括日期、時間、IP 和用戶名
+HISTTIMEFORMAT=&quot;%F %T $USER_IP:`whoami` &quot;
+export HISTTIMEFORMAT
+</code></pre>
+<p>清除历史操作命令
+history -c</p>
+<p>入侵排查：</p>
+<pre><code>进入用户目录下，到处历史命令
+cat .bash_history &gt;&gt; history.txt
+</code></pre>
+<h3>1.2.3 检查异常端口</h3>
+<p>netstat命令
+<code>netstat -antlp | more</code></p>
+<p>查看pid对应的进程文件路径</p>
+<pre><code>ls -l /proc/$pid/exe或file /proc/$pid/exe
+</code></pre>
+<h3>1.2.4 检查异常进程</h3>
+<pre><code>ps aux | grep pid
+</code></pre>
+<h3>1.2.5 检查开机启动项</h3>
+<p>基本使用：系统运行级别示意图</p>
+<pre><code>0 关机
+1 单用户模式，可以认为windows安全模式，用于系统修复
+2 不完全命令行模式，不包含nfs
+3 完全命令行模式，标准字符界面
+4 系统保留
+5 图形模式
+6 reboot
+</code></pre>
+<p>查看运行级别命令<code>runlevel</code>
+系统默认允许级别</p>
+<pre><code>vi /etc/inittab
+</code></pre>
+<p>开机启动配置文件</p>
+<pre><code>/etc/rc.local
+/etc/rc[0~6].d
+</code></pre>
+<p>当我们需要开自己自动自己的脚本时，只需要将可执行脚本丢在<code>/etc/init.d</code>目录下，然后再<code>/etc/rc.d/rc*.d</code>文件中建立软连接即可</p>
+<pre><code>ln -s /etc/init.d/sshd /etc/rc.d/rc3.d/s100ssh
+</code></pre>
+<p>其中的sshd是脚本文件,s100ssh是软连接,s开头代表加载时自启动，k开头则是加载时需要关闭</p>
+<h3>1.2.6 检查定时任务</h3>
+<ol>
+<li>通过crontab创建计划任务</li>
+</ol>
+<pre><code>crontab -l 列出某个用户cron服务的详细内容
+crontab -r 删除每个用户的cront任务
+crontab -e 使用编辑器编辑当前crontab文件
+</code></pre>
+<ol start="2">
+<li>anacron实现异步定时任务调度</li>
+</ol>
+<pre><code>每天运行/home/backup.sh脚本
+vi /etc/anacrontab
+@daily 10 example.daily /bin/bash  /home/backup.sh
+当机器在backup.sh期望被运行时是关闭的，anacron会在机器开机十分钟后打开它，而不用等待7天
+</code></pre>
+<p>重点关注一下目录</p>
+<pre><code>/var/spool/cron/*
+/etc/crontab
+/etc/cron.d/*
+/etc/cron.daily/*
+/etc/cron.hourly/*
+/etc/cron.monthly/*
+/etc/cron.weekly/
+/etc/anacrontab
+/var/spool/anacron/*
+</code></pre>
+<p>小巧思：</p>
+<pre><code>more /etc/cron.daily/*   查看目录下所有文件
+</code></pre>
+<h3>1.2.7 检查服务</h3>
+<ol>
+<li>服务自启动</li>
+</ol>
+<pre><code># sudo apt-get install sysv-rc-conf
+chkconfig  [--level 运行级别] [地理服务名] [on|off]
+chkconfig -level 2345 httpd on 开启自启动
+chkconfig httpd on 默认level是2345
+</code></pre>
+<h3>1.2.8 检查异常文件</h3>
+<ol>
+<li>查看敏感目录，比如/tmp目录下的文件，同时注意<code>..</code>开头的隐藏目录</li>
+<li>发现webshell，远控木马的创建时间怎么找出同一时间范围内创建的文件</li>
+</ol>
+<pre><code>find /opt -iname &quot;*&quot; -atime 1 -type f 找到/opt下一天前访问过的文件
+</code></pre>
+<ol start="3">
+<li>针对可疑文件可以stat获取修改时间</li>
+</ol>
+<h3>1.2.9 检查系统日志</h3>
+<p>日志存放地址<code>/var/log</code>
+日志默认配置情况<code> more /etc/rsyslog.conf</code>
+<a href="https://imgchr.com/i/pZgm80A"><img src="https://s41.ax1x.com/2026/01/23/pZgm80A.png" alt="pZgm80A.png"></a></p>
+<p>小巧思</p>
+<pre><code>grep &quot;Faileed password for root&quot; /var/log/secure | awk &#39;{print $11}&#39; | sort | uniq -c | sort -nr | more
+从安全日志中抓取root登录失败的，awk提取11字段也就是ip的，uniq统计次数,sort排序，n按数值r反向
+
+
+grep &quot;Failed password&quot; /var/log/secure |
+grep -oE &quot;(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)&quot; | \
+uniq -c
+定位有那些ip再爆破
+
+grep &quot;Failed password&quot; /var/log/secure|perl -e &#39;while($_=&lt;&gt;){/for(.*?) from/; print &quot;$1\n&quot;;}&#39;|uniq -c|sort -nr
+从日志中提取暴力破解（爆破）尝试中使用的用户名，并统计每个用户名尝试失败的次数，按次数降序排列
+while($_=&lt;&gt;) {...}  # 循环读取标准输入（来自前一个命令的输出）
+(.*?)非贪婪匹配
+
+grep &quot;Accepted&quot; /var/log/secure | awk &#39;{print $11}&#39; | sort | uniq -c | sort -nr | more
+登录成功的IP有哪些
+
+grep &quot;Accepted&quot; /var/log/secure | awk &#39;{print $1,$2,$3,$9,$11}&#39;
+登录成功的日期、用户名、IP
+
+grep &quot;useradd&quot; /var/log/secure 增加一个用户kali日志
+
+grep &quot;userdel&quot; /var/log/secure 删除一个用户kali日志
+</code></pre>
+<h3>1.2.10 工具查杀</h3>
+<h4>rootkit查杀</h4>
+<ul>
+<li>chkrootkit</li>
+<li>rkhunter</li>
+</ul>
+<h4>病毒查杀clamav</h4>
+<h4>webshell</h4>
+<h4>rpm check检查</h4>
+<h4>linux安全检查脚本</h4>
+<ul>
+<li>gscan</li>
+<li>security_check</li>
+<li>/t0xst/linux</li>
+</ul>
+<h2>1.3 常见webshell查杀工具</h2>
+<h3>1.3.1 d盾</h3>
+<h3>1.3.2 百度webdir+</h3>
+<h3>河马</h3>
+<h3>1.3.4 web shell detector</h3>
+<h3>1.3.5 牧云</h3>
+<h3>1.3.6 php malware finder</h3>
+<h3>1.3.7 findwebshell</h3>
+<h2>1.4 如何发现隐藏的webshell后门</h2>
+<p>文件完整性验证，对文件进行Md5校验，并与文件发布者的特征值对比</p>
+<pre><code>import hashlib
+import os
+
+def md5sum(file):
+    &quot;&quot;&quot;计算文件或字符串的 MD5 哈希值&quot;&quot;&quot;
+    m = hashlib.md5()
+
+    if os.path.isfile(file):  # 处理文件
+        with open(file, &#39;rb&#39;) as f:  # 使用 with 自动关闭文件
+            for chunk in iter(lambda: f.read(4096), b&#39;&#39;):  # 分块读取
+                m.update(chunk)
+    else:  # 处理字符串
+        m.update(file.encode(&#39;utf-8&#39;))  # 字符串转字节
+
+    return m.hexdigest()
+</code></pre>
+<h3>1.4.2 diff命令</h3>
+<p>diff可以展示出两个文件的不同</p>
+<h3>1.4.3 文件对比工具</h3>
+<h2>1.5 勒索病毒自救</h2>
+<h3>1.5.1 勒索病毒搜索引擎</h3>
+<p>【360】勒索病毒搜索引擎</p>
+<h3>1.5.2 勒索软件解密工具集</h3>
+<p>【腾讯哈勃】
+【金山毒霸】
+【火绒】
+....</p>
+<h1>2 日志分析</h1>
+<h2>2.1 windows日志分析</h2>
+<h3>2.1.1 windows事件日志</h3>
+<p>系统日志</p>
+<p>默认位置<code>%systemroot%\system32\winevt\logs\system.evtx</code></p>
+<p>应用程序日志</p>
+<p>默认位置<code>%systemroot%\system32\winevt\logs\application.evtx</code></p>
+<p>安全日志</p>
+<p>默认位置<code>%systemroot%\system32\winevt\logs\security.evtx</code></p>
+<h3>2.1.2 审核策略与事件查看器</h3>
+<p>设置1：开始-&gt;管理工具-&gt;本地安全阀策略-&gt;本地策略-&gt;审核策略
+或者win+r直接<code>eventvwr.msc</code></p>
+<h3>2.1.3 事件日志分析</h3>
+<pre><code class="language-常见安全事件">事件id 说明
+4624 登陆成功
+4625 登陆失败
+4634 注销成功
+4637 用户启动注销
+4672 超级用户登录
+4720 创建用户
+</code></pre>
+<p>登录成功的时间有一个登陆类型
+<a href="https://imgchr.com/i/pZgnDgO"><img src="https://s41.ax1x.com/2026/01/23/pZgnDgO.png" alt="pZgnDgO.png"></a></p>
+<h3>2.1.4 日志分析工具</h3>
+<h4>2.1.4.1 log parser</h4>
+<h4>2.1.4.2 logparser lizard</h4>
+<h4>2。1.4.3 event log explorer</h4>
+<h2>2.2 linux日志分析</h2>
+</article>
+  </div>
+</div><script>
+  // 正文插图兜底：失效图片替换为占位块，避免出现破图
+  document.querySelectorAll('article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+</script></body>
+</html>
