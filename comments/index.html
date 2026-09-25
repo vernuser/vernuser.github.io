@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>留言板 · 随波逐流の旅店</title>
+<style>:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:11vh 22px 80px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
+h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
+.sub{margin:8px 0 0;font-size:13.5px;color:rgba(255,255,255,.72)}
+.panel{background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
+.panel p{margin:.9em 0}
+.panel h2{color:#fff;font-size:20px;margin:1.6em 0 .5em;border-left:3px solid var(--sky);padding-left:12px}
+.panel a{color:#8fd0ff}
+.panel del{color:rgba(255,255,255,.45)}
+@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:8vh 14px 60px}h1{font-size:23px}}</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>留言板</h1>
+      <p class="sub">想来一间足够舒适的房间？</p>
+    </div>
+    <a class="pill" href="/">← 返回主页</a>
+  </div>
+  <div class="panel">
+  <p>这里原本是评论系统所在的位置。当前站点由静态页面组成，留言功能需要一个评论后端才能使用。</p>
+  <p>想开通的话，接入任意一种评论服务即可（Valine / Waline / Twikoo / Giscus 都行），
+  接好之后我把这里替换成真正的留言板。</p>
+  <p>暂时可以先通过主页的 <b>邮箱</b> 或 <b>QQ</b> 找到我 🙌</p>
+</div>
+</div>
+</body>
+</html>
