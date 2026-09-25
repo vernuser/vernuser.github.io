@@ -297,6 +297,12 @@ const WALL_CSS = `
 }
 @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
 .msg{padding:40px;text-align:center;color:var(--muted)}
+.wall-more{
+  margin-top:22px;padding:14px;text-align:center;font-size:13px;color:var(--muted);
+  border-radius:14px;border:1px dashed rgba(255,255,255,.18);background:rgba(12,28,48,.3);
+  transition:opacity .3s ease;
+}
+.wall-more.done{opacity:.7;border-style:solid}
 `;
 
 function wallpaperPage(meta) {
@@ -304,20 +310,9 @@ function wallpaperPage(meta) {
   // 竖图优先排前面（瀑布流视觉更好），横图在后
   all.sort((a, b) => a.ratio - b.ratio || a.id.localeCompare(b.id));
 
-  const tiles = all
-    .map((r) => {
-      const src = imgSrc(r.id);
-      const label = r.id.replace(/\.[^.]+$/, '');
-      return `<a class="tile" href="${src}" target="_blank" rel="noopener" data-ratio="${r.ratio}" title="${esc(r.id)} ${r.w}×${r.h}">
-  <img src="${src}" alt="${esc(r.id)}" width="${r.w}" height="${r.h}" loading="lazy" decoding="async" onerror="this.closest('.tile').remove()">
-  <span class="who">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><circle cx="9" cy="10" r="1.6"/><path d="m5 17 4.5-4.5 3 3L16 12l4 4.5"/></svg>
-    ${esc(label)}
-  </span>
-</a>`;
-    })
-    .join('\n');
+  const items = all.map((r) => ({ id: r.id.replace(/\.[^.]+$/, ''), s: imgSrc(r.id), w: r.w, h: r.h, r: r.ratio }));
 
+  const wallData = `<script>window.__WALL__=${JSON.stringify(items)}<\/script>`;
   const body = `<div class="wrap">
   <div class="headline">
     <div>
@@ -330,30 +325,96 @@ function wallpaperPage(meta) {
       <button type="button" id="allBtn" class="on">全部</button>
     </div>
   </div>
-  <div class="wall" id="wall">
-${tiles}
-  </div>
+  <div class="wall" id="wall"></div>
+  <div class="wall-more" id="wallMore">向下滚动继续加载…</div>
 </div>
 <script>
 (function () {
+  // 分块增量渲染：首屏只放一部分，滚动到底再加载下一块
+  var CHUNK = 40;
   var wall = document.getElementById('wall');
-  var tiles = Array.prototype.slice.call(wall.querySelectorAll('.tile'));
+  var more = document.getElementById('wallMore');
+  var data = window.__WALL__ || [];
   var btns = { v: document.getElementById('onlyV'), h: document.getElementById('onlyH'), all: document.getElementById('allBtn') };
-  function setMode(mode) {
-    tiles.forEach(function (t) {
-      var ratio = parseFloat(t.dataset.ratio || '1');
-      var show = mode === 'all' || (mode === 'v' && ratio < 1.3) || (mode === 'h' && ratio >= 1.3);
-      t.style.display = show ? '' : 'none';
-    });
-    Object.keys(btns).forEach(function (k) { btns[k].classList.toggle('on', k === mode); });
+  var mode = 'all';
+  var ptr = 0;
+
+  function matches(item) {
+    if (mode === 'all') return true;
+    if (mode === 'v') return item.r < 1.3;
+    return item.r >= 1.3;
   }
+
+  function appendChunk() {
+    var added = 0;
+    var frag = document.createDocumentFragment();
+    while (ptr < data.length && added < CHUNK) {
+      var it = data[ptr++];
+      if (!matches(it)) continue;
+      var a = document.createElement('a');
+      a.className = 'tile';
+      a.href = it.s;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.dataset.ratio = it.r;
+      a.title = it.id + ' ' + it.w + '×' + it.h;
+      var img = document.createElement('img');
+      img.src = it.s;
+      img.alt = it.id;
+      img.width = it.w;
+      img.height = it.h;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.onerror = function () { var p = this.closest('.tile'); if (p) p.remove(); };
+      a.appendChild(img);
+      frag.appendChild(a);
+      added++;
+    }
+    wall.appendChild(frag);
+    if (ptr >= data.length) {
+      more.textContent = '已经到底啦 · 共 ' + wall.children.length + ' 张';
+      more.classList.add('done');
+    } else {
+      more.textContent = '向下滚动继续加载 · 已显示 ' + wall.children.length + ' / ' + data.length;
+    }
+  }
+
+  function reset() {
+    ptr = 0;
+    wall.innerHTML = '';
+    more.classList.remove('done');
+    appendChunk();
+  }
+
+  function setMode(m) {
+    mode = m;
+    Object.keys(btns).forEach(function (k) { btns[k].classList.toggle('on', k === m); });
+    reset();
+  }
+
+  // 滚动到底部自动加载下一块
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      if (ptr >= data.length) return;
+      var rect = more.getBoundingClientRect();
+      if (rect.top <= window.innerHeight + 400) appendChunk();
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
   btns.v.addEventListener('click', function () { setMode('v'); });
   btns.h.addEventListener('click', function () { setMode('h'); });
   btns.all.addEventListener('click', function () { setMode('all'); });
+
+  reset();
 })();
 </script>`;
 
-  return shell('壁纸墙', '精选 ACG 插画收藏', WALL_CSS, body, 'wallpaper');
+  return shell('壁纸墙', '精选 ACG 插画收藏', WALL_CSS, wallData + body, 'wallpaper');
 }
 
 /* -------------------------------- 入口 -------------------------------- */
