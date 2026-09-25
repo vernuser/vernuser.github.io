@@ -284,7 +284,11 @@ function main() {
   console.log(`已生成文章 ${articles.length} 篇`);
   console.log('  public/article/<slug>/index.html');
   console.log('  public/article-list/index.html');
+  // GitHub Pages 的 Jekyll 会忽略以 _ 开头的目录（如 _next），禁用之
+  writeFileSync(join(ROOT, 'public', '.nojekyll'), '', 'utf-8');
+
   console.log('  src/generated/articles.json');
+  console.log('  public/.nojekyll');
 }
 
 main();
