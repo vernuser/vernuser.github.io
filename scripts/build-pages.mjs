@@ -1,6 +1,6 @@
 /*
  * 生成站点内的静态子页面：关于店长 / 员工们（友链）/ 留言板
- * 数据来源：_hexo-old/source 下的 about、link、comments 与 _data/link.yml
+ * 数据来源：content 下的 about、link、comments 与 _data/link.yml
  * 输出：public/about/index.html、public/link/index.html、public/comments/index.html
  * 运行：node scripts/build-pages.mjs（已挂在 prebuild）
  */
@@ -9,7 +9,7 @@ import { join } from 'path';
 import { marked } from 'marked';
 
 const ROOT = process.cwd();
-const SRC = join(ROOT, '..', '_hexo-old', 'source');
+const SRC = join(ROOT, 'content');
 const PUBLIC = join(ROOT, 'public');
 const SITE_TITLE = '随波逐流の旅店';
 

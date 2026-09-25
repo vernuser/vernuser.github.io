@@ -2,7 +2,7 @@
  * 生成博客版式首页 public/index.html —— 覆盖 Next 导出的主页
  *   左栏：个人信息 / 热门+最近+最新评论 三标签列表 / 分类 / 标签云 / 站点信息
  *   右栏：文章卡片墙（两栏，悬停放大、其余虚化）
- * 数据源：_hexo-old/source/_posts（构建期读取）
+ * 数据源：content/_posts（构建期读取）
  * 所有样式与结构为本站原创实现，配色取自本地背景插画。
  * 运行：node scripts/build-home.mjs（已挂在 prebuild）
  */
@@ -10,8 +10,8 @@ import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 
 import { join } from 'path';
 
 const ROOT = process.cwd();
-const POSTS_DIR = join(ROOT, '..', '_hexo-old', 'source', '_posts');
-const DATA_DIR = join(ROOT, '..', '_hexo-old', 'source', '_data');
+const POSTS_DIR = join(ROOT, 'content', '_posts');
+const DATA_DIR = join(ROOT, 'content', '_data');
 const PUBLIC = join(ROOT, 'public');
 const GENERATED = join(ROOT, 'src', 'generated');
 

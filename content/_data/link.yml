@@ -1,0 +1,60 @@
+- class_name: 1.技术支持
+  class_desc: 本网站的搭建由以下开源作者提供技术支持
+  link_list: 
+    - name: Hexo 
+      link: https://hexo.io/zh-cn/
+      avatar: https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg
+      descr: 快速、简单且强大的网志框架
+      siteshot: https://source.fomal.cc/siteshot/hexo.io.jpg
+      
+- class_name: 2.友情链接
+  class_desc: 员工们
+  link_list:
+    - name: 昊戈
+      link: https://www.lhglearncode.top/
+      avatar: https://pic.imgdb.cn/item/672f0eb0d29ded1a8c3c6f00.jpg
+      descr: 佬，菜，带
+    - name: creeper？
+      link: https://4reexile.github.io
+      avatar: https://pic.imgdb.cn/item/672f0e6ad29ded1a8c3c38fa.jpg
+      descr: aw!man
+    - name: 云哲
+      link: https://arrio464.github.io/blog2/
+      avatar: https://pic.imgdb.cn/item/672f0e69d29ded1a8c3c38ab.jpg
+      descr: 关注云哲喵~关注云哲谢谢喵~
+    - name: 云云
+      link: https://taskmanagerol.github.io/
+      avatar: https://pic.imgdb.cn/item/66781e0cd9c307b7e91cfb1c.jpg
+      descr: 以撒领域大神
+    - name: pyc
+      link: https://www.cnblogs.com/Kawakaze777
+      avatar: https://pic.imgdb.cn/item/672f0e69d29ded1a8c3c38ab.jpg
+      descr: kawakazi
+    - name: 尚少
+      link: https://jokerboxs.github.io/
+      avatar: https://pic.imgdb.cn/item/672f0e6ad29ded1a8c3c3963.jpg
+      descr: re（炉石）领域大神
+    - name: 鬼鬼
+      link:  https://www.noctuna.cc
+      avatar: https://pic.imgdb.cn/item/672f0eb0d29ded1a8c3c6eb4.jpg
+      descr: 女装领域大神（bushi）
+    - name: 孟神
+      link: luckycyang.top
+      avatat: https://pic.imgdb.cn/item/672f0cd4d29ded1a8c3ad6d6.jpg
+      descr: ddw
+    - name: FloW1t233
+      link: http://www.flowit233.cn/
+      avatar: https://pic.imgdb.cn/item/667811d3d9c307b7e902cec3.png
+      descr: 0_o
+    - name: 炭烧
+      link: https://blog.csdn.net/WRplayeR
+      avatar: https://profile-avatar.csdnimg.cn/20540d98d36b4e00913f06fbb67dbdc6_wrplayer.jpg!1
+      descr: 炭烧大人ddw
+    - name: recyvan
+      link: https://recyvan.github.io/
+      avatar: https://recyvan.github.io/user_data/auto.jpg
+      descr: 任神为什么 是神！
+    - name: 屎官
+      link: https://bakadeer.github.io/
+      avatar: https://pic.imgdb.cn/item/672f1112d29ded1a8c3e35a4.jpg
+      descr: 史官否？屎官矣
