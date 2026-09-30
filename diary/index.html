@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>随心记 · 随波逐流の旅店</title>
+<title>随心记 · 艾恩葛朗特第一层の旅店</title>
 <meta name="description" content="旅店里的碎碎念与近况">
 <link rel="icon" href="/favicon.ico">
 <style>:root{
@@ -61,72 +61,152 @@ a{color:inherit}
   .nav-menu a::after{display:none}
 }
 
-.wrap{max-width:864px;margin:0 auto;padding:104px 20px 90px}
-.headline{display:flex;align-items:center;gap:14px;margin-bottom:30px}
-.headline h1{margin:0;font-size:30px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
-.headline .tag{
-  padding:3px 13px;border-radius:999px;font-size:12.5px;
-  background:rgba(58,163,227,.28);border:1px solid rgba(120,196,240,.5);color:#dff0ff;
-  box-shadow:0 0 16px rgba(58,163,227,.35);
-}
-.headline .count{margin-left:auto;font-size:13px;color:var(--muted)}
+.d-wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:104px 20px 84px}
+.d-head{display:flex;align-items:flex-start;gap:26px;margin-bottom:28px}
+.d-crumb{font:700 12px/1 Georgia,"Times New Roman",serif;letter-spacing:.3em;color:#e0a545}
+.d-title{margin:12px 0 6px;font-size:36px;line-height:1.25;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
+.d-title .hl{background:linear-gradient(transparent 64%,rgba(224,165,69,.36) 64%);padding:0 4px}
+.d-sub{margin:0;font-size:13px;color:var(--muted)}
 
-/* 时间轴：左侧竖线 + 每个条目一个发光节点 */
-.tl{position:relative;padding-left:38px}
-.tl::before{
-  content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;border-radius:2px;
-  background:linear-gradient(to bottom,rgba(255,255,255,.05),rgba(255,255,255,.34) 12%,rgba(255,255,255,.34) 88%,rgba(255,255,255,.05));
+/* 草稿箱便签 */
+.d-sticky{
+  margin-left:auto;flex:none;width:228px;padding:15px 16px 12px;position:relative;
+  background:linear-gradient(165deg,#e9f3e6,#d3e7d1);border-radius:3px;
+  transform:rotate(2.2deg);box-shadow:0 14px 30px rgba(6,20,36,.4);
 }
-.entry{position:relative;margin-bottom:22px}
-.entry::before{
-  content:"";position:absolute;left:-33px;top:22px;width:12px;height:12px;border-radius:50%;
-  background:#eaf6ff;border:2px solid rgba(58,163,227,.85);
-  box-shadow:0 0 14px rgba(120,196,240,.9),0 0 30px rgba(58,163,227,.5);
+.d-sticky::before{content:'';position:absolute;top:-9px;left:50%;width:78px;height:18px;transform:translateX(-50%) rotate(-2deg);background:rgba(255,255,255,.55);border:1px dashed rgba(120,150,120,.35)}
+.d-sticky .s-label{font-size:11.5px;color:#5c7a5f;letter-spacing:.06em}
+.d-sticky .s-big{margin:7px 0 12px;font-size:15px;font-weight:600;color:#3e5a42;line-height:1.5}
+.d-sticky .s-bar{height:7px;border-radius:4px;background:rgba(90,120,95,.28);position:relative;overflow:hidden}
+.d-sticky .s-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:4px;background:#8fbc8f}
+.d-sticky .s-pct{margin-top:4px;text-align:right;font-size:10.5px;color:#5c7a5f}
+
+/* 冒险记录 */
+.d-ledger{
+  background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  padding:20px 26px 18px;margin-bottom:30px;
+}
+.d-ledger .lg-head{display:flex;align-items:center;gap:10px;font:600 12px/1 Georgia,"Times New Roman",serif;letter-spacing:.24em;color:rgba(233,242,253,.8)}
+.d-ledger .lg-head .till{margin-left:auto;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-weight:400;letter-spacing:.08em}
+.d-ledger .lg-stats{display:flex;flex-wrap:wrap;margin:18px 0 6px}
+.d-ledger .lg-stat{flex:1 1 0;min-width:140px;padding:2px 20px;border-left:1px dashed rgba(255,255,255,.16)}
+.d-ledger .lg-stat:first-child{border-left:0;padding-left:0}
+.d-ledger .lg-stat b{font:700 30px/1.15 Georgia,"Times New Roman",serif;color:#fff;font-variant-numeric:tabular-nums}
+.d-ledger .lg-stat b i{font:600 13px/1 Georgia,"Times New Roman",serif;font-style:normal;color:#e0a545;margin-left:3px}
+.d-ledger .lg-stat span{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+.d-chart{display:flex;align-items:flex-end;gap:12px;margin-top:14px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.14)}
+.d-chart .bar{flex:1 1 0;max-width:72px;text-align:center}
+.d-chart .bar em{display:block;font:600 11px/1 Georgia,"Times New Roman",serif;font-style:normal;color:#e0a545;margin-bottom:5px}
+.d-chart .bar i{display:block;margin:0 auto;width:22px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#e8c47c,#c08f42);box-shadow:0 0 12px rgba(224,165,69,.25)}
+.d-chart .bar span{display:block;margin-top:6px;font-size:11px;color:var(--muted)}
+
+/* 便签卡片墙 */
+.d-grid{column-count:3;column-gap:18px}
+@media(max-width:1080px){.d-grid{column-count:2}}
+@media(max-width:680px){.d-grid{column-count:1}}
+.d-note{
+  position:relative;break-inside:avoid;margin-bottom:18px;
+  background:var(--glass);border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 28px rgba(6,20,36,.3);backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  padding:17px 18px 12px;
+  transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,border-color .35s ease;
+}
+.d-note::before{
+  content:'';position:absolute;top:-9px;left:50%;width:88px;height:18px;
+  transform:translateX(-50%) rotate(-2deg);
+  background:rgba(224,165,69,.30);border:1px dashed rgba(255,255,255,.28);
+}
+.d-note:nth-child(3n)::before{transform:translateX(-50%) rotate(2.4deg);background:rgba(125,196,236,.26)}
+.d-note:nth-child(3n+1)::before{width:70px;background:rgba(255,255,255,.18)}
+.d-note:hover{transform:translateY(-4px);border-color:rgba(224,165,69,.45);box-shadow:0 22px 46px rgba(6,20,36,.44)}
+.d-note .n-top{display:flex;align-items:center;gap:10px;font-size:11px}
+.d-note .n-cat{color:#e0a545;letter-spacing:.14em}
+.d-note .n-date{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.d-note h3{margin:10px 0 0;font-size:16px;line-height:1.55;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.d-note h3 a{color:inherit;text-decoration:none;transition:color .25s ease}
+.d-note h3 a:hover{color:#7cc4ec}
+.d-note .n-desc{margin:9px 0 0;padding-bottom:10px;border-bottom:1px dashed rgba(255,255,255,.16);font-size:13px;line-height:1.8;color:rgba(233,242,253,.72);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.d-note .n-foot{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:11.5px;min-width:0}
+.d-note .n-tags{color:rgba(233,242,253,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-note .n-tags span{margin-right:8px}
+.d-note .n-read{margin-left:auto;flex:none;color:#e0a545;text-decoration:none;font-weight:600;transition:transform .3s ease}
+.d-note .n-read:hover{transform:translateX(3px);color:#f0bd68}
+@media(max-width:820px){
+  .d-wrap{padding:96px 14px 70px}
+  .d-head{flex-direction:column;gap:18px}
+  .d-sticky{margin-left:0;transform:rotate(1.2deg)}
+  .d-title{font-size:27px}
+  .d-ledger{padding:18px 16px 14px}
+  .d-ledger .lg-stat{min-width:44%;padding:2px 12px;margin-bottom:8px}
+  .d-ledger .lg-stat b{font-size:24px}
+  .d-chart{gap:7px}
+  .d-chart .bar i{width:14px}
+}
+
+/* 页脚 */
+.site-footer{position:relative;z-index:1;padding:22px 16px 30px;text-align:center;font-size:12.5px;color:rgba(233,242,253,.62);letter-spacing:.05em}
+.site-footer b{color:#7cc4ec;font-weight:600;font-variant-numeric:tabular-nums;font-size:13.5px}
+.site-footer .star{margin:0 10px;color:rgba(233,242,253,.35)}
+
+/* 悬浮音乐播放器（左下角） */
+.mp-root{position:fixed;left:18px;bottom:18px;z-index:80}
+.mp-disc{
+  width:52px;height:52px;border-radius:50%;cursor:pointer;padding:0;position:relative;
+  border:2px solid rgba(255,255,255,.5);
+  background:radial-gradient(circle,#0d2137 0 20%,#16283f 21% 36%,#0d2137 37% 54%,#16283f 55% 70%,#0d2137 71% 100%);
+  box-shadow:0 10px 26px rgba(4,12,24,.55);
+  animation:mp-spin 7s linear infinite;animation-play-state:paused;
   transition:transform .3s ease,box-shadow .3s ease;
 }
-.entry:hover::before{transform:scale(1.25);box-shadow:0 0 20px rgba(160,216,255,1),0 0 40px rgba(58,163,227,.7)}
-.card{
-  position:relative;border-radius:16px;border:1px solid rgba(255,255,255,.2);
-  background:rgba(12,28,48,.42);backdrop-filter:blur(14px) saturate(140%);
-  -webkit-backdrop-filter:blur(14px) saturate(140%);
-  box-shadow:0 12px 30px rgba(6,20,36,.28);
-  padding:16px 20px 15px;transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,background .35s ease;
+.mp-disc:hover{transform:scale(1.06);box-shadow:0 14px 32px rgba(4,12,24,.65)}
+.mp-disc.playing{animation-play-state:running}
+.mp-disc::before{content:'';position:absolute;left:50%;top:7px;bottom:7px;width:2px;margin-left:-1px;background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.06))}
+.mp-disc::after{content:'';position:absolute;inset:0;margin:auto;width:15px;height:15px;border-radius:50%;background:linear-gradient(140deg,#3aa3e3,#62a33d);border:2px solid rgba(255,255,255,.75)}
+@keyframes mp-spin{to{transform:rotate(360deg)}}
+.mp-panel{
+  position:absolute;left:0;bottom:64px;width:302px;max-width:calc(100vw - 32px);
+  border-radius:16px;background:rgba(10,24,42,.86);border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 18px 44px rgba(4,12,24,.55);padding:14px 14px 8px;color:#eaf3ff;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease;
 }
-.entry:hover .card{transform:translateX(5px);background:rgba(20,42,68,.52);box-shadow:0 18px 40px rgba(6,20,36,.38)}
-.card .top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-.card .av{
-  width:34px;height:34px;flex:none;border-radius:50%;overflow:hidden;
-  border:1px solid rgba(255,255,255,.34);box-shadow:0 3px 10px rgba(4,12,24,.4);
+.mp-panel.open{opacity:1;transform:none;pointer-events:auto}
+.mp-head{display:flex;align-items:baseline;gap:8px;min-width:0}
+.mp-title{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-artist{font-size:11px;color:rgba(233,242,253,.55);margin-left:auto;flex:none;white-space:nowrap}
+.mp-progress{display:flex;align-items:center;gap:8px;margin-top:10px}
+.mp-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;position:relative}
+.mp-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;background:linear-gradient(90deg,#3aa3e3,#7cc4ec)}
+.mp-time{font-size:10.5px;color:rgba(233,242,253,.6);font-variant-numeric:tabular-nums;flex:none}
+.mp-ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.mp-ctrls button{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);color:#fff;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background .25s ease,transform .25s ease;
 }
-.card .av img{width:100%;height:100%;object-fit:cover;display:block}
-.card .nm{font-size:13.5px;color:#fff}
-.card .time{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.card .text{margin:0;font-size:14.5px;line-height:1.85;color:rgba(255,255,255,.9)}
-.card .text a{color:#cfe9fb;text-decoration:none;border-bottom:1px dashed rgba(207,233,251,.5)}
-.card .text a:hover{color:#fff}
-.card .foot{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.16)}
-.card .chip{
-  padding:2px 11px;border-radius:999px;font-size:11.5px;color:rgba(255,255,255,.82);
-  background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);
-}
-.card .chip:hover{background:rgba(58,163,227,.4);color:#fff}
-.card .like{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.55)}
-.card .like svg{width:13px;height:13px}
-.empty{padding:36px;text-align:center;color:var(--muted)}
+.mp-ctrls button:hover{background:rgba(58,163,227,.5);transform:scale(1.06)}
+.mp-ctrls button svg{width:14px;height:14px}
+.mp-ctrls .mp-playbtn{width:40px;height:40px;background:linear-gradient(140deg,#3aa3e3,#62a33d);border-color:transparent}
+.mp-playlist{list-style:none;margin:10px 0 2px;padding:5px 2px 3px;border-top:1px dashed rgba(255,255,255,.16);max-height:148px;overflow-y:auto}
+.mp-playlist li{padding:6px 9px;border-radius:8px;font-size:12.5px;color:rgba(233,242,253,.85);cursor:pointer;display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-playlist li:hover{background:rgba(255,255,255,.08)}
+.mp-playlist li.on{color:#fff;background:rgba(58,163,227,.28)}
+.mp-playlist li .idx{font-size:10.5px;color:rgba(233,242,253,.5);flex:none;width:14px}
 @media(max-width:640px){
-  .wrap{padding:92px 14px 70px}
-  .headline h1{font-size:23px}
-  .tl{padding-left:30px}
-  .entry::before{left:-26px;width:10px;height:10px}
-  .card{padding:14px 16px}
-  .card .time{font-size:11px}
+  .mp-root{left:12px;bottom:12px}
+  .mp-disc{width:46px;height:46px}
 }
 </style>
 </head>
 <body>
 <header class="topbar">
   <div class="topbar-in">
-    <a class="brand" href="/"><span class="mark">随</span><span class="word">随波逐流の旅店</span></a>
+    <a class="brand" href="/"><span class="mark">剑</span><span class="word">艾恩葛朗特第一层の旅店</span></a>
     <nav>
       <ul class="nav-menu">
         <li><a href="/">首页</a></li>
@@ -139,1256 +219,454 @@ a{color:inherit}
     <a class="avatar-btn" href="/about/" title="vernus"><img src="/icons/cards/avatar.png" alt="vernus"></a>
   </div>
 </header>
-<div class="wrap">
-  <div class="headline">
-    <span class="tag">我的动态</span>
-    <h1>随心记</h1>
-    <span class="count">共 69 条</span>
-  </div>
-  <div class="tl">
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-08-26</time>
-    </div>
-    <p class="text">内网</p>
-    <div class="foot">
-      <span class="chip">「内网」</span>
-      <a class="chip" href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-08-26</time>
-    </div>
-    <p class="text">我在永远的看着你，直到永远....</p>
-    <div class="foot">
-      <span class="chip">「内网」</span>
-      <a class="chip" href="/article/%E9%92%93%E9%B1%BC/">钓鱼</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-07-07</time>
-    </div>
-    <p class="text">functions describe the world</p>
-    <div class="foot">
-      <span class="chip">「ai」</span>
-      <a class="chip" href="/article/agent/">AI agent</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-02-15</time>
-    </div>
-    <p class="text">向所有开发者，致以最高的敬意。</p>
-    <div class="foot">
-      <span class="chip">「vpn」</span>
-      <a class="chip" href="/article/vpn_develop/">vpn develop</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-02-12</time>
-    </div>
-    <p class="text">llm注入</p>
-    <div class="foot">
-      <span class="chip">「ai」</span>
-      <a class="chip" href="/article/llm_prompt_attack/">llm prompt attack</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-02-07</time>
-    </div>
-    <p class="text">functions describe the world</p>
-    <div class="foot">
-      <span class="chip">「ai」</span>
-      <a class="chip" href="/article/ai_study/">AI study</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-02-07</time>
-    </div>
-    <p class="text">markdown &amp; ai</p>
-    <div class="foot">
-      <span class="chip">「markdown」</span>
-      <a class="chip" href="/article/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E8%BF%B0%26ai_agent/">markdown语法简述&amp;ai_agent</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-02-02</time>
-    </div>
-    <p class="text">win22挖矿</p>
-    <div class="foot">
-      <span class="chip">「应急响应」</span>
-      <a class="chip" href="/article/win22%E6%8C%96%E7%9F%BF/">win挖矿</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-01-20</time>
-    </div>
-    <p class="text">入侵检测</p>
-    <div class="foot">
-      <span class="chip">「入侵检测」</span>
-      <a class="chip" href="/article/some_plus/">入侵检测</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2026-01-08</time>
-    </div>
-    <p class="text">owasp</p>
-    <div class="foot">
-      <span class="chip">「owasp」</span>
-      <a class="chip" href="/article/owasp_top_10/">owasp top 10 2025</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2025-03-11</time>
-    </div>
-    <p class="text">工具</p>
-    <div class="foot">
-      <span class="chip">「工具」</span>
-      <a class="chip" href="/article/nasl%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/">openvas</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-12-12</time>
-    </div>
-    <p class="text">skytower</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/skytower/">skytower</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-12-12</time>
-    </div>
-    <p class="text">靶场</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/%E9%BB%91%E7%9B%92/">黑盒知识梳理</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-11-23</time>
-    </div>
-    <p class="text">tr0ll2</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/tr0ll2/">tr0ll2</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-11-15</time>
-    </div>
-    <p class="text">php命令执行</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">php命令执行</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-11-08</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/xinhucms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">xinhucms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-10-26</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/hadcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">hadcms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-10-21</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/yzmcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">yzmcms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-10-13</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/zzcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">zzcms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-10-11</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/kitecms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">kitecms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-10-07</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/IBOS%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">IBOScms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-10-05</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/bosscms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">bosscms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-09-31</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/%E4%BA%94%E6%8C%87cms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">五指cms代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-09-24</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">代码审计</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-09-21</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1sql%E6%B3%A8%E5%85%A5/">代码审计sql注入</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-09-19</time>
-    </div>
-    <p class="text">csrf</p>
-    <div class="foot">
-      <span class="chip">「csrf」</span>
-      <a class="chip" href="/article/csrf/">csrf</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-09-19</time>
-    </div>
-    <p class="text">代码审计</p>
-    <div class="foot">
-      <span class="chip">「代码审计」</span>
-      <a class="chip" href="/article/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计---java基础</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-30</time>
-    </div>
-    <p class="text">守夜--任意文件上传</p>
-    <div class="foot">
-      <span class="chip">「守夜」</span>
-      <a class="chip" href="/article/all_file_upload/">WEB攻防--任意文件上传</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-27</time>
-    </div>
-    <p class="text">守夜-任意文件下载</p>
-    <div class="foot">
-      <span class="chip">「守夜」</span>
-      <a class="chip" href="/article/all_file_download/">WEB攻防--任意文件下载</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-25</time>
-    </div>
-    <p class="text">守夜-sql注入</p>
-    <div class="foot">
-      <span class="chip">「渗透」</span>
-      <a class="chip" href="/article/sql%E6%B3%A8%E5%85%A5-%E5%AE%88%E5%A4%9C%E4%BA%BA/">WEB攻防--sql注入</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-25</time>
-    </div>
-    <p class="text">工具</p>
-    <div class="foot">
-      <span class="chip">「工具」</span>
-      <a class="chip" href="/article/sql%E8%AF%AD%E5%8F%A5%E7%A7%AF%E7%B4%AF/">sql语句积累</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-15</time>
-    </div>
-    <p class="text">loadsh</p>
-    <div class="foot">
-      <span class="chip">「渗透」</span>
-      <a class="chip" href="/article/lodash/">lodash</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-07</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day7/">小迪笔记day18-WEB攻防</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-02</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day4/">小迪笔记day4--加解密方式&amp;web&amp;服务器&amp;</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-02</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day5/">小迪笔记day5--CDN&amp;资产架构等</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-08-02</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day6/">小迪笔记day67891011--信息打点</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-07-31</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day3/">小迪笔记day3--抓包&amp;封包&amp;协议&amp;app&amp;小程序</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-07-30</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day1/">小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-07-30</time>
-    </div>
-    <p class="text">小迪安全</p>
-    <div class="foot">
-      <span class="chip">「小迪安全」</span>
-      <a class="chip" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day2/">小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-07-27</time>
-    </div>
-    <p class="text">iwebsec</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/iwebsec/">iwebsec---- not only rce/sqli</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-07-26</time>
-    </div>
-    <p class="text">rce</p>
-    <div class="foot">
-      <span class="chip">「渗透」</span>
-      <a class="chip" href="/article/rce/">RCE</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-07-22</time>
-    </div>
-    <p class="text">Derpnstink-1</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/Derpnstink-1/">Derpnstink-1</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-30</time>
-    </div>
-    <p class="text">LordOfTheRoot_1.0.1</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/LordOfTheRoot_1.0.1/">LordOfTheRoot_1.0.1</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-30</time>
-    </div>
-    <p class="text">w1r3s-editable</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/w1r3s-editable/">w1r3s-editable</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-28</time>
-    </div>
-    <p class="text">Tr0ll</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/Tr0ll/">Tr0ll</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-27</time>
-    </div>
-    <p class="text">raven2</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/raven2/">raven2靶场</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-27</time>
-    </div>
-    <p class="text">yaml</p>
-    <div class="foot">
-      <span class="chip">「yaml」</span>
-      <a class="chip" href="/article/yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/">nuclei模板编写&amp;&amp;yaml学习</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-25</time>
-    </div>
-    <p class="text">隐写术</p>
-    <div class="foot">
-      <span class="chip">「ctf」</span>
-      <a class="chip" href="/article/CTF%E9%9A%90%E5%86%99%E6%9C%AF/">CTF--隐写术</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-25</time>
-    </div>
-    <p class="text">内存取证</p>
-    <div class="foot">
-      <span class="chip">「内存取证」</span>
-      <a class="chip" href="/article/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-06-21</time>
-    </div>
-    <p class="text">Goldeneye</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/GoldenEye/">goldeneye靶场</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2024-04-25</time>
-    </div>
-    <p class="text">IDS（入侵检测系统） 分类 通过 位置 可以分为： NIDS(network based intrusion detection system) HIDS(H</p>
-    <div class="foot">
-      <span class="chip">「随笔」</span>
-      <a class="chip" href="/article/%E9%9A%8F%E7%AC%94/">答题的时候遇到的一些奇奇怪怪的知识点吧</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-11-06</time>
-    </div>
-    <p class="text">网络渗透测试</p>
-    <div class="foot">
-      <span class="chip">「渗透」</span>
-      <a class="chip" href="/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">网络渗透测试</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-07-01</time>
-    </div>
-    <p class="text">计算机网络</p>
-    <div class="foot">
-      <span class="chip">「计算机网络」</span>
-      <a class="chip" href="/article/cn/">计算机网络简略</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-07-01</time>
-    </div>
-    <p class="text">php</p>
-    <div class="foot">
-      <span class="chip">「php」</span>
-      <a class="chip" href="/article/php/">PHP学习</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-05-12</time>
-    </div>
-    <p class="text">ctfshow第一类:信息收集 web 1 打开以后直接查看源码就可以了 web 2 web 3 bp抓包重发就行了 web 4 1 第四个和B站上给的不一样，</p>
-    <div class="foot">
-      <span class="chip">「随笔」</span>
-      <a class="chip" href="/article/web/">web入门</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-05-04</time>
-    </div>
-    <p class="text">内存马</p>
-    <div class="foot">
-      <span class="chip">「内存马」</span>
-      <a class="chip" href="/article/%E5%86%85%E5%AD%98%E9%A9%AC/">内存马入门知识学习</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-04-24</time>
-    </div>
-    <p class="text">url中?表示传参，id表示变量， 参数类型 1. 数字型：当输入的参数为整形时，如果存在注入漏洞，可以认为是数字型注入。 如 www.text.com/tex</p>
-    <div class="foot">
-      <span class="chip">「随笔」</span>
-      <a class="chip" href="/article/sql/">sql注入基本知识</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-29</time>
-    </div>
-    <p class="text">python 类</p>
-    <div class="foot">
-      <span class="chip">「python」</span>
-      <a class="chip" href="/article/python_category/">Python--从入门到入土--类</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-27</time>
-    </div>
-    <p class="text">python 函数</p>
-    <div class="foot">
-      <span class="chip">「python」</span>
-      <a class="chip" href="/article/python_function/">Pyhton--从入门到入土---函数</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-24</time>
-    </div>
-    <p class="text">python 字典</p>
-    <div class="foot">
-      <span class="chip">「python」</span>
-      <a class="chip" href="/article/python_dictionary/">Python--从入门到入土--字典</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-20</time>
-    </div>
-    <p class="text">python 列表</p>
-    <div class="foot">
-      <span class="chip">「python」</span>
-      <a class="chip" href="/article/python_list/">Python:从入门到入土---列表</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-19</time>
-    </div>
-    <p class="text">操作系统</p>
-    <div class="foot">
-      <span class="chip">「操作系统」</span>
-      <a class="chip" href="/article/os/">操作系统教程</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-19</time>
-    </div>
-    <p class="text">皮卡丘靶场</p>
-    <div class="foot">
-      <span class="chip">「靶场」</span>
-      <a class="chip" href="/article/pikachu/">pikachu---爆破</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-19</time>
-    </div>
-    <p class="text">python 变量</p>
-    <div class="foot">
-      <span class="chip">「python」</span>
-      <a class="chip" href="/article/python_variable/">Python:从入门到入土---变量和基本数据类型</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      <time class="time">2023-03-19</time>
-    </div>
-    <p class="text">udf提权</p>
-    <div class="foot">
-      <span class="chip">「提权」</span>
-      <a class="chip" href="/article/udf%E6%8F%90%E6%9D%83/">mysql提权</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      
-    </div>
-    <p class="text">web</p>
-    <div class="foot">
-      <span class="chip">「web」</span>
-      <a class="chip" href="/article/CISCN2024_canic/">CISCN2024_canic</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      
-    </div>
-    <p class="text">数据结构</p>
-    <div class="foot">
-      <span class="chip">「数据结构」</span>
-      <a class="chip" href="/article/ds/">数据结构</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      
-    </div>
-    <p class="text">title: lampao靶场 datas: 2024.6.24 tags: 靶场 categories: 靶场 keywords: description: </p>
-    <div class="foot">
-      <span class="chip">「随笔」</span>
-      <a class="chip" href="/article/lampiao/">lampiao</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
-</article>
-<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus" loading="lazy"></span>
-      <span class="nm">vernus</span>
-      
-    </div>
-    <p class="text">web</p>
-    <div class="foot">
-      <span class="chip">「web」</span>
-      <a class="chip" href="/article/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/">原型链污染</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
+<div class="d-wrap">
+  <div class="d-head">
+    <div>
+      <div class="d-crumb">✦ DIARY / WRITINGS</div>
+      <h1 class="d-title"><span class="hl">随心记</span></h1>
+      <p class="d-sub">旅店里的碎碎念与近况</p>
+    </div>
+    <aside class="d-sticky">
+      <div class="s-label">✎ 草稿箱 · 下一篇在写……</div>
+      <p class="s-big">暂无，随时起笔</p>
+      <div class="s-bar"><i></i></div>
+      <div class="s-pct">0%</div>
+    </aside>
+  </div>
+
+  <section class="d-ledger">
+    <div class="lg-head"><span>艾恩葛朗特第一层 · 随心记账本</span><span class="till">截至 2026.09.30</span></div>
+    <div class="lg-stats">
+      <div class="lg-stat"><b>51<i>篇</i></b><span>已上架</span></div>
+      <div class="lg-stat"><b>40.6<i>万字</i></b><span>累计字数</span></div>
+      <div class="lg-stat"><b>36<i>天前</i></b><span>最近一篇</span></div>
+      <div class="lg-stat"><b>3.5<i>年</i></b><span>动笔至今</span></div>
+    </div>
+    <div class="d-chart">
+<div class="bar"><em>10</em><i style="height:25px"></i><span>'23</span></div>
+<div class="bar"><em>26</em><i style="height:52px"></i><span>'24</span></div>
+<div class="bar"><em>1</em><i style="height:10px"></i><span>'25</span></div>
+<div class="bar"><em>10</em><i style="height:25px"></i><span>'26</span></div>
+    </div>
+  </section>
+
+  <div class="d-grid">
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">内网</span><time class="n-date">2026-08-26</time></div>
+  <h3><a href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></h3>
+  <p class="n-desc">内网</p>
+  <div class="n-foot"><span class="n-tags"><span>#内网</span></span><a class="n-read" href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">内网</span><time class="n-date">2026-08-26</time></div>
+  <h3><a href="/article/%E9%92%93%E9%B1%BC/">钓鱼</a></h3>
+  <p class="n-desc">我在永远的看着你，直到永远....</p>
+  <div class="n-foot"><span class="n-tags"><span>#内网</span></span><a class="n-read" href="/article/%E9%92%93%E9%B1%BC/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">ai</span><time class="n-date">2026-07-07</time></div>
+  <h3><a href="/article/agent/">AI agent</a></h3>
+  <p class="n-desc">functions describe the world</p>
+  <div class="n-foot"><span class="n-tags"><span>#ai</span></span><a class="n-read" href="/article/agent/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">vpn</span><time class="n-date">2026-02-15</time></div>
+  <h3><a href="/article/vpn_develop/">vpn develop</a></h3>
+  <p class="n-desc">向所有开发者，致以最高的敬意。</p>
+  <div class="n-foot"><span class="n-tags"><span>#vpn</span></span><a class="n-read" href="/article/vpn_develop/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">ai</span><time class="n-date">2026-02-12</time></div>
+  <h3><a href="/article/llm_prompt_attack/">llm prompt attack</a></h3>
+  <p class="n-desc">llm注入</p>
+  <div class="n-foot"><span class="n-tags"><span>#ai</span></span><a class="n-read" href="/article/llm_prompt_attack/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">ai</span><time class="n-date">2026-02-07</time></div>
+  <h3><a href="/article/ai_study/">AI study</a></h3>
+  <p class="n-desc">functions describe the world</p>
+  <div class="n-foot"><span class="n-tags"><span>#ai</span></span><a class="n-read" href="/article/ai_study/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">markdown</span><time class="n-date">2026-02-07</time></div>
+  <h3><a href="/article/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E8%BF%B0%26ai_agent/">markdown语法简述&amp;ai_agent</a></h3>
+  <p class="n-desc">markdown &amp; ai</p>
+  <div class="n-foot"><span class="n-tags"><span>#markdown</span><span>#ai</span></span><a class="n-read" href="/article/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E8%BF%B0%26ai_agent/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">应急响应</span><time class="n-date">2026-02-02</time></div>
+  <h3><a href="/article/win22%E6%8C%96%E7%9F%BF/">win挖矿</a></h3>
+  <p class="n-desc">win22挖矿</p>
+  <div class="n-foot"><span class="n-tags"><span>#应急响应</span></span><a class="n-read" href="/article/win22%E6%8C%96%E7%9F%BF/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">入侵检测</span><time class="n-date">2026-01-20</time></div>
+  <h3><a href="/article/some_plus/">入侵检测</a></h3>
+  <p class="n-desc">入侵检测</p>
+  <div class="n-foot"><span class="n-tags"><span>#入侵检测</span></span><a class="n-read" href="/article/some_plus/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">owasp</span><time class="n-date">2026-01-08</time></div>
+  <h3><a href="/article/owasp_top_10/">owasp top 10 2025</a></h3>
+  <p class="n-desc">owasp</p>
+  <div class="n-foot"><span class="n-tags"><span>#owasp</span></span><a class="n-read" href="/article/owasp_top_10/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">工具</span><time class="n-date">2025-03-11</time></div>
+  <h3><a href="/article/nasl%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/">openvas</a></h3>
+  <p class="n-desc">工具</p>
+  <div class="n-foot"><span class="n-tags"><span>#工具</span><span>#openvas</span></span><a class="n-read" href="/article/nasl%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-12-12</time></div>
+  <h3><a href="/article/skytower/">skytower</a></h3>
+  <p class="n-desc">skytower</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/skytower/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-12-12</time></div>
+  <h3><a href="/article/%E9%BB%91%E7%9B%92/">黑盒知识梳理</a></h3>
+  <p class="n-desc">靶场</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/%E9%BB%91%E7%9B%92/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-11-23</time></div>
+  <h3><a href="/article/tr0ll2/">tr0ll2</a></h3>
+  <p class="n-desc">tr0ll2</p>
+  <div class="n-foot"><span class="n-tags"><span>#SAO</span></span><a class="n-read" href="/article/tr0ll2/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">代码审计</span><time class="n-date">2024-11-15</time></div>
+  <h3><a href="/article/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">php命令执行</a></h3>
+  <p class="n-desc">php命令执行</p>
+  <div class="n-foot"><span class="n-tags"><span>#代码审计</span></span><a class="n-read" href="/article/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">代码审计</span><time class="n-date">2024-11-08</time></div>
+  <h3><a href="/article/CMS%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%90%88%E9%9B%86/">CMS 代码审计实战合集（八个国产 CMS）</a></h3>
+  <p class="n-desc">八个国产 CMS 的代码审计实战记录——五指、BossCMS、IBOS、KiteCMS、ZZCMS、YzmCMS、海 CMS、信呼，覆盖 SQL 注入、任意文件上传与 GetShe</p>
+  <div class="n-foot"><span class="n-tags"><span>#代码审计</span></span><a class="n-read" href="/article/CMS%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%90%88%E9%9B%86/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">代码审计</span><time class="n-date">2024-09-24</time></div>
+  <h3><a href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">代码审计</a></h3>
+  <p class="n-desc">代码审计</p>
+  <div class="n-foot"><span class="n-tags"><span>#代码审计</span></span><a class="n-read" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">代码审计</span><time class="n-date">2024-09-21</time></div>
+  <h3><a href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1sql%E6%B3%A8%E5%85%A5/">代码审计sql注入</a></h3>
+  <p class="n-desc">代码审计</p>
+  <div class="n-foot"><span class="n-tags"><span>#代码审计</span></span><a class="n-read" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1sql%E6%B3%A8%E5%85%A5/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">csrf</span><time class="n-date">2024-09-19</time></div>
+  <h3><a href="/article/csrf/">csrf</a></h3>
+  <p class="n-desc">csrf</p>
+  <div class="n-foot"><span class="n-tags"><span>#web</span></span><a class="n-read" href="/article/csrf/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">代码审计</span><time class="n-date">2024-09-19</time></div>
+  <h3><a href="/article/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计---java基础</a></h3>
+  <p class="n-desc">代码审计</p>
+  <div class="n-foot"><span class="n-tags"><span>#代码审计</span></span><a class="n-read" href="/article/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">守夜</span><time class="n-date">2024-08-30</time></div>
+  <h3><a href="/article/%E5%AE%88%E5%A4%9C-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/">WEB攻防--任意文件上传与下载</a></h3>
+  <p class="n-desc">守夜实战笔记：以皮卡丘等靶场为例，整理任意文件下载与任意文件上传漏洞的测试思路与利用过程。</p>
+  <div class="n-foot"><span class="n-tags"><span>#渗透</span></span><a class="n-read" href="/article/%E5%AE%88%E5%A4%9C-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">渗透</span><time class="n-date">2024-08-25</time></div>
+  <h3><a href="/article/sql%E6%B3%A8%E5%85%A5-%E5%AE%88%E5%A4%9C%E4%BA%BA/">WEB攻防--sql注入</a></h3>
+  <p class="n-desc">守夜-sql注入</p>
+  <div class="n-foot"><span class="n-tags"><span>#渗透</span></span><a class="n-read" href="/article/sql%E6%B3%A8%E5%85%A5-%E5%AE%88%E5%A4%9C%E4%BA%BA/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">工具</span><time class="n-date">2024-08-25</time></div>
+  <h3><a href="/article/sql%E8%AF%AD%E5%8F%A5%E7%A7%AF%E7%B4%AF/">sql语句积累</a></h3>
+  <p class="n-desc">工具</p>
+  <div class="n-foot"><span class="n-tags"><span>#工具</span></span><a class="n-read" href="/article/sql%E8%AF%AD%E5%8F%A5%E7%A7%AF%E7%B4%AF/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">渗透</span><time class="n-date">2024-08-15</time></div>
+  <h3><a href="/article/lodash/">lodash</a></h3>
+  <p class="n-desc">loadsh</p>
+  <div class="n-foot"><span class="n-tags"><span>#渗透</span></span><a class="n-read" href="/article/lodash/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">小迪安全</span><time class="n-date">2024-08-07</time></div>
+  <h3><a href="/article/%E5%B0%8F%E8%BF%AA%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B0%E5%90%88%E9%9B%86/">小迪安全学习笔记（Day1-Day7 合集）</a></h3>
+  <p class="n-desc">小迪安全入门课程笔记合集：从名词解释、文件上传下载与反弹 shell，到信息打点、CDN 绕过与端口扫描的完整学习记录。</p>
+  <div class="n-foot"><span class="n-tags"><span>#小迪安全</span><span>#渗透</span></span><a class="n-read" href="/article/%E5%B0%8F%E8%BF%AA%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B0%E5%90%88%E9%9B%86/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-07-27</time></div>
+  <h3><a href="/article/iwebsec/">iwebsec---- not only rce/sqli</a></h3>
+  <p class="n-desc">iwebsec</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/iwebsec/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">渗透</span><time class="n-date">2024-07-26</time></div>
+  <h3><a href="/article/rce/">RCE</a></h3>
+  <p class="n-desc">rce</p>
+  <div class="n-foot"><span class="n-tags"><span>#渗透</span></span><a class="n-read" href="/article/rce/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-07-22</time></div>
+  <h3><a href="/article/Derpnstink-1/">Derpnstink-1</a></h3>
+  <p class="n-desc">Derpnstink-1</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/Derpnstink-1/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-06-30</time></div>
+  <h3><a href="/article/LordOfTheRoot_1.0.1/">LordOfTheRoot_1.0.1</a></h3>
+  <p class="n-desc">LordOfTheRoot_1.0.1</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/LordOfTheRoot_1.0.1/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-06-30</time></div>
+  <h3><a href="/article/w1r3s-editable/">w1r3s-editable</a></h3>
+  <p class="n-desc">w1r3s-editable</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/w1r3s-editable/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-06-28</time></div>
+  <h3><a href="/article/Tr0ll/">Tr0ll</a></h3>
+  <p class="n-desc">Tr0ll</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/Tr0ll/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-06-27</time></div>
+  <h3><a href="/article/raven2/">raven2靶场</a></h3>
+  <p class="n-desc">raven2</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/raven2/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">yaml</span><time class="n-date">2024-06-27</time></div>
+  <h3><a href="/article/yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/">nuclei模板编写&amp;&amp;yaml学习</a></h3>
+  <p class="n-desc">yaml</p>
+  <div class="n-foot"><span class="n-tags"><span>#yaml</span></span><a class="n-read" href="/article/yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">ctf</span><time class="n-date">2024-06-25</time></div>
+  <h3><a href="/article/CTF%E9%9A%90%E5%86%99%E6%9C%AF/">CTF--隐写术</a></h3>
+  <p class="n-desc">隐写术</p>
+  <div class="n-foot"><span class="n-tags"><span>#ctf</span></span><a class="n-read" href="/article/CTF%E9%9A%90%E5%86%99%E6%9C%AF/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">内存取证</span><time class="n-date">2024-06-25</time></div>
+  <h3><a href="/article/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a></h3>
+  <p class="n-desc">内存取证</p>
+  <div class="n-foot"><span class="n-tags"><span>#内存取证</span></span><a class="n-read" href="/article/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2024-06-21</time></div>
+  <h3><a href="/article/GoldenEye/">goldeneye靶场</a></h3>
+  <p class="n-desc">Goldeneye</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/GoldenEye/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">随笔</span><time class="n-date">2024-04-25</time></div>
+  <h3><a href="/article/%E9%9A%8F%E7%AC%94/">答题的时候遇到的一些奇奇怪怪的知识点吧</a></h3>
+  <p class="n-desc">IDS（入侵检测系统） 分类 通过 位置 可以分为： NIDS(network based intrusion detection system) HIDS(H</p>
+  <div class="n-foot"><span class="n-tags"><span>#渗透</span></span><a class="n-read" href="/article/%E9%9A%8F%E7%AC%94/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">渗透</span><time class="n-date">2023-11-06</time></div>
+  <h3><a href="/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">网络渗透测试</a></h3>
+  <p class="n-desc">网络渗透测试</p>
+  <div class="n-foot"><span class="n-tags"><span>#渗透</span></span><a class="n-read" href="/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">计算机网络</span><time class="n-date">2023-07-01</time></div>
+  <h3><a href="/article/cn/">计算机网络简略</a></h3>
+  <p class="n-desc">计算机网络</p>
+  <div class="n-foot"><span class="n-tags"><span>#计算机网络</span></span><a class="n-read" href="/article/cn/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">php</span><time class="n-date">2023-07-01</time></div>
+  <h3><a href="/article/php/">PHP学习</a></h3>
+  <p class="n-desc">php</p>
+  <div class="n-foot"><span class="n-tags"><span>#php</span></span><a class="n-read" href="/article/php/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">随笔</span><time class="n-date">2023-05-12</time></div>
+  <h3><a href="/article/web/">web入门</a></h3>
+  <p class="n-desc">ctfshow第一类:信息收集 web 1 打开以后直接查看源码就可以了 web 2 web 3 bp抓包重发就行了 web 4 1 第四个和B站上给的不一样，</p>
+  <div class="n-foot"><span class="n-tags"><span>#web</span></span><a class="n-read" href="/article/web/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">内存马</span><time class="n-date">2023-05-04</time></div>
+  <h3><a href="/article/%E5%86%85%E5%AD%98%E9%A9%AC/">内存马入门知识学习</a></h3>
+  <p class="n-desc">内存马</p>
+  <div class="n-foot"><span class="n-tags"><span>#web</span></span><a class="n-read" href="/article/%E5%86%85%E5%AD%98%E9%A9%AC/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">随笔</span><time class="n-date">2023-04-24</time></div>
+  <h3><a href="/article/sql/">sql注入基本知识</a></h3>
+  <p class="n-desc">url中?表示传参，id表示变量， 参数类型 1. 数字型：当输入的参数为整形时，如果存在注入漏洞，可以认为是数字型注入。 如 www.text.com/tex</p>
+  <div class="n-foot"><span class="n-tags"><span>#web</span></span><a class="n-read" href="/article/sql/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">python</span><time class="n-date">2023-03-29</time></div>
+  <h3><a href="/article/python%E5%9F%BA%E7%A1%80%E5%90%88%E9%9B%86/">Python:从入门到入土---基础合集（变量·列表·字典·函数·类）</a></h3>
+  <p class="n-desc">Python 基础学习笔记合集：按学习顺序整理变量与基本数据类型、列表、字典、函数与类五个部分，附示例代码与踩坑记录。</p>
+  <div class="n-foot"><span class="n-tags"><span>#python</span></span><a class="n-read" href="/article/python%E5%9F%BA%E7%A1%80%E5%90%88%E9%9B%86/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">操作系统</span><time class="n-date">2023-03-19</time></div>
+  <h3><a href="/article/os/">操作系统教程</a></h3>
+  <p class="n-desc">操作系统</p>
+  <div class="n-foot"><span class="n-tags"><span>#操作系统</span></span><a class="n-read" href="/article/os/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">靶场</span><time class="n-date">2023-03-19</time></div>
+  <h3><a href="/article/pikachu/">pikachu---爆破</a></h3>
+  <p class="n-desc">皮卡丘靶场</p>
+  <div class="n-foot"><span class="n-tags"><span>#靶场</span></span><a class="n-read" href="/article/pikachu/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">提权</span><time class="n-date">2023-03-19</time></div>
+  <h3><a href="/article/udf%E6%8F%90%E6%9D%83/">mysql提权</a></h3>
+  <p class="n-desc">udf提权</p>
+  <div class="n-foot"><span class="n-tags"><span>#手法</span></span><a class="n-read" href="/article/udf%E6%8F%90%E6%9D%83/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">web</span></div>
+  <h3><a href="/article/CISCN2024_canic/">CISCN2024_canic</a></h3>
+  <p class="n-desc">web</p>
+  <div class="n-foot"><span class="n-tags"><span>#web</span></span><a class="n-read" href="/article/CISCN2024_canic/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">数据结构</span></div>
+  <h3><a href="/article/ds/">数据结构</a></h3>
+  <p class="n-desc">数据结构</p>
+  <div class="n-foot"><span class="n-tags"><span>#数据结构</span></span><a class="n-read" href="/article/ds/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">随笔</span></div>
+  <h3><a href="/article/lampiao/">lampiao</a></h3>
+  <p class="n-desc">title: lampao靶场 datas: 2024.6.24 tags: 靶场 categories: 靶场 keywords: description: </p>
+  <div class="n-foot"><span class="n-tags"><span>#SAO</span></span><a class="n-read" href="/article/lampiao/">读一读 →</a></div>
+</article>
+<article class="d-note">
+  <div class="n-top"><span class="n-cat">web</span></div>
+  <h3><a href="/article/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/">原型链污染</a></h3>
+  <p class="n-desc">web</p>
+  <div class="n-foot"><span class="n-tags"><span>#web</span><span>#原型链污染</span></span><a class="n-read" href="/article/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/">读一读 →</a></div>
 </article>
   </div>
 </div>
+<footer class="site-footer">
+  ✦ 旅店已开放 <b id="sfDays">…</b> 天<span class="star">·</span>愿终有一天能与你重要的人重逢
+</footer>
+<script>
+(function () {
+  var el = document.getElementById('sfDays');
+  if (!el) return;
+  var open = Math.max(1, Math.ceil((Date.now() - new Date('2023-04-12T00:00:00+08:00').getTime()) / 864e5));
+  el.textContent = open.toLocaleString('en-US');
+})();
+</script>
+<div class="mp-root">
+  <button class="mp-disc" id="mpDisc" type="button" aria-label="音乐播放器" title="音乐播放器"></button>
+  <div class="mp-panel" id="mpPanel">
+    <div class="mp-head"><span class="mp-title" id="mpTitle">…</span><span class="mp-artist" id="mpArtist"></span></div>
+    <div class="mp-progress">
+      <span class="mp-bar" id="mpBar"><i id="mpFill"></i></span>
+      <span class="mp-time" id="mpTime">0:00 / 0:00</span>
+    </div>
+    <div class="mp-ctrls">
+      <button type="button" id="mpPrev" title="上一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12L9.5 12z"/></svg></button>
+      <button type="button" class="mp-playbtn" id="mpPlay" title="播放/暂停"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+      <button type="button" id="mpNext" title="下一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+    </div>
+    <ul class="mp-playlist" id="mpListEl"></ul>
+  </div>
+</div>
+<audio id="mpAudio" preload="none"></audio>
+<script>
+(function () {
+  var TR = [{"title":"野火 Wildfire","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=2045806409.mp3"},{"title":"疾如猛火 Rapid as Wildfires","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1492283139.mp3"},{"title":"Moon Halo","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1859652717.mp3"},{"title":"Nightglow (Instrumental)","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1334673828.mp3"},{"title":"皎洁的笑颜 Moonlike Smile","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1833805540.mp3"},{"title":"坠叶与晚星 Falling Leaves and Even-Stars","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=3437729518.mp3"}];
+  if (!TR.length) return;
+  var audio = document.getElementById('mpAudio');
+  var disc = document.getElementById('mpDisc');
+  var panel = document.getElementById('mpPanel');
+  var titleEl = document.getElementById('mpTitle');
+  var artistEl = document.getElementById('mpArtist');
+  var fill = document.getElementById('mpFill');
+  var timeEl = document.getElementById('mpTime');
+  var bar = document.getElementById('mpBar');
+  var playBtn = document.getElementById('mpPlay');
+  var listEl = document.getElementById('mpListEl');
+  var cur = 0, errs = 0;
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  function renderList() {
+    listEl.innerHTML = TR.map(function (t, i) {
+      return '<li class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '"><span class="idx">' + (i + 1) + '</span><span style="overflow:hidden;text-overflow:ellipsis">' + t.title + (t.artist ? ' · ' + t.artist : '') + '</span></li>';
+    }).join('');
+  }
+  function setPlayIcon(on) {
+    playBtn.innerHTML = on
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+    disc.classList.toggle('playing', on);
+  }
+  function load(i, autoplay) {
+    cur = ((i % TR.length) + TR.length) % TR.length;
+    var t = TR[cur];
+    audio.src = t.url;
+    titleEl.textContent = t.title;
+    artistEl.textContent = t.artist || '';
+    fill.style.width = '0';
+    timeEl.textContent = '0:00 / 0:00';
+    renderList();
+    if (autoplay) audio.play().catch(function () {});
+  }
+  function next(auto) { errs = auto ? errs : 0; load(cur + 1, playing || !!auto); }
+  function prev() { load(cur - 1, playing); }
+
+  disc.addEventListener('click', function () { panel.classList.toggle('open'); });
+  playBtn.addEventListener('click', function () {
+    if (!audio.src) { load(cur, true); return; }
+    if (audio.paused) audio.play().catch(function () {}); else audio.pause();
+  });
+  document.getElementById('mpNext').addEventListener('click', function () { next(false); });
+  document.getElementById('mpPrev').addEventListener('click', prev);
+  audio.addEventListener('play', function () { setPlayIcon(true); playing = true; });
+  audio.addEventListener('pause', function () { setPlayIcon(false); playing = false; });
+  audio.addEventListener('ended', function () { next(true); });
+  audio.addEventListener('error', function () {
+    errs++;
+    if (errs >= TR.length) { titleEl.textContent = '歌单加载失败'; setPlayIcon(false); return; }
+    next(true);
+  });
+  audio.addEventListener('playing', function () { errs = 0; });
+  audio.addEventListener('timeupdate', function () {
+    var d = audio.duration;
+    fill.style.width = (d ? (audio.currentTime / d) * 100 : 0) + '%';
+    timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(d);
+  });
+  bar.addEventListener('click', function (e) {
+    var r = bar.getBoundingClientRect();
+    if (isFinite(audio.duration)) audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+  });
+  listEl.addEventListener('click', function (e) {
+    var li = e.target.closest('li[data-i]');
+    if (!li) return;
+    playing = true;
+    load(parseInt(li.dataset.i, 10), true);
+  });
+
+  load(0, false);
+})();
+</script>
 </body>
 </html>

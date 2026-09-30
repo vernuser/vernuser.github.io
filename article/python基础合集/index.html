@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python:从入门到入土---基础合集（变量·列表·字典·函数·类） · 艾恩葛朗特第一层の旅店</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;padding:14px 20px}
+.topbar-in{max-width:1120px;margin:0 auto;height:56px;padding:0 8px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(78,86,120,.42);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);box-shadow:0 12px 34px rgba(6,18,34,.32)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;white-space:nowrap;color:#fff}
+.brand .mark{width:28px;height:28px;flex:none;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#3aa3e3,#62a33d);font:700 15px/1 Georgia,"Times New Roman",serif;color:#fff}
+.brand .word{font:700 17px/1 Georgia,"Times New Roman",serif}
+.nav-menu{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}
+.nav-menu a{position:relative;color:rgba(255,255,255,.88);text-decoration:none;font-size:14.5px;white-space:nowrap;transition:color .25s ease}
+.nav-menu a::after{content:"";position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
+.nav-menu a:hover{color:#fff}
+.nav-menu a:hover::after{width:60%}
+.topbar .avatar-btn{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(6,20,36,.4)}
+.topbar .avatar-btn img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:820px){.topbar{padding:10px 12px}.topbar-in{padding:0 6px 0 12px}.brand .word{font-size:15px}.nav-menu{gap:12px}.nav-menu a{font-size:13px}.nav-menu a::after{display:none}}
+:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+/* 文章页：左栏 + 正文两栏 */
+.layout{max-width:1180px;margin:0 auto;padding:96px 20px 90px;display:flex;gap:22px;align-items:flex-start}
+.main{flex:1 1 auto;min-width:0}
+.crumb{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:14px;padding:6px 15px;border-radius:999px;
+  font-size:13px;color:#fff;text-decoration:none;
+  background:rgba(226,236,248,.16);border:1px solid var(--line);backdrop-filter:blur(12px);transition:.3s;
+}
+.crumb:hover{background:rgba(58,163,227,.5)}
+
+/* 左栏（与首页同款） */
+.side{flex:0 0 250px;width:250px;position:sticky;top:96px;max-height:calc(100vh - 108px);overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none}
+.side::-webkit-scrollbar{width:0;height:0;display:none}
+.side .card{
+  background:rgba(12,28,48,.44);border:1px solid var(--line);border-radius:18px;margin-bottom:16px;padding:18px 16px;
+  box-shadow:0 14px 34px rgba(6,20,36,.28);backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+}
+.side .profile{text-align:center;padding:20px 16px 16px}
+.side .profile .avatar{width:96px;height:96px;margin:0 auto;border-radius:50%;overflow:hidden;box-shadow:0 10px 26px rgba(6,20,36,.4)}
+.side .profile .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.side .profile .name{position:relative;display:inline-block;margin:11px auto 3px;padding-bottom:5px;font-size:16px;font-weight:700;color:#fff}
+.side .profile .name::after{content:"";position:absolute;left:50%;bottom:0;width:0;height:2px;background:var(--sky);transform:translateX(-50%);transition:width .3s ease}
+.side .profile .name:hover::after{width:52%}
+.side .profile .bio{margin:5px 0 0;font-size:12.5px;color:var(--muted)}
+.side .profile .socials{display:flex;justify-content:center;gap:9px;margin-top:13px}
+.side .profile .socials a{
+  width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);border:1px solid var(--line);color:#fff;text-decoration:none;
+  transition:all .3s cubic-bezier(.075,.82,.165,1);
+}
+.side .profile .socials a:hover{background:rgba(58,163,227,.5);transform:translateY(-3px)}
+.side .sec-title{position:relative;display:flex;align-items:center;margin:0 0 11px;padding-left:11px;font-size:14.5px;font-weight:600;color:#fff}
+.side .sec-title::before{content:"";position:absolute;left:0;top:50%;width:3px;height:54%;border-radius:2px;background:var(--sky);transform:translateY(-50%);transition:height .3s ease-in-out}
+.side .card:hover .sec-title::before{height:86%}
+.side .sec-title .sub{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--muted)}
+.side .sec-title.center{justify-content:center;padding-left:0}
+.side .sec-title.center::before{display:none}
+.side .sec-title.center .sub{margin-left:8px}
+.side .tabs{display:flex;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:11px}
+.side .tab{position:relative;flex:1 1 0;height:30px;border:0;background:none;color:rgba(255,255,255,.6);font-size:13.5px;cursor:pointer;transition:color .3s ease}
+.side .tab+.tab::before{content:"";position:absolute;left:0;top:50%;width:1px;height:14px;background:var(--line);transform:translateY(-50%)}
+.side .tab:hover{color:#fff}
+.side .tab.on{color:#fff}
+.side .tab.on::after{content:"";position:absolute;left:50%;bottom:-10px;width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:0 0 9px rgba(58,163,227,.9);transform:translateX(-50%)}
+.side .list{display:flex;flex-direction:column;gap:7px;max-height:300px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+.side .list::-webkit-scrollbar{width:0;height:0;display:none}
+.side .list a{display:flex;align-items:center;gap:9px;text-decoration:none;opacity:.9;transition:opacity .3s ease,transform .3s ease}
+.side .list a:hover{opacity:1;transform:translateX(2px)}
+.side .list a.cur .t{color:#bfe4ff}
+.side .thumb{flex:none;width:32px;height:32px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,.3);background:linear-gradient(135deg,rgba(58,163,227,.55),rgba(98,163,61,.55))}
+.side .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.side .txt{min-width:0;flex:1 1 auto}
+.side .t{display:block;font-size:12.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
+.side .m{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.side .empty{padding:14px 4px;text-align:center;font-size:12.5px;color:var(--muted)}
+.side .cat{list-style:none;margin:0;padding:0}
+.side .cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;color:rgba(255,255,255,.9);font-size:13px;text-decoration:none;transition:background .3s ease,transform .3s ease;cursor:pointer}
+.side .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.side .cat .n{flex:none;min-width:24px;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11px;text-align:center;color:#fff}
+.side .cloud{display:flex;flex-wrap:wrap;gap:7px}
+.side .cloud .tagpill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease;cursor:pointer}
+
+/* 封面大图 + 白色毛玻璃信息层 */
+.hero{
+  position:relative;height:300px;border-radius:20px;overflow:hidden;margin-bottom:18px;
+  border:1px solid rgba(255,255,255,.28);background:linear-gradient(135deg,rgba(58,163,227,.5),rgba(98,163,61,.5));
+  box-shadow:0 18px 44px rgba(6,20,36,.34);
+}
+.hero-bg{
+  position:absolute;inset:0;display:block;
+  background-image:var(--hero);background-size:cover;background-position:center;
+  transform:scale(1.02);
+}
+.hero:hover .hero-bg{transform:scale(1.05);transition:transform 1.2s cubic-bezier(.22,.61,.36,1)}
+.hero-glass{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;justify-content:center;gap:12px;
+  padding:26px 30px;
+  /* 暗色毛玻璃：左侧更实保证文字可读，右侧更透让插画透出来 */
+  background:linear-gradient(to right,rgba(6,18,34,.82) 0%,rgba(6,18,34,.6) 46%,rgba(6,18,34,.24) 100%);
+  backdrop-filter:blur(5px) saturate(140%);
+  -webkit-backdrop-filter:blur(5px) saturate(140%);
+  color:#eaf3ff;
+}
+.hero-title{
+  margin:0;font-size:27px;line-height:1.4;font-weight:700;color:#fff;
+  text-shadow:0 2px 14px rgba(4,12,24,.7);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.hero-meta{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:rgba(234,243,255,.82)}
+.hero-meta li{display:flex;align-items:center;gap:8px}
+.hero-meta svg{width:15px;height:15px;flex:none;opacity:.8}
+.hero-meta b{font-weight:600;color:#fff}
+.hero-share{display:flex;gap:11px;margin-top:8px}
+.hero-share a,.hero-share button{
+  width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);
+  color:#eaf3ff;backdrop-filter:blur(8px);
+  box-shadow:0 4px 14px rgba(4,12,24,.3);
+  transition:transform .3s ease,background .3s ease,color .3s ease;
+}
+.hero-share a:hover,.hero-share button:hover{transform:translateY(-3px);background:rgba(58,163,227,.55);color:#fff}
+
+/* 正文面板：白色毛玻璃 */
+.panel{
+  background:rgba(10,24,42,.62);
+  border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:30px 34px 34px;
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 18px 44px rgba(4,12,24,.34);
+  color:rgba(234,243,255,.9);
+}
+.panel-title{
+  margin:0 0 14px;padding-left:13px;font-size:26px;line-height:1.4;color:#fff;
+  border-left:4px solid var(--sky);
+}
+.panel .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px dashed rgba(255,255,255,.18)}
+.panel .chip{padding:2px 11px;border-radius:999px;background:rgba(58,163,227,.2);border:1px solid rgba(58,163,227,.36);font-size:12px;color:#bfe0ff}
+.panel .chip.date{color:#f0d79a;background:rgba(224,165,69,.18);border-color:rgba(224,165,69,.36)}
+
+/* 正文排版（暗色玻璃底） */
+.sao-article h1,.sao-article h2,.sao-article h3,.sao-article h4,.sao-article h5,.sao-article h6{color:#fff;font-weight:700;line-height:1.45;margin:1.6em 0 .6em}
+.sao-article h2{font-size:22px;border-left:3px solid var(--sky);padding-left:12px}
+.sao-article h3{font-size:19px;color:#dcecff}
+.sao-article p{margin:.9em 0}
+.sao-article a{color:#8fd0ff;text-decoration:underline;text-underline-offset:3px}
+.sao-article a:hover{color:#fff}
+.sao-article img{max-width:100%;height:auto;border-radius:10px;margin:14px 0}
+.sao-article ul,.sao-article ol{padding-left:1.5em;margin:.9em 0}
+.sao-article li{margin:.35em 0}
+.sao-article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:rgba(234,243,255,.82)}
+.sao-article code{background:rgba(255,255,255,.12);color:#ffd9a8;padding:2px 6px;border-radius:5px;font-size:.9em;font-family:Consolas,Monaco,monospace}
+.sao-article pre{background:rgba(4,12,24,.72);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+.sao-article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+.sao-article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+.sao-article th,.sao-article td{border:1px solid rgba(255,255,255,.18);padding:8px 12px;text-align:left}
+.sao-article th{background:rgba(255,255,255,.08);color:#fff}
+.sao-article hr{border:none;border-top:1px dashed rgba(255,255,255,.2);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed rgba(255,255,255,.24);border-radius:10px;background:rgba(255,255,255,.05);color:rgba(234,243,255,.7);font-size:13px;text-align:center}
+
+@media(max-width:1080px){
+  .layout{flex-direction:column;padding-top:88px}
+  .side{
+    position:static;width:100%;flex:none;max-height:none;display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;
+  }
+  .side .card{margin-bottom:0}
+  .side .profile{grid-column:1/-1}
+}
+@media(max-width:820px){
+  .side{grid-template-columns:minmax(0,1fr)}
+  .hero{height:250px}
+  .hero-glass{padding:20px 22px;background:linear-gradient(to right,rgba(6,18,34,.86),rgba(6,18,34,.62))}
+  .hero-title{font-size:21px}
+  .panel{padding:22px 18px 24px}
+  .panel-title{font-size:21px}
+}
+
+/* 页脚 */
+.site-footer{position:relative;z-index:1;padding:22px 16px 30px;text-align:center;font-size:12.5px;color:rgba(233,242,253,.62);letter-spacing:.05em}
+.site-footer b{color:#7cc4ec;font-weight:600;font-variant-numeric:tabular-nums;font-size:13.5px}
+.site-footer .star{margin:0 10px;color:rgba(233,242,253,.35)}
+
+/* 悬浮音乐播放器（左下角） */
+.mp-root{position:fixed;left:18px;bottom:18px;z-index:80}
+.mp-disc{
+  width:52px;height:52px;border-radius:50%;cursor:pointer;padding:0;position:relative;
+  border:2px solid rgba(255,255,255,.5);
+  background:radial-gradient(circle,#0d2137 0 20%,#16283f 21% 36%,#0d2137 37% 54%,#16283f 55% 70%,#0d2137 71% 100%);
+  box-shadow:0 10px 26px rgba(4,12,24,.55);
+  animation:mp-spin 7s linear infinite;animation-play-state:paused;
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.mp-disc:hover{transform:scale(1.06);box-shadow:0 14px 32px rgba(4,12,24,.65)}
+.mp-disc.playing{animation-play-state:running}
+.mp-disc::before{content:'';position:absolute;left:50%;top:7px;bottom:7px;width:2px;margin-left:-1px;background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.06))}
+.mp-disc::after{content:'';position:absolute;inset:0;margin:auto;width:15px;height:15px;border-radius:50%;background:linear-gradient(140deg,#3aa3e3,#62a33d);border:2px solid rgba(255,255,255,.75)}
+@keyframes mp-spin{to{transform:rotate(360deg)}}
+.mp-panel{
+  position:absolute;left:0;bottom:64px;width:302px;max-width:calc(100vw - 32px);
+  border-radius:16px;background:rgba(10,24,42,.86);border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 18px 44px rgba(4,12,24,.55);padding:14px 14px 8px;color:#eaf3ff;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease;
+}
+.mp-panel.open{opacity:1;transform:none;pointer-events:auto}
+.mp-head{display:flex;align-items:baseline;gap:8px;min-width:0}
+.mp-title{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-artist{font-size:11px;color:rgba(233,242,253,.55);margin-left:auto;flex:none;white-space:nowrap}
+.mp-progress{display:flex;align-items:center;gap:8px;margin-top:10px}
+.mp-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;position:relative}
+.mp-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;background:linear-gradient(90deg,#3aa3e3,#7cc4ec)}
+.mp-time{font-size:10.5px;color:rgba(233,242,253,.6);font-variant-numeric:tabular-nums;flex:none}
+.mp-ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.mp-ctrls button{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);color:#fff;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background .25s ease,transform .25s ease;
+}
+.mp-ctrls button:hover{background:rgba(58,163,227,.5);transform:scale(1.06)}
+.mp-ctrls button svg{width:14px;height:14px}
+.mp-ctrls .mp-playbtn{width:40px;height:40px;background:linear-gradient(140deg,#3aa3e3,#62a33d);border-color:transparent}
+.mp-playlist{list-style:none;margin:10px 0 2px;padding:5px 2px 3px;border-top:1px dashed rgba(255,255,255,.16);max-height:148px;overflow-y:auto}
+.mp-playlist li{padding:6px 9px;border-radius:8px;font-size:12.5px;color:rgba(233,242,253,.85);cursor:pointer;display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-playlist li:hover{background:rgba(255,255,255,.08)}
+.mp-playlist li.on{color:#fff;background:rgba(58,163,227,.28)}
+.mp-playlist li .idx{font-size:10.5px;color:rgba(233,242,253,.5);flex:none;width:14px}
+@media(max-width:640px){
+  .mp-root{left:12px;bottom:12px}
+  .mp-disc{width:46px;height:46px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="/"><span class="mark">剑</span><span class="word">艾恩葛朗特第一层の旅店</span></a>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="/">首页</a></li>
+        <li><a href="/diary/">随心记</a></li>
+        <li><a href="/wallpaper/">壁纸墙</a></li>
+        <li><a href="/link/">友人帐</a></li>
+        <li><a href="/about/">关于我</a></li>
+      </ul>
+    </nav>
+    <a class="avatar-btn" href="/about/" title="vernus"><img src="/icons/cards/avatar.png" alt="vernus"></a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="side">
+  <section class="card profile">
+    <div class="avatar"><img src="/icons/cards/avatar.png" alt="vernus"></div>
+    <div class="name">艾恩葛朗特第一层の旅店</div>
+    <p class="bio">愿终有一天能与你重要的人重逢</p>
+    <div class="socials">
+      <a href="https://github.com/vernuser" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0C17.7 4.7 18.7 5 18.7 5c.6 1.5.2 2.7.1 3 .8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      </a>
+      <a href="https://space.bilibili.com/348470293" target="_blank" rel="noopener" title="BiliBili" aria-label="BiliBili">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M17.8 4.6h2.7c1 0 1.8.8 1.8 1.8v10.4c0 1-.8 1.8-1.8 1.8H3.5c-1 0-1.8-.8-1.8-1.8V6.4c0-1 .8-1.8 1.8-1.8h2.7L4.9 3.3c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l2.4 2.3h7.4l2.4-2.3c.3-.3.7-.3 1 0 .3.3.3.7 0 1l-1.3 1.3zM7.2 10.6c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9.6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/></svg>
+      </a>
+      <a href="mailto:vernuser@foxmail.com" title="邮箱" aria-label="邮箱">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg>
+      </a>
+      <a href="http://wpa.qq.com/msgrd?v=3&uin=840683056&site=qq&menu=yes" target="_blank" rel="noopener" title="QQ" aria-label="QQ">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 0 5.2 2.3 5.2 5.4 0 1 .3 1.6.9 2.6.9 1.5 1.9 3 1.9 5.1 0 1.4-.5 2.3-1.3 2.3-.6 0-1.1-.5-1.5-1.3-.8 1.4-2.2 2.4-3.9 2.4h-2.6c-1.7 0-3.1-1-3.9-2.4-.4.8-.9 1.3-1.5 1.3-.8 0-1.3-.9-1.3-2.3 0-2.1 1-3.6 1.9-5.1.6-1 .9-1.6.9-2.6C6.8 4.3 9 2 12 2z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3 class="sec-title center">最近<span class="sub">5 篇</span></h3>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="card">
+    <h3 class="sec-title">分类<span class="sub">26 个</span></h3>
+    <ul class="cat"><li><a class="row" href="/#cat=%E9%9D%B6%E5%9C%BA"><span>靶场</span><span class="n">11</span></a></li><li><a class="row" href="/#cat=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span>代码审计</span><span class="n">5</span></a></li><li><a class="row" href="/#cat=%E6%B8%97%E9%80%8F"><span>渗透</span><span class="n">4</span></a></li><li><a class="row" href="/#cat=%E6%9C%AA%E5%88%86%E7%B1%BB"><span>未分类</span><span class="n">4</span></a></li><li><a class="row" href="/#cat=ai"><span>ai</span><span class="n">3</span></a></li><li><a class="row" href="/#cat=%E5%B7%A5%E5%85%B7"><span>工具</span><span class="n">2</span></a></li><li><a class="row" href="/#cat=%E5%86%85%E7%BD%91"><span>内网</span><span class="n">2</span></a></li><li><a class="row" href="/#cat=web"><span>web</span><span class="n">2</span></a></li><li><a class="row" href="/#cat=%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span>操作系统</span><span class="n">1</span></a></li><li><a class="row" href="/#cat=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span>计算机网络</span><span class="n">1</span></a></li></ul>
+  </section>
+
+  <section class="card">
+    <h3 class="sec-title">标签云<span class="sub">24 个</span></h3>
+    <div class="cloud"><a class="tagpill" href="/#tag=%E9%9D%B6%E5%9C%BA">靶场</a><a class="tagpill" href="/#tag=%E6%B8%97%E9%80%8F">渗透</a><a class="tagpill" href="/#tag=web">web</a><a class="tagpill" href="/#tag=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1">代码审计</a><a class="tagpill" href="/#tag=ai">ai</a><a class="tagpill" href="/#tag=%E5%86%85%E7%BD%91">内网</a><a class="tagpill" href="/#tag=%E5%B7%A5%E5%85%B7">工具</a><a class="tagpill" href="/#tag=vpn">vpn</a><a class="tagpill" href="/#tag=markdown">markdown</a><a class="tagpill" href="/#tag=%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94">应急响应</a><a class="tagpill" href="/#tag=%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B">入侵检测</a><a class="tagpill" href="/#tag=owasp">owasp</a><a class="tagpill" href="/#tag=openvas">openvas</a><a class="tagpill" href="/#tag=%E5%B0%8F%E8%BF%AA%E5%AE%89%E5%85%A8">小迪安全</a><a class="tagpill" href="/#tag=yaml">yaml</a><a class="tagpill" href="/#tag=ctf">ctf</a><a class="tagpill" href="/#tag=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81">内存取证</a><a class="tagpill" href="/#tag=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">计算机网络</a><a class="tagpill" href="/#tag=php">php</a><a class="tagpill" href="/#tag=python">python</a><a class="tagpill" href="/#tag=%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a><a class="tagpill" href="/#tag=%E6%89%8B%E6%B3%95">手法</a><a class="tagpill" href="/#tag=%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a><a class="tagpill" href="/#tag=%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93">原型链污染</a></div>
+  </section>
+</aside>
+
+  <main class="main">
+    <a class="crumb" href="/">← 返回首页</a>
+
+    <section class="hero" style="--hero:url('/covers/0460.jpg')">
+      <span class="hero-bg"></span>
+      <div class="hero-glass">
+        <h1 class="hero-title">Python:从入门到入土---基础合集（变量·列表·字典·函数·类）</h1>
+        <ul class="hero-meta">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l3 1.8"/></svg>
+            <span>发表于 <b>2023-03-29</b></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 12S6 5.4 12 5.4 21.4 12 21.4 12 18 18.6 12 18.6 2.6 12 2.6 12z"/><circle cx="12" cy="12" r="2.6"/></svg>
+            <span>字数 <b>29,308</b> · 约 <b>73</b> 分钟</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
+            <span>评论 <b>—</b></span>
+          </li>
+        </ul>
+        <div class="hero-share">
+          <a href="https://github.com/vernuser" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0C17.7 4.7 18.7 5 18.7 5c.6 1.5.2 2.7.1 3 .8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+          </a>
+          <a href="https://space.bilibili.com/348470293" target="_blank" rel="noopener" title="BiliBili" aria-label="BiliBili">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.8 4.6h2.7c1 0 1.8.8 1.8 1.8v10.4c0 1-.8 1.8-1.8 1.8H3.5c-1 0-1.8-.8-1.8-1.8V6.4c0-1 .8-1.8 1.8-1.8h2.7L4.9 3.3c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l2.4 2.3h7.4l2.4-2.3c.3-.3.7-.3 1 0 .3.3.3.7 0 1l-1.3 1.3zM7.2 10.6c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9.6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/></svg>
+          </a>
+          <button type="button" class="share-copy" data-url="" title="复制链接">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.4"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <article class="panel sao-article">
+      <h1 class="panel-title">Python:从入门到入土---基础合集（变量·列表·字典·函数·类）</h1>
+      <div class="meta"><span class="chip date">2023-03-29</span><span class="chip">分类·python</span><span class="chip">#python</span></div>
+      <p>Python 基础学习笔记合集：按学习顺序整理变量与基本数据类型、列表、字典、函数与类五个部分，附示例代码与踩坑记录。</p>
+<blockquote>
+<p>本篇由 5 篇内容相近的笔记合并整理，<strong>安排如下</strong>（按时间顺序）：</p>
+</blockquote>
+<ol>
+<li><strong>Python:从入门到入土---变量和基本数据类型</strong>（2023年3月19日）</li>
+<li><strong>Python:从入门到入土---列表</strong>（2023年3月20日）</li>
+<li><strong>Python--从入门到入土--字典</strong>（2023年3月24日）</li>
+<li><strong>Pyhton--从入门到入土---函数</strong>（2023年3月27日）</li>
+<li><strong>Python--从入门到入土--类</strong>（2023年3月29日）</li>
+</ol>
+<hr>
+<h1>1. Python:从入门到入土---变量和基本数据类型（2023年3月19日）</h1>
+<h6>第一个python代码</h6>
+<p>无疑是永远の
+    ·Hello,world
+与C语言不同の是，python使用の是print而非printf,其次，python中不需要像C语言那样频繁地输入;结束，Python中换行即是结束语句
+运行</p>
+<pre><code>print(&quot;Hello,world&quot;)
+</code></pre>
+<p>输出の结果就是</p>
+<pre><code>Hello,world
+</code></pre>
+<p>当然你也可以选择设置一个变量来指向“Hello,world”这个值
+比如</p>
+<pre><code>message=&quot;Hello,world&quot;
+print(&quot;message&quot;)
+</code></pre>
+<p>运行这个程序就会输出</p>
+<pre><code>Hello,world
+</code></pre>
+<p>下面来拓展这个程序：使得message指向另外一个值</p>
+<pre><code>·message = hello world
+·print(&quot;message&quot;)
+·message = goodbye world
+ ·print(&quot;message&quot;)
+</code></pre>
+<p>这样の话就会打印输出两行</p>
+<pre><code>hello world
+goodbye world
+</code></pre>
+<p>在程序中可以随时修改变量の值，但是python将始终记录变相の最新值</p>
+<h6>变量的使用和命名原则</h6>
+<p>变量的使用，需要遵循一些原则</p>
+<blockquote>
+<p>变量名只能包含数字，下划线，字母。变量名只能以字母或者下划线打头，但不能以数字打头。</p>
+<p>例如：</p>
+<p>你可以以message_1为变量名，但是你不可以以1_message为变量名</p>
+<p>变量名不可以是空格，需要用到的时候以下划线来分割其中的单词</p>
+<p>例如：</p>
+<p>message_1是可以的，但是message 1是不可行的</p>
+<p>有些Python关键字和函数名是不鞥用作变量名的，查询的话是使用</p>
+<pre><code>import keyword
+print(keyword.kwlist)
+print(len(keyword.kwlist))
+</code></pre>
+</blockquote>
+<h6>字符串</h6>
+<p>字符串就是一连串的字符。在Pyhthon中，用括号括起来的都是字符串，</p>
+<p>“this is a string”</p>
+<p>&#39;this is also a string&#39;</p>
+<h6>方法：Python对数据进行的操作</h6>
+<p>例如：</p>
+<pre><code>name = &quot;anaconda&quot;
+print(name.title())
+</code></pre>
+<p>这个语句的输出就是</p>
+<pre><code>anaconda
+</code></pre>
+<p>其中title()就是方法，而name后面的.就是让Pyhon对变量name执行方法title（）指定的操作</p>
+<p>方法title()已首字母大写的方式显示每个单词，即将每个单词的首字母都大写（所以叫title标题么）</p>
+<p>此外还有几个大小写处理方法</p>
+<p>.upper()全字母大写</p>
+<p>.lower()全字母小写</p>
+<p>在字符串中使用变量</p>
+<pre><code>first_name = &quot;ada&quot;
+lase_name = &quot;lovelace&quot;
+full_name = f&quot;{first_name}{last_name}&quot;
+print(full_name)
+</code></pre>
+<p>要在字符串中插入变量的值，可在牵引号前加入字母f，再将要插入的变量放在花括号内。这种字符串称之为f（format）字符串</p>
+<p>上述代码输出结果如下</p>
+<pre><code>ada lovelace
+</code></pre>
+<p>比如</p>
+<pre><code>first_name = &quot;ada&quot;
+lase_name = &quot;lovelace&quot;
+full_name = f&quot;{first_name}{last_name}&quot;
+print(f&quot;hello,{full_name.title()}!&quot;)
+</code></pre>
+<p>上述语句会变成一段友好的问候</p>
+<pre><code>hello,Ada Lovelace!
+</code></pre>
+<p>当然，还可以将整个这一段赋值给一个变量，zheyangdehuazuihouzaiprint调用的话时候会简单很多</p>
+<h6>制表符或者换行符来添加空白</h6>
+<pre><code>print(&quot;language:\n\ttPyhton\n\tC\n\tJavaScript&quot;)
+    输出结果如下
+    language:
+        Python
+        C
+        JavaScript
+</code></pre>
+<h6>删除空白</h6>
+<pre><code>&gt;&gt;&gt;favorite_language = &quot;Pyhotn &quot;
+&gt;&gt;&gt;favorite_language
+”python “
+&gt;&gt;&gt;favorite_language = &quot;Pyhotn &quot;
+&gt;&gt;&gt;favorite_language.rstrip()
+”python“
+</code></pre>
+<p>但是这种删除只是短暂的，当你再次访问这个favorite_language的变量的值的时候，可看见末尾的空格。</p>
+<p>要永久的删除这个地方的空白，就要将删除操作的结果关联到变量</p>
+<pre><code>&gt;&gt;&gt;favorite_language = &quot;Pyhotn &quot;
+&gt;&gt;&gt;favorite_language = favorite_language.rstrip()
+&gt;&gt;&gt;favorite_language
+&quot;python&quot;
+</code></pre>
+<p>当然，你还可以删除开头的空白</p>
+<pre><code>&gt;&gt;&gt;favorite_language = &quot; Pyhotn &quot;
+》》》favorite_language.lstrip()
+&quot;Python &quot;
+</code></pre>
+<h6>使用字符串的时候要避免语法错误</h6>
+<p>比如</p>
+<pre><code>message = &#39;Python&#39;s strength is its diverse community&#39;
+</code></pre>
+<p>这是一个错误的，单引号之内不能有单引号，但是双引号可以</p>
+<pre><code>message = “Python&#39;s strength is its diverse community”
+</code></pre>
+<p>整数Int浮点数float也和C语言一样，这里就不多说了</p>
+<p>有一点，整数不管怎么和浮点数运算，结果永远是浮点数。</p>
+<p>书写很大的整数的时候，可以用_来进行分割，当你打印这种使用下划线定义的数的时候，Python不会打印其中的下划线</p>
+<h6>同时给过个变量赋值</h6>
+<pre><code>x,y,z=0,1,2
+</code></pre>
+<p>这样的话x=0,y=1,z=2</p>
+<p>同时复制的话记得中间用,隔开就行</p>
+<p>在python中，要指出特定的变量为常亮可已将其全部大写，方便辨认。</p>
+<h6>注释</h6>
+<p>#跟C语言的/一样性质</p>
+<hr>
+<h1>2. Python:从入门到入土---列表（2023年3月20日）</h1>
+<h6>列表是什么？</h6>
+<p>列表由一些列按照特定顺序排列而成的元素。</p>
+<p>在Python中，由[]表示列表，并用“，”分隔开其中的元素</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+</code></pre>
+<p>这样的话会打印</p>
+<pre><code>[&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+</code></pre>
+<p>没错，他会连着【】一块打印下来，没想到吧</p>
+<h6>访问列表元素</h6>
+<p>列表式有序集合，所以要访问列表式只需要将该元素的索引告诉Python就好。</p>
+<p>例如</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[0])
+</code></pre>
+<p>当你请求访问列表元素时，Python只会返回该元素，而不包括【】</p>
+<pre><code>trek
+</code></pre>
+<p>当然你也可以使用之前学习过的方法</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[0].title())
+</code></pre>
+<p>这样的话会输出</p>
+<pre><code>Trek
+</code></pre>
+<p>值得一提的是</p>
+<p>索引是从0开始而并不是1开始</p>
+<p>在Python中，第一个列表元素的索引为0而不是1.(这一点 就跟C语言的数组那块一样，都是从0开始的)</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[1])
+print(bicycle[2])
+</code></pre>
+<pre><code>cannondale
+redline
+</code></pre>
+<p>当你想要倒过来访问列表的时候，Python会提供给你一种特殊的语法。通过将索引定位为-1，可让Python返回最后一个列表元素：</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle[-1])
+</code></pre>
+<pre><code>redline
+</code></pre>
+<h5>修改添加和删除元素</h5>
+<h6>修改</h6>
+<p>很简单，用索引定位就好</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle[0] = &#39;baba&#39;
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+[&#39;baba&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+</code></pre>
+<h6>添加</h6>
+<p>在列表未添加元素</p>
+<pre><code>.append
+</code></pre>
+<p>这是一个很神奇的东西，他可以让你在列表的末尾添加元素</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.append = (&#39;ca&#39;)
+print(bicycle)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;&#39;ca&#39;
+</code></pre>
+<p>当然，如果你足够闲得无聊，你也来可以尝试</p>
+<pre><code>name = []
+name.append=(&#39;zgh&#39;)
+nmae.append=(&#39;cjy&#39;)
+nmae.append=(&#39;czm&#39;)
+nmae.append=(&#39;dyf&#39;)
+nmae.append=(&#39;czh&#39;)
+print(name)
+</code></pre>
+<pre><code>[&#39;cgh&#39;,&#39;cjy&#39;,&#39;czm&#39;,&#39;dlf&#39;,&#39;czh&#39;]
+</code></pre>
+<p>有了在末尾添加当然就有在中间添加了</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.insect = (1,&#39;ca&#39;)
+print(bicycle)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;trek&#39;,&#39;ca&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+</code></pre>
+<h6>删除</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+del bicycle[0]
+print(bicycle)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;cannondale&#39;,&#39;redline&#39;
+</code></pre>
+<p>使用del可以无线删除，当然，前提是你知道这个元素在Python中的索引值</p>
+<h6>当然你也可以使用方法pop()删除</h6>
+<p>（我感觉这个列表就像一个栈，pop使用就像弹出这个栈顶）</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+outdate = bicycle.pop()
+print(bicycle)
+print(outdate)
+（这一块本来我打算用popped的，但@一般路过小辉夜给了更好的建议，所以就用outdata了）
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+‘trek’&#39;cannondale&#39;
+&#39;redline&#39;
+</code></pre>
+<h6>弹出任何位置的元素</h6>
+<p>其实吧，pop这个东西不知能删除最后一个元素，你只要在括号里面填写你想要的元素的索引，他都能给你弹出来</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+outdate = bicycle.pop(1)
+print(bicycle)
+print(outdate)
+</code></pre>
+<pre><code>&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;
+&#39;trek,&#39;redline&#39;
+&#39;cannondale&#39;
+</code></pre>
+<p>需要注意的是，当你弹出元素的时候，这个元素就不在列表中了</p>
+<p>根据特定的值删除</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.remove(&#39;cannondale&#39;)
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+[&#39;trek&#39;,redline&#39;]
+</code></pre>
+<p>使用remove的时候也可以照常使用这个值</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+abb = &#39;cannondale&#39;
+bicycle.remove(&#39;cannondale&#39;)
+print(f&quot;{abb.title()}&quot;)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+Cannondale
+</code></pre>
+<h6>组织列表</h6>
+<p>sort（）</p>
+<h6>使用sort（）可以将列表进行用就行排序（这个是按照字母进行排序的）</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+bicycle.sort()
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;cannondale&#39;,&#39;redline&#39;,&#39;trek&#39;]
+</code></pre>
+<p>当你要逆字母方向时，需要</p>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+bicycle.sort(reverse = True)
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;redline&#39;, &#39;cannondale&#39;]
+</code></pre>
+<h6>使用sorted函数进行临时性的排序</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+print(sorted(bicycle))
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+[&#39;cannondale&#39;, &#39;redline&#39;, &#39;trek&#39;]
+[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+</code></pre>
+<h6>倒着打印列表</h6>
+<pre><code>bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+print(bicycle)
+bicycle.reverse()
+print(bicycle)
+</code></pre>
+<pre><code>[&#39;trek&#39;, &#39;cannondale&#39;, &#39;redline&#39;]
+[&#39;redline&#39;, &#39;cannondale&#39;, &#39;trek&#39;]
+</code></pre>
+<h6>确定列表长度</h6>
+<pre><code>&gt;&gt;&gt;bicycle = [&#39;trek&#39;,&#39;cannondale&#39;,&#39;redline&#39;]
+&gt;&gt;&gt;len(bicycle)
+3
+</code></pre>
+<h3>遍历整个列表</h3>
+<h5>for循环</h5>
+<pre><code>people = [&#39;ann&#39;,&#39;bee&#39;,&#39;c++&#39;,&#39;dev--c&#39;]
+for person in people:
+    print(person)
+</code></pre>
+<pre><code>ann
+bee
+c++
+dev--c
+</code></pre>
+<p>需要注意的是：</p>
+<p>Python中的for循环与C语言中的不一样，C语言中的是</p>
+<p>for(中间是循环条件)</p>
+<p>但Python的是for (临时变量) in （列表）</p>
+<p>而且需要注意的是，Python每次运行循环的时候需要注意在后面添加一个:，这在C语言中是不层出现过的，C语言中，for后面不需要加任何的标点符号。</p>
+<h5>在for循环中进行更多的操作，比如说</h5>
+<pre><code>people = [&#39;ann&#39;,&#39;bee&#39;,&#39;c++&#39;,&#39;dev--c&#39;]
+for person in people:
+    print(f“{person.title()},you are a good man&quot;)
+    print(f&quot;i can&#39;t meet a better man than you,f{person.title()}&quot;)
+</code></pre>
+<pre><code>Ann,you are a good man
+i can&#39;t meet a better man than you,Ann
+Bee,you are a good man
+i can&#39;t meet a better man than you,Bee
+C++,you are a good man
+i can&#39;t meet a better man than you,C++
+Dev--C,you are a good man
+i can&#39;t meet a better man than you,Dev--C
+</code></pre>
+<p>在for循环中，想要包含多少行代码都是可以的，实际上，你会发现使用for循环对每个元素执行众多不同的操作很有用</p>
+<h6>注意事项：（一股子翻译腔味道）</h6>
+<ol>
+<li>注意缩进，切记注意，你永远不知道你会犯下什么样的错误直到有人指出来</li>
+<li>注意标点符号，注意冒号，这很重要，你知道的</li>
+</ol>
+<h5>创建数值列表</h5>
+<h6>使用函数range</h6>
+<pre><code>for value in range(1,5):
+    print(value)
+</code></pre>
+<pre><code>1
+2
+3
+4
+</code></pre>
+<p>没错，range(1,5)只打印了1-4，这回死编程语言中常见的差一行为的结果，函数range（）让python从指定的第一个值开始数，并在到达你指定的第二个值时停止。这就是他不输出5的原因。当然，如果你执意要打印1-5，只需要输入range(1,6)</p>
+<h6>使用range创建数值列表</h6>
+<pre><code>&gt;&gt;&gt;number = list(range(1,6))
+&gt;&gt;&gt;print(number)
+</code></pre>
+<pre><code>[1, 2, 3, 4, 5]
+</code></pre>
+<p>需要注意的是，上面的list后面使用的实施（）而不是【】，如果你使用【】的话，那就是输出</p>
+<pre><code>list[range(1, 6)]
+</code></pre>
+<p>使用range时还可以指定步长，比如</p>
+<pre><code>number = list(range(2,11,2))
+print(number)
+</code></pre>
+<pre><code>[2, 4, 6, 8, 10]
+</code></pre>
+<p>使用range（）几乎能够创建任何需要的数集。</p>
+<pre><code>squares = []
+for value in range(1,11):
+    square = value ** 2
+    squares.append(square)
+print(squares)
+</code></pre>
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+<p>可以小小的进行优化</p>
+<pre><code>squares = []
+for value in range(1,11):
+    squares.append(square**2)
+print(squares)
+</code></pre>
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+<p>当然,python中也有一些库函数可以方便你运算</p>
+<pre><code>digits = [1,2,3,4,5,6,7,8,9]
+print(min(digits))
+print(max(digits))
+print(sum(digits))
+</code></pre>
+<pre><code>1
+9
+45
+</code></pre>
+<p>值得注意的是，这里的digits不能使用for循环，原因是不能迭代</p>
+<h6>列表解析</h6>
+<pre><code>squares = [value**2 for value in range(1,11)]
+print(squares)
+</code></pre>
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+<p>这个列表中的意思是首先制定一个描述性的列表名squares，然后制定一个左方括号，并且定义一个表达式，用于生成要存储到列表中的值，接下来，编写一个for循环，用于给表达式提供值，在加上右方括号。</p>
+<h5>使用列表的一部分</h5>
+<h6>切片</h6>
+<pre><code>player = [&#39;ann&#39;,&#39;bee&#39;,&#39;c++&#39;,&#39;dev&#39;]
+print(player[0:2])
+</code></pre>
+<pre><code>[&#39;ann&#39;, &#39;bee&#39;]
+</code></pre>
+<p>上述语言中[:]分号是到的意思，比如说0:2是索引为0的数到索引为1的数的，[1:]是索引为1的数到末尾的，[:2]是索引为0的数到索引为2 的数</p>
+<p>当然，如果你要输出在结尾附近的，你可以用这样的形式[-3:]</p>
+<p>当然，列表也是可以遍历和复制的</p>
+<h5>元组</h5>
+<p>元组看起来很像列表，但其实是不一样的，元组使用的是圆括号而不是方括号</p>
+<p>需要注意的是Python是禁止修改元组的值的</p>
+<p>所以要想修改元组的值，只能从头重新定义一个元组。</p>
+<hr>
+<h1>3. Python--从入门到入土--字典（2023年3月24日）</h1>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+print(alien_0[&#39;color&#39;])
+print(alien_0[&#39;points&#39;])
+</code></pre>
+<pre><code>green
+5
+</code></pre>
+<h6>这就是一个简单的字典</h6>
+<p>在Python中，字典是一系列键值对。每个键都有一个值相互关联</p>
+<h6>访问字典中的值</h6>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+new_point=alien_0[&#39;points&#39;]
+print(f&quot;you have killed {new_point} alien&quot;)
+</code></pre>
+<pre><code>you have killed 5alien
+</code></pre>
+<h6>添加键值对</h6>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+print(alien_0)
+alien_0[&#39;x_position&#39;]=0
+alien_0[&#39;y_position&#39;]=0
+print(alien_0)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;, &#39;points&#39;: 5}
+{&#39;color&#39;: &#39;green&#39;, &#39;points&#39;: 5, &#39;x_position&#39;: 0, &#39;y_position&#39;: 0}
+</code></pre>
+<h6>修改字典中的值</h6>
+<pre><code>alien_0={&#39;color&#39;:&#39;green&#39;}
+print(alien_0)
+alien_0[&#39;color&#39;]=&#39;yellow&#39;
+print(f&quot;now it&#39;s {alien_0}&quot;)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;}
+now it&#39;s {&#39;color&#39;: &#39;yellow&#39;}
+</code></pre>
+<h6>删除字典中的键值对</h6>
+<pre><code>alien_0={&#39;color&#39;:&#39;green&#39;,&#39;point&#39;:5}
+print(alien_0)
+del alien_0[&#39;color&#39;]
+print(alien_0)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;, &#39;point&#39;: 5}
+{&#39;point&#39;: 5}
+</code></pre>
+<h6>来一个大家伙</h6>
+<pre><code>favorite_language ={
+    &#39;edward&#39;:&#39;rudy&#39;,
+    &#39;jen&#39;:&#39;python&#39;,
+    &#39;phil&#39;:&#39;python&#39;,
+    &#39;sarah&#39;:&#39;c&#39;,
+    }
+language = favorite_language[&#39;sarah&#39;].title()
+print(f&quot;sarah&#39;s favorite language is {language}&quot;)
+</code></pre>
+<pre><code>sarah&#39;s favorite language is C
+</code></pre>
+<h6>使用方法get来访问值</h6>
+<p>get（）方法的第一个参数用于指定值，第二个参数为指定的键不存在的时候要返回的值，可省略</p>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;speed&#39;:&#39;slow&#39;}
+point_value = alien_0.get(&#39;color&#39;,&#39;0_o&#39;)
+print(point_value)
+</code></pre>
+<pre><code>green
+</code></pre>
+<p>但是如果我换一个数值呢</p>
+<pre><code>alien_0 = {&#39;color&#39;:&#39;green&#39;,&#39;speed&#39;:&#39;slow&#39;}
+point_value = alien_0.get(&#39;spend&#39;,&#39;0_o&#39;)
+print(point_value)
+</code></pre>
+<pre><code>0_o//(好一个杰西卡)
+</code></pre>
+<h6>遍历字典</h6>
+<pre><code>user = {
+    &#39;username&#39;: &#39;admin&#39;,
+    &#39;first&#39;:&#39;enrico&#39;,
+    &#39;last&#39;:&#39;fermi&#39;
+}
+for key,value in user.items():
+    print(f&quot;\nkey:{key}&quot;)
+    print(f&quot;vale:{value}&quot;)
+</code></pre>
+<pre><code>key:username
+vale:admin
+
+key:first
+vale:enrico
+
+key:last
+vale:fermi
+</code></pre>
+<p>这里不是使用keys()和values()方法，只是设了两个局部变量使得key=键，value等于值而已</p>
+<p>item（）方法返回一个键值对列表</p>
+<pre><code>from builtins import print
+
+favorite_languages = {
+    &#39;edward&#39;: &#39;rudy&#39;,
+    &#39;jen&#39;: &#39;python&#39;,
+    &#39;phil&#39;: &#39;python&#39;,
+    &#39;sarah&#39;: &#39;c&#39;,
+}
+friends = [&#39;sarah&#39;,&#39;jen&#39;]               //这里的“，”很关键，这是分隔开两个的，										   如果没有的话会默认两个连接在一起输出
+for name in favorite_languages.keys():
+    print(f&quot;{name.title()}&quot;)
+
+    if name in friends:
+        language = favorite_languages[name].title()
+        print(f&quot;{name.title()},i know you like {language}&quot;)
+</code></pre>
+<pre><code>Edward
+Jen
+Jen,i know you like Python
+Phil
+Sarah
+Sarah,i know you like C
+</code></pre>
+<p>key()方法：返回一个字典所有的键。</p>
+<h6>按照特定顺序来遍历字典中的所有键</h6>
+<pre><code>from builtins import print
+
+favorite_languages = {
+    &#39;jen&#39;: &#39;python&#39;,
+    &#39;phil&#39;: &#39;python&#39;,
+    &#39;edward&#39;: &#39;rudy&#39;,
+    &#39;sarah&#39;: &#39;c&#39;,
+}
+for name in sorted(favorite_languages.keys()):
+    print(f&quot;{name.title()},thanks for you &quot;)
+</code></pre>
+<pre><code>Edward,thanks for you
+Jen,thanks for you
+Phil,thanks for you
+Sarah,thanks for you
+</code></pre>
+<p>set()可以找出独一无二的元素</p>
+<pre><code>from builtins import print
+
+favorite_languages = {
+    &#39;jen&#39;: &#39;python&#39;,
+    &#39;phil&#39;: &#39;python&#39;,
+    &#39;edward&#39;: &#39;rudy&#39;,
+    &#39;sarah&#39;: &#39;c&#39;,
+}
+for language in set(favorite_languages.values()):
+    print(f&quot;{language.title()}&quot;)
+</code></pre>
+<pre><code>Rudy
+Python
+C
+</code></pre>
+<p>keys() 方法用于返回字典中的所有键；values() 方法用于返回字典中所有键对应的值</p>
+<h6>嵌套</h6>
+<pre><code>alien_00={&#39;color&#39;:&#39;green&#39;,&#39;points&#39;:5}
+alien_01={&#39;color&#39;:&#39;blue&#39;,&#39;points&#39;:6}
+alien_02={&#39;color&#39;:&#39;red&#39;,&#39;points&#39;:9}
+alien_03={&#39;color&#39;:&#39;yellow&#39;,&#39;points&#39;:7}
+aliens=[alien_00,alien_01,alien_02,alien_03]
+for alien in aliens:
+    print(alien)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;green&#39;, &#39;points&#39;: 5}
+{&#39;color&#39;: &#39;blue&#39;, &#39;points&#39;: 6}
+{&#39;color&#39;: &#39;red&#39;, &#39;points&#39;: 9}
+{&#39;color&#39;: &#39;yellow&#39;, &#39;points&#39;: 7}
+</code></pre>
+<p>大量使用</p>
+<pre><code>aliens = []
+for alien_number in range(20):
+    new_alien = {&#39;color&#39;:&#39;green&#39;,&#39;point&#39;:5}
+    aliens.append(new_alien)
+
+for alien in aliens[:3]:
+    if alien[&#39;color&#39;]==&#39;green&#39;:
+        alien[&#39;color&#39;]=&#39;yellow&#39;
+        alien[&#39;point&#39;]=&#39;10&#39;
+    elif alien[&#39;color&#39;]==&#39;yellow&#39;:
+        alien[&#39;color&#39;]=&#39;red&#39;
+        alien[&#39;point&#39;]=&#39;20&#39;
+for alien in aliens[:5]:
+    print(alien)
+</code></pre>
+<pre><code>{&#39;color&#39;: &#39;yellow&#39;, &#39;point&#39;: &#39;10&#39;}
+{&#39;color&#39;: &#39;yellow&#39;, &#39;point&#39;: &#39;10&#39;}
+{&#39;color&#39;: &#39;yellow&#39;, &#39;point&#39;: &#39;10&#39;}
+{&#39;color&#39;: &#39;green&#39;, &#39;point&#39;: 5}
+{&#39;color&#39;: &#39;green&#39;, &#39;point&#39;: 5}
+</code></pre>
+<h6>在字典中存储列表</h6>
+<pre><code>pizza = {
+    &#39;sort&#39;:&#39;好好好&#39;,
+    &#39;materials&#39;:[&#39;好&#39;,&#39;好个寂寞好&#39;],
+}
+print(f&quot;you order a {pizza[&#39;sort&#39;]} pizza&quot;)
+for material in pizza[&#39;materials&#39;]:
+    print(&#39;\t&#39;+material)
+</code></pre>
+<pre><code>you order a 好好好 pizza
+    好
+    好个寂寞好
+</code></pre>
+<h6>在字典中存储字典</h6>
+<pre><code>users = {
+    &#39;admin&#39;: {
+        &#39;first&#39;:&#39;ann&#39;,
+        &#39;last&#39;:&#39;bbaa&#39;,
+        &#39;location&#39;:&#39;A点&#39;,
+    },								//&quot;,&quot;切记切记
+    &#39;adminstor&#39;: {
+        &#39;first&#39;:&#39;daa&#39;,
+        &#39;last&#39;:&#39;ccaa&#39;,
+        &#39;location&#39;:&#39;B点&#39;,
+    }
+}
+for user_name,user_info in users.items():        //items()返回一个键值对，
+                                                   user_name等于前面的键
+                                                   user_info等于后面的值
+    print(f&quot;username:{user_name}&quot;)
+    print(f&quot;full name:{user_info[&#39;first&#39;]}{user_info[&#39;last&#39;]}&quot;)
+    print(f&quot;location:{user_info[&#39;location&#39;]}&quot;)
+</code></pre>
+<pre><code>username:admin
+full name:annbbaa
+location:A点
+username:adminstor
+full name:daaccaa
+location:B点
+</code></pre>
+<p>这一块挺乱的我感觉，字典跟之前的if和for循环贴在一起了，再加上keys(),values(),items()等等几个方法，多练练吧0_o</p>
+<hr>
+<h1>4. Pyhton--从入门到入土---函数（2023年3月27日）</h1>
+<p>函数</p>
+<h6>定义函数</h6>
+<p>开头使用关键字def定义函数，中间添加需要定义的函数的名字，结尾部分别忘了:</p>
+<pre><code>def greet_user():
+    print(&quot;Hello a&quot;)
+greet_user()
+</code></pre>
+<pre><code>Hello a
+</code></pre>
+<h6>向函数中传递信息</h6>
+<pre><code>def greet_user(user_name):
+    &quot;&quot;&quot;表示最简单的问候&quot;&quot;&quot;
+    print(f&quot;Hello a,{user_name.title()}&quot;)
+greet_user(&#39;jess&#39;)
+</code></pre>
+<pre><code>Hello a,Jess
+</code></pre>
+<p>传递实参</p>
+<pre><code>def describe_pet(animal_type,pet_name):
+   print(f&quot;i have a {animal_type}&quot;)
+   print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+describe_pet(&#39;dog&#39;,&#39;king&#39;)
+</code></pre>
+<pre><code>i have a dog
+my dog&#39;s name is king.
+</code></pre>
+<p>这里将实参dog赋给形参animal_type，而实参king被赋给pet_name，这种基于实参的位置顺序的关联方式称之为位置实参</p>
+<h6>多次调用函数</h6>
+<pre><code>def describe_pet(animal_type,pet_name):
+    print(f&quot;i have a {animal_type}&quot;)
+    print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+describe_pet(&#39;小黑子&#39;,&#39;真下头&#39;)
+describe_pet(&#39;汪汪队&#39;,&#39;立大功&#39;)
+</code></pre>
+<pre><code>i have a 小黑子
+my 小黑子&#39;s name is 真下头.
+i have a 汪汪队
+my 汪汪队&#39;s name is 立大功.
+</code></pre>
+<h6>关键字实参</h6>
+<pre><code>from builtins import print
+
+
+def describe_pet(animal_type, pet_name):
+    print(f&quot;i have a {animal_type}&quot;)
+    print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+
+
+describe_pet(animal_type=&#39;小黑子&#39;, pet_name=&#39;真下头&#39;)
+</code></pre>
+<pre><code>i have a 小黑子
+my 小黑子&#39;s name is 真下头.
+</code></pre>
+<p>关键字实参的顺序无所谓，但是需要准确制定函数定义中的形参名</p>
+<h6>默认值</h6>
+<p>编写函数式，可以给每个形参指定默认值，在调用函数中都给形参提供实参时，Python将使用指定的实参值，否则将会使用形参的默认值</p>
+<pre><code>from builtins import print
+
+
+def describe_pet(pet_name,animal_type=&#39;dog&#39;):
+    print(f&quot;i have a {animal_type}&quot;)
+    print(f&quot;my {animal_type}&#39;s name is {pet_name}.&quot;)
+
+
+describe_pet(pet_name=&#39;汪汪队立大功&#39;)
+</code></pre>
+<pre><code>i have a dog
+my dog&#39;s name is 汪汪队立大功.
+</code></pre>
+<h6>返回值</h6>
+<p>·函数并非是直接显示输出，它还可以处理一些数据，并返回一个或者一组值。函数返回的值称之为返回值。</p>
+<pre><code>from builtins import print
+
+
+def name(first_name,last_name):
+    full_name=f&quot;{first_name}  {last_name}&quot;
+    return full_name.title()
+musician = name(&#39;a&#39;,&#39;hahaha&#39;)
+print(musician)
+</code></pre>
+<pre><code>A  Hahaha
+</code></pre>
+<p>这里的返回值是full.name转换成首字母大写形式</p>
+<h6>让实参变成可选的</h6>
+<p>可以使用默认值是实参变成可选的</p>
+<pre><code>from builtins import print
+
+
+def name(first_name,last_name,middle_name=&#39;&#39;):
+    if middle_name:
+        full_name=f&quot;{first_name} {middle_name} {last_name}&quot;
+    else:
+        full_name=f&quot;{first_name} {last_name}&quot;
+
+    return full_name.title()
+musician = name(&#39;a&#39;,&#39;hahaha&#39;)
+print(musician)
+</code></pre>
+<pre><code>A Hahaha
+</code></pre>
+<h6>返回字典</h6>
+<pre><code>from builtins import print
+
+def name_in(first_name,last_name):
+    person = {&#39;ffirst&#39;:first_name,&#39;last&#39;:last_name}
+    return person
+musician = name_in(&#39;奥拓&#39;,&#39;阿波卡利斯&#39;)
+print(musician)
+</code></pre>
+<pre><code>{&#39;ffirst&#39;: &#39;奥拓&#39;, &#39;last&#39;: &#39;阿波卡利斯&#39;}
+</code></pre>
+<h6>结合使用函数以及while循环</h6>
+<pre><code>from builtins import print
+
+def name_in(first_name,last_name):
+    full_name = f&quot;{first_name}{last_name}&quot;
+    return full_name.title()
+while True:
+    print(&#39;Hello everybody&#39;)
+    print(&#39;please input your first name and last name&#39;)
+    f_name = input(&quot;Please input your first name:&quot;)
+    if f_name == &#39;quit&#39;:
+        break
+    l_name = input(&quot;Please input your last name:&quot;)
+    if l_name == &#39;quit&#39;:
+        break
+    name_out=name_in(f_name,l_name)
+    print(name_out)
+</code></pre>
+<pre><code>Hello everybody
+please input your first name and last name
+Please input your first name:a
+Please input your last name:a
+Aa
+Hello everybody
+please input your first name and last name
+Please input your first name:a
+Please input your last name:_a
+A_A
+Hello everybody
+please input your first name and last name
+Please input your first name:a
+Please input your last name:quit
+</code></pre>
+<h6>传递列表</h6>
+<pre><code>def greet_user(names):
+    for name in names:
+        message = f&quot;hello  {name.title()}&quot;
+        print(message)
+username = [&#39;haah&#39;,&#39;xixi&#39;,&#39;wangwang&#39;]
+greet_user(username)
+</code></pre>
+<pre><code>hello  Haah
+hello  Xixi
+hello  Wangwang
+</code></pre>
+<h6>在函数中修改列表</h6>
+<pre><code>unprint_Designed = [&#39;phone&#39;,&#39;robot&#39;,&#39;dodecahedron&#39;]
+print_designeds = []
+
+while unprint_Designed:
+    current_design = unprint_Designed.pop()
+    print(f&quot;printing model:{current_design}&quot;)
+    print_designeds.append(current_design)
+print(&quot;the following models have been printed:&quot;)
+for print_designed in print_designeds:
+    print(print_designed)
+</code></pre>
+<pre><code>printing model:dodecahedron
+printing model:robot
+printing model:phone
+the following models have been printed:
+dodecahedron
+robot
+phone
+</code></pre>
+<p>使用函数来进行编写</p>
+<pre><code>def print_model(unprinted_designeds,completed_models):
+    while unprinted_designeds:
+        current_print = unprinted_designeds.pop()
+        print(f&quot;printing models:{current_print}&quot;)
+        completed_models.append(current_print)
+def show_completed(completed_models):
+    print(&quot;the following models have been printed:&quot;)
+    for completed_model in completed_models:
+        print(completed_model)
+unprint_designs = [&#39;phone&#39;,&#39;computer&#39;,&#39;robot&#39;]
+complete_models = []
+
+print_model(unprint_designs,complete_models)
+show_completed(complete_models)
+</code></pre>
+<pre><code>printing models:robot
+printing models:computer
+printing models:phone
+the following models have been printed:
+robot
+computer
+phone
+</code></pre>
+<h6>切片表示法[:]禁止访问列表</h6>
+<pre><code>from builtins import print
+
+
+def print_model(unprinted_designeds, completed_models):
+    while unprinted_designeds:
+        current_print = unprinted_designeds.pop()
+        print(f&quot;printing models:{current_print}&quot;)
+        completed_models.append(current_print)
+
+
+def show_completed(completed_models):
+    print(&quot;the following models have been printed:&quot;)
+    for completed_model in completed_models:
+        print(completed_model)
+
+
+
+unprint_designs = [&#39;phone&#39;, &#39;computer&#39;, &#39;robot&#39;]
+complete_models = []
+print_model(unprint_designs[:],complete_models)
+show_completed(complete_models)
+print(unprint_designs)
+</code></pre>
+<pre><code>printing models:robot
+printing models:computer
+printing models:phone
+the following models have been printed:
+robot
+computer
+phone
+[&#39;phone&#39;, &#39;computer&#39;, &#39;robot&#39;]
+</code></pre>
+<p>这个就是在下面调用函数的时候建立一个切片来进行运算，这个切片的话当做中间件就好</p>
+<h6>传递任意数量的实参</h6>
+<pre><code>def making_pizza(*toppomgs):
+    print(&quot;\nmaking a pizza whit the ffollowing topping&quot;)
+    for topping in toppomgs:
+        print(f&quot;-{topping}&quot;)
+making_pizza(&#39;pepperoni&#39;)
+making_pizza(&#39;mushrooms&#39;,&#39;green peppers&#39;,&#39;extra cheese&#39;)
+</code></pre>
+<pre><code>
+making a pizza whit the ffollowing topping
+-pepperoni
+
+making a pizza whit the ffollowing topping
+-mushrooms
+-green peppers
+-extra cheese
+</code></pre>
+<p>在这里的话，*toppings这里的星号定义了一个空元组（元组的话见操作列表）并将所有的值封装到这个空元组中</p>
+<h6>结合使用位置实参和任意数量实参</h6>
+<pre><code>def making_pizza(size,*toppomgs):
+    print(f&quot;making a {size} pizza whit the ffollowing topping&quot;)
+    for topping in toppomgs:
+        print(f&quot;-{topping}&quot;)
+making_pizza(12,&#39;pepperoni&#39;)
+making_pizza(16,&#39;mushrooms&#39;,&#39;green peppers&#39;,&#39;extra cheese&#39;)
+</code></pre>
+<pre><code>making a 12 pizza whit the ffollowing topping
+-pepperoni
+making a 16 pizza whit the ffollowing topping
+-mushrooms
+-green peppers
+-extra cheese
+</code></pre>
+<p>使用任意数量的关键字实参</p>
+<p>**可以创建一个空字典</p>
+<pre><code>def build_profit(first,last,**user_name):
+    user_name[&#39;first_name&#39;] = first
+    user_name[&#39;last_name&#39;] = last
+    return user_name
+user_profile = build_profit(&#39;齐格飞&#39;,&#39;卡斯兰娜&#39;,
+                            location = &#39;圣芙蕾雅学园&#39;,
+                            says = &#39;我将发动一次nb的攻击&#39;)
+print(user_profile)
+</code></pre>
+<pre><code>{&#39;location&#39;: &#39;圣芙蕾雅学园&#39;, &#39;says&#39;: &#39;我将发动一次nb的攻击&#39;, &#39;first_name&#39;: &#39;齐格飞&#39;, &#39;last_name&#39;: &#39;卡斯兰娜&#39;}
+</code></pre>
+<h6>导入整个模块</h6>
+<p>先建立一个python文件，里面输入写好的def，保存为pizza.py</p>
+<pre><code>def making_pizza(size,*toppings):
+   print(f&quot;making a {size} pizza whit the following topping&quot;)
+   for topping in toppings:
+      print(f&quot;-{topping}&quot;)
+</code></pre>
+<p>然后再这个文件所在的目录下在新建一个</p>
+<pre><code>import pizza
+pizza.making_pizza(16,&#39;pepperont&#39;)
+pizza.making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<p>使用import让python打开文件pizza.py</p>
+<p>，并将其中的线索有的函数都复制到这个程序中，你看不到复制的代码，因为在这个程序运行时，Python在幕后复制了这些代码。要调用被导入模块的函数，可指定被导入模块的名称pizza和函数名making_pizza（），并用句号来分隔开</p>
+<h6>当然也可以显性的调用函数</h6>
+<pre><code>from pizza import making_pizza
+making_pizza(16,&#39;pepperont&#39;)
+making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<p>这样也是可行的，而且这样的话不需要在每一个前面添加句号</p>
+<h6>使用as来给函数指定别名</h6>
+<pre><code>from pizza import making_pizza as mp
+mp(16,&#39;pepperont&#39;)
+mp(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<pre><code>making a 16 pizza whit the following topping
+-pepperont
+making a 21 pizza whit the following topping
+-cheese
+-huge
+-mushrooms
+</code></pre>
+<h6>使用as给模块指定别名</h6>
+<pre><code>import pizza as p
+p.making_pizza(16,&#39;pepperont&#39;)
+p.making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<p>结果是一样的</p>
+<h6>导入模块中的所有函数</h6>
+<p>使用星号（*）可以让Python导入模块中的所有函数</p>
+<pre><code>from pizza import *
+making_pizza(16,&#39;pepperont&#39;)
+making_pizza(21,&#39;cheese&#39;,&#39;huge&#39;,&#39;mushrooms&#39;)
+</code></pre>
+<pre><code>making a 16 pizza whit the following topping
+-pepperont
+making a 21 pizza whit the following topping
+-cheese
+-huge
+-mushrooms
+</code></pre>
+<hr>
+<h1>5. Python--从入门到入土--类（2023年3月29日）</h1>
+<p>类</p>
+<h5>创建和使用类以及根据实参来创造事例</h5>
+<pre><code>class Dog:
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(f&quot;{self.name} is now sitting &quot;)
+
+    def roll_over(self):
+        print(f&quot;{self.name} rolled over&quot;)
+
+my_dog = Dog(&quot;willie&quot;,6)
+print(f&quot;my dog&#39;s name is  {my_dog.name}&quot;)
+print(f&quot;my dog&#39;s age is {my_dog.age}&quot;)
+</code></pre>
+<pre><code>my dog&#39;s name is  willie
+my dog&#39;s age is 6
+</code></pre>
+<p>这里的”<em>init</em>（）“是一种特殊的方法，每当你想要根据Dog类创建新的实例的时候，Python就会自动运行它。在这个方法的名称中，开头和结尾默认都有2个下划线，这是为了避免Python将他和其他的普通的方法名称发生冲突。在这个方法的定义的时候，形参self是必不可少的，而且必须为与其他的形参的前面。因为Python在调用这个函数的时候，将会自动传入实参self，每个与实例相关联的方法调用都自动传递实参self，它起到一个指向实例的作用，让实例能够访问类中的属性和方法。后面的def中变量都有前缀self，以self为前缀的变量可供给类中的所有方法使用，可以通过类的所有实例来访问。可通过实例访问的变量称之为属性。</p>
+<p>Dog类还定义了来年各个方法：sit()和roll_over。这些方法执行时不需要额外的信息，因此他们只有一个形参self、</p>
+<h6>1.访问属性</h6>
+<p>my_dog.name</p>
+<h6>2.调用方法</h6>
+<pre><code>class Dog:
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(f&quot;{self.name} is now sitting &quot;)
+
+    def roll_over(self):
+        print(f&quot;{self.name} rolled over&quot;)
+
+my_dog = Dog(&quot;willie&quot;,6)
+print(f&quot;my dog&#39;s name is  {my_dog.name}&quot;)
+print(f&quot;my dog&#39;s age is {my_dog.age}&quot;)
+my_dog.sit()
+my_dog.roll_over()
+</code></pre>
+<pre><code>my dog&#39;s name is  willie
+my dog&#39;s age is 6
+willie is now sitting
+willie rolled over
+</code></pre>
+<h6>3.创造多个实例</h6>
+<pre><code>class Dog:
+    def __init__(self,name,age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(f&quot;{self.name} is now sitting &quot;)
+
+    def roll_over(self):
+        print(f&quot;{self.name} rolled over&quot;)
+
+my_dog = Dog(&quot;willie&quot;,6)
+your_dog = Dog(&quot;annn&quot;,2)
+print(f&quot;my dog&#39;s name is  {my_dog.name}&quot;)
+print(f&quot;my dog&#39;s age is {my_dog.age}&quot;)
+my_dog.sit()
+my_dog.roll_over()
+
+print(f&quot;your dog&#39;s name is {your_dog.name}&quot;)
+your_dog.sit()
+print(f&quot;your dog can roll over,{your_dog.name},how old is your dog {your_dog.age}&quot;)
+your_dog.roll_over()
+</code></pre>
+<pre><code>my dog&#39;s name is  willie
+my dog&#39;s age is 6
+willie is now sitting
+willie rolled over
+your dog&#39;s name is annn
+annn is now sitting
+your dog can roll over,annn,how old is your dog 2
+annn rolled over
+</code></pre>
+<h5>使用类和实例</h5>
+<pre><code>class car:
+    def __init__(self,maek,model,year):
+        self.make = maek
+        self.model = model
+        self.year = year
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+my_new_car = car(&#39;Aodi&#39;,&#39;a4&#39;,&#39;2019&#39;)
+print(my_new_car.get_descript_name())
+</code></pre>
+<pre><code>2019  A4  Aodi
+</code></pre>
+<h6>给属性指定默认值</h6>
+<p>创建实例时，有些属性无需通过形参来定义，可以再方法&quot;<em>init</em>()&quot;中为其指定默认值。</p>
+<pre><code>class car:
+    def __init__(self,maek,model,year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading=0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+my_new_car = car(&#39;Aodi&#39;,&#39;a4&#39;,&#39;2019&#39;)
+print(my_new_car.get_descript_name())
+my_new_car.read_odometer()
+</code></pre>
+<pre><code>2019  A4  Aodi
+this car has 0 mile on it
+</code></pre>
+<h5>修改属性的值</h5>
+<h6>直接修改</h6>
+<pre><code>class car:
+    def __init__(self,maek,model,year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading=0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+
+my_new_car = car(&#39;Aodi&#39;,&#39;a4&#39;,&#39;2019&#39;)
+print(my_new_car.get_descript_name())
+my_new_car.odometer_reading = 23
+my_new_car.read_odometer()
+</code></pre>
+<pre><code>2019  A4  Aodi
+this car has 23 mile on it
+</code></pre>
+<h6>通过方法修改属性的值</h6>
+<pre><code>class car:
+    def __init__(self,maek,model,year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading=0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def undate_odometer(self,milliage):
+        self.odometer_reading = milliage
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+
+my_new_car = car(&#39;Aodi&#39;,&#39;a4&#39;,&#39;2019&#39;)
+print(my_new_car.get_descript_name())
+my_new_car.undate_odometer(23)
+my_new_car.read_odometer()
+</code></pre>
+<pre><code>2019  A4  Aodi
+this car has 23 mile on it
+</code></pre>
+<h6>通过方法对属性的值进行递增</h6>
+<pre><code>from builtins import print
+
+
+class car:
+    def __init__(self, maek, model, year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def undate_odometer(self, milliage):
+        self.odometer_reading = milliage
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+
+    def increaing_odometer(self, miles):
+        self.odometer_reading += miles
+
+
+my_new_car = car(&#39;Aodi&#39;, &#39;a4&#39;, &#39;2019&#39;)
+print(my_new_car.get_descript_name())
+my_new_car.undate_odometer(666)
+my_new_car.read_odometer()
+
+my_new_car.increaing_odometer(1000)
+print(my_new_car.read_odometer())
+</code></pre>
+<pre><code>2019  A4  Aodi
+this car has 666 mile on it
+this car has 1666 mile on it
+None
+</code></pre>
+<p>？这个none是怎么蹦出来的？</p>
+<h6>继承</h6>
+<p>子类的方法_init_</p>
+<p>在既有类的基础上编写新的类的时候，通常会调用父类的方法_inti_。浙江初始化在父类_init_（）方法来定义的所有属性，从而让子类包含这些属性。</p>
+<pre><code>from builtins import print
+
+
+class car:
+    def __init__(self, maek, model, year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def undate_odometer(self, milliage):
+        self.odometer_reading = milliage
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+
+    def increaing_odometer(self, miles):
+        self.odometer_reading += miles
+class electorcar(car):
+    def _init_(self,make,model,year):
+        super()._init_(maek,model.year)
+
+my_tesia = electorcar(&#39;tesla&#39;,&#39;model s&#39;,&#39;2020&#39;)
+print(my_tesia.get_descript_name())
+</code></pre>
+<pre><code>2020  Model S  Tesla
+</code></pre>
+<p>这里super()是一个特殊函数，使得你可以调用弗雷德方法。这一行代码能够使得python调用car类的方法_init_，让electorcar实例能够包含这个方法的所有属性。父类也称之为超类。</p>
+<h6>给子类定义属性和方法</h6>
+<pre><code>from builtins import print, super
+
+
+class car:
+    def __init__(self, maek, model, year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def undate_odometer(self, milliage):
+        self.odometer_reading = milliage
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+
+    def increaing_odometer(self, miles):
+        self.odometer_reading += miles
+class electorcar(car):
+    def __init__(self,make,model,year):
+        super().__init__(make,model,year)
+        self.battery_size = 75
+
+    def describe_battery(self):
+        print(f&quot;this car has a {self.battery_size} - km battery&quot;)
+
+my_tesla = electorcar(&#39;tesla&#39;,&#39;model s&#39;,2020)
+print(my_tesla.get_descript_name())
+my_tesla.describe_battery()
+</code></pre>
+<pre><code>2020  Model S  Tesla
+this car has a 75 - km battery
+</code></pre>
+<h6>重写父类的方法</h6>
+<p>对于父类的方法重写，可以在子类中定义一个与要冲写的父类方法同名的方法。</p>
+<h6>将实例当做属性</h6>
+<pre><code>from builtins import print, super
+
+class car:
+    def __init__(self, maek, model, year):
+        self.make = maek
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print(f&quot;this car has {self.odometer_reading} mile on it&quot;)
+
+    def undate_odometer(self, milliage):
+        self.odometer_reading = milliage
+
+    def get_descript_name(self):
+        long_name = f&quot;{self.year}  {self.model}  {self.make}&quot;
+        return long_name.title()
+
+    def increaing_odometer(self, miles):
+        self.odometer_reading += miles
+
+class Battery:
+    def __init__(self,battery_size=75):
+        self.battery_size = battery_size
+    def describe_battery(self):
+        print(f&quot;this car has a {self.battery_size}-kwh battery.&quot;)
+
+class electorcar(car):
+    def __init__(self,make,model,year):
+        super().__init__(make, model,year)
+        self.battery= Battery()
+
+
+my_tesla = electorcar(&#39;tesla&#39;,&#39;model s&#39;,2020)
+print(my_tesla.get_descript_name())
+my_tesla.battery.describe_battery()
+</code></pre>
+<pre><code>2020  Model S  Tesla
+this car has a 75-kwh battery.
+</code></pre>
+<h6>导入类</h6>
+<p>导入所有类的时候</p>
+<pre><code>from  ()   import *
+</code></pre>
+<p>使用别名</p>
+<pre><code>from () import ()  as ()
+</code></pre>
+
+    </article>
+  </main>
+</div>
+
+<footer class="site-footer">
+  ✦ 旅店已开放 <b id="sfDays">…</b> 天<span class="star">·</span>愿终有一天能与你重要的人重逢
+</footer>
+<script>
+(function () {
+  var el = document.getElementById('sfDays');
+  if (!el) return;
+  var open = Math.max(1, Math.ceil((Date.now() - new Date('2023-04-12T00:00:00+08:00').getTime()) / 864e5));
+  el.textContent = open.toLocaleString('en-US');
+})();
+</script>
+<div class="mp-root">
+  <button class="mp-disc" id="mpDisc" type="button" aria-label="音乐播放器" title="音乐播放器"></button>
+  <div class="mp-panel" id="mpPanel">
+    <div class="mp-head"><span class="mp-title" id="mpTitle">…</span><span class="mp-artist" id="mpArtist"></span></div>
+    <div class="mp-progress">
+      <span class="mp-bar" id="mpBar"><i id="mpFill"></i></span>
+      <span class="mp-time" id="mpTime">0:00 / 0:00</span>
+    </div>
+    <div class="mp-ctrls">
+      <button type="button" id="mpPrev" title="上一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12L9.5 12z"/></svg></button>
+      <button type="button" class="mp-playbtn" id="mpPlay" title="播放/暂停"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+      <button type="button" id="mpNext" title="下一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+    </div>
+    <ul class="mp-playlist" id="mpListEl"></ul>
+  </div>
+</div>
+<audio id="mpAudio" preload="none"></audio>
+<script>
+(function () {
+  var TR = [{"title":"野火 Wildfire","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=2045806409.mp3"},{"title":"疾如猛火 Rapid as Wildfires","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1492283139.mp3"},{"title":"Moon Halo","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1859652717.mp3"},{"title":"Nightglow (Instrumental)","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1334673828.mp3"},{"title":"皎洁的笑颜 Moonlike Smile","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1833805540.mp3"},{"title":"坠叶与晚星 Falling Leaves and Even-Stars","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=3437729518.mp3"}];
+  if (!TR.length) return;
+  var audio = document.getElementById('mpAudio');
+  var disc = document.getElementById('mpDisc');
+  var panel = document.getElementById('mpPanel');
+  var titleEl = document.getElementById('mpTitle');
+  var artistEl = document.getElementById('mpArtist');
+  var fill = document.getElementById('mpFill');
+  var timeEl = document.getElementById('mpTime');
+  var bar = document.getElementById('mpBar');
+  var playBtn = document.getElementById('mpPlay');
+  var listEl = document.getElementById('mpListEl');
+  var cur = 0, errs = 0;
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  function renderList() {
+    listEl.innerHTML = TR.map(function (t, i) {
+      return '<li class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '"><span class="idx">' + (i + 1) + '</span><span style="overflow:hidden;text-overflow:ellipsis">' + t.title + (t.artist ? ' · ' + t.artist : '') + '</span></li>';
+    }).join('');
+  }
+  function setPlayIcon(on) {
+    playBtn.innerHTML = on
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+    disc.classList.toggle('playing', on);
+  }
+  function load(i, autoplay) {
+    cur = ((i % TR.length) + TR.length) % TR.length;
+    var t = TR[cur];
+    audio.src = t.url;
+    titleEl.textContent = t.title;
+    artistEl.textContent = t.artist || '';
+    fill.style.width = '0';
+    timeEl.textContent = '0:00 / 0:00';
+    renderList();
+    if (autoplay) audio.play().catch(function () {});
+  }
+  function next(auto) { errs = auto ? errs : 0; load(cur + 1, playing || !!auto); }
+  function prev() { load(cur - 1, playing); }
+
+  disc.addEventListener('click', function () { panel.classList.toggle('open'); });
+  playBtn.addEventListener('click', function () {
+    if (!audio.src) { load(cur, true); return; }
+    if (audio.paused) audio.play().catch(function () {}); else audio.pause();
+  });
+  document.getElementById('mpNext').addEventListener('click', function () { next(false); });
+  document.getElementById('mpPrev').addEventListener('click', prev);
+  audio.addEventListener('play', function () { setPlayIcon(true); playing = true; });
+  audio.addEventListener('pause', function () { setPlayIcon(false); playing = false; });
+  audio.addEventListener('ended', function () { next(true); });
+  audio.addEventListener('error', function () {
+    errs++;
+    if (errs >= TR.length) { titleEl.textContent = '歌单加载失败'; setPlayIcon(false); return; }
+    next(true);
+  });
+  audio.addEventListener('playing', function () { errs = 0; });
+  audio.addEventListener('timeupdate', function () {
+    var d = audio.duration;
+    fill.style.width = (d ? (audio.currentTime / d) * 100 : 0) + '%';
+    timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(d);
+  });
+  bar.addEventListener('click', function (e) {
+    var r = bar.getBoundingClientRect();
+    if (isFinite(audio.duration)) audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+  });
+  listEl.addEventListener('click', function (e) {
+    var li = e.target.closest('li[data-i]');
+    if (!li) return;
+    playing = true;
+    load(parseInt(li.dataset.i, 10), true);
+  });
+
+  load(0, false);
+})();
+</script>
+
+<script>
+(function () {
+  // 侧栏「最近」列表
+  var data = {"recent":[{"t":"内网渗透","u":"/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/","d":"2026-08-26","w":18366,"c":"/covers/0208.jpg","cur":false},{"t":"钓鱼","u":"/article/%E9%92%93%E9%B1%BC/","d":"2026-08-26","w":986,"c":"/covers/0640.jpg","cur":false},{"t":"AI agent","u":"/article/agent/","d":"2026-07-07","w":1919,"c":"/covers/0035.jpg","cur":false},{"t":"vpn develop","u":"/article/vpn_develop/","d":"2026-02-15","w":4053,"c":"/covers/0002.jpg","cur":false},{"t":"llm prompt attack","u":"/article/llm_prompt_attack/","d":"2026-02-12","w":11607,"c":"/covers/0098.jpg","cur":false}]};
+  var list = document.getElementById('list');
+  var me = location.pathname;
+  function render() {
+    var rows = data.recent || [];
+    if (!rows.length) { list.innerHTML = '<div class="empty">还没有文章</div>'; return; }
+    list.innerHTML = rows.map(function (a) {
+      return '<a href="' + a.u + '" title="' + a.t + '"' + (a.cur ? ' class="cur"' : '') + '>' +
+        '<span class="thumb">' + (a.c ? '<img src="' + a.c + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</span>' +
+        '<span class="txt"><span class="t">' + a.t + '</span><span class="m">' +
+        (a.d ? a.d + ' · ' : '') + a.w.toLocaleString('en-US') + ' 字</span></span></a>';
+    }).join('');
+  }
+  render();
+  void me;
+
+  // 复制当前链接
+  var cp = document.querySelector('.share-copy');
+  if (cp) {
+    cp.dataset.url = location.href;
+    cp.addEventListener('click', function () {
+      var done = function () {
+        var old = cp.getAttribute('title');
+        cp.setAttribute('title', '已复制');
+        setTimeout(function () { cp.setAttribute('title', old); }, 1600);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, done);
+      else done();
+    });
+  }
+
+  // 正文外链新窗口 + 图片兜底
+  document.querySelectorAll('.sao-article a[href^="http"]').forEach(function (a) {
+    a.target = '_blank'; a.rel = 'noopener';
+  });
+  document.querySelectorAll('.sao-article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+})();
+</script>
+</body>
+</html>
