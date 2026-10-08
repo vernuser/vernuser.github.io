@@ -1,13 +1,15 @@
 /*
  * 生成博客版式首页 public/index.html —— 覆盖 Next 导出的主页
- *   左栏：个人信息 / 热门+最近+最新评论 三标签列表 / 分类 / 标签云 / 站点信息
+ *   左栏：个人信息 / 最近文章列表 / 分类 / 标签云 / 站点信息
  *   右栏：文章卡片墙（两栏，悬停放大、其余虚化）
+ *   分类与标签点击后就地过滤卡片墙（#cat=xxx / #tag=xxx，可分享、可后退）
  * 数据源：content/_posts（构建期读取）
  * 所有样式与结构为本站原创实现，配色取自本地背景插画。
  * 运行：node scripts/build-home.mjs（已挂在 prebuild）
  */
 import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { WIDGET_CSS, siteFooter, musicPlayer } from './site-widgets.mjs';
 
 const ROOT = process.cwd();
 const POSTS_DIR = join(ROOT, 'content', '_posts');
@@ -80,7 +82,7 @@ function assignWallpapers(articles, ids) {
 }
 
 const SITE = {
-  name: '随波逐流の旅店',
+  name: '艾恩葛朗特第一层の旅店',
   author: 'vernus',
   bio: '愿终有一天能与你重要的人重逢',
   avatar: '/icons/cards/avatar.png'
@@ -408,6 +410,9 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 .sec-title::before{content:'';position:absolute;left:0;top:50%;width:3px;height:54%;border-radius:2px;background:var(--sky);transform:translateY(-50%);transition:height .3s ease-in-out}
 .card:hover .sec-title::before{height:86%}
 .sec-title .sub{margin-left:auto;font-size:12px;font-weight:400;color:var(--muted)}
+.sec-title.center{justify-content:center;padding-left:0}
+.sec-title.center::before{display:none}
+.sec-title.center .sub{margin-left:8px}
 
 /* 三标签 */
 .tabs{display:flex;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:12px}
@@ -439,15 +444,30 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 
 /* 分类 / 标签 / 站点信息 */
 .cat{list-style:none;margin:0;padding:0}
-.cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 6px;border-radius:10px;color:rgba(255,255,255,.9);font-size:13.5px;transition:background .3s ease,transform .3s ease;cursor:default}
+.cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 6px;border-radius:10px;color:rgba(255,255,255,.9);font-size:13.5px;text-decoration:none;transition:background .3s ease,transform .3s ease;cursor:pointer}
 .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.cat .row.on{background:rgba(58,163,227,.38);box-shadow:inset 0 0 0 1px rgba(58,163,227,.55)}
 .cat .n{flex:none;min-width:26px;padding:1px 8px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11.5px;text-align:center;color:#fff}
 .cloud{display:flex;flex-wrap:wrap;gap:8px}
-.cloud .tagpill{display:inline-block;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.9);transition:all .3s ease;cursor:default}
+.cloud .tagpill{display:inline-block;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease;cursor:pointer}
 .cloud .tagpill:hover{background:rgba(58,163,227,.4);color:#fff}
+.cloud .tagpill.on{background:rgba(58,163,227,.55);color:#fff;box-shadow:0 0 12px rgba(58,163,227,.5)}
 .info{display:flex;flex-direction:column;gap:8px;font-size:13px}
 .info div{display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.9)}
 .info b{font-weight:600;color:#fff}
+
+/* 分类 / 标签筛选提示条 */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 10px 10px 18px;border-radius:14px;background:var(--glass-strong);border:1px solid rgba(58,163,227,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:13.5px}
+.filter-bar[hidden]{display:none}
+.filter-bar .lab{color:var(--muted);letter-spacing:.08em}
+.filter-bar .val{color:#fff;font-weight:600}
+.filter-bar button{
+  margin-left:auto;width:27px;height:27px;border-radius:50%;cursor:pointer;flex:none;
+  border:1px solid var(--line);background:rgba(255,255,255,.14);color:#fff;font-size:12px;
+  transition:background .25s ease,transform .25s ease;
+}
+.filter-bar button:hover{background:rgba(255,255,255,.32);transform:rotate(90deg)}
+.filter-empty{padding:46px 0;text-align:center;font-size:14px;color:var(--muted)}
 
 /* 置顶区：2 行 × 2 列大图卡 */
 .featured{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px}
@@ -630,7 +650,6 @@ function profileBlock(articleCount, catCount, tagCount) {
 }
 
 function tabsBlock(articles) {
-  const hot = [...articles].sort((a, b) => b.weight - a.weight).slice(0, 5);
   const recent = articles.slice(0, 5);
 
   const item = (a) => `<a href="${a.url}" title="${esc(a.title)}">
@@ -639,16 +658,8 @@ function tabsBlock(articles) {
 </a>`;
 
   return `<section class="card">
-  <div class="tabs" id="tabs">
-    <button class="tab on" data-k="hot" type="button">热门</button>
-    <button class="tab" data-k="recent" type="button">最近</button>
-    <button class="tab" data-k="comment" type="button">评论</button>
-  </div>
-  <div class="list" id="list">${hot.map(item).join('\n')}</div>
-  <script type="application/json" id="feed-data">${JSON.stringify({
-    hot: hot.map((a) => ({ t: a.title, u: a.url, d: a.date, w: a.weight, c: a.cover || '' })),
-    recent: recent.map((a) => ({ t: a.title, u: a.url, d: a.date, w: a.weight, c: a.cover || '' }))
-  })}</script>
+  <h3 class="sec-title center">最近<span class="sub">${articles.length} 篇</span></h3>
+  <div class="list">${recent.map(item).join('\n')}</div>
 </section>`;
 }
 
@@ -661,7 +672,7 @@ function categoriesBlock(articles) {
   const rows = [...counter.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, 10)
-    .map(([name, n]) => `<li><span class="row"><span>${esc(name)}</span><span class="n">${n}</span></span></li>`)
+    .map(([name, n]) => `<li><a class="row" href="#cat=${encodeURIComponent(name)}" data-cat="${esc(name)}"><span>${esc(name)}</span><span class="n">${n}</span></a></li>`)
     .join('\n');
   return `<section class="card">
   <h3 class="sec-title">分类<span class="sub">${counter.size} 个</span></h3>
@@ -675,7 +686,7 @@ function tagsBlock(articles) {
   const tags = [...counter.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 34);
   return `<section class="card">
   <h3 class="sec-title">标签云<span class="sub">${counter.size} 个</span></h3>
-  <div class="cloud">${tags.map(([t]) => `<span class="tagpill">${esc(t)}</span>`).join('')}</div>
+  <div class="cloud">${tags.map(([t]) => `<a class="tagpill" href="#tag=${encodeURIComponent(t)}" data-tag="${esc(t)}">${esc(t)}</a>`).join('')}</div>
 </section>`;
 }
 
@@ -716,10 +727,15 @@ function metaLine(a) {
     </div>`;
 }
 
+/** 文章卡的过滤属性（分类 / 标签云点击后按此过滤卡片墙） */
+function filterAttrs(a) {
+  return ` data-cat="${esc(a.categories[0] || '未分类')}" data-tags="${esc(a.tags.join(','))}"`;
+}
+
 /** 置顶区：前四篇，两行两列 */
 function featuredBlock(articles) {
   const cards = articles
-    .map((a) => `<a class="pt" href="${a.url}" title="${esc(a.title)}">
+    .map((a) => `<a class="pt" href="${a.url}" title="${esc(a.title)}"${filterAttrs(a)}>
   <span class="inner"></span>
   <span class="cover">${coverInner(a)}</span>
   <span class="veil"></span>
@@ -737,7 +753,7 @@ function featuredBlock(articles) {
 function rowsBlock(articles) {
   const cards = articles
     .map((a) => {
-      return `<a class="pr" href="${a.url}" title="${esc(a.title)}">
+      return `<a class="pr" href="${a.url}" title="${esc(a.title)}"${filterAttrs(a)}>
   <span class="cover">${coverInner(a)}</span>
   <span class="veil"></span>
   <div class="body">
@@ -777,13 +793,13 @@ function page(articles) {
 <meta name="description" content="${esc(SITE.bio)}">
 <link rel="icon" href="/favicon.ico">
 <link rel="manifest" href="/manifest.json">
-<style>${CSS}</style>
+<style>${CSS}${WIDGET_CSS}</style>
 </head>
 <body>
 <header class="topbar" id="topbar">
   <div class="topbar-in">
     <a class="brand" href="/">
-      <span class="mark">随</span>
+      <span class="mark">剑</span>
       <span class="word">${esc(SITE.name)}</span>
     </a>
     <nav>
@@ -815,33 +831,21 @@ function page(articles) {
   </div>
 
   <main class="main">
+    <div class="filter-bar" id="filterBar" hidden>
+      <span class="lab">筛选</span>
+      <span class="val" id="filterText"></span>
+      <button type="button" id="filterClear" title="清除筛选" aria-label="清除筛选">✕</button>
+    </div>
     <div id="feed">${feedBlock(articles)}</div>
     <nav class="pager" id="pager" aria-label="分页"></nav>
   </main>
 </div>
 
+${siteFooter()}
+${musicPlayer()}
+
 <script>
 (function () {
-  // 三标签切换
-  var data = JSON.parse(document.getElementById('feed-data').textContent);
-  var list = document.getElementById('list');
-  function render(k) {
-    var rows = data[k] || [];
-    if (!rows.length) { list.innerHTML = '<div class="empty">还没有接入评论系统</div>'; return; }
-    list.innerHTML = rows.map(function (a) {
-      return '<a href="' + a.u + '" title="' + a.t + '">' +
-        '<span class="thumb">' + (a.c ? '<img src="' + a.c + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</span>' +
-        '<span class="txt"><span class="t">' + a.t + '</span><span class="m">' +
-        (a.d ? a.d + ' · ' : '') + a.w.toLocaleString('en-US') + ' 字</span></span></a>';
-    }).join('');
-  }
-  document.getElementById('tabs').addEventListener('click', function (e) {
-    var btn = e.target.closest('.tab');
-    if (!btn) return;
-    Array.prototype.forEach.call(this.children, function (b) { b.classList.toggle('on', b === btn); });
-    render(btn.dataset.k);
-  });
-
   // 卡片墙：悬停放大，其余虚化
   var feed = document.getElementById('feed');
   feed.addEventListener('mouseover', function (e) {
@@ -889,45 +893,145 @@ function page(articles) {
     });
   }
 
-  // 客户端分页：每页 12 条（4 张置顶 + 8 篇最新），显示普通页码
+  // 分类 / 标签云：点击后就地过滤卡片墙（静态站没有独立分类页）
+  // 分页：每页 12 条（4 张置顶 + 8 篇最新），基于过滤后的集合计算
   var PER_PAGE = 12;
-  var feed = document.getElementById('feed');
   var pager = document.getElementById('pager');
-  if (feed && pager) {
-    var posts = Array.prototype.slice.call(feed.querySelectorAll('.pt, .pr'));
-    var pages = Math.max(1, Math.ceil(posts.length / PER_PAGE));
-    var page = 1;
-    function drawPager() {
-      var html = '';
-      html += '<button type="button" data-go="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>上一页</button>';
-      for (var i = 1; i <= pages; i++) {
-        if (pages > 7 && i > 2 && i < pages - 1 && Math.abs(i - page) > 1) {
-          if (!html.endsWith('<span class="gap">…</span>')) html += '<span class="gap">…</span>';
-          continue;
-        }
-        html += '<button type="button" data-go="' + i + '"' + (i === page ? ' class="cur"' : '') + '>' + i + '</button>';
-      }
-      html += '<button type="button" data-go="' + (page + 1) + '"' + (page === pages ? ' disabled' : '') + '>下一页</button>';
-      pager.innerHTML = html;
-    }
-    function render(smooth) {
-      posts.forEach(function (el, i) {
-        var show = Math.floor(i / PER_PAGE) + 1 === page;
-        el.style.display = show ? '' : 'none';
-      });
-      drawPager();
-      if (smooth) window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    pager.addEventListener('click', function (e) {
-      var btn = e.target.closest('button[data-go]');
-      if (!btn || btn.disabled) return;
-      var next = parseInt(btn.dataset.go, 10);
-      if (!next || next < 1 || next > pages || next === page) return;
-      page = next;
-      render(true);
-    });
-    render(false);
+  var filterBar = document.getElementById('filterBar');
+  var filterText = document.getElementById('filterText');
+  var filterClear = document.getElementById('filterClear');
+  var posts = Array.prototype.slice.call(feed.querySelectorAll('.pt, .pr'));
+  var pages = 1, page = 1, pageItems = posts.slice();
+  var filter = null; // { type: 'cat' | 'tag', value: '...' }
+
+  function matchFilter(el) {
+    if (!filter) return true;
+    if (filter.type === 'cat') return (el.getAttribute('data-cat') || '') === filter.value;
+    var tags = (el.getAttribute('data-tags') || '').split(',').filter(Boolean);
+    return tags.indexOf(filter.value) > -1;
   }
+
+  function markActive() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cat], [data-tag]'), function (el) {
+      var isCat = el.hasAttribute('data-cat');
+      var key = isCat ? 'data-cat' : 'data-tag';
+      var on = filter && filter.type === (isCat ? 'cat' : 'tag') && filter.value === el.getAttribute(key);
+      el.classList.toggle('on', !!on);
+    });
+  }
+
+  function drawPager() {
+    var html = '';
+    html += '<button type="button" data-go="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>上一页</button>';
+    for (var i = 1; i <= pages; i++) {
+      if (pages > 7 && i > 2 && i < pages - 1 && Math.abs(i - page) > 1) {
+        if (!html.endsWith('<span class="gap">…</span>')) html += '<span class="gap">…</span>';
+        continue;
+      }
+      html += '<button type="button" data-go="' + i + '"' + (i === page ? ' class="cur"' : '') + '>' + i + '</button>';
+    }
+    html += '<button type="button" data-go="' + (page + 1) + '"' + (page === pages ? ' disabled' : '') + '>下一页</button>';
+    pager.innerHTML = html;
+  }
+
+  function applyFilter(smooth) {
+    // 无筛选：置顶 2×2 在最上方（前 12 条含置顶卡）；筛选中：置顶区整体收起，结果统一为列表行
+    pageItems = posts.filter(function (el) {
+      if (filter && el.classList.contains('pt')) return false;
+      return matchFilter(el);
+    });
+    pages = Math.max(1, Math.ceil(pageItems.length / PER_PAGE));
+    if (page > pages) page = pages;
+    posts.forEach(function (el) { el.style.display = 'none'; });
+    pageItems.forEach(function (el, i) {
+      el.style.display = Math.floor(i / PER_PAGE) + 1 === page ? '' : 'none';
+    });
+    drawPager();
+
+    var empty = document.getElementById('filterEmpty');
+    if (filter && !pageItems.length) {
+      if (!empty) {
+        empty = document.createElement('div');
+        empty.id = 'filterEmpty';
+        empty.className = 'filter-empty';
+        feed.insertBefore(empty, feed.firstChild);
+      }
+      empty.textContent = '「' + filter.value + '」下还没有文章';
+      pager.style.display = 'none';
+    } else if (empty) {
+      empty.remove();
+      pager.style.display = '';
+    }
+
+    if (filter) {
+      filterBar.hidden = false;
+      filterText.textContent = (filter.type === 'cat' ? '分类 · ' : '标签 · ') + filter.value + '（' + pageItems.length + ' 篇）';
+    } else {
+      filterBar.hidden = true;
+    }
+    markActive();
+    if (smooth) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function syncHash() {
+    var h = filter ? '#' + filter.type + '=' + encodeURIComponent(filter.value) : location.pathname + location.search;
+    if (history.replaceState) history.replaceState(null, '', h);
+  }
+
+  function setFilter(type, value) {
+    // 再点一次同一个分类 / 标签 = 取消筛选
+    filter = (filter && filter.type === type && filter.value === value) ? null : { type: type, value: value };
+    page = 1;
+    syncHash();
+    applyFilter(true);
+  }
+
+  var catList = document.querySelector('.cat');
+  if (catList) catList.addEventListener('click', function (e) {
+    var row = e.target.closest('a.row[data-cat]');
+    if (!row) return;
+    e.preventDefault();
+    setFilter('cat', row.getAttribute('data-cat'));
+  });
+
+  var cloud = document.querySelector('.cloud');
+  if (cloud) cloud.addEventListener('click', function (e) {
+    var pill = e.target.closest('a.tagpill[data-tag]');
+    if (!pill) return;
+    e.preventDefault();
+    setFilter('tag', pill.getAttribute('data-tag'));
+  });
+
+  if (filterClear) filterClear.addEventListener('click', function () {
+    if (!filter) return;
+    filter = null; page = 1;
+    syncHash();
+    applyFilter(true);
+  });
+
+  // 从 URL hash 恢复筛选（#cat=xxx / #tag=xxx），并跟随浏览器前进后退
+  function filterFromHash() {
+    var m = location.hash.match(/^#(cat|tag)=(.+)$/);
+    return m ? { type: m[1], value: decodeURIComponent(m[2]) } : null;
+  }
+  filter = filterFromHash();
+  window.addEventListener('hashchange', function () {
+    var next = filterFromHash();
+    var same = (!filter && !next) || (filter && next && filter.type === next.type && filter.value === next.value);
+    if (same) return;
+    filter = next; page = 1;
+    applyFilter(false);
+  });
+
+  pager.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-go]');
+    if (!btn || btn.disabled) return;
+    var next = parseInt(btn.dataset.go, 10);
+    if (!next || next < 1 || next > pages || next === page) return;
+    page = next;
+    applyFilter(true);
+  });
+  applyFilter(false);
 
   // 置顶卡入场动画：进入视口后依次浮出
   var featured = document.querySelectorAll('.pt');

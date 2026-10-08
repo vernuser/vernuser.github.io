@@ -1,52 +1,25 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>留言板 · 艾恩葛朗特第一层の旅店</title>
-<link rel="icon" href="/favicon.ico">
-<style>
-/* 顶栏：悬浮胶囊玻璃条（与首页一致） */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:60;padding:14px 20px}
-.topbar-in{max-width:1120px;margin:0 auto;height:56px;padding:0 8px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(78,86,120,.42);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);box-shadow:0 12px 34px rgba(6,18,34,.32)}
-.brand{display:flex;align-items:center;gap:9px;text-decoration:none;white-space:nowrap;color:#fff}
-.brand .mark{width:28px;height:28px;flex:none;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#3aa3e3,#62a33d);font:700 15px/1 Georgia,"Times New Roman",serif;color:#fff}
-.brand .word{font:700 17px/1 Georgia,"Times New Roman",serif}
-.nav-menu{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}
-.nav-menu a{position:relative;color:rgba(255,255,255,.88);text-decoration:none;font-size:14.5px;white-space:nowrap;transition:color .25s ease}
-.nav-menu a::after{content:"";position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
-.nav-menu a:hover{color:#fff}
-.nav-menu a:hover::after{width:60%}
-.nav-menu a.active{color:#fff;font-weight:600}
-.nav-menu a.active::after{width:60%}
-.topbar .avatar-btn{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(6,20,36,.4);transition:transform .25s ease}
-.topbar .avatar-btn img{width:100%;height:100%;object-fit:cover;display:block}
-.topbar .avatar-btn:hover{transform:scale(1.1)}
-@media(max-width:820px){
-  .topbar{padding:10px 12px}
-  .topbar-in{padding:0 6px 0 12px}
-  .brand .word{font-size:15px}
-  .nav-menu{gap:12px}
-  .nav-menu a{font-size:13px}
-  .nav-menu a::after{display:none}
-}
-:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
-body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
-.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:104px 22px 80px}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
-.pill:hover{background:rgba(58,163,227,.5)}
-.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px;margin-top:6px}
-h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
-.sub{margin:8px 0 0;font-size:13.5px;color:rgba(255,255,255,.72)}
-.panel{background:rgba(12,26,44,.62);border:1px solid var(--line);border-radius:20px;padding:34px 36px;backdrop-filter:blur(18px) saturate(140%);box-shadow:0 20px 50px rgba(5,16,30,.4)}
-.panel p{margin:.9em 0}
-.panel h2{color:#fff;font-size:20px;margin:1.6em 0 .5em;border-left:3px solid var(--sky);padding-left:12px}
-.panel a{color:#8fd0ff}
-.panel del{color:rgba(255,255,255,.45)}
-@media(max-width:640px){.panel{padding:22px 18px}.wrap{padding:8vh 14px 60px}h1{font-size:23px}}
+/*
+ * 全站共享小部件：页脚（旅店已开放 xx 天）+ 悬浮音乐播放器
+ * 用法：
+ *   import { WIDGET_CSS, siteFooter, musicPlayer } from './site-widgets.mjs';
+ *   <style> 里拼上 ${WIDGET_CSS}；</body> 前拼上 ${siteFooter()}${musicPlayer()}
+ * 换歌单：直接改下面的 TRACKS（网易云外链格式 id=歌曲ID.mp3，VIP 歌会拿不到音频）。
+ * 运行：被各生成脚本引用，无独立入口。
+ */
+
+export const OPEN_SINCE = '2023-04-12'; // 旅店开店日（与 about 页一致）
+
+/* 默认歌单：HOYO-MiX（构建期已用 curl 验证外链可出音频流）；换歌直接改这里 */
+export const TRACKS = [
+  { title: '野火 Wildfire', artist: 'HOYO-MiX', url: 'https://music.163.com/song/media/outer/url?id=2045806409.mp3' },
+  { title: '疾如猛火 Rapid as Wildfires', artist: '陈致逸/HOYO-MiX', url: 'https://music.163.com/song/media/outer/url?id=1492283139.mp3' },
+  { title: 'Moon Halo', artist: 'HOYO-MiX', url: 'https://music.163.com/song/media/outer/url?id=1859652717.mp3' },
+  { title: 'Nightglow (Instrumental)', artist: 'HOYO-MiX', url: 'https://music.163.com/song/media/outer/url?id=1334673828.mp3' },
+  { title: '皎洁的笑颜 Moonlike Smile', artist: '陈致逸/HOYO-MiX', url: 'https://music.163.com/song/media/outer/url?id=1833805540.mp3' },
+  { title: '坠叶与晚星 Falling Leaves and Even-Stars', artist: 'HOYO-MiX', url: 'https://music.163.com/song/media/outer/url?id=3437729518.mp3' }
+];
+
+export const WIDGET_CSS = `
 /* 页脚 */
 .site-footer{position:relative;z-index:1;padding:22px 16px 30px;text-align:center;font-size:12.5px;color:rgba(233,242,253,.62);letter-spacing:.05em}
 .site-footer b{color:#7cc4ec;font-weight:600;font-variant-numeric:tabular-nums;font-size:13.5px}
@@ -102,51 +75,32 @@ h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
   .mp-root{left:12px;bottom:12px}
   .mp-disc{width:46px;height:46px}
 }
-</style>
-</head>
-<body>
-<header class="topbar">
-  <div class="topbar-in">
-    <a class="brand" href="/"><span class="mark">剑</span><span class="word">艾恩葛朗特第一层の旅店</span></a>
-    <nav>
-      <ul class="nav-menu">
-        <li><a href="/">首页</a></li>
-        <li><a href="/diary/">随心记</a></li>
-        <li><a href="/wallpaper/">壁纸墙</a></li>
-        <li><a href="/link/">友人帐</a></li>
-        <li><a href="/about/">关于我</a></li>
-      </ul>
-    </nav>
-    <a class="avatar-btn" href="/about/" title="vernus"><img src="/icons/cards/avatar.png" alt="vernus"></a>
-  </div>
-</header>
-<div class="wrap">
-  <div class="head">
-    <div>
-      <h1>留言板</h1>
-      <p class="sub">想来一间足够舒适的房间？</p>
-    </div>
-    <a class="pill" href="/">← 返回主页</a>
-  </div>
-  <div class="panel">
-  <p>这里原本是评论系统所在的位置。当前站点由静态页面组成，留言功能需要一个评论后端才能使用。</p>
-  <p>想开通的话，接入任意一种评论服务即可（Valine / Waline / Twikoo / Giscus 都行），
-  接好之后我把这里替换成真正的留言板。</p>
-  <p>暂时可以先通过主页的 <b>邮箱</b> 或 <b>QQ</b> 找到我 🙌</p>
-</div>
-</div>
-<footer class="site-footer">
+`;
+
+/** 页脚：旅店已开放 xx 天（天数由浏览器实时计算，静态站也不会过期） */
+export function siteFooter() {
+  return `<footer class="site-footer">
   ✦ 旅店已开放 <b id="sfDays">…</b> 天<span class="star">·</span>愿终有一天能与你重要的人重逢
 </footer>
 <script>
 (function () {
   var el = document.getElementById('sfDays');
   if (!el) return;
-  var open = Math.max(1, Math.ceil((Date.now() - new Date('2023-04-12T00:00:00+08:00').getTime()) / 864e5));
+  var open = Math.max(1, Math.ceil((Date.now() - new Date('${OPEN_SINCE}T00:00:00+08:00').getTime()) / 864e5));
   el.textContent = open.toLocaleString('en-US');
 })();
-</script>
-<div class="mp-root">
+</script>`;
+}
+
+/** 悬浮音乐播放器：右下角唱片按钮，点击展开面板（播放/切歌/进度/歌单） */
+export function musicPlayer() {
+  const ICONS = {
+    play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>',
+    prev: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12L9.5 12z"/></svg>',
+    next: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l10.5-6z"/></svg>'
+  };
+  return `<div class="mp-root">
   <button class="mp-disc" id="mpDisc" type="button" aria-label="音乐播放器" title="音乐播放器"></button>
   <div class="mp-panel" id="mpPanel">
     <div class="mp-head"><span class="mp-title" id="mpTitle">…</span><span class="mp-artist" id="mpArtist"></span></div>
@@ -155,9 +109,9 @@ h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
       <span class="mp-time" id="mpTime">0:00 / 0:00</span>
     </div>
     <div class="mp-ctrls">
-      <button type="button" id="mpPrev" title="上一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12L9.5 12z"/></svg></button>
-      <button type="button" class="mp-playbtn" id="mpPlay" title="播放/暂停"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
-      <button type="button" id="mpNext" title="下一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+      <button type="button" id="mpPrev" title="上一首">${ICONS.prev}</button>
+      <button type="button" class="mp-playbtn" id="mpPlay" title="播放/暂停">${ICONS.play}</button>
+      <button type="button" id="mpNext" title="下一首">${ICONS.next}</button>
     </div>
     <ul class="mp-playlist" id="mpListEl"></ul>
   </div>
@@ -165,7 +119,7 @@ h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
 <audio id="mpAudio" preload="none"></audio>
 <script>
 (function () {
-  var TR = [{"title":"野火 Wildfire","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=2045806409.mp3"},{"title":"疾如猛火 Rapid as Wildfires","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1492283139.mp3"},{"title":"Moon Halo","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1859652717.mp3"},{"title":"Nightglow (Instrumental)","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1334673828.mp3"},{"title":"皎洁的笑颜 Moonlike Smile","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1833805540.mp3"},{"title":"坠叶与晚星 Falling Leaves and Even-Stars","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=3437729518.mp3"}];
+  var TR = ${JSON.stringify(TRACKS)};
   if (!TR.length) return;
   var audio = document.getElementById('mpAudio');
   var disc = document.getElementById('mpDisc');
@@ -191,8 +145,8 @@ h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
   }
   function setPlayIcon(on) {
     playBtn.innerHTML = on
-      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>'
-      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+      ? '${ICONS.pause}'
+      : '${ICONS.play}';
     disc.classList.toggle('playing', on);
   }
   function load(i, autoplay) {
@@ -243,6 +197,5 @@ h1{margin:0;font-size:32px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
 
   load(0, false);
 })();
-</script>
-</body>
-</html>
+</script>`;
+}

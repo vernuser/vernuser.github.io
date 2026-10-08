@@ -1,7 +1,7 @@
 {
-  "name": "随波逐流の旅店",
+  "name": "艾恩葛朗特第一层の旅店",
   "favicon": "/favicon.ico",
-  "keywords": "vernus,随波逐流の旅店,个人主页,网安,CTF,代码审计,渗透测试,靶场,二次元",
+  "keywords": "vernus,艾恩葛朗特第一层の旅店,个人主页,网安,CTF,代码审计,渗透测试,靶场,二次元",
   "description": "愿终有一天能与你重要的人重逢",
   "avatarConfig": {
     "src": "/icons/cards/avatar.png",
@@ -44,7 +44,7 @@
     "showFrom": true,
     "style": "desc",
     "gapDelay": 0.05,
-    "content": "欢迎光临，这里是随波逐流の旅店",
+    "content": "欢迎光临，这里是艾恩葛朗特第一层の旅店",
     "desc": "vernus · 一个菜菜的 CTF 玩家，主营 python / 靶场 / 网安知识，偶尔打打 galgame，重度二次元爱好者。"
   },
   "links": [

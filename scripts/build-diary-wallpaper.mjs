@@ -8,13 +8,14 @@
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
+import { WIDGET_CSS, siteFooter, musicPlayer } from './site-widgets.mjs';
 
 const ROOT = process.cwd();
 const PUBLIC = join(ROOT, 'public');
 const GENERATED = join(ROOT, 'src', 'generated');
 
 const SITE = {
-  name: '随波逐流の旅店',
+  name: '艾恩葛朗特第一层の旅店',
   author: 'vernus',
   avatar: '/icons/cards/avatar.png'
 };
@@ -102,7 +103,7 @@ function topbar(active) {
   ];
   return `<header class="topbar">
   <div class="topbar-in">
-    <a class="brand" href="/"><span class="mark">随</span><span class="word">${esc(SITE.name)}</span></a>
+    <a class="brand" href="/"><span class="mark">剑</span><span class="word">${esc(SITE.name)}</span></a>
     <nav>
       <ul class="nav-menu">
 ${items.map(([href, label, key]) => `        <li><a href="${href}"${key === active ? ' class="active"' : ''}>${label}</a></li>`).join('\n')}
@@ -122,104 +123,140 @@ function shell(title, description, css, body, active) {
 <title>${esc(title)} · ${esc(SITE.name)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="icon" href="/favicon.ico">
-<style>${SHELL_CSS}${css}</style>
+<style>${SHELL_CSS}${css}${WIDGET_CSS}</style>
 </head>
 <body>
 ${topbar(active)}
 ${body}
+${siteFooter()}
+${musicPlayer()}
 </body>
 </html>`;
 }
 
 /* ------------------------------ 随心记 ------------------------------ */
 
+/* 随心记：写作账本 + 便签卡片墙（形式取自参考设计，配色适配站点深色玻璃风格） */
 const DIARY_CSS = `
-.wrap{max-width:864px;margin:0 auto;padding:104px 20px 90px}
-.headline{display:flex;align-items:center;gap:14px;margin-bottom:30px}
-.headline h1{margin:0;font-size:30px;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
-.headline .tag{
-  padding:3px 13px;border-radius:999px;font-size:12.5px;
-  background:rgba(58,163,227,.28);border:1px solid rgba(120,196,240,.5);color:#dff0ff;
-  box-shadow:0 0 16px rgba(58,163,227,.35);
-}
-.headline .count{margin-left:auto;font-size:13px;color:var(--muted)}
+.d-wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:104px 20px 84px}
+.d-head{display:flex;align-items:flex-start;gap:26px;margin-bottom:28px}
+.d-crumb{font:700 12px/1 Georgia,"Times New Roman",serif;letter-spacing:.3em;color:#e0a545}
+.d-title{margin:12px 0 6px;font-size:36px;line-height:1.25;color:#fff;text-shadow:0 2px 14px rgba(6,20,36,.6)}
+.d-title .hl{background:linear-gradient(transparent 64%,rgba(224,165,69,.36) 64%);padding:0 4px}
+.d-sub{margin:0;font-size:13px;color:var(--muted)}
 
-/* 时间轴：左侧竖线 + 每个条目一个发光节点 */
-.tl{position:relative;padding-left:38px}
-.tl::before{
-  content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;border-radius:2px;
-  background:linear-gradient(to bottom,rgba(255,255,255,.05),rgba(255,255,255,.34) 12%,rgba(255,255,255,.34) 88%,rgba(255,255,255,.05));
+/* 草稿箱便签 */
+.d-sticky{
+  margin-left:auto;flex:none;width:228px;padding:15px 16px 12px;position:relative;
+  background:linear-gradient(165deg,#e9f3e6,#d3e7d1);border-radius:3px;
+  transform:rotate(2.2deg);box-shadow:0 14px 30px rgba(6,20,36,.4);
 }
-.entry{position:relative;margin-bottom:22px}
-.entry::before{
-  content:"";position:absolute;left:-33px;top:22px;width:12px;height:12px;border-radius:50%;
-  background:#eaf6ff;border:2px solid rgba(58,163,227,.85);
-  box-shadow:0 0 14px rgba(120,196,240,.9),0 0 30px rgba(58,163,227,.5);
-  transition:transform .3s ease,box-shadow .3s ease;
+.d-sticky::before{content:'';position:absolute;top:-9px;left:50%;width:78px;height:18px;transform:translateX(-50%) rotate(-2deg);background:rgba(255,255,255,.55);border:1px dashed rgba(120,150,120,.35)}
+.d-sticky .s-label{font-size:11.5px;color:#5c7a5f;letter-spacing:.06em}
+.d-sticky .s-big{margin:7px 0 12px;font-size:15px;font-weight:600;color:#3e5a42;line-height:1.5}
+.d-sticky .s-bar{height:7px;border-radius:4px;background:rgba(90,120,95,.28);position:relative;overflow:hidden}
+.d-sticky .s-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:4px;background:#8fbc8f}
+.d-sticky .s-pct{margin-top:4px;text-align:right;font-size:10.5px;color:#5c7a5f}
+
+/* 冒险记录 */
+.d-ledger{
+  background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  padding:20px 26px 18px;margin-bottom:30px;
 }
-.entry:hover::before{transform:scale(1.25);box-shadow:0 0 20px rgba(160,216,255,1),0 0 40px rgba(58,163,227,.7)}
-.card{
-  position:relative;border-radius:16px;border:1px solid rgba(255,255,255,.2);
-  background:rgba(12,28,48,.42);backdrop-filter:blur(14px) saturate(140%);
+.d-ledger .lg-head{display:flex;align-items:center;gap:10px;font:600 12px/1 Georgia,"Times New Roman",serif;letter-spacing:.24em;color:rgba(233,242,253,.8)}
+.d-ledger .lg-head .till{margin-left:auto;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-weight:400;letter-spacing:.08em}
+.d-ledger .lg-stats{display:flex;flex-wrap:wrap;margin:18px 0 6px}
+.d-ledger .lg-stat{flex:1 1 0;min-width:140px;padding:2px 20px;border-left:1px dashed rgba(255,255,255,.16)}
+.d-ledger .lg-stat:first-child{border-left:0;padding-left:0}
+.d-ledger .lg-stat b{font:700 30px/1.15 Georgia,"Times New Roman",serif;color:#fff;font-variant-numeric:tabular-nums}
+.d-ledger .lg-stat b i{font:600 13px/1 Georgia,"Times New Roman",serif;font-style:normal;color:#e0a545;margin-left:3px}
+.d-ledger .lg-stat span{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+.d-chart{display:flex;align-items:flex-end;gap:12px;margin-top:14px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.14)}
+.d-chart .bar{flex:1 1 0;max-width:72px;text-align:center}
+.d-chart .bar em{display:block;font:600 11px/1 Georgia,"Times New Roman",serif;font-style:normal;color:#e0a545;margin-bottom:5px}
+.d-chart .bar i{display:block;margin:0 auto;width:22px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#e8c47c,#c08f42);box-shadow:0 0 12px rgba(224,165,69,.25)}
+.d-chart .bar span{display:block;margin-top:6px;font-size:11px;color:var(--muted)}
+
+/* 便签卡片墙 */
+.d-grid{column-count:3;column-gap:18px}
+@media(max-width:1080px){.d-grid{column-count:2}}
+@media(max-width:680px){.d-grid{column-count:1}}
+.d-note{
+  position:relative;break-inside:avoid;margin-bottom:18px;
+  background:var(--glass);border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 28px rgba(6,20,36,.3);backdrop-filter:blur(14px) saturate(140%);
   -webkit-backdrop-filter:blur(14px) saturate(140%);
-  box-shadow:0 12px 30px rgba(6,20,36,.28);
-  padding:16px 20px 15px;transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,background .35s ease;
+  padding:17px 18px 12px;
+  transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease,border-color .35s ease;
 }
-.entry:hover .card{transform:translateX(5px);background:rgba(20,42,68,.52);box-shadow:0 18px 40px rgba(6,20,36,.38)}
-.card .top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-.card .av{
-  width:34px;height:34px;flex:none;border-radius:50%;overflow:hidden;
-  border:1px solid rgba(255,255,255,.34);box-shadow:0 3px 10px rgba(4,12,24,.4);
+.d-note::before{
+  content:'';position:absolute;top:-9px;left:50%;width:88px;height:18px;
+  transform:translateX(-50%) rotate(-2deg);
+  background:rgba(224,165,69,.30);border:1px dashed rgba(255,255,255,.28);
 }
-.card .av img{width:100%;height:100%;object-fit:cover;display:block}
-.card .nm{font-size:13.5px;color:#fff}
-.card .time{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.card .text{margin:0;font-size:14.5px;line-height:1.85;color:rgba(255,255,255,.9)}
-.card .text a{color:#cfe9fb;text-decoration:none;border-bottom:1px dashed rgba(207,233,251,.5)}
-.card .text a:hover{color:#fff}
-.card .foot{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.16)}
-.card .chip{
-  padding:2px 11px;border-radius:999px;font-size:11.5px;color:rgba(255,255,255,.82);
-  background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);
-}
-.card .chip:hover{background:rgba(58,163,227,.4);color:#fff}
-.card .like{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.55)}
-.card .like svg{width:13px;height:13px}
-.empty{padding:36px;text-align:center;color:var(--muted)}
-@media(max-width:640px){
-  .wrap{padding:92px 14px 70px}
-  .headline h1{font-size:23px}
-  .tl{padding-left:30px}
-  .entry::before{left:-26px;width:10px;height:10px}
-  .card{padding:14px 16px}
-  .card .time{font-size:11px}
+.d-note:nth-child(3n)::before{transform:translateX(-50%) rotate(2.4deg);background:rgba(125,196,236,.26)}
+.d-note:nth-child(3n+1)::before{width:70px;background:rgba(255,255,255,.18)}
+.d-note:hover{transform:translateY(-4px);border-color:rgba(224,165,69,.45);box-shadow:0 22px 46px rgba(6,20,36,.44)}
+.d-note .n-top{display:flex;align-items:center;gap:10px;font-size:11px}
+.d-note .n-cat{color:#e0a545;letter-spacing:.14em}
+.d-note .n-date{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.d-note h3{margin:10px 0 0;font-size:16px;line-height:1.55;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.d-note h3 a{color:inherit;text-decoration:none;transition:color .25s ease}
+.d-note h3 a:hover{color:#7cc4ec}
+.d-note .n-desc{margin:9px 0 0;padding-bottom:10px;border-bottom:1px dashed rgba(255,255,255,.16);font-size:13px;line-height:1.8;color:rgba(233,242,253,.72);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.d-note .n-foot{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:11.5px;min-width:0}
+.d-note .n-tags{color:rgba(233,242,253,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-note .n-tags span{margin-right:8px}
+.d-note .n-read{margin-left:auto;flex:none;color:#e0a545;text-decoration:none;font-weight:600;transition:transform .3s ease}
+.d-note .n-read:hover{transform:translateX(3px);color:#f0bd68}
+@media(max-width:820px){
+  .d-wrap{padding:96px 14px 70px}
+  .d-head{flex-direction:column;gap:18px}
+  .d-sticky{margin-left:0;transform:rotate(1.2deg)}
+  .d-title{font-size:27px}
+  .d-ledger{padding:18px 16px 14px}
+  .d-ledger .lg-stat{min-width:44%;padding:2px 12px;margin-bottom:8px}
+  .d-ledger .lg-stat b{font-size:24px}
+  .d-chart{gap:7px}
+  .d-chart .bar i{width:14px}
 }
 `;
 
 function diaryPage(articles) {
-  const entries = articles
+  const now = new Date();
+  const till = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+  const DAY = 864e5;
+  const ts = (d) => new Date(d + 'T00:00:00+08:00').getTime();
+
+  const posts = articles.length;
+  const words = articles.reduce((n, a) => n + (a.weight || 0), 0);
+  const dated = articles.filter((a) => a.date).sort((a, b) => b.date.localeCompare(a.date));
+  const latest = dated[0];
+  const oldest = dated[dated.length - 1];
+  const daysAgo = latest ? Math.max(0, Math.round((now.getTime() - ts(latest.date)) / DAY)) : '—';
+  const yearsSpan = oldest ? ((now.getTime() - ts(oldest.date)) / (365.25 * DAY)).toFixed(1) : '—';
+
+  const byYear = new Map();
+  for (const a of dated) byYear.set(a.date.slice(0, 4), (byYear.get(a.date.slice(0, 4)) || 0) + 1);
+  const yearRows = [...byYear.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  const maxYear = Math.max(1, ...yearRows.map((r) => r[1]));
+  const chart = yearRows
+    .map(([y, n]) => `<div class="bar"><em>${n}</em><i style="height:${8 + Math.round((n / maxYear) * 44)}px"></i><span>'${y.slice(2)}</span></div>`)
+    .join('\n');
+
+  const wordsW = words ? (words / 10000).toFixed(1) : '0';
+
+  const notes = articles
     .map((a) => {
       const cat = (a.categories && a.categories[0]) || '随笔';
-      const body = a.desc
-        ? esc(a.desc)
-        : `<a href="${a.url}">${esc(a.title)}</a>`;
-      return `<article class="entry">
-  <div class="card">
-    <div class="top">
-      <span class="av"><img src="${esc(SITE.avatar)}" alt="${esc(SITE.author)}" loading="lazy"></span>
-      <span class="nm">${esc(SITE.author)}</span>
-      ${a.date ? `<time class="time">${esc(a.date)}</time>` : ''}
-    </div>
-    <p class="text">${body}</p>
-    <div class="foot">
-      <span class="chip">「${esc(cat)}」</span>
-      <a class="chip" href="${a.url}">${esc(a.title)}</a>
-      <span class="like" title="评论数需接入评论系统后显示">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
-        —
-      </span>
-    </div>
-  </div>
+      const tags = (a.tags || []).slice(0, 3).map((t) => `<span>#${esc(t)}</span>`).join('');
+      return `<article class="d-note">
+  <div class="n-top"><span class="n-cat">${esc(cat)}</span>${a.date ? `<time class="n-date">${esc(a.date)}</time>` : ''}</div>
+  <h3><a href="${a.url}">${esc(a.title)}</a></h3>
+  ${a.desc ? `<p class="n-desc">${esc(a.desc)}</p>` : ''}
+  <div class="n-foot"><span class="n-tags">${tags || '<span>#SAO</span>'}</span><a class="n-read" href="${a.url}">读一读 →</a></div>
 </article>`;
     })
     .join('\n');
@@ -228,14 +265,36 @@ function diaryPage(articles) {
     '随心记',
     '旅店里的碎碎念与近况',
     DIARY_CSS,
-    `<div class="wrap">
-  <div class="headline">
-    <span class="tag">我的动态</span>
-    <h1>随心记</h1>
-    <span class="count">共 ${articles.length} 条</span>
+    `<div class="d-wrap">
+  <div class="d-head">
+    <div>
+      <div class="d-crumb">✦ DIARY / WRITINGS</div>
+      <h1 class="d-title"><span class="hl">随心记</span></h1>
+      <p class="d-sub">旅店里的碎碎念与近况</p>
+    </div>
+    <aside class="d-sticky">
+      <div class="s-label">✎ 草稿箱 · 下一篇在写……</div>
+      <p class="s-big">暂无，随时起笔</p>
+      <div class="s-bar"><i></i></div>
+      <div class="s-pct">0%</div>
+    </aside>
   </div>
-  <div class="tl">
-${entries}
+
+  <section class="d-ledger">
+    <div class="lg-head"><span>艾恩葛朗特第一层 · 随心记账本</span><span class="till">截至 ${till}</span></div>
+    <div class="lg-stats">
+      <div class="lg-stat"><b>${posts}<i>篇</i></b><span>已上架</span></div>
+      <div class="lg-stat"><b>${wordsW}<i>万字</i></b><span>累计字数</span></div>
+      <div class="lg-stat"><b>${daysAgo}<i>天前</i></b><span>最近一篇</span></div>
+      <div class="lg-stat"><b>${yearsSpan}<i>年</i></b><span>动笔至今</span></div>
+    </div>
+    <div class="d-chart">
+${chart}
+    </div>
+  </section>
+
+  <div class="d-grid">
+${notes}
   </div>
 </div>`,
     'diary'

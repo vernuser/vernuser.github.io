@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>随波逐流の旅店</title>
+<title>艾恩葛朗特第一层の旅店</title>
 <meta name="description" content="愿终有一天能与你重要的人重逢">
 <link rel="icon" href="/favicon.ico">
 <link rel="manifest" href="/manifest.json">
@@ -122,6 +122,9 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 .sec-title::before{content:'';position:absolute;left:0;top:50%;width:3px;height:54%;border-radius:2px;background:var(--sky);transform:translateY(-50%);transition:height .3s ease-in-out}
 .card:hover .sec-title::before{height:86%}
 .sec-title .sub{margin-left:auto;font-size:12px;font-weight:400;color:var(--muted)}
+.sec-title.center{justify-content:center;padding-left:0}
+.sec-title.center::before{display:none}
+.sec-title.center .sub{margin-left:8px}
 
 /* 三标签 */
 .tabs{display:flex;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:12px}
@@ -153,15 +156,30 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
 
 /* 分类 / 标签 / 站点信息 */
 .cat{list-style:none;margin:0;padding:0}
-.cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 6px;border-radius:10px;color:rgba(255,255,255,.9);font-size:13.5px;transition:background .3s ease,transform .3s ease;cursor:default}
+.cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 6px;border-radius:10px;color:rgba(255,255,255,.9);font-size:13.5px;text-decoration:none;transition:background .3s ease,transform .3s ease;cursor:pointer}
 .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.cat .row.on{background:rgba(58,163,227,.38);box-shadow:inset 0 0 0 1px rgba(58,163,227,.55)}
 .cat .n{flex:none;min-width:26px;padding:1px 8px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11.5px;text-align:center;color:#fff}
 .cloud{display:flex;flex-wrap:wrap;gap:8px}
-.cloud .tagpill{display:inline-block;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.9);transition:all .3s ease;cursor:default}
+.cloud .tagpill{display:inline-block;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease;cursor:pointer}
 .cloud .tagpill:hover{background:rgba(58,163,227,.4);color:#fff}
+.cloud .tagpill.on{background:rgba(58,163,227,.55);color:#fff;box-shadow:0 0 12px rgba(58,163,227,.5)}
 .info{display:flex;flex-direction:column;gap:8px;font-size:13px}
 .info div{display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.9)}
 .info b{font-weight:600;color:#fff}
+
+/* 分类 / 标签筛选提示条 */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 10px 10px 18px;border-radius:14px;background:var(--glass-strong);border:1px solid rgba(58,163,227,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:13.5px}
+.filter-bar[hidden]{display:none}
+.filter-bar .lab{color:var(--muted);letter-spacing:.08em}
+.filter-bar .val{color:#fff;font-weight:600}
+.filter-bar button{
+  margin-left:auto;width:27px;height:27px;border-radius:50%;cursor:pointer;flex:none;
+  border:1px solid var(--line);background:rgba(255,255,255,.14);color:#fff;font-size:12px;
+  transition:background .25s ease,transform .25s ease;
+}
+.filter-bar button:hover{background:rgba(255,255,255,.32);transform:rotate(90deg)}
+.filter-empty{padding:46px 0;text-align:center;font-size:14px;color:var(--muted)}
 
 /* 置顶区：2 行 × 2 列大图卡 */
 .featured{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:18px}
@@ -317,14 +335,70 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   .pr .goto{padding:5px 12px;font-size:12px}
   .pt{height:220px}
 }
+
+/* 页脚 */
+.site-footer{position:relative;z-index:1;padding:22px 16px 30px;text-align:center;font-size:12.5px;color:rgba(233,242,253,.62);letter-spacing:.05em}
+.site-footer b{color:#7cc4ec;font-weight:600;font-variant-numeric:tabular-nums;font-size:13.5px}
+.site-footer .star{margin:0 10px;color:rgba(233,242,253,.35)}
+
+/* 悬浮音乐播放器（左下角） */
+.mp-root{position:fixed;left:18px;bottom:18px;z-index:80}
+.mp-disc{
+  width:52px;height:52px;border-radius:50%;cursor:pointer;padding:0;position:relative;
+  border:2px solid rgba(255,255,255,.5);
+  background:radial-gradient(circle,#0d2137 0 20%,#16283f 21% 36%,#0d2137 37% 54%,#16283f 55% 70%,#0d2137 71% 100%);
+  box-shadow:0 10px 26px rgba(4,12,24,.55);
+  animation:mp-spin 7s linear infinite;animation-play-state:paused;
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.mp-disc:hover{transform:scale(1.06);box-shadow:0 14px 32px rgba(4,12,24,.65)}
+.mp-disc.playing{animation-play-state:running}
+.mp-disc::before{content:'';position:absolute;left:50%;top:7px;bottom:7px;width:2px;margin-left:-1px;background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.06))}
+.mp-disc::after{content:'';position:absolute;inset:0;margin:auto;width:15px;height:15px;border-radius:50%;background:linear-gradient(140deg,#3aa3e3,#62a33d);border:2px solid rgba(255,255,255,.75)}
+@keyframes mp-spin{to{transform:rotate(360deg)}}
+.mp-panel{
+  position:absolute;left:0;bottom:64px;width:302px;max-width:calc(100vw - 32px);
+  border-radius:16px;background:rgba(10,24,42,.86);border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 18px 44px rgba(4,12,24,.55);padding:14px 14px 8px;color:#eaf3ff;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease;
+}
+.mp-panel.open{opacity:1;transform:none;pointer-events:auto}
+.mp-head{display:flex;align-items:baseline;gap:8px;min-width:0}
+.mp-title{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-artist{font-size:11px;color:rgba(233,242,253,.55);margin-left:auto;flex:none;white-space:nowrap}
+.mp-progress{display:flex;align-items:center;gap:8px;margin-top:10px}
+.mp-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;position:relative}
+.mp-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;background:linear-gradient(90deg,#3aa3e3,#7cc4ec)}
+.mp-time{font-size:10.5px;color:rgba(233,242,253,.6);font-variant-numeric:tabular-nums;flex:none}
+.mp-ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.mp-ctrls button{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);color:#fff;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background .25s ease,transform .25s ease;
+}
+.mp-ctrls button:hover{background:rgba(58,163,227,.5);transform:scale(1.06)}
+.mp-ctrls button svg{width:14px;height:14px}
+.mp-ctrls .mp-playbtn{width:40px;height:40px;background:linear-gradient(140deg,#3aa3e3,#62a33d);border-color:transparent}
+.mp-playlist{list-style:none;margin:10px 0 2px;padding:5px 2px 3px;border-top:1px dashed rgba(255,255,255,.16);max-height:148px;overflow-y:auto}
+.mp-playlist li{padding:6px 9px;border-radius:8px;font-size:12.5px;color:rgba(233,242,253,.85);cursor:pointer;display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-playlist li:hover{background:rgba(255,255,255,.08)}
+.mp-playlist li.on{color:#fff;background:rgba(58,163,227,.28)}
+.mp-playlist li .idx{font-size:10.5px;color:rgba(233,242,253,.5);flex:none;width:14px}
+@media(max-width:640px){
+  .mp-root{left:12px;bottom:12px}
+  .mp-disc{width:46px;height:46px}
+}
 </style>
 </head>
 <body>
 <header class="topbar" id="topbar">
   <div class="topbar-in">
     <a class="brand" href="/">
-      <span class="mark">随</span>
-      <span class="word">随波逐流の旅店</span>
+      <span class="mark">剑</span>
+      <span class="word">艾恩葛朗特第一层の旅店</span>
     </a>
     <nav>
       <ul class="menu" id="menu">
@@ -349,7 +423,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   <div class="side">
     <aside class="card profile">
   <div class="avatar"><img src="/icons/cards/avatar.png" alt="vernus"></div>
-  <div class="name">随波逐流の旅店</div>
+  <div class="name">艾恩葛朗特第一层の旅店</div>
   <p class="bio">愿终有一天能与你重要的人重逢</p>
   <div class="socials">
     <a href="https://github.com/vernuser" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
@@ -367,64 +441,64 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   </div>
 </aside>
     <section class="card">
-  <div class="tabs" id="tabs">
-    <button class="tab on" data-k="hot" type="button">热门</button>
-    <button class="tab" data-k="recent" type="button">最近</button>
-    <button class="tab" data-k="comment" type="button">评论</button>
-  </div>
-  <div class="list" id="list"><a href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">
+  <h3 class="sec-title center">最近<span class="sub">51 篇</span></h3>
+  <div class="list"><a href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">
   <span class="thumb"><img src="/covers/0208.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
   <span class="txt"><span class="t">内网渗透</span><span class="m">2026-08-26 · 13,991 字</span></span>
 </a>
-<a href="/article/iwebsec/" title="iwebsec---- not only rce/sqli">
-  <span class="thumb"><img src="/covers/0322.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-  <span class="txt"><span class="t">iwebsec---- not only rce/sqli</span><span class="m">2024-07-27 · 9,629 字</span></span>
+<a href="/article/%E9%92%93%E9%B1%BC/" title="钓鱼">
+  <span class="thumb"><img src="/covers/0640.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+  <span class="txt"><span class="t">钓鱼</span><span class="m">2026-08-26 · 1,101 字</span></span>
 </a>
-<a href="/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" title="网络渗透测试">
-  <span class="thumb"><img src="/covers/0515.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-  <span class="txt"><span class="t">网络渗透测试</span><span class="m">2023-11-06 · 8,661 字</span></span>
+<a href="/article/agent/" title="AI agent">
+  <span class="thumb"><img src="/covers/0035.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+  <span class="txt"><span class="t">AI agent</span><span class="m">2026-07-07 · 873 字</span></span>
 </a>
-<a href="/article/%E9%BB%91%E7%9B%92/" title="黑盒知识梳理">
-  <span class="thumb"><img src="/covers/0607.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-  <span class="txt"><span class="t">黑盒知识梳理</span><span class="m">2024-12-12 · 8,132 字</span></span>
+<a href="/article/vpn_develop/" title="vpn develop">
+  <span class="thumb"><img src="/covers/0002.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+  <span class="txt"><span class="t">vpn develop</span><span class="m">2026-02-15 · 4,347 字</span></span>
 </a>
-<a href="/article/php/" title="PHP学习">
-  <span class="thumb"><img src="/covers/0434.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-  <span class="txt"><span class="t">PHP学习</span><span class="m">2023-07-01 · 7,787 字</span></span>
+<a href="/article/llm_prompt_attack/" title="llm prompt attack">
+  <span class="thumb"><img src="/covers/0098.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+  <span class="txt"><span class="t">llm prompt attack</span><span class="m">2026-02-12 · 7,089 字</span></span>
 </a></div>
-  <script type="application/json" id="feed-data">{"hot":[{"t":"内网渗透","u":"/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/","d":"2026-08-26","w":13991,"c":"/covers/0208.jpg"},{"t":"iwebsec---- not only rce/sqli","u":"/article/iwebsec/","d":"2024-07-27","w":9629,"c":"/covers/0322.jpg"},{"t":"网络渗透测试","u":"/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/","d":"2023-11-06","w":8661,"c":"/covers/0515.jpg"},{"t":"黑盒知识梳理","u":"/article/%E9%BB%91%E7%9B%92/","d":"2024-12-12","w":8132,"c":"/covers/0607.jpg"},{"t":"PHP学习","u":"/article/php/","d":"2023-07-01","w":7787,"c":"/covers/0434.jpg"}],"recent":[{"t":"内网渗透","u":"/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/","d":"2026-08-26","w":13991,"c":"/covers/0208.jpg"},{"t":"钓鱼","u":"/article/%E9%92%93%E9%B1%BC/","d":"2026-08-26","w":1101,"c":"/covers/0640.jpg"},{"t":"AI agent","u":"/article/agent/","d":"2026-07-07","w":873,"c":"/covers/0035.jpg"},{"t":"vpn develop","u":"/article/vpn_develop/","d":"2026-02-15","w":4347,"c":"/covers/0002.jpg"},{"t":"llm prompt attack","u":"/article/llm_prompt_attack/","d":"2026-02-12","w":7089,"c":"/covers/0098.jpg"}]}</script>
 </section>
     <section class="card">
   <h3 class="sec-title">分类<span class="sub">26 个</span></h3>
-  <ul class="cat"><li><span class="row"><span>代码审计</span><span class="n">12</span></span></li>
-<li><span class="row"><span>靶场</span><span class="n">11</span></span></li>
-<li><span class="row"><span>小迪安全</span><span class="n">7</span></span></li>
-<li><span class="row"><span>python</span><span class="n">5</span></span></li>
-<li><span class="row"><span>渗透</span><span class="n">4</span></span></li>
-<li><span class="row"><span>未分类</span><span class="n">4</span></span></li>
-<li><span class="row"><span>ai</span><span class="n">3</span></span></li>
-<li><span class="row"><span>工具</span><span class="n">2</span></span></li>
-<li><span class="row"><span>内网</span><span class="n">2</span></span></li>
-<li><span class="row"><span>守夜</span><span class="n">2</span></span></li></ul>
+  <ul class="cat"><li><a class="row" href="#cat=%E9%9D%B6%E5%9C%BA" data-cat="靶场"><span>靶场</span><span class="n">11</span></a></li>
+<li><a class="row" href="#cat=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1" data-cat="代码审计"><span>代码审计</span><span class="n">5</span></a></li>
+<li><a class="row" href="#cat=%E6%B8%97%E9%80%8F" data-cat="渗透"><span>渗透</span><span class="n">4</span></a></li>
+<li><a class="row" href="#cat=%E6%9C%AA%E5%88%86%E7%B1%BB" data-cat="未分类"><span>未分类</span><span class="n">4</span></a></li>
+<li><a class="row" href="#cat=ai" data-cat="ai"><span>ai</span><span class="n">3</span></a></li>
+<li><a class="row" href="#cat=%E5%B7%A5%E5%85%B7" data-cat="工具"><span>工具</span><span class="n">2</span></a></li>
+<li><a class="row" href="#cat=%E5%86%85%E7%BD%91" data-cat="内网"><span>内网</span><span class="n">2</span></a></li>
+<li><a class="row" href="#cat=web" data-cat="web"><span>web</span><span class="n">2</span></a></li>
+<li><a class="row" href="#cat=%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" data-cat="操作系统"><span>操作系统</span><span class="n">1</span></a></li>
+<li><a class="row" href="#cat=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" data-cat="计算机网络"><span>计算机网络</span><span class="n">1</span></a></li></ul>
 </section>
     <section class="card">
   <h3 class="sec-title">标签云<span class="sub">24 个</span></h3>
-  <div class="cloud"><span class="tagpill">渗透</span><span class="tagpill">代码审计</span><span class="tagpill">靶场</span><span class="tagpill">小迪安全</span><span class="tagpill">web</span><span class="tagpill">python</span><span class="tagpill">ai</span><span class="tagpill">工具</span><span class="tagpill">内网</span><span class="tagpill">操作系统</span><span class="tagpill">计算机网络</span><span class="tagpill">内存取证</span><span class="tagpill">入侵检测</span><span class="tagpill">手法</span><span class="tagpill">数据结构</span><span class="tagpill">应急响应</span><span class="tagpill">原型链污染</span><span class="tagpill">ctf</span><span class="tagpill">markdown</span><span class="tagpill">openvas</span><span class="tagpill">owasp</span><span class="tagpill">php</span><span class="tagpill">vpn</span><span class="tagpill">yaml</span></div>
+  <div class="cloud"><a class="tagpill" href="#tag=%E9%9D%B6%E5%9C%BA" data-tag="靶场">靶场</a><a class="tagpill" href="#tag=%E6%B8%97%E9%80%8F" data-tag="渗透">渗透</a><a class="tagpill" href="#tag=web" data-tag="web">web</a><a class="tagpill" href="#tag=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1" data-tag="代码审计">代码审计</a><a class="tagpill" href="#tag=ai" data-tag="ai">ai</a><a class="tagpill" href="#tag=%E5%B7%A5%E5%85%B7" data-tag="工具">工具</a><a class="tagpill" href="#tag=%E5%86%85%E7%BD%91" data-tag="内网">内网</a><a class="tagpill" href="#tag=%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" data-tag="操作系统">操作系统</a><a class="tagpill" href="#tag=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C" data-tag="计算机网络">计算机网络</a><a class="tagpill" href="#tag=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81" data-tag="内存取证">内存取证</a><a class="tagpill" href="#tag=%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B" data-tag="入侵检测">入侵检测</a><a class="tagpill" href="#tag=%E6%89%8B%E6%B3%95" data-tag="手法">手法</a><a class="tagpill" href="#tag=%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" data-tag="数据结构">数据结构</a><a class="tagpill" href="#tag=%E5%B0%8F%E8%BF%AA%E5%AE%89%E5%85%A8" data-tag="小迪安全">小迪安全</a><a class="tagpill" href="#tag=%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94" data-tag="应急响应">应急响应</a><a class="tagpill" href="#tag=%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93" data-tag="原型链污染">原型链污染</a><a class="tagpill" href="#tag=ctf" data-tag="ctf">ctf</a><a class="tagpill" href="#tag=markdown" data-tag="markdown">markdown</a><a class="tagpill" href="#tag=openvas" data-tag="openvas">openvas</a><a class="tagpill" href="#tag=owasp" data-tag="owasp">owasp</a><a class="tagpill" href="#tag=php" data-tag="php">php</a><a class="tagpill" href="#tag=python" data-tag="python">python</a><a class="tagpill" href="#tag=vpn" data-tag="vpn">vpn</a><a class="tagpill" href="#tag=yaml" data-tag="yaml">yaml</a></div>
 </section>
     <section class="card">
   <h3 class="sec-title">站点信息</h3>
   <div class="info">
-    <div><span>文章</span><b>69</b></div>
+    <div><span>文章</span><b>51</b></div>
     <div><span>分类</span><b>26</b></div>
     <div><span>标签</span><b>24</b></div>
-    <div><span>总字数</span><b>166.2k</b></div>
+    <div><span>总字数</span><b>168.3k</b></div>
     <div><span>运行天数</span><b>0</b></div>
   </div>
 </section>
   </div>
 
   <main class="main">
-    <div id="feed"><div class="featured"><a class="pt" href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透">
+    <div class="filter-bar" id="filterBar" hidden>
+      <span class="lab">筛选</span>
+      <span class="val" id="filterText"></span>
+      <button type="button" id="filterClear" title="清除筛选" aria-label="清除筛选">✕</button>
+    </div>
+    <div id="feed"><div class="featured"><a class="pt" href="/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" title="内网渗透" data-cat="内网" data-tags="内网">
   <span class="inner"></span>
   <span class="cover"><img src="/covers/0208.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0208.jpg'"></span>
   <span class="veil"></span>
@@ -437,7 +511,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     <p>内网</p>
   </div>
 </a>
-<a class="pt" href="/article/%E9%92%93%E9%B1%BC/" title="钓鱼">
+<a class="pt" href="/article/%E9%92%93%E9%B1%BC/" title="钓鱼" data-cat="内网" data-tags="内网">
   <span class="inner"></span>
   <span class="cover"><img src="/covers/0640.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0640.jpg'"></span>
   <span class="veil"></span>
@@ -450,7 +524,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     <p>我在永远的看着你，直到永远....</p>
   </div>
 </a>
-<a class="pt" href="/article/agent/" title="AI agent">
+<a class="pt" href="/article/agent/" title="AI agent" data-cat="ai" data-tags="ai">
   <span class="inner"></span>
   <span class="cover"><img src="/covers/0035.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0035.jpg'"></span>
   <span class="veil"></span>
@@ -463,7 +537,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     <p>functions describe the world</p>
   </div>
 </a>
-<a class="pt" href="/article/vpn_develop/" title="vpn develop">
+<a class="pt" href="/article/vpn_develop/" title="vpn develop" data-cat="vpn" data-tags="vpn">
   <span class="inner"></span>
   <span class="cover"><img src="/covers/0002.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0002.jpg'"></span>
   <span class="veil"></span>
@@ -476,7 +550,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     <p>向所有开发者，致以最高的敬意。</p>
   </div>
 </a></div>
-<div class="rows"><a class="pr" href="/article/llm_prompt_attack/" title="llm prompt attack">
+<div class="rows"><a class="pr" href="/article/llm_prompt_attack/" title="llm prompt attack" data-cat="ai" data-tags="ai">
   <span class="cover"><img src="/covers/0098.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0098.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -494,7 +568,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/ai_study/" title="AI study">
+<a class="pr" href="/article/ai_study/" title="AI study" data-cat="ai" data-tags="ai">
   <span class="cover"><img src="/covers/0493.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0493.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -512,7 +586,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E8%BF%B0%26ai_agent/" title="markdown语法简述&amp;ai_agent">
+<a class="pr" href="/article/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E8%BF%B0%26ai_agent/" title="markdown语法简述&amp;ai_agent" data-cat="markdown" data-tags="markdown,ai">
   <span class="cover"><img src="/covers/0367.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0367.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -530,7 +604,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/win22%E6%8C%96%E7%9F%BF/" title="win挖矿">
+<a class="pr" href="/article/win22%E6%8C%96%E7%9F%BF/" title="win挖矿" data-cat="应急响应" data-tags="应急响应">
   <span class="cover"><img src="/covers/0596.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0596.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -548,7 +622,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/some_plus/" title="入侵检测">
+<a class="pr" href="/article/some_plus/" title="入侵检测" data-cat="入侵检测" data-tags="入侵检测">
   <span class="cover"><img src="/covers/0651.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0651.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -566,7 +640,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/owasp_top_10/" title="owasp top 10 2025">
+<a class="pr" href="/article/owasp_top_10/" title="owasp top 10 2025" data-cat="owasp" data-tags="owasp">
   <span class="cover"><img src="/covers/0339.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0339.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -584,7 +658,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/nasl%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/" title="openvas">
+<a class="pr" href="/article/nasl%E8%84%9A%E6%9C%AC%E7%BC%96%E5%86%99/" title="openvas" data-cat="工具" data-tags="工具,openvas">
   <span class="cover"><img src="/covers/0579.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0579.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -602,7 +676,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/skytower/" title="skytower">
+<a class="pr" href="/article/skytower/" title="skytower" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0623.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0623.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -620,7 +694,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E9%BB%91%E7%9B%92/" title="黑盒知识梳理">
+<a class="pr" href="/article/%E9%BB%91%E7%9B%92/" title="黑盒知识梳理" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0607.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0607.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -638,7 +712,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/tr0ll2/" title="tr0ll2">
+<a class="pr" href="/article/tr0ll2/" title="tr0ll2" data-cat="靶场" data-tags="">
   <span class="cover"><img src="/covers/0272.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0272.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -656,7 +730,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" title="php命令执行">
+<a class="pr" href="/article/php%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" title="php命令执行" data-cat="代码审计" data-tags="代码审计">
   <span class="cover"><img src="/covers/0549.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0549.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -674,12 +748,12 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/xinhucms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="xinhucms代码审计">
-  <span class="cover"><img src="/covers/0202.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0202.jpg'"></span>
+<a class="pr" href="/article/CMS%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%90%88%E9%9B%86/" title="CMS 代码审计实战合集（八个国产 CMS）" data-cat="代码审计" data-tags="代码审计">
+  <span class="cover"><img src="/covers/0070.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0070.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <h2>xinhucms代码审计</h2>
-    <p>代码审计</p>
+    <h2>CMS 代码审计实战合集（八个国产 CMS）</h2>
+    <p>八个国产 CMS 的代码审计实战记录——五指、BossCMS、IBOS、KiteCMS、ZZCMS、YzmCMS、海 CMS、信呼，覆盖 SQL 注入、任意文件上传与 GetShe</p>
   </div>
   <div class="bar">
     <span class="who">
@@ -692,133 +766,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/hadcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="hadcms代码审计">
-  <span class="cover"><img src="/covers/0016.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0016.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>hadcms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-10-26</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/yzmcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="yzmcms代码审计">
-  <span class="cover"><img src="/covers/0594.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0594.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>yzmcms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-10-21</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/zzcms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="zzcms代码审计">
-  <span class="cover"><img src="/covers/0310.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0310.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>zzcms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-10-13</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/kitecms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="kitecms代码审计">
-  <span class="cover"><img src="/covers/0595.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0595.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>kitecms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-10-11</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/IBOS%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="IBOScms代码审计">
-  <span class="cover"><img src="/covers/0205.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0205.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>IBOScms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-10-07</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/bosscms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="bosscms代码审计">
-  <span class="cover"><img src="/covers/0244.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0244.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>bosscms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-10-05</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/%E4%BA%94%E6%8C%87cms%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="五指cms代码审计">
-  <span class="cover"><img src="/covers/0397.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0397.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>五指cms代码审计</h2>
-    <p>代码审计</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-09-31</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" title="代码审计">
+<a class="pr" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" title="代码审计" data-cat="代码审计" data-tags="代码审计">
   <span class="cover"><img src="/covers/0431.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0431.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -836,7 +784,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1sql%E6%B3%A8%E5%85%A5/" title="代码审计sql注入">
+<a class="pr" href="/article/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1sql%E6%B3%A8%E5%85%A5/" title="代码审计sql注入" data-cat="代码审计" data-tags="代码审计">
   <span class="cover"><img src="/covers/0468.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0468.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -854,7 +802,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/csrf/" title="csrf">
+<a class="pr" href="/article/csrf/" title="csrf" data-cat="csrf" data-tags="web">
   <span class="cover"><img src="/covers/0570.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0570.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -872,7 +820,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计---java基础">
+<a class="pr" href="/article/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计---java基础" data-cat="代码审计" data-tags="代码审计">
   <span class="cover"><img src="/covers/0432.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0432.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -890,12 +838,12 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/all_file_upload/" title="WEB攻防--任意文件上传">
-  <span class="cover"><img src="/covers/0561.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0561.jpg'"></span>
+<a class="pr" href="/article/%E5%AE%88%E5%A4%9C-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" title="WEB攻防--任意文件上传与下载" data-cat="守夜" data-tags="渗透">
+  <span class="cover"><img src="/covers/0599.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0599.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <h2>WEB攻防--任意文件上传</h2>
-    <p>守夜--任意文件上传</p>
+    <h2>WEB攻防--任意文件上传与下载</h2>
+    <p>守夜实战笔记：以皮卡丘等靶场为例，整理任意文件下载与任意文件上传漏洞的测试思路与利用过程。</p>
   </div>
   <div class="bar">
     <span class="who">
@@ -908,25 +856,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/all_file_download/" title="WEB攻防--任意文件下载">
-  <span class="cover"><img src="/covers/0393.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0393.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>WEB攻防--任意文件下载</h2>
-    <p>守夜-任意文件下载</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-08-27</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/sql%E6%B3%A8%E5%85%A5-%E5%AE%88%E5%A4%9C%E4%BA%BA/" title="WEB攻防--sql注入">
+<a class="pr" href="/article/sql%E6%B3%A8%E5%85%A5-%E5%AE%88%E5%A4%9C%E4%BA%BA/" title="WEB攻防--sql注入" data-cat="渗透" data-tags="渗透">
   <span class="cover"><img src="/covers/0422.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0422.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -944,7 +874,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/sql%E8%AF%AD%E5%8F%A5%E7%A7%AF%E7%B4%AF/" title="sql语句积累">
+<a class="pr" href="/article/sql%E8%AF%AD%E5%8F%A5%E7%A7%AF%E7%B4%AF/" title="sql语句积累" data-cat="工具" data-tags="工具">
   <span class="cover"><img src="/covers/0382.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0382.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -962,7 +892,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/lodash/" title="lodash">
+<a class="pr" href="/article/lodash/" title="lodash" data-cat="渗透" data-tags="渗透">
   <span class="cover"><img src="/covers/0461.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0461.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -980,12 +910,12 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day7/" title="小迪笔记day18-WEB攻防">
-  <span class="cover"><img src="/covers/0047.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0047.jpg'"></span>
+<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B0%E5%90%88%E9%9B%86/" title="小迪安全学习笔记（Day1-Day7 合集）" data-cat="小迪安全" data-tags="小迪安全,渗透">
+  <span class="cover"><img src="/covers/0631.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0631.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <h2>小迪笔记day18-WEB攻防</h2>
-    <p>小迪安全</p>
+    <h2>小迪安全学习笔记（Day1-Day7 合集）</h2>
+    <p>小迪安全入门课程笔记合集：从名词解释、文件上传下载与反弹 shell，到信息打点、CDN 绕过与端口扫描的完整学习记录。</p>
   </div>
   <div class="bar">
     <span class="who">
@@ -998,116 +928,8 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day4/" title="小迪笔记day4--加解密方式&amp;web&amp;服务器&amp;">
-  <span class="cover"><img src="/covers/0405.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0405.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>小迪笔记day4--加解密方式&amp;web&amp;服务器&amp;</h2>
-    <p>小迪安全</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-08-02</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day5/" title="小迪笔记day5--CDN&amp;资产架构等">
-  <span class="cover"><img src="/covers/0087.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0087.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>小迪笔记day5--CDN&amp;资产架构等</h2>
-    <p>小迪安全</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-08-02</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day6/" title="小迪笔记day67891011--信息打点">
-  <span class="cover"><img src="/covers/0335.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0335.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>小迪笔记day67891011--信息打点</h2>
-    <p>小迪安全</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-08-02</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day3/" title="小迪笔记day3--抓包&amp;封包&amp;协议&amp;app&amp;小程序">
+<a class="pr" href="/article/iwebsec/" title="iwebsec---- not only rce/sqli" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0312.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0312.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>小迪笔记day3--抓包&amp;封包&amp;协议&amp;app&amp;小程序</h2>
-    <p>小迪安全</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-07-31</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day1/" title="小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过">
-  <span class="cover"><img src="/covers/0628.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0628.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过</h2>
-    <p>小迪安全</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-07-30</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/%E5%B0%8F%E8%BF%AA%E7%AC%94%E8%AE%B0day2/" title="小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器">
-  <span class="cover"><img src="/covers/0394.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0394.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器</h2>
-    <p>小迪安全</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2024-07-30</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/iwebsec/" title="iwebsec---- not only rce/sqli">
-  <span class="cover"><img src="/covers/0322.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0322.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
     <h2>iwebsec---- not only rce/sqli</h2>
@@ -1124,7 +946,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/rce/" title="RCE">
+<a class="pr" href="/article/rce/" title="RCE" data-cat="渗透" data-tags="渗透">
   <span class="cover"><img src="/covers/0544.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0544.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1142,7 +964,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/Derpnstink-1/" title="Derpnstink-1">
+<a class="pr" href="/article/Derpnstink-1/" title="Derpnstink-1" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0551.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0551.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1160,7 +982,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/LordOfTheRoot_1.0.1/" title="LordOfTheRoot_1.0.1">
+<a class="pr" href="/article/LordOfTheRoot_1.0.1/" title="LordOfTheRoot_1.0.1" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0466.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0466.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1178,7 +1000,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/w1r3s-editable/" title="w1r3s-editable">
+<a class="pr" href="/article/w1r3s-editable/" title="w1r3s-editable" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0311.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0311.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1196,7 +1018,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/Tr0ll/" title="Tr0ll">
+<a class="pr" href="/article/Tr0ll/" title="Tr0ll" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0585.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0585.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1214,8 +1036,8 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/raven2/" title="raven2靶场">
-  <span class="cover"><img src="/covers/0539.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0539.jpg'"></span>
+<a class="pr" href="/article/raven2/" title="raven2靶场" data-cat="靶场" data-tags="靶场">
+  <span class="cover"><img src="/covers/0087.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0087.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
     <h2>raven2靶场</h2>
@@ -1232,7 +1054,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/" title="nuclei模板编写&amp;&amp;yaml学习">
+<a class="pr" href="/article/yaml%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/" title="nuclei模板编写&amp;&amp;yaml学习" data-cat="yaml" data-tags="yaml">
   <span class="cover"><img src="/covers/0542.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0542.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1250,7 +1072,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/CTF%E9%9A%90%E5%86%99%E6%9C%AF/" title="CTF--隐写术">
+<a class="pr" href="/article/CTF%E9%9A%90%E5%86%99%E6%9C%AF/" title="CTF--隐写术" data-cat="ctf" data-tags="ctf">
   <span class="cover"><img src="/covers/0326.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0326.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1268,7 +1090,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/" title="内存取证">
+<a class="pr" href="/article/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/" title="内存取证" data-cat="内存取证" data-tags="内存取证">
   <span class="cover"><img src="/covers/0330.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0330.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1286,8 +1108,8 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/GoldenEye/" title="goldeneye靶场">
-  <span class="cover"><img src="/covers/0599.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0599.jpg'"></span>
+<a class="pr" href="/article/GoldenEye/" title="goldeneye靶场" data-cat="靶场" data-tags="靶场">
+  <span class="cover"><img src="/covers/0632.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0632.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
     <h2>goldeneye靶场</h2>
@@ -1304,7 +1126,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E9%9A%8F%E7%AC%94/" title="答题的时候遇到的一些奇奇怪怪的知识点吧">
+<a class="pr" href="/article/%E9%9A%8F%E7%AC%94/" title="答题的时候遇到的一些奇奇怪怪的知识点吧" data-cat="未分类" data-tags="渗透">
   <span class="cover"><img src="/covers/0559.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0559.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1322,7 +1144,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" title="网络渗透测试">
+<a class="pr" href="/article/%E7%BD%91%E7%BB%9C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" title="网络渗透测试" data-cat="渗透" data-tags="渗透">
   <span class="cover"><img src="/covers/0515.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0515.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1340,7 +1162,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/cn/" title="计算机网络简略">
+<a class="pr" href="/article/cn/" title="计算机网络简略" data-cat="计算机网络" data-tags="计算机网络">
   <span class="cover"><img src="/covers/0240.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0240.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1358,7 +1180,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/php/" title="PHP学习">
+<a class="pr" href="/article/php/" title="PHP学习" data-cat="php" data-tags="php">
   <span class="cover"><img src="/covers/0434.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0434.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1376,8 +1198,8 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/web/" title="web入门">
-  <span class="cover"><img src="/covers/0630.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0630.jpg'"></span>
+<a class="pr" href="/article/web/" title="web入门" data-cat="未分类" data-tags="web">
+  <span class="cover"><img src="/covers/0628.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0628.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
     <h2>web入门</h2>
@@ -1394,7 +1216,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E5%86%85%E5%AD%98%E9%A9%AC/" title="内存马入门知识学习">
+<a class="pr" href="/article/%E5%86%85%E5%AD%98%E9%A9%AC/" title="内存马入门知识学习" data-cat="内存马" data-tags="web">
   <span class="cover"><img src="/covers/0418.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0418.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1412,7 +1234,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/sql/" title="sql注入基本知识">
+<a class="pr" href="/article/sql/" title="sql注入基本知识" data-cat="未分类" data-tags="web">
   <span class="cover"><img src="/covers/0602.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0602.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1430,12 +1252,12 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/python_category/" title="Python--从入门到入土--类">
-  <span class="cover"><img src="/covers/0613.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0613.jpg'"></span>
+<a class="pr" href="/article/python%E5%9F%BA%E7%A1%80%E5%90%88%E9%9B%86/" title="Python:从入门到入土---基础合集（变量·列表·字典·函数·类）" data-cat="python" data-tags="python">
+  <span class="cover"><img src="/covers/0460.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0460.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
-    <h2>Python--从入门到入土--类</h2>
-    <p>python 类</p>
+    <h2>Python:从入门到入土---基础合集（变量·列表·字典·函数·类）</h2>
+    <p>Python 基础学习笔记合集：按学习顺序整理变量与基本数据类型、列表、字典、函数与类五个部分，附示例代码与踩坑记录。</p>
   </div>
   <div class="bar">
     <span class="who">
@@ -1448,61 +1270,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/python_function/" title="Pyhton--从入门到入土---函数">
-  <span class="cover"><img src="/covers/0237.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0237.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>Pyhton--从入门到入土---函数</h2>
-    <p>python 函数</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2023-03-27</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/python_dictionary/" title="Python--从入门到入土--字典">
-  <span class="cover"><img src="/covers/0089.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0089.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>Python--从入门到入土--字典</h2>
-    <p>python 字典</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2023-03-24</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/python_list/" title="Python:从入门到入土---列表">
-  <span class="cover"><img src="/covers/0024.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0024.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>Python:从入门到入土---列表</h2>
-    <p>python 列表</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2023-03-20</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/os/" title="操作系统教程">
+<a class="pr" href="/article/os/" title="操作系统教程" data-cat="操作系统" data-tags="操作系统">
   <span class="cover"><img src="/covers/0600.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0600.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1520,7 +1288,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/pikachu/" title="pikachu---爆破">
+<a class="pr" href="/article/pikachu/" title="pikachu---爆破" data-cat="靶场" data-tags="靶场">
   <span class="cover"><img src="/covers/0541.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0541.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1538,25 +1306,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/python_variable/" title="Python:从入门到入土---变量和基本数据类型">
-  <span class="cover"><img src="/covers/0619.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0619.jpg'"></span>
-  <span class="veil"></span>
-  <div class="body">
-    <h2>Python:从入门到入土---变量和基本数据类型</h2>
-    <p>python 变量</p>
-  </div>
-  <div class="bar">
-    <span class="who">
-      <span class="av"><img src="/icons/cards/avatar.png" alt="vernus"></span>
-      <span class="nm">vernus</span>
-      <span class="dt">2023-03-19</span>
-    </span>
-    <span class="goto">查看详情
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-    </span>
-  </div>
-</a>
-<a class="pr" href="/article/udf%E6%8F%90%E6%9D%83/" title="mysql提权">
+<a class="pr" href="/article/udf%E6%8F%90%E6%9D%83/" title="mysql提权" data-cat="提权" data-tags="手法">
   <span class="cover"><img src="/covers/0548.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0548.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1574,7 +1324,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/CISCN2024_canic/" title="CISCN2024_canic">
+<a class="pr" href="/article/CISCN2024_canic/" title="CISCN2024_canic" data-cat="web" data-tags="web">
   <span class="cover"><img src="/covers/0654.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0654.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1592,7 +1342,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/ds/" title="数据结构">
+<a class="pr" href="/article/ds/" title="数据结构" data-cat="数据结构" data-tags="数据结构">
   <span class="cover"><img src="/covers/0305.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0305.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1610,7 +1360,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/lampiao/" title="lampiao">
+<a class="pr" href="/article/lampiao/" title="lampiao" data-cat="未分类" data-tags="">
   <span class="cover"><img src="/covers/0603.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0603.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1628,7 +1378,7 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     </span>
   </div>
 </a>
-<a class="pr" href="/article/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" title="原型链污染">
+<a class="pr" href="/article/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" title="原型链污染" data-cat="web" data-tags="web,原型链污染">
   <span class="cover"><img src="/covers/0183.jpg" alt="" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/vernuser/acg-wallpaper/main/acg/0183.jpg'"></span>
   <span class="veil"></span>
   <div class="body">
@@ -1650,28 +1400,118 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
   </main>
 </div>
 
+<footer class="site-footer">
+  ✦ 旅店已开放 <b id="sfDays">…</b> 天<span class="star">·</span>愿终有一天能与你重要的人重逢
+</footer>
 <script>
 (function () {
-  // 三标签切换
-  var data = JSON.parse(document.getElementById('feed-data').textContent);
-  var list = document.getElementById('list');
-  function render(k) {
-    var rows = data[k] || [];
-    if (!rows.length) { list.innerHTML = '<div class="empty">还没有接入评论系统</div>'; return; }
-    list.innerHTML = rows.map(function (a) {
-      return '<a href="' + a.u + '" title="' + a.t + '">' +
-        '<span class="thumb">' + (a.c ? '<img src="' + a.c + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</span>' +
-        '<span class="txt"><span class="t">' + a.t + '</span><span class="m">' +
-        (a.d ? a.d + ' · ' : '') + a.w.toLocaleString('en-US') + ' 字</span></span></a>';
+  var el = document.getElementById('sfDays');
+  if (!el) return;
+  var open = Math.max(1, Math.ceil((Date.now() - new Date('2023-04-12T00:00:00+08:00').getTime()) / 864e5));
+  el.textContent = open.toLocaleString('en-US');
+})();
+</script>
+<div class="mp-root">
+  <button class="mp-disc" id="mpDisc" type="button" aria-label="音乐播放器" title="音乐播放器"></button>
+  <div class="mp-panel" id="mpPanel">
+    <div class="mp-head"><span class="mp-title" id="mpTitle">…</span><span class="mp-artist" id="mpArtist"></span></div>
+    <div class="mp-progress">
+      <span class="mp-bar" id="mpBar"><i id="mpFill"></i></span>
+      <span class="mp-time" id="mpTime">0:00 / 0:00</span>
+    </div>
+    <div class="mp-ctrls">
+      <button type="button" id="mpPrev" title="上一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12L9.5 12z"/></svg></button>
+      <button type="button" class="mp-playbtn" id="mpPlay" title="播放/暂停"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+      <button type="button" id="mpNext" title="下一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+    </div>
+    <ul class="mp-playlist" id="mpListEl"></ul>
+  </div>
+</div>
+<audio id="mpAudio" preload="none"></audio>
+<script>
+(function () {
+  var TR = [{"title":"野火 Wildfire","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=2045806409.mp3"},{"title":"疾如猛火 Rapid as Wildfires","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1492283139.mp3"},{"title":"Moon Halo","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1859652717.mp3"},{"title":"Nightglow (Instrumental)","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1334673828.mp3"},{"title":"皎洁的笑颜 Moonlike Smile","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1833805540.mp3"},{"title":"坠叶与晚星 Falling Leaves and Even-Stars","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=3437729518.mp3"}];
+  if (!TR.length) return;
+  var audio = document.getElementById('mpAudio');
+  var disc = document.getElementById('mpDisc');
+  var panel = document.getElementById('mpPanel');
+  var titleEl = document.getElementById('mpTitle');
+  var artistEl = document.getElementById('mpArtist');
+  var fill = document.getElementById('mpFill');
+  var timeEl = document.getElementById('mpTime');
+  var bar = document.getElementById('mpBar');
+  var playBtn = document.getElementById('mpPlay');
+  var listEl = document.getElementById('mpListEl');
+  var cur = 0, errs = 0;
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  function renderList() {
+    listEl.innerHTML = TR.map(function (t, i) {
+      return '<li class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '"><span class="idx">' + (i + 1) + '</span><span style="overflow:hidden;text-overflow:ellipsis">' + t.title + (t.artist ? ' · ' + t.artist : '') + '</span></li>';
     }).join('');
   }
-  document.getElementById('tabs').addEventListener('click', function (e) {
-    var btn = e.target.closest('.tab');
-    if (!btn) return;
-    Array.prototype.forEach.call(this.children, function (b) { b.classList.toggle('on', b === btn); });
-    render(btn.dataset.k);
+  function setPlayIcon(on) {
+    playBtn.innerHTML = on
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+    disc.classList.toggle('playing', on);
+  }
+  function load(i, autoplay) {
+    cur = ((i % TR.length) + TR.length) % TR.length;
+    var t = TR[cur];
+    audio.src = t.url;
+    titleEl.textContent = t.title;
+    artistEl.textContent = t.artist || '';
+    fill.style.width = '0';
+    timeEl.textContent = '0:00 / 0:00';
+    renderList();
+    if (autoplay) audio.play().catch(function () {});
+  }
+  function next(auto) { errs = auto ? errs : 0; load(cur + 1, playing || !!auto); }
+  function prev() { load(cur - 1, playing); }
+
+  disc.addEventListener('click', function () { panel.classList.toggle('open'); });
+  playBtn.addEventListener('click', function () {
+    if (!audio.src) { load(cur, true); return; }
+    if (audio.paused) audio.play().catch(function () {}); else audio.pause();
+  });
+  document.getElementById('mpNext').addEventListener('click', function () { next(false); });
+  document.getElementById('mpPrev').addEventListener('click', prev);
+  audio.addEventListener('play', function () { setPlayIcon(true); playing = true; });
+  audio.addEventListener('pause', function () { setPlayIcon(false); playing = false; });
+  audio.addEventListener('ended', function () { next(true); });
+  audio.addEventListener('error', function () {
+    errs++;
+    if (errs >= TR.length) { titleEl.textContent = '歌单加载失败'; setPlayIcon(false); return; }
+    next(true);
+  });
+  audio.addEventListener('playing', function () { errs = 0; });
+  audio.addEventListener('timeupdate', function () {
+    var d = audio.duration;
+    fill.style.width = (d ? (audio.currentTime / d) * 100 : 0) + '%';
+    timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(d);
+  });
+  bar.addEventListener('click', function (e) {
+    var r = bar.getBoundingClientRect();
+    if (isFinite(audio.duration)) audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+  });
+  listEl.addEventListener('click', function (e) {
+    var li = e.target.closest('li[data-i]');
+    if (!li) return;
+    playing = true;
+    load(parseInt(li.dataset.i, 10), true);
   });
 
+  load(0, false);
+})();
+</script>
+
+<script>
+(function () {
   // 卡片墙：悬停放大，其余虚化
   var feed = document.getElementById('feed');
   feed.addEventListener('mouseover', function (e) {
@@ -1719,45 +1559,145 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.58);z-in
     });
   }
 
-  // 客户端分页：每页 12 条（4 张置顶 + 8 篇最新），显示普通页码
+  // 分类 / 标签云：点击后就地过滤卡片墙（静态站没有独立分类页）
+  // 分页：每页 12 条（4 张置顶 + 8 篇最新），基于过滤后的集合计算
   var PER_PAGE = 12;
-  var feed = document.getElementById('feed');
   var pager = document.getElementById('pager');
-  if (feed && pager) {
-    var posts = Array.prototype.slice.call(feed.querySelectorAll('.pt, .pr'));
-    var pages = Math.max(1, Math.ceil(posts.length / PER_PAGE));
-    var page = 1;
-    function drawPager() {
-      var html = '';
-      html += '<button type="button" data-go="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>上一页</button>';
-      for (var i = 1; i <= pages; i++) {
-        if (pages > 7 && i > 2 && i < pages - 1 && Math.abs(i - page) > 1) {
-          if (!html.endsWith('<span class="gap">…</span>')) html += '<span class="gap">…</span>';
-          continue;
-        }
-        html += '<button type="button" data-go="' + i + '"' + (i === page ? ' class="cur"' : '') + '>' + i + '</button>';
-      }
-      html += '<button type="button" data-go="' + (page + 1) + '"' + (page === pages ? ' disabled' : '') + '>下一页</button>';
-      pager.innerHTML = html;
-    }
-    function render(smooth) {
-      posts.forEach(function (el, i) {
-        var show = Math.floor(i / PER_PAGE) + 1 === page;
-        el.style.display = show ? '' : 'none';
-      });
-      drawPager();
-      if (smooth) window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    pager.addEventListener('click', function (e) {
-      var btn = e.target.closest('button[data-go]');
-      if (!btn || btn.disabled) return;
-      var next = parseInt(btn.dataset.go, 10);
-      if (!next || next < 1 || next > pages || next === page) return;
-      page = next;
-      render(true);
-    });
-    render(false);
+  var filterBar = document.getElementById('filterBar');
+  var filterText = document.getElementById('filterText');
+  var filterClear = document.getElementById('filterClear');
+  var posts = Array.prototype.slice.call(feed.querySelectorAll('.pt, .pr'));
+  var pages = 1, page = 1, pageItems = posts.slice();
+  var filter = null; // { type: 'cat' | 'tag', value: '...' }
+
+  function matchFilter(el) {
+    if (!filter) return true;
+    if (filter.type === 'cat') return (el.getAttribute('data-cat') || '') === filter.value;
+    var tags = (el.getAttribute('data-tags') || '').split(',').filter(Boolean);
+    return tags.indexOf(filter.value) > -1;
   }
+
+  function markActive() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cat], [data-tag]'), function (el) {
+      var isCat = el.hasAttribute('data-cat');
+      var key = isCat ? 'data-cat' : 'data-tag';
+      var on = filter && filter.type === (isCat ? 'cat' : 'tag') && filter.value === el.getAttribute(key);
+      el.classList.toggle('on', !!on);
+    });
+  }
+
+  function drawPager() {
+    var html = '';
+    html += '<button type="button" data-go="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>上一页</button>';
+    for (var i = 1; i <= pages; i++) {
+      if (pages > 7 && i > 2 && i < pages - 1 && Math.abs(i - page) > 1) {
+        if (!html.endsWith('<span class="gap">…</span>')) html += '<span class="gap">…</span>';
+        continue;
+      }
+      html += '<button type="button" data-go="' + i + '"' + (i === page ? ' class="cur"' : '') + '>' + i + '</button>';
+    }
+    html += '<button type="button" data-go="' + (page + 1) + '"' + (page === pages ? ' disabled' : '') + '>下一页</button>';
+    pager.innerHTML = html;
+  }
+
+  function applyFilter(smooth) {
+    // 无筛选：置顶 2×2 在最上方（前 12 条含置顶卡）；筛选中：置顶区整体收起，结果统一为列表行
+    pageItems = posts.filter(function (el) {
+      if (filter && el.classList.contains('pt')) return false;
+      return matchFilter(el);
+    });
+    pages = Math.max(1, Math.ceil(pageItems.length / PER_PAGE));
+    if (page > pages) page = pages;
+    posts.forEach(function (el) { el.style.display = 'none'; });
+    pageItems.forEach(function (el, i) {
+      el.style.display = Math.floor(i / PER_PAGE) + 1 === page ? '' : 'none';
+    });
+    drawPager();
+
+    var empty = document.getElementById('filterEmpty');
+    if (filter && !pageItems.length) {
+      if (!empty) {
+        empty = document.createElement('div');
+        empty.id = 'filterEmpty';
+        empty.className = 'filter-empty';
+        feed.insertBefore(empty, feed.firstChild);
+      }
+      empty.textContent = '「' + filter.value + '」下还没有文章';
+      pager.style.display = 'none';
+    } else if (empty) {
+      empty.remove();
+      pager.style.display = '';
+    }
+
+    if (filter) {
+      filterBar.hidden = false;
+      filterText.textContent = (filter.type === 'cat' ? '分类 · ' : '标签 · ') + filter.value + '（' + pageItems.length + ' 篇）';
+    } else {
+      filterBar.hidden = true;
+    }
+    markActive();
+    if (smooth) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function syncHash() {
+    var h = filter ? '#' + filter.type + '=' + encodeURIComponent(filter.value) : location.pathname + location.search;
+    if (history.replaceState) history.replaceState(null, '', h);
+  }
+
+  function setFilter(type, value) {
+    // 再点一次同一个分类 / 标签 = 取消筛选
+    filter = (filter && filter.type === type && filter.value === value) ? null : { type: type, value: value };
+    page = 1;
+    syncHash();
+    applyFilter(true);
+  }
+
+  var catList = document.querySelector('.cat');
+  if (catList) catList.addEventListener('click', function (e) {
+    var row = e.target.closest('a.row[data-cat]');
+    if (!row) return;
+    e.preventDefault();
+    setFilter('cat', row.getAttribute('data-cat'));
+  });
+
+  var cloud = document.querySelector('.cloud');
+  if (cloud) cloud.addEventListener('click', function (e) {
+    var pill = e.target.closest('a.tagpill[data-tag]');
+    if (!pill) return;
+    e.preventDefault();
+    setFilter('tag', pill.getAttribute('data-tag'));
+  });
+
+  if (filterClear) filterClear.addEventListener('click', function () {
+    if (!filter) return;
+    filter = null; page = 1;
+    syncHash();
+    applyFilter(true);
+  });
+
+  // 从 URL hash 恢复筛选（#cat=xxx / #tag=xxx），并跟随浏览器前进后退
+  function filterFromHash() {
+    var m = location.hash.match(/^#(cat|tag)=(.+)$/);
+    return m ? { type: m[1], value: decodeURIComponent(m[2]) } : null;
+  }
+  filter = filterFromHash();
+  window.addEventListener('hashchange', function () {
+    var next = filterFromHash();
+    var same = (!filter && !next) || (filter && next && filter.type === next.type && filter.value === next.value);
+    if (same) return;
+    filter = next; page = 1;
+    applyFilter(false);
+  });
+
+  pager.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-go]');
+    if (!btn || btn.disabled) return;
+    var next = parseInt(btn.dataset.go, 10);
+    if (!next || next < 1 || next > pages || next === page) return;
+    page = next;
+    applyFilter(true);
+  });
+  applyFilter(false);
 
   // 置顶卡入场动画：进入视口后依次浮出
   var featured = document.querySelectorAll('.pt');

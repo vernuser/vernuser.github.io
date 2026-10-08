@@ -9,6 +9,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'fs';
 import { join } from 'path';
 import { marked } from 'marked';
+import { WIDGET_CSS, siteFooter, musicPlayer } from './site-widgets.mjs';
 
 const ROOT = process.cwd();
 const POSTS_DIR = join(ROOT, 'content', '_posts');
@@ -16,7 +17,7 @@ const OUT_HTML = join(ROOT, 'public', 'article');
 const OUT_JSON = join(ROOT, 'src', 'generated', 'articles.json');
 const OUT_LIST = join(ROOT, 'public', 'article-list', 'index.html');
 
-const SITE_TITLE = '随波逐流の旅店';
+const SITE_TITLE = '艾恩葛朗特第一层の旅店';
 
 function parseFrontMatter(raw) {
   const m = raw.match(/^\uFEFF?---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
@@ -159,6 +160,9 @@ const ARTICLE_CSS = `${BASE_CSS}
 .side .sec-title::before{content:"";position:absolute;left:0;top:50%;width:3px;height:54%;border-radius:2px;background:var(--sky);transform:translateY(-50%);transition:height .3s ease-in-out}
 .side .card:hover .sec-title::before{height:86%}
 .side .sec-title .sub{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--muted)}
+.side .sec-title.center{justify-content:center;padding-left:0}
+.side .sec-title.center::before{display:none}
+.side .sec-title.center .sub{margin-left:8px}
 .side .tabs{display:flex;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:11px}
 .side .tab{position:relative;flex:1 1 0;height:30px;border:0;background:none;color:rgba(255,255,255,.6);font-size:13.5px;cursor:pointer;transition:color .3s ease}
 .side .tab+.tab::before{content:"";position:absolute;left:0;top:50%;width:1px;height:14px;background:var(--line);transform:translateY(-50%)}
@@ -177,11 +181,11 @@ const ARTICLE_CSS = `${BASE_CSS}
 .side .m{display:block;font-size:11px;color:var(--muted);margin-top:1px}
 .side .empty{padding:14px 4px;text-align:center;font-size:12.5px;color:var(--muted)}
 .side .cat{list-style:none;margin:0;padding:0}
-.side .cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;color:rgba(255,255,255,.9);font-size:13px;transition:background .3s ease,transform .3s ease;cursor:default}
+.side .cat .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px;border-radius:9px;color:rgba(255,255,255,.9);font-size:13px;text-decoration:none;transition:background .3s ease,transform .3s ease;cursor:pointer}
 .side .cat .row:hover{background:rgba(255,255,255,.12);transform:translateX(2px)}
 .side .cat .n{flex:none;min-width:24px;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid var(--line);font-size:11px;text-align:center;color:#fff}
 .side .cloud{display:flex;flex-wrap:wrap;gap:7px}
-.side .cloud .tagpill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);transition:all .3s ease;cursor:default}
+.side .cloud .tagpill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid var(--line);font-size:11.5px;color:rgba(255,255,255,.9);text-decoration:none;transition:all .3s ease;cursor:pointer}
 
 /* 封面大图 + 白色毛玻璃信息层 */
 .hero{
@@ -300,13 +304,12 @@ const LIST_CSS = `${BASE_CSS}
 
 /** 左栏三标签数据（与首页同款，文章页注入一份） */
 function sidebarFeed(articles, currentSlug) {
-  const hot = [...articles].sort((a, b) => b.weight - a.weight).slice(0, 5);
   const recent = articles.slice(0, 5);
   const strip = (list) => list.map((a) => ({
     t: a.title, u: a.url, d: a.date, w: a.weight,
     c: a.cover || '', cur: a.slug === currentSlug
   }));
-  return { hot: strip(hot), recent: strip(recent) };
+  return { recent: strip(recent) };
 }
 
 /** 文章页左栏（与首页一致：个人信息 + 三标签 + 分类 + 标签云；站点信息由脚本更新） */
@@ -324,7 +327,7 @@ function articleSidebar(articles) {
   return `<aside class="side">
   <section class="card profile">
     <div class="avatar"><img src="/icons/cards/avatar.png" alt="vernus"></div>
-    <div class="name">随波逐流の旅店</div>
+    <div class="name">艾恩葛朗特第一层の旅店</div>
     <p class="bio">愿终有一天能与你重要的人重逢</p>
     <div class="socials">
       <a href="https://github.com/vernuser" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
@@ -343,22 +346,18 @@ function articleSidebar(articles) {
   </section>
 
   <section class="card">
-    <div class="tabs" id="tabs">
-      <button class="tab on" data-k="hot" type="button">热门</button>
-      <button class="tab" data-k="recent" type="button">最近</button>
-      <button class="tab" data-k="comment" type="button">评论</button>
-    </div>
+    <h3 class="sec-title center">最近<span class="sub">${Math.min(5, articles.length)} 篇</span></h3>
     <div class="list" id="list"></div>
   </section>
 
   <section class="card">
     <h3 class="sec-title">分类<span class="sub">${catCount.size} 个</span></h3>
-    <ul class="cat">${cats.map(([n, c]) => `<li><span class="row"><span>${esc(n)}</span><span class="n">${c}</span></span></li>`).join('')}</ul>
+    <ul class="cat">${cats.map(([n, c]) => `<li><a class="row" href="/#cat=${encodeURIComponent(n)}"><span>${esc(n)}</span><span class="n">${c}</span></a></li>`).join('')}</ul>
   </section>
 
   <section class="card">
     <h3 class="sec-title">标签云<span class="sub">${tagCount.size} 个</span></h3>
-    <div class="cloud">${tags.map(([n]) => `<span class="tagpill">${esc(n)}</span>`).join('')}</div>
+    <div class="cloud">${tags.map(([n]) => `<a class="tagpill" href="/#tag=${encodeURIComponent(n)}">${esc(n)}</a>`).join('')}</div>
   </section>
 </aside>`;
 }
@@ -380,12 +379,12 @@ function articleShell(a, contentHtml, articles) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(a.title)} · ${esc(SITE_TITLE)}</title>
 <link rel="icon" href="/favicon.ico">
-<style>${TOPBAR_CSS}${ARTICLE_CSS}</style>
+<style>${TOPBAR_CSS}${ARTICLE_CSS}${WIDGET_CSS}</style>
 </head>
 <body>
 <header class="topbar">
   <div class="topbar-in">
-    <a class="brand" href="/"><span class="mark">随</span><span class="word">随波逐流の旅店</span></a>
+    <a class="brand" href="/"><span class="mark">剑</span><span class="word">艾恩葛朗特第一层の旅店</span></a>
     <nav>
       <ul class="nav-menu">
         <li><a href="/">首页</a></li>
@@ -445,15 +444,18 @@ function articleShell(a, contentHtml, articles) {
   </main>
 </div>
 
+${siteFooter()}
+${musicPlayer()}
+
 <script>
 (function () {
-  // 三标签（与首页同一套数据渲染）
+  // 侧栏「最近」列表
   var data = ${JSON.stringify(feed)};
   var list = document.getElementById('list');
   var me = location.pathname;
-  function render(k) {
-    var rows = data[k] || [];
-    if (!rows.length) { list.innerHTML = '<div class="empty">还没有接入评论系统</div>'; return; }
+  function render() {
+    var rows = data.recent || [];
+    if (!rows.length) { list.innerHTML = '<div class="empty">还没有文章</div>'; return; }
     list.innerHTML = rows.map(function (a) {
       return '<a href="' + a.u + '" title="' + a.t + '"' + (a.cur ? ' class="cur"' : '') + '>' +
         '<span class="thumb">' + (a.c ? '<img src="' + a.c + '" alt="" loading="lazy" onerror="this.remove()">' : '') + '</span>' +
@@ -461,13 +463,7 @@ function articleShell(a, contentHtml, articles) {
         (a.d ? a.d + ' · ' : '') + a.w.toLocaleString('en-US') + ' 字</span></span></a>';
     }).join('');
   }
-  document.getElementById('tabs').addEventListener('click', function (e) {
-    var b = e.target.closest('.tab');
-    if (!b) return;
-    Array.prototype.forEach.call(this.children, function (x) { x.classList.toggle('on', x === b); });
-    render(b.dataset.k);
-  });
-  render('hot');
+  render();
   void me;
 
   // 复制当前链接
@@ -538,7 +534,7 @@ ${a.categories.length ? `<span class="cat">${esc(a.categories[0])}</span>` : ''}
 <body>
 <header class="topbar">
   <div class="topbar-in">
-    <a class="brand" href="/"><span class="mark">随</span><span class="word">随波逐流の旅店</span></a>
+    <a class="brand" href="/"><span class="mark">剑</span><span class="word">艾恩葛朗特第一层の旅店</span></a>
     <nav>
       <ul class="nav-menu">
         <li><a href="/">首页</a></li>
@@ -617,6 +613,8 @@ function main() {
     };
 
     const html = marked.parse(body);
+    // 侧栏「最近」列表展示字数用（纯文本字数）
+    a.weight = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, '').length;
     const dir = join(OUT_HTML, slug);
     a.html = html;
     articles.push(a);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>代码审计---java基础 · 艾恩葛朗特第一层の旅店</title>
+<title>小迪安全学习笔记（Day1-Day7 合集） · 艾恩葛朗特第一层の旅店</title>
 <link rel="icon" href="/favicon.ico">
 <style>
 .topbar{position:fixed;top:0;left:0;right:0;z-index:60;padding:14px 20px}
@@ -299,18 +299,18 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-ind
   <main class="main">
     <a class="crumb" href="/">← 返回首页</a>
 
-    <section class="hero" style="--hero:url('/covers/0432.jpg')">
+    <section class="hero" style="--hero:url('/covers/0631.jpg')">
       <span class="hero-bg"></span>
       <div class="hero-glass">
-        <h1 class="hero-title">代码审计---java基础</h1>
+        <h1 class="hero-title">小迪安全学习笔记（Day1-Day7 合集）</h1>
         <ul class="hero-meta">
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l3 1.8"/></svg>
-            <span>发表于 <b>2024-09-19</b></span>
+            <span>发表于 <b>2024-08-07</b></span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 12S6 5.4 12 5.4 21.4 12 21.4 12 18 18.6 12 18.6 2.6 12 2.6 12z"/><circle cx="12" cy="12" r="2.6"/></svg>
-            <span>字数 <b>1,933</b> · 约 <b>5</b> 分钟</span>
+            <span>字数 <b>5,260</b> · 约 <b>13</b> 分钟</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5.4a8.2 8.2 0 0 1-.9-3.7A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
@@ -332,159 +332,286 @@ body::before{content:'';position:fixed;inset:0;background:rgba(8,20,36,.7);z-ind
     </section>
 
     <article class="panel sao-article">
-      <h1 class="panel-title">代码审计---java基础</h1>
-      <div class="meta"><span class="chip date">2024-09-19</span><span class="chip">分类·代码审计</span><span class="chip">#代码审计</span></div>
-      <h1>java基本语法</h1>
-<p>基础语法：</p>
-<ul>
-<li>对象：对象是类的一个实例，有状态和行为</li>
-</ul>
-<p>例如：一条狗是一个对象，他的状态就有：颜色，名字，品种；行为就有了：吃，坐下，叫等</p>
-<ul>
-<li><p>类：类是一个模板，他描述一类对象的行为和状态</p>
-</li>
-<li><p>方法：方法就是行为，一个类可以有很多方法，逻辑运算，数据修改以及所有动作都是在方法中完成的</p>
-</li>
-<li><p>实例变量：每个对象都有独特的实例变量，对象的状态由这些实例变量的值决定</p>
-</li>
-</ul>
-<p>第一个java程序</p>
-<pre><code>public class the_first_java {
-    /* 第一个Java程序
+      <h1 class="panel-title">小迪安全学习笔记（Day1-Day7 合集）</h1>
+      <div class="meta"><span class="chip date">2024-08-07</span><span class="chip">分类·小迪安全</span><span class="chip">#小迪安全</span><span class="chip">#渗透</span></div>
+      <p>小迪安全入门课程笔记合集：从名词解释、文件上传下载与反弹 shell，到信息打点、CDN 绕过与端口扫描的完整学习记录。</p>
+<blockquote>
+<p>本篇由 7 篇内容相近的笔记合并整理，<strong>安排如下</strong>（按时间顺序）：</p>
+</blockquote>
+<ol>
+<li><strong>小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过</strong>（2024年7月30日）</li>
+<li><strong>小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器</strong>（2024年7月30日）</li>
+<li><strong>小迪笔记day3--抓包&amp;封包&amp;协议&amp;app&amp;小程序</strong>（2024年7月31日）</li>
+<li><strong>小迪笔记day4--加解密方式&amp;web&amp;服务器&amp;</strong>（2024年8月2日）</li>
+<li><strong>小迪笔记day5--CDN&amp;资产架构等</strong>（2024年8月2日）</li>
+<li><strong>小迪笔记day67891011--信息打点</strong>（2024年8月2日）</li>
+<li><strong>小迪笔记day18-WEB攻防</strong>（2024年8月7日）</li>
+</ol>
+<hr>
+<h1>1. 小迪笔记day1--名词解释&amp;文件下载&amp;反弹shell&amp;文件上传下载&amp;防火墙绕过（2024年7月30日）</h1>
+<h1>名词解释</h1>
+<p>poc：概念验证，常指的是一段漏洞证明的代码</p>
+<p>（就是根据漏洞的一些信息，比如nuclei使用的yaml中，根据baseurl以及一些的raw http进行访问，再通过dsl,words，等进一步确认漏洞存在）</p>
+<p>exp:漏洞利用脚本，不解释</p>
+<p>paylaod：exp成功执行的时候，真正在目标系统执行的代码或指令</p>
+<p>shellcode：指的是漏洞载荷，免杀经常提到</p>
+<p>后门：通称，web网站叫webshell，但是其实还有系统等</p>
+<p>木马：针对电脑的控制</p>
+<p>病毒：破坏性的程序</p>
+<p>反弹：弹shell，将权限转移到其他地方</p>
+<p>跳板：中间的机器，A无法连接B，A可以通过连接B来达到连接C的</p>
+<p><a href="https://www.cnblogs.com/sunny11/p/13583083.html">参考</a></p>
+<h1>文件上传下载</h1>
+<p>linux：wget curl ruby perl java python等</p>
+<p>windows:powershell certutil bitsadmin msiexec mshta rund1132等</p>
+<p><a href="https://blog.csdn.net/weixin_43303273/article/details/83029138">命令</a></p>
+<p><a href="https://forum.ywhack.com/infosec.php">study 棱角社区</a></p>
+<p>需要注意的是下载的文件夹的权限</p>
+<h1>权限</h1>
+<p>root or user</p>
+<p>提权</p>
+<p>前面靶机基本上最后都是提权完成的，我记得以前看了个文章说有100多个提权手法？（忘记了）</p>
+<h1>防火墙</h1>
+<p>windows默认自带windows defender</p>
+<p>linux默认是iptables</p>
+<p>入站出站协议</p>
+<p>传webshell需要交互式 的，（联想到python的哪个命令）</p>
+<p>内外网区分
+<img src="https://pic.imgdb.cn/item/66a8e27ed9c307b7e93458ad.png" alt=""></p>
+<p>所以说靶机尽量不要搞在线靶机</p>
+<p>比如你上fofa搜能找到同行的pikachu，，，还是一堆...</p>
+<p>难崩</p>
+<pre><code class="language-fofa语句">&quot;pikachu&quot; &amp;&amp; country=&quot;CN&quot; &amp;&amp; title=&quot;Get the pikachu&quot;
+</code></pre>
+<p>别干坏事奥</p>
+<hr>
+<h1>2. 小迪笔记day2--web应用&amp;架构搭建&amp;漏洞&amp;http数据报&amp;代理服务器（2024年7月30日）</h1>
+<h1>网站搭建前置</h1>
+<p>域名，子域名，DNS，HTTP/HTTPS，SSL证书</p>
+<p>域名：网站的名字，例如<a href="http://www.baidu.com">www.baidu.com</a></p>
+<p>DNS：解析域名的</p>
+<h1>web应用架构</h1>
+<p>开发语言:asp,php,aspx,jsp,java,python,ruby,go,html,js</p>
+<p>程序源码：开源cms分类，开发语言分类，应用类型分类，开发框架分类</p>
+<p>中间件容器：IIS,APACHE,NGINX,TOMENT,WEBLOGIC,JBOOS,GLASSHFISH</p>
+<p>第三方软件：phpmyadmin,vs-ftpd,vnc,openssh</p>
+<p>数据库类型：access,mysql,mssql,oracle,db2,sybase,redis,mongdb</p>
+<h1>web安全漏洞</h1>
+<p>sql注入，xxe/xml，弱口令，文件安全，rce，csrf/ssrf/crlf，反序列化，逻辑越权，未授权访问等等</p>
+<h1>web请求返回过程数据包</h1>
+<p><a href="https://www.jianshu.com/p/558455228c43">https://www.jianshu.com/p/558455228c43</a></p>
+<p><a href="https://www.cnblogs.com/cherrycui/p/10815465.html">https://www.cnblogs.com/cherrycui/p/10815465.html</a></p>
+<p><a href="https://www.runoob.com/http/http-status-codes.html">http状态码</a></p>
+<p>可以用bp简单客串一下扫描器，具体就是用爆破的方法，如果404就没有，403就存在</p>
+<p>如果被拉黑了你的ip,上代理池/ww或者你去换一个</p>
+<hr>
+<h1>3. 小迪笔记day3--抓包&amp;封包&amp;协议&amp;app&amp;小程序（2024年7月31日）</h1>
+<h1>抓包封包工具</h1>
+<p>burpsuite</p>
+<p>charles</p>
+<p>fiddler</p>
+<p>个人感觉常用的就bp和青花瓷就可以了，八爪鱼没用过...不做评价</p>
+<p>记得吧证书安装到浏览器和模拟器中，不然浏览器抓不到包，模拟器会一直报证书有问题</p>
+<p>（好像是因为你个人装的话装进个人里面，需要装到系统的那里面才可以）</p>
+<p>app抓包的目的就是把app中的信息提取出来，获得他的api获得他的信息等等来进行web攻防</p>
+<p>非web协议，上述三个就没用了</p>
+<p>可以用wireshark和科莱网络分析系统</p>
+<p>抓包是零散的，封包就是你的每一个操作的</p>
+<p>wpe和cc是一套的，wpe抓cc的包，封包监控是一体的</p>
+<hr>
+<h1>4. 小迪笔记day4--加解密方式&amp;web&amp;服务器&amp;（2024年8月2日）</h1>
+<h1>知识点</h1>
+<p>存储密码加密-Web&amp;数据库&amp;系统</p>
+<p>传输数据编码-各类组合传输参数值</p>
+<p>代码特性加密-JS&amp;PHP&amp;NET&amp;JAVA</p>
+<p>数据显示编码-字符串数据显示编码</p>
+<h2>密码存储加密：</h2>
+<blockquote>
+<blockquote>
+<p>MD5 SHA1 NTLM AES DES RC4</p>
+</blockquote>
+</blockquote>
+<p>MD5 值是 32 或 16 位位由数字&quot;0-9&quot;和字母&quot;a-f&quot;所组成的字符串，</p>
+<blockquote>
+<p>md5不可逆，解密需要碰撞 枚举</p>
+</blockquote>
+<p>SHA1 这种加密的密文特征跟 MD5 差不多，只不过位数是 40</p>
+<p>NTLM 这种加密是 Windows 的哈希密码，标准通讯安全协议</p>
+<p>AES,DES,RC4 这些都是非对称性加密算法，引入密钥，密文特征与 Base64 类似</p>
+<p>应用场景：各类应用密文，自定义算法，代码分析，CTF 安全比赛等</p>
+<h2>传输数据编码：</h2>
+<blockquote>
+<blockquote>
+<p>BASE64 URL HEX ASCII</p>
+</blockquote>
+</blockquote>
+<p>BASE64 值是由数字&quot;0-9&quot;和字母&quot;a-f&quot;所组成的字符串,大小写敏感,结尾通常有符号=</p>
+<p>URL 编码是由数字&quot;0-9&quot;和字母&quot;a-f&quot;所组成的字符串,大小写敏感,通常以%数字字母间隔</p>
+<p>HEX 编码是计算机中数据的一种表示方法,将数据进行十六进制转换,它由 0-9,A-F,组成</p>
+<p>ASCII 编码是将 128 个字符进行进制数来表示,常见 ASCII 码表大小规则：0<del>9&lt;A</del>Z&lt;a~
+z</p>
+<p>应用场景：参数传递(如注入影响)，后期 WAF 绕过干扰写法应用，视频地址还原等</p>
+<h2>JS 前端代码加密：</h2>
+<blockquote>
+<blockquote>
+<p>JS 颜文字 jother JSFUCK</p>
+</blockquote>
+</blockquote>
+<p>颜文字特征：一堆颜文字构成的 js 代码，在 F12 中可直接解密执行</p>
+<p>jother 特征：只用! + ( ) [ ] { }这八个字符就能完成对任意字符串的编码。也可在
+F12 中解密执行</p>
+<p>JSFUCK 特征：与 jother 很像，只是少了{ }</p>
+<h2>后端代码加密：</h2>
+<blockquote>
+<blockquote>
+<p>PHP .NET JAVA</p>
+</blockquote>
+</blockquote>
+<p>PHP：乱码，头部有信息</p>
+<p>.NET：DLL 封装代码文件</p>
+<p>JAVA：JAR&amp;CLASS 文件</p>
+<p>举例：Zend ILSpy IDEA</p>
+<h2>识别算法编码类型：</h2>
+<p>看位数</p>
+<p>看特征（数字字母大小写符号等）</p>
+<p>看当前密文所在的位置（web，数据库，操作系统等）</p>
+<hr>
+<h1>5. 小迪笔记day5--CDN&amp;资产架构等（2024年8月2日）</h1>
+<p>这一节课的内容我没怎么看</p>
+<p>下面的来自迪总的课件</p>
+<pre><code>#资产架构：
+WEB 单个源码指向安全
+WEB 多个目录源码安全
+WEB 多个端口源码安全
+服务器架设多个站点安全
+架设第三方插件接口安全
+服务器架设多个应用安全
 
-  *它将输出字符串 Hello World
+#番外安全：
+基于域名解析安全
+基于服务器本身安全
+基于服务商信息安全
+基于管理个人的安全
 
-   */
-    public static void main(String[] args){
-        System.out.println(&quot;Hello World&quot;);
-    }
-}
+#考虑阻碍：
+阻碍-站库分离
+阻碍-CDN 加速服务
+阻碍-负载均衡服务
+阻碍-WAF 应用防火墙
+阻碍-主机防护防火墙
 </code></pre>
-<p>输出应该是</p>
-<pre><code>Hello World
+<p>很多的话，感觉和计网啥的学的差不多？</p>
+<p>唔，感觉需要一个沙箱了</p>
+<hr>
+<h1>6. 小迪笔记day67891011--信息打点（2024年8月2日）</h1>
+<h1>信息点：</h1>
+<p>基础信息，系统信息，应用信息，防护信息，人员信息，其他信息等</p>
+<h1>技术点：</h1>
+<p>CMS 识别，端口扫描，CDN 绕过，源码获取，子域名查询，WAF 识别，负载均衡识别等</p>
+<h1>资产收集</h1>
+<h2>ttl判断操作系统</h2>
+<p>linux的数是64或255</p>
+<p>windows nt/2000/xp 是128</p>
+<p>windows98 是32</p>
+<p>unix是255</p>
+<p>ping一下看距离哪一个更近就可以判断是那个（）</p>
+<p>也可以直接上nmap等端口扫描开干</p>
+<h2>数据库判断</h2>
+<p>组合 or 端口扫描</p>
+<p>mysql 3306</p>
+<p>mssql 1433</p>
+<p>redis 6379</p>
+<p>Oracle 1521</p>
+<p>DB2 5000</p>
+<p>postgresql 5432</p>
+<h2>源码</h2>
+<p>互站  网上搜  fofa搜</p>
+<p>（例：不知道还存不存在 面具约会）</p>
+<h3>源码泄露</h3>
+<p>composer.json(类似版权和声明的文件，一种php特性)</p>
+<p>git 源码泄露</p>
+<p>svn 源码泄露</p>
+<p>hg 源码泄漏</p>
+<p>网站备份压缩文件</p>
+<p>WEB-INF/web.xml 泄露   [RoarCTF 2019]Easy Java</p>
+<p>DS_Store 文件泄露</p>
+<p>SWP 文件泄露</p>
+<p>CVS 泄露</p>
+<p>Bzr 泄露</p>
+<p>GitHub 源码泄漏</p>
+<pre><code>GITHUB 资源搜索：
+in:name test               #仓库标题搜索含有关键字
+in:descripton test         #仓库描述搜索含有关键字
+in:readme test             #Readme 文件搜素含有关键字
+stars:&gt;3000 test
+#stars 数量大于 3000 的搜索关键字
+stars:1000..3000 test      #stars 数量 大 于 1000 小于 3000 的搜 索 关 键 字 forks:&gt;1000 test
+#forks 数量大于 1000 的搜索关键字
+forks:1000..3000 test      #forks 数量 大 于 1000 小于 3000 的搜 索 关 键 字 size:&gt;=5000 test
+#指定仓库大于 5000k(5M)的搜索关键字 pushed:&gt;2019-02-12 test    #发布时间大于 2019-02-12 的
+搜索 关 键 字 created:&gt;2019-02-12 test   # 创建 时 间 大 于 2019-02-12 的搜 索 关 键 字 user:test
+#用户名搜素
+license:apache-2.0 test    #明确仓库的 LICENSE 搜索关键字 language:java test         #在 java 语
+言的代码中搜索关键字
+user:test in:name test     #组合搜索,用户名 test 的标题含有 test 的
+关键字配合谷歌搜索：
+site:Github.com smtp
+site:Github.com smtp @qq.com
+site:Github.com smtp @126.com
+site:Github.com smtp @163.com
+site:Github.com smtp @sina.com.cn
+site:Github.com smtp password
+site:Github.com String password smtp
 </code></pre>
-<p><img src="https://pic.imgdb.cn/item/66ec1db4f21886ccc0fb79df.png" alt=""></p>
-<h2>java对象和类</h2>
-<p><img src="https://pic.imgdb.cn/item/66ec1e60f21886ccc0fc1ded.png" alt=""></p>
-<h2>java创建对象</h2>
-<p>对象是根据类创建的。在Java中，使用关键字new来创建一个新的对象。创建对象需要以下三步：</p>
-<ul>
-<li><p>声明：声明一个对象，包括对象名称和对象类型。</p>
-</li>
-<li><p>实例化：使用关键字 new 来创建一个对象。</p>
-</li>
-<li><p>初始化：使用 new 创建对象时，会调用构造方法初始化对象。</p>
-</li>
-</ul>
-<p>puppy</p>
-<pre><code>public class Puppy {
-    public Puppy(String name){
-        System.out.println(&quot;小狗的名字是&quot;+name);
-
-    }
-    public static void main(String[] args){
-        Puppy myPuppy = new Puppy(&quot;tommy&quot;);
-    }
-}
-</code></pre>
-<p>输出应该是:</p>
-<pre><code>小狗的名字是tommy
-</code></pre>
-<h2>Java基本类型</h2>
-<p><img src="https://pic.imgdb.cn/item/66ec23eef21886ccc00243ec.png" alt=""></p>
-<pre><code>public class Test {
-    static boolean bool;
-    static byte by;
-    static  char ch;
-    static double d;
-    static float f;
-    static int i;
-    static long l;
-    static short sh;
-    static String str;
-
-    public static void main(String[] args) {
-        System.out.println(&quot;Bool:&quot;+bool);
-        System.out.println(&quot;Byte:&quot;+by);
-        System.out.println(&quot;Char:&quot;+ch);
-        System.out.println(&quot;Double:&quot;+d);
-        System.out.println(&quot;Float:&quot;+f);
-        System.out.println(&quot;Int:&quot;+i);
-        System.out.println(&quot;Long:&quot;+l);
-        System.out.println(&quot;Short:&quot;+sh);
-        System.out.println(&quot;String:&quot;+str);
-    }
-
-}
-</code></pre>
-<p>输出应该是</p>
-<pre><code>Bool:false
-Byte:0
-Char:
-Double:0.0
-Float:0.0
-Int:0
-Long:0
-Short:0
-String:null
-
-进程已结束，退出代码为 0
-</code></pre>
-<h2>java循环结构</h2>
-<p>经典的三种循环方式:</p>
-<ul>
-<li>while 循环</li>
-<li>do...while循环</li>
-<li>for循环</li>
-</ul>
-<p>while实例</p>
-<pre><code>public class cycle {
-    public static void main(String[] args) {
-        int x=10;
-        while(x&lt;20){
-            System.out.println(&quot;value of x : &quot;+ x);
-            x++;
-//            System.out.println(&quot;\n&quot;);
-        }
-    }
-}
-</code></pre>
-<p>输出</p>
-<pre><code>value of x : 10
-value of x : 11
-value of x : 12
-value of x : 13
-value of x : 14
-value of x : 15
-value of x : 16
-value of x : 17
-value of x : 18
-value of x : 19
-</code></pre>
-<p>不知道为啥，按理说不应该不会换行的吗，怎么加了个换行符多一行🧐</p>
-<p>do-while循环</p>
-<pre><code>public class text {
-        public static void main(String args[]) {
-
-            for(int x = 10; x &lt; 20; x = x+1) {
-                System.out.print(&quot;value of x : &quot; + x );
-                System.out.print(&quot;\n&quot;);
-            }
-        }
-}
-</code></pre>
-<p>输出为</p>
-<pre><code>value of x : 10
-value of x : 11
-value of x : 12
-value of x : 13
-value of x : 14
-value of x : 15
-value of x : 16
-value of x : 17
-value of x : 18
-value of x : 19
-</code></pre>
+<h2>域名</h2>
+<p>可以看域名是否已经被注册，买域名</p>
+<h2>备案</h2>
+<p> beianx</p>
+<h2>操作系统</h2>
+<h2>cdn</h2>
+<p>超级ping一下就可以</p>
+<p><a href="https://ping.chinaz.com/">https://ping.chinaz.com/</a></p>
+<p><a href="https://www.17ce.com/">https://www.17ce.com/</a></p>
+<p><a href="https://tools.ipip.net/ping.php">https://tools.ipip.net/ping.php</a></p>
+<h3>cdn绕过</h3>
+<p>一把梭
+<a href="https://get-site-ip.com/">git-site-ip</a></p>
+<h4>子域名入手</h4>
+<h4>利用网站漏洞</h4>
+<h4>历史DNS记录</h4>
+<h4>cdn本身</h4>
+<p>获取控制面板，这个纯粹靠运气</p>
+<h4>mx记录和邮件</h4>
+<p>找回的地方发送邮件到你的邮箱，在qq邮箱中查看邮件原文就可以了
+<img src="https://pic.imgdb.cn/item/66b0880ad9c307b7e93f5424.png" alt=""></p>
+<p>配合备案配合ip查询配合网站能得到真实ip</p>
+<h4>国外请求：</h4>
+<p>可能仅针对国内进行了cdn加速，绕到国外就可以尝试了</p>
+<p><a href="https://tools.ipip.net/cdn.php">https://tools.ipip.net/cdn.php</a></p>
+<p>（阿里云CDN有个业务类型是
+<img src="https://pic.imgdb.cn/item/66b0814bd9c307b7e935c9ac.png" alt=""></p>
+<p>超级ping:<a href="https://ping.chinaz.com/">https://ping.chinaz.com/</a></p>
+<p>17ce.com</p>
+<h4>超级ping</h4>
+<h4>扫描探针</h4>
+<h1>### zmap</h1>
+<p>44分大法（）</p>
+<h4>黑暗引擎</h4>
+<p>zoomeye,fofa,shadon</p>
+<h2>服务器负载均衡</h2>
+<p>lbd--kali也有</p>
+<h3>app</h3>
+<p>app的抓包封包监听等等的我跳了，目前用不上，后面用上了再加</p>
+<hr>
+<h1>7. 小迪笔记day18-WEB攻防（2024年8月7日）</h1>
+<p>废了几天事，终于是把信息打点结束了，总的来说就是CDN的绕过，信息收集工具的使用，资产泄露，通过域名等方式获得真是IP地址，端口扫描，泄露的源码进行白盒分析以及黑引擎的使用等等</p>
+<p>arl还不开源了，Kunyu的seebug我是半天没瞅到api在哪啊，哪个水泽，python的arl_revelor的是22年的吧，根本用不了，头大了都</p>
+<p>总之，一言难尽</p>
+<p>迪总下面的PHP开发我给跳过了，直接开始WEB攻防得了，博客的话，，额，你现在看的就是，至于上传什么的太麻烦了等我后面有时间再说吧(bushi)</p>
+<p>-----以上来自一个配置环境快炸了的人</p>
+<h1>asp</h1>
+<p>一般都是windows iis asp access(sqlserver)</p>
+<p>漏洞主要集中在iis 和 asp</p>
 
     </article>
   </main>
